@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
@@ -23,6 +23,28 @@ export default function Home() {
   const [additionalImage, setAdditionalImage] = useState<File | null>(null)
   const [additionalImagePreview, setAdditionalImagePreview] = useState<string | null>(null)
   const [zoomedImage, setZoomedImage] = useState<string | null>(null)
+  const [zoomLevel, setZoomLevel] = useState(1)
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
+
+  // Reset zoom when opening a new image
+  const openZoom = (imageSrc: string) => {
+    setZoomedImage(imageSrc)
+    setZoomLevel(1)
+    setZoomPosition({ x: 0, y: 0 })
+  }
+
+  // Handle ESC key to close zoom
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && zoomedImage) {
+        setZoomedImage(null)
+        setZoomLevel(1)
+        setZoomPosition({ x: 0, y: 0 })
+      }
+    }
+    window.addEventListener('keydown', handleEsc)
+    return () => window.removeEventListener('keydown', handleEsc)
+  }, [zoomedImage])
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -233,31 +255,94 @@ export default function Home() {
       {/* Zoom Modal */}
       {zoomedImage && (
         <div
-          className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4"
-          onClick={() => setZoomedImage(null)}
+          className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center overflow-hidden"
+          onClick={() => {
+            setZoomedImage(null)
+            setZoomLevel(1)
+            setZoomPosition({ x: 0, y: 0 })
+          }}
+          onWheel={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            const delta = e.deltaY > 0 ? 0.9 : 1.1
+            setZoomLevel(prev => Math.min(Math.max(prev * delta, 0.5), 5))
+          }}
         >
-          <div className="relative max-w-[95vw] max-h-[95vh]">
-            <button
-              onClick={() => setZoomedImage(null)}
-              className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
-              aria-label="Close zoom"
-            >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+          <div
+            className="relative"
+            style={{
+              transform: `scale(${zoomLevel}) translate(${zoomPosition.x}px, ${zoomPosition.y}px)`,
+              transition: 'transform 0.1s ease-out',
+              cursor: zoomLevel > 1 ? 'move' : 'zoom-in'
+            }}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => {
+              if (zoomLevel > 1) {
+                e.preventDefault()
+                const startX = e.clientX - zoomPosition.x
+                const startY = e.clientY - zoomPosition.y
+
+                const handleMouseMove = (moveEvent: MouseEvent) => {
+                  setZoomPosition({
+                    x: moveEvent.clientX - startX,
+                    y: moveEvent.clientY - startY
+                  })
+                }
+
+                const handleMouseUp = () => {
+                  document.removeEventListener('mousemove', handleMouseMove)
+                  document.removeEventListener('mouseup', handleMouseUp)
+                }
+
+                document.addEventListener('mousemove', handleMouseMove)
+                document.addEventListener('mouseup', handleMouseUp)
+              }
+            }}
+          >
             <img
               src={zoomedImage}
               alt="Zoomed view"
-              className="max-w-full max-h-[90vh] object-contain cursor-zoom-out"
+              className="max-w-[90vw] max-h-[90vh] object-contain select-none"
+              draggable={false}
+            />
+          </div>
+
+          {/* Zoom controls overlay */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-75 text-white px-4 py-2 rounded-full flex items-center gap-4">
+            <button
               onClick={(e) => {
                 e.stopPropagation()
-                setZoomedImage(null)
+                setZoomLevel(prev => Math.max(prev - 0.25, 0.5))
               }}
-            />
-            <div className="text-center text-white text-sm mt-2 opacity-75">
-              Click anywhere to close
-            </div>
+              className="hover:text-orange-400 transition-colors text-xl px-2"
+            >
+              −
+            </button>
+            <span className="min-w-[60px] text-center font-medium">{Math.round(zoomLevel * 100)}%</span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setZoomLevel(prev => Math.min(prev + 0.25, 5))
+              }}
+              className="hover:text-orange-400 transition-colors text-xl px-2"
+            >
+              +
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setZoomLevel(1)
+                setZoomPosition({ x: 0, y: 0 })
+              }}
+              className="ml-2 text-sm hover:text-orange-400 transition-colors border-l pl-3 border-gray-600"
+            >
+              Reset
+            </button>
+          </div>
+
+          {/* Instructions */}
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-75 text-white text-sm px-4 py-2 rounded-full">
+            Scroll to zoom • {zoomLevel > 1 ? 'Drag to pan' : 'Click to close'} • ESC to exit
           </div>
         </div>
       )}
@@ -337,10 +422,10 @@ export default function Home() {
                       alt="Current image"
                       fill
                       className="object-contain cursor-zoom-in"
-                      onClick={() => setZoomedImage(currentImage)}
+                      onClick={() => openZoom(currentImage)}
                     />
                     <button
-                      onClick={() => setZoomedImage(currentImage)}
+                      onClick={() => openZoom(currentImage)}
                       className="absolute top-2 left-2 bg-black bg-opacity-50 text-white p-2 rounded-lg hover:bg-opacity-70 transition-all"
                       title="Click to zoom"
                     >
@@ -486,7 +571,7 @@ export default function Home() {
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  setZoomedImage(item.image)
+                                  openZoom(item.image)
                                 }}
                                 className="absolute top-1 left-1 bg-black bg-opacity-50 text-white p-1 rounded hover:bg-opacity-70 transition-all opacity-0 group-hover:opacity-100"
                                 title="Zoom"
