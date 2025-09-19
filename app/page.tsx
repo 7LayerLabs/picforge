@@ -22,6 +22,7 @@ export default function Home() {
   const [originalImage, setOriginalImage] = useState<string | null>(null)
   const [additionalImage, setAdditionalImage] = useState<File | null>(null)
   const [additionalImagePreview, setAdditionalImagePreview] = useState<string | null>(null)
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null)
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -229,6 +230,38 @@ export default function Home() {
 
   return (
     <div className="min-h-screen p-4 flex flex-col items-center">
+      {/* Zoom Modal */}
+      {zoomedImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4"
+          onClick={() => setZoomedImage(null)}
+        >
+          <div className="relative max-w-[95vw] max-h-[95vh]">
+            <button
+              onClick={() => setZoomedImage(null)}
+              className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
+              aria-label="Close zoom"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <img
+              src={zoomedImage}
+              alt="Zoomed view"
+              className="max-w-full max-h-[90vh] object-contain cursor-zoom-out"
+              onClick={(e) => {
+                e.stopPropagation()
+                setZoomedImage(null)
+              }}
+            />
+            <div className="text-center text-white text-sm mt-2 opacity-75">
+              Click anywhere to close
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl w-full space-y-4">
         <div className="flex justify-between items-center">
           <a
@@ -298,12 +331,24 @@ export default function Home() {
                 {/* Main Image Display */}
                 <div className="relative w-full h-[500px] border-2 border-gray-200 rounded-lg overflow-hidden bg-gray-50">
                 {currentImage && (
-                  <Image
-                    src={currentImage}
-                    alt="Current image"
-                    fill
-                    className="object-contain"
-                  />
+                  <>
+                    <Image
+                      src={currentImage}
+                      alt="Current image"
+                      fill
+                      className="object-contain cursor-zoom-in"
+                      onClick={() => setZoomedImage(currentImage)}
+                    />
+                    <button
+                      onClick={() => setZoomedImage(currentImage)}
+                      className="absolute top-2 left-2 bg-black bg-opacity-50 text-white p-2 rounded-lg hover:bg-opacity-70 transition-all"
+                      title="Click to zoom"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                      </svg>
+                    </button>
+                  </>
                 )}
                 {history.length > 0 && (
                   <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
@@ -428,20 +473,32 @@ export default function Home() {
                           currentImage === item.image ? 'border-blue-500 shadow-lg' : 'border-gray-200'
                         } ${item.isOriginal ? 'bg-green-50' : 'bg-white'} relative group`}
                       >
-                        <div
-                          className="relative h-32 w-full rounded overflow-hidden bg-gray-50 mb-1 cursor-pointer"
-                          onClick={() => restoreFromHistory(item)}
-                        >
+                        <div className="relative h-32 w-full rounded overflow-hidden bg-gray-50 mb-1">
                           {item.image && (
-                            <Image
-                              src={item.image}
-                              alt={`Version ${index}`}
-                              fill
-                              className="object-contain"
-                            />
+                            <>
+                              <Image
+                                src={item.image}
+                                alt={`Version ${index}`}
+                                fill
+                                className="object-contain cursor-pointer"
+                                onClick={() => restoreFromHistory(item)}
+                              />
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setZoomedImage(item.image)
+                                }}
+                                className="absolute top-1 left-1 bg-black bg-opacity-50 text-white p-1 rounded hover:bg-opacity-70 transition-all opacity-0 group-hover:opacity-100"
+                                title="Zoom"
+                              >
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                              </button>
+                            </>
                           )}
                           {item.isOriginal && (
-                            <div className="absolute top-1 left-1 bg-green-600 text-white text-xs px-2 py-1 rounded">
+                            <div className="absolute bottom-1 left-1 bg-green-600 text-white text-xs px-2 py-1 rounded">
                               Original
                             </div>
                           )}
