@@ -1,0 +1,55 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d2d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="flame1" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffa500;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff6347;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc143c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="flame2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffff00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffa500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6347;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6347;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc143c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Logo centered -->
+  <g transform="translate(600, 250) scale(2.5)">
+    <!-- Flames -->
+    <path d="M0 -60 Q-15 -45 -20 -30 T-25 -10 Q-25 5 -20 15 Q-30 0 -35 -15 T-40 -35 Q-40 -55 -30 -70 Q-20 -85 0 -90 Q20 -85 30 -70 Q40 -55 40 -35 Q40 -20 35 -5 Q30 10 20 25 Q25 15 25 0 Q25 -15 20 -30 Q15 -45 0 -60 Z" fill="url(#flame1)" opacity="0.9"/>
+    <path d="M0 -50 Q-10 -40 -13 -28 T-15 -5 Q-15 5 -12 12 Q-18 2 -20 -8 T-22 -28 Q-22 -42 -15 -52 Q-8 -62 0 -65 Q8 -62 15 -52 Q22 -42 22 -28 Q22 -18 20 -8 Q18 2 12 12 Q15 5 15 -5 Q15 -16 13 -28 Q10 -40 0 -50 Z" fill="url(#flame2)" opacity="0.8"/>
+
+    <!-- Camera aperture/lens shape -->
+    <g transform="translate(0, 20)">
+      <circle r="35" fill="none" stroke="#fff" stroke-width="2" opacity="0.8"/>
+      <circle r="32" fill="#444" opacity="0.9"/>
+      <path d="M0,-30 L15,-15 L30,0 L15,15 L0,30 L-15,15 L-30,0 L-15,-15 Z" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.8"/>
+      <path d="M0,-20 L10,-10 L20,0 L10,10 L0,20 L-10,10 L-20,0 L-10,-10 Z" fill="#666"/>
+      <circle r="8" fill="#888"/>
+      <circle r="5" fill="#aaa"/>
+    </g>
+  </g>
+
+  <!-- Text -->
+  <text x="600" y="450" font-family="Arial, sans-serif" font-size="72" font-weight="bold" text-anchor="middle" fill="url(#textGradient)">
+    PicForge
+  </text>
+
+  <text x="600" y="500" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="#ffffff" opacity="0.9">
+    Forge your images into art with AI
+  </text>
+
+  <!-- Decorative elements -->
+  <rect x="400" y="530" width="400" height="2" fill="#ff6347" opacity="0.5"/>
+</svg>
