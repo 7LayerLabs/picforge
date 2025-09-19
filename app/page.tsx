@@ -231,7 +231,10 @@ export default function Home() {
     <div className="min-h-screen p-4 flex flex-col items-center">
       <div className="max-w-7xl w-full space-y-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center gap-3">
+          <a
+            href="/"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          >
             <Image
               src="/logo.svg"
               alt="PicForge Logo"
@@ -245,7 +248,7 @@ export default function Home() {
               </h1>
               <p className="text-gray-600 text-xs">Forge your images into art</p>
             </div>
-          </div>
+          </a>
           {currentImage && (
             <button
               type="button"
