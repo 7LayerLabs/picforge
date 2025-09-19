@@ -232,16 +232,20 @@ export default function Home() {
       <div className="max-w-7xl w-full space-y-4">
         <div className="flex justify-between items-center">
           <a
-            href="/"
+            href="https://pic-forge.com"
             className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            aria-label="PicForge Home"
           >
-            <Image
-              src="/logo.svg"
-              alt="PicForge Logo"
-              width={60}
-              height={60}
-              className="animate-pulse"
-            />
+            <div className="w-[60px] h-[60px] relative">
+              <Image
+                src="/logo.svg"
+                alt="PicForge Logo"
+                width={60}
+                height={60}
+                className="animate-pulse pointer-events-none"
+                draggable={false}
+              />
+            </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                 PicForge
