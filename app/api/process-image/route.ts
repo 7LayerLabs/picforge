@@ -21,15 +21,15 @@ export async function POST(request: NextRequest) {
                request.headers.get('x-real-ip') ||
                'unknown'
 
-    // Check rate limit - 20 images per day per IP
-    const rateLimitResult = checkRateLimit(ip, 20, 24 * 60 * 60 * 1000)
+    // Check rate limit - 500 images per day per IP
+    const rateLimitResult = checkRateLimit(ip, 500, 24 * 60 * 60 * 1000)
 
     if (!rateLimitResult.allowed) {
       const resetDate = new Date(rateLimitResult.resetTime)
       const hoursUntilReset = Math.ceil((rateLimitResult.resetTime - Date.now()) / (1000 * 60 * 60))
       return NextResponse.json(
         {
-          error: `You've reached today's limit of 20 free images. Try again in ${hoursUntilReset} hours!`,
+          error: `You've reached today's limit of 500 free images. Try again in ${hoursUntilReset} hours!`,
           remaining: 0,
           resetTime: resetDate.toISOString()
         },
