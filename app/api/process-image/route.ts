@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
     const base64Image = Buffer.from(arrayBuffer).toString('base64')
 
     // Convert additional image to base64 if provided
-    let base64AdditionalImage = null
-    let additionalImageType = null
+    let base64AdditionalImage: string | null = null
+    let additionalImageType: string | null = null
     if (additionalImageFile) {
       const additionalArrayBuffer = await additionalImageFile.arrayBuffer()
       base64AdditionalImage = Buffer.from(additionalArrayBuffer).toString('base64')
