@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
     const imageFile = formData.get('image') as File
     const additionalImageFile = formData.get('additionalImage') as File | null
     const prompt = formData.get('prompt') as string
-    const userApiKey = formData.get('apiKey') as string | null
 
     if (!imageFile || !prompt) {
       return NextResponse.json(
@@ -22,28 +21,26 @@ export async function POST(request: NextRequest) {
                request.headers.get('x-real-ip') ||
                'unknown'
 
-    // Check rate limit if using default API key
-    if (!userApiKey) {
-      const rateLimitResult = checkRateLimit(ip, 5, 24 * 60 * 60 * 1000) // 5 images per day
+    // Check rate limit - 20 images per day per IP
+    const rateLimitResult = checkRateLimit(ip, 20, 24 * 60 * 60 * 1000)
 
-      if (!rateLimitResult.allowed) {
-        const resetDate = new Date(rateLimitResult.resetTime)
-        return NextResponse.json(
-          {
-            error: 'Rate limit exceeded. You can generate 5 images per day with the demo.',
-            remaining: 0,
-            resetTime: resetDate.toISOString(),
-            suggestion: 'To generate more images, please provide your own Gemini API key.'
-          },
-          { status: 429 }
-        )
-      }
-
-      console.log(`Rate limit check - IP: ${ip}, Remaining: ${rateLimitResult.remaining}`)
+    if (!rateLimitResult.allowed) {
+      const resetDate = new Date(rateLimitResult.resetTime)
+      const hoursUntilReset = Math.ceil((rateLimitResult.resetTime - Date.now()) / (1000 * 60 * 60))
+      return NextResponse.json(
+        {
+          error: `You've reached today's limit of 20 free images. Try again in ${hoursUntilReset} hours!`,
+          remaining: 0,
+          resetTime: resetDate.toISOString()
+        },
+        { status: 429 }
+      )
     }
 
-    // Use user's API key if provided, otherwise use default
-    const apiKey = userApiKey || process.env.GEMINI_API_KEY
+    console.log(`Rate limit check - IP: ${ip}, Remaining: ${rateLimitResult.remaining}`)
+
+    // Use the app's API key
+    const apiKey = process.env.GEMINI_API_KEY
     if (!apiKey || apiKey === 'your_api_key_here') {
       console.error('GEMINI_API_KEY not configured in .env.local')
       return NextResponse.json(
