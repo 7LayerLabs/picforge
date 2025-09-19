@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      const contentParts: any[] = []
+      const contentParts: Array<string | { inlineData: { data: string; mimeType: string } }> = []
 
       // Create a clear prompt that tells Gemini to generate an image
       if (base64AdditionalImage) {
@@ -179,11 +179,12 @@ Requirements:
         }
       })
 
-    } catch (modelError: any) {
+    } catch (modelError: unknown) {
       console.error('Model error:', modelError)
 
+      const error = modelError as Error
       // Check if it's a model not found error
-      if (modelError.message && modelError.message.includes('not found')) {
+      if (error.message && error.message.includes('not found')) {
         console.log('Image generation model not available, trying alternate approach...')
 
         // Fallback to regular Gemini for analysis
@@ -229,13 +230,13 @@ Provide:
       // For other errors, provide detailed information
       return NextResponse.json({
         success: false,
-        error: modelError.message || 'Unknown error occurred',
-        errorType: modelError.name || 'UnknownError',
+        error: error.message || 'Unknown error occurred',
+        errorType: error.name || 'UnknownError',
         imageSize: imageSize,
         prompt: prompt,
         modelUsed: 'gemini-2.5-flash-image-preview',
         debugInfo: {
-          errorDetails: modelError.toString(),
+          errorDetails: error.toString(),
           apiKeyPresent: !!apiKey,
           imageReceived: !!imageFile
         }
