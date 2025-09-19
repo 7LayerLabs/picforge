@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { checkRateLimit } from './rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,6 +8,7 @@ export async function POST(request: NextRequest) {
     const imageFile = formData.get('image') as File
     const additionalImageFile = formData.get('additionalImage') as File | null
     const prompt = formData.get('prompt') as string
+    const userApiKey = formData.get('apiKey') as string | null
 
     if (!imageFile || !prompt) {
       return NextResponse.json(
@@ -15,8 +17,33 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check for API key
-    const apiKey = process.env.GEMINI_API_KEY
+    // Get client IP for rate limiting
+    const ip = request.headers.get('x-forwarded-for') ||
+               request.headers.get('x-real-ip') ||
+               'unknown'
+
+    // Check rate limit if using default API key
+    if (!userApiKey) {
+      const rateLimitResult = checkRateLimit(ip, 5, 24 * 60 * 60 * 1000) // 5 images per day
+
+      if (!rateLimitResult.allowed) {
+        const resetDate = new Date(rateLimitResult.resetTime)
+        return NextResponse.json(
+          {
+            error: 'Rate limit exceeded. You can generate 5 images per day with the demo.',
+            remaining: 0,
+            resetTime: resetDate.toISOString(),
+            suggestion: 'To generate more images, please provide your own Gemini API key.'
+          },
+          { status: 429 }
+        )
+      }
+
+      console.log(`Rate limit check - IP: ${ip}, Remaining: ${rateLimitResult.remaining}`)
+    }
+
+    // Use user's API key if provided, otherwise use default
+    const apiKey = userApiKey || process.env.GEMINI_API_KEY
     if (!apiKey || apiKey === 'your_api_key_here') {
       console.error('GEMINI_API_KEY not configured in .env.local')
       return NextResponse.json(

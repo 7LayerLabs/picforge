@@ -22,6 +22,9 @@ export default function Home() {
   const [originalImage, setOriginalImage] = useState<string | null>(null)
   const [additionalImage, setAdditionalImage] = useState<File | null>(null)
   const [additionalImagePreview, setAdditionalImagePreview] = useState<string | null>(null)
+  const [userApiKey, setUserApiKey] = useState<string>('')
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false)
+  const [remainingUses, setRemainingUses] = useState<number | null>(null)
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -95,6 +98,11 @@ export default function Home() {
         formData.append('additionalImage', additionalImage)
       }
 
+      // Add user API key if provided
+      if (userApiKey) {
+        formData.append('apiKey', userApiKey)
+      }
+
       formData.append('prompt', instructions)
 
       const response = await fetch('/api/process-image', {
@@ -129,6 +137,12 @@ export default function Home() {
         setAdditionalImagePreview(null)
       } else if (response.ok && data.analysis) {
         setSubmitMessage(`Analysis complete. ${data.note || 'Image generation not available.'}`)
+      } else if (response.status === 429) {
+        // Rate limit exceeded
+        setSubmitMessage(data.error || 'Rate limit exceeded')
+        if (!userApiKey) {
+          setShowApiKeyInput(true) // Show API key input when rate limited
+        }
       } else {
         setSubmitMessage(`Error: ${data.error}`)
       }
@@ -223,6 +237,24 @@ export default function Home() {
               <p className="text-gray-600 text-xs">Forge your images into art</p>
             </div>
           </div>
+          <div className="flex items-center gap-3">
+            {!userApiKey && (
+              <div className="text-sm text-gray-600">
+                Demo: 5 images/day
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowApiKeyInput(!showApiKeyInput)}
+              className={`px-3 py-1.5 text-xs border rounded-lg transition-colors ${
+                userApiKey
+                  ? 'bg-green-50 border-green-300 text-green-700'
+                  : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              {userApiKey ? '✓ Using Your API Key' : 'Use Your API Key'}
+            </button>
+          </div>
           {currentImage && (
             <button
               type="button"
@@ -236,6 +268,60 @@ export default function Home() {
             </button>
           )}
         </div>
+
+        {/* API Key Input Modal */}
+        {showApiKeyInput && (
+          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-lg">
+            <div className="space-y-3">
+              <h3 className="font-semibold">Use Your Own Gemini API Key</h3>
+              <p className="text-sm text-gray-600">
+                Get unlimited image generations by using your own API key.
+                Get one free at{' '}
+                <a
+                  href="https://aistudio.google.com/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  Google AI Studio
+                </a>
+              </p>
+              <input
+                type="password"
+                value={userApiKey}
+                onChange={(e) => setUserApiKey(e.target.value)}
+                placeholder="Enter your Gemini API key (starts with AIza...)"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowApiKeyInput(false)
+                    if (!userApiKey) {
+                      setUserApiKey('')
+                    }
+                  }}
+                  className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                >
+                  {userApiKey ? 'Save' : 'Cancel'}
+                </button>
+                {userApiKey && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUserApiKey('')
+                      setShowApiKeyInput(false)
+                    }}
+                    className="px-4 py-2 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
+                  >
+                    Remove Key
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {!currentImage ? (
           <div className="flex flex-col items-center space-y-4">
