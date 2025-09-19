@@ -207,6 +207,26 @@ export default function Home() {
     }
   }
 
+  const deleteHistoryItem = (indexToDelete: number) => {
+    const itemToDelete = history[indexToDelete]
+
+    // Don't allow deleting the original image
+    if (itemToDelete.isOriginal) {
+      return
+    }
+
+    // If deleting the current image, switch to the previous one or original
+    if (currentImage === itemToDelete.image) {
+      const prevItem = history[indexToDelete - 1]
+      if (prevItem) {
+        restoreFromHistory(prevItem)
+      }
+    }
+
+    // Remove from history
+    setHistory(prev => prev.filter((_, index) => index !== indexToDelete))
+  }
+
   return (
     <div className="min-h-screen p-4 flex flex-col items-center">
       <div className="max-w-7xl w-full space-y-4">
@@ -428,18 +448,34 @@ export default function Home() {
                           <p className="text-xs truncate" title={item.prompt}>
                             {item.isOriginal ? 'Original' : item.prompt}
                           </p>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              downloadSingleImage(item, index)
-                            }}
-                            className="opacity-0 group-hover:opacity-100 absolute bottom-1 right-1 p-1 bg-white bg-opacity-90 hover:bg-gray-200 rounded transition-opacity"
-                            title="Download"
-                          >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                          </button>
+                          <div className="opacity-0 group-hover:opacity-100 absolute bottom-1 right-1 flex gap-1 transition-opacity">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                downloadSingleImage(item, index)
+                              }}
+                              className="p-1 bg-white bg-opacity-90 hover:bg-gray-200 rounded"
+                              title="Download"
+                            >
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                              </svg>
+                            </button>
+                            {!item.isOriginal && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  deleteHistoryItem(index)
+                                }}
+                                className="p-1 bg-white bg-opacity-90 hover:bg-red-100 rounded"
+                                title="Delete"
+                              >
+                                <svg className="w-3 h-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}
