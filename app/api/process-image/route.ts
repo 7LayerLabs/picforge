@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       const contentParts: Array<string | { inlineData: { data: string; mimeType: string } }> = []
 
       // Create a clear prompt that tells Gemini to generate an image
-      if (base64AdditionalImage) {
+      if (base64AdditionalImage && additionalImageType) {
         const additionalImagePart = {
           inlineData: {
             data: base64AdditionalImage,
