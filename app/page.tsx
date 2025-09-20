@@ -64,61 +64,71 @@ export default function Home() {
 
   // Load sessions from localStorage on mount
   useEffect(() => {
-    const storedSessions = localStorage.getItem('picforge_sessions')
-    if (storedSessions) {
-      try {
-        const parsed = JSON.parse(storedSessions)
-        setSessions(parsed.map((s: Session) => ({
-          ...s,
-          timestamp: new Date(s.timestamp),
-          history: s.history.map((h: HistoryItem) => ({
-            ...h,
-            timestamp: new Date(h.timestamp)
-          }))
-        })))
-      } catch (e) {
-        console.error('Failed to load sessions:', e)
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+      const storedSessions = localStorage.getItem('picforge_sessions')
+      if (storedSessions) {
+        try {
+          const parsed = JSON.parse(storedSessions)
+          setSessions(parsed.map((s: Session) => ({
+            ...s,
+            timestamp: new Date(s.timestamp),
+            history: s.history.map((h: HistoryItem) => ({
+              ...h,
+              timestamp: new Date(h.timestamp)
+            }))
+          })))
+        } catch (e) {
+          console.error('Failed to load sessions:', e)
+        }
       }
     }
   }, [])
 
   // Save sessions to localStorage whenever they change
   useEffect(() => {
-    if (sessions.length > 0) {
+    // Only run on client side
+    if (typeof window !== 'undefined' && sessions.length > 0) {
       localStorage.setItem('picforge_sessions', JSON.stringify(sessions))
     }
   }, [sessions])
 
   // Save current session
   const saveSession = () => {
-    if (!currentImage && !originalImage) return
+    try {
+      if (!currentImage && !originalImage) return
 
-    const name = sessionName.trim() || `Session ${new Date().toLocaleString()}`
-    const sessionId = currentSessionId || Date.now().toString()
+      const name = sessionName.trim() || `Session ${new Date().toLocaleString()}`
+      const sessionId = currentSessionId || Date.now().toString()
 
-    const newSession: Session = {
-      id: sessionId,
-      name,
-      timestamp: new Date(),
-      originalImage,
-      currentImage,
-      history
-    }
-
-    setSessions(prev => {
-      const existing = prev.findIndex(s => s.id === sessionId)
-      if (existing >= 0) {
-        const updated = [...prev]
-        updated[existing] = newSession
-        return updated
+      const newSession: Session = {
+        id: sessionId,
+        name,
+        timestamp: new Date(),
+        originalImage,
+        currentImage,
+        history
       }
-      return [newSession, ...prev].slice(0, 50) // Keep max 50 sessions
-    })
 
-    setCurrentSessionId(sessionId)
-    setSessionName('')
-    setSubmitMessage('Session saved!')
-    setTimeout(() => setSubmitMessage(''), 3000)
+      setSessions(prev => {
+        const existing = prev.findIndex(s => s.id === sessionId)
+        if (existing >= 0) {
+          const updated = [...prev]
+          updated[existing] = newSession
+          return updated
+        }
+        return [newSession, ...prev].slice(0, 50) // Keep max 50 sessions
+      })
+
+      setCurrentSessionId(sessionId)
+      setSessionName('')
+      setSubmitMessage('Session saved!')
+      setTimeout(() => setSubmitMessage(''), 3000)
+    } catch (error) {
+      console.error('Failed to save session:', error)
+      setSubmitMessage('Failed to save session')
+      setTimeout(() => setSubmitMessage(''), 3000)
+    }
   }
 
   // Load a session
