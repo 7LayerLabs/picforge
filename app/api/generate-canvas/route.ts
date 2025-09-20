@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     } else {
       throw new Error('No image URL in response')
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error generating image:', error)
 
     // Handle specific OpenAI errors

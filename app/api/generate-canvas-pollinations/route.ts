@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       provider: 'Pollinations.ai (100% Free, No API Key)',
     })
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error generating image:', error)
 
     return NextResponse.json(

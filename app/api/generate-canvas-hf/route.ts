@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       provider: 'Hugging Face (Free)',
     })
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error generating image:', error)
 
     return NextResponse.json(

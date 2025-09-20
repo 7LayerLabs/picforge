@@ -40,8 +40,8 @@ export default function Home() {
   const [showAICanvas, setShowAICanvas] = useState(false)
   const [canvasPrompt, setCanvasPrompt] = useState('')
   const [isGeneratingCanvas, setIsGeneratingCanvas] = useState(false)
-  const [canvasSize, setCanvasSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024')
-  const [canvasQuality, setCanvasQuality] = useState<'standard' | 'hd'>('standard')
+  const [canvasSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024')
+  const [canvasQuality] = useState<'standard' | 'hd'>('standard')
 
   // Session management
   const [sessions, setSessions] = useState<Session[]>([])
@@ -758,7 +758,7 @@ export default function Home() {
                   />
 
                   <div className="text-center text-xs text-gray-500 mb-2">
-                    💡 Tip: Be descriptive! Try "oil painting of..." or "photorealistic..." for better results
+                    💡 Tip: Be descriptive! Try &quot;oil painting of...&quot; or &quot;photorealistic...&quot; for better results
                   </div>
 
                   <div className="flex gap-2">
