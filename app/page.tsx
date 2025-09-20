@@ -433,14 +433,18 @@ export default function Home() {
       {/* Toggle sidebar button */}
       <button
         onClick={() => setShowSidebar(!showSidebar)}
-        className={`fixed left-4 top-4 z-50 bg-gray-900 text-white p-2 rounded-lg hover:bg-gray-800 transition-all ${
+        className={`fixed left-4 top-24 z-50 bg-orange-600 text-white px-4 py-3 rounded-lg hover:bg-orange-700 shadow-lg transition-all flex items-center gap-2 ${
           showSidebar ? 'translate-x-80' : ''
         }`}
+        title={showSidebar ? "Close sidebar" : "Open sessions"}
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
             d={showSidebar ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
         </svg>
+        <span className="text-sm font-medium">
+          {showSidebar ? 'Close' : 'Sessions'}
+        </span>
       </button>
 
       {/* Main content */}
