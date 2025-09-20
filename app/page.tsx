@@ -73,9 +73,9 @@ export default function Home() {
   useEffect(() => {
     // Only run on client side
     if (typeof window !== 'undefined') {
-      const storedSessions = localStorage.getItem('picforge_sessions')
-      if (storedSessions) {
-        try {
+      try {
+        const storedSessions = localStorage.getItem('picforge_sessions')
+        if (storedSessions) {
           const parsed = JSON.parse(storedSessions)
           setSessions(parsed.map((s: Session) => ({
             ...s,
@@ -85,9 +85,13 @@ export default function Home() {
               timestamp: new Date(h.timestamp)
             }))
           })))
-        } catch (e) {
-          console.error('Failed to load sessions:', e)
         }
+      } catch (e) {
+        console.error('Failed to load sessions:', e)
+        // Clear corrupted localStorage data
+        try {
+          localStorage.removeItem('picforge_sessions')
+        } catch {}
       }
     }
   }, [])
@@ -96,7 +100,19 @@ export default function Home() {
   useEffect(() => {
     // Only run on client side
     if (typeof window !== 'undefined' && sessions.length > 0) {
-      localStorage.setItem('picforge_sessions', JSON.stringify(sessions))
+      try {
+        localStorage.setItem('picforge_sessions', JSON.stringify(sessions))
+      } catch (e) {
+        console.error('Failed to save sessions:', e)
+        // Try to save with smaller data if quota exceeded
+        if (e instanceof Error && e.name === 'QuotaExceededError') {
+          try {
+            // Keep only last 10 sessions
+            const reducedSessions = sessions.slice(0, 10)
+            localStorage.setItem('picforge_sessions', JSON.stringify(reducedSessions))
+          } catch {}
+        }
+      }
     }
   }, [sessions])
 
