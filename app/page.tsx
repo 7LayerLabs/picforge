@@ -12,6 +12,15 @@ interface HistoryItem {
   isOriginal?: boolean
 }
 
+interface Session {
+  id: string
+  name: string
+  timestamp: Date
+  originalImage: string | null
+  currentImage: string | null
+  history: HistoryItem[]
+}
+
 export default function Home() {
   const [currentImage, setCurrentImage] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -25,6 +34,12 @@ export default function Home() {
   const [zoomedImage, setZoomedImage] = useState<string | null>(null)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
+
+  // Session management
+  const [sessions, setSessions] = useState<Session[]>([])
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null)
+  const [showSidebar, setShowSidebar] = useState(false)
+  const [sessionName, setSessionName] = useState('')
 
   // Reset zoom when opening a new image
   const openZoom = (imageSrc: string) => {
@@ -45,6 +60,84 @@ export default function Home() {
     window.addEventListener('keydown', handleEsc)
     return () => window.removeEventListener('keydown', handleEsc)
   }, [zoomedImage])
+
+  // Load sessions from localStorage on mount
+  useEffect(() => {
+    const storedSessions = localStorage.getItem('picforge_sessions')
+    if (storedSessions) {
+      try {
+        const parsed = JSON.parse(storedSessions)
+        setSessions(parsed.map((s: any) => ({
+          ...s,
+          timestamp: new Date(s.timestamp),
+          history: s.history.map((h: any) => ({
+            ...h,
+            timestamp: new Date(h.timestamp)
+          }))
+        })))
+      } catch (e) {
+        console.error('Failed to load sessions:', e)
+      }
+    }
+  }, [])
+
+  // Save sessions to localStorage whenever they change
+  useEffect(() => {
+    if (sessions.length > 0) {
+      localStorage.setItem('picforge_sessions', JSON.stringify(sessions))
+    }
+  }, [sessions])
+
+  // Save current session
+  const saveSession = () => {
+    if (!currentImage && !originalImage) return
+
+    const name = sessionName.trim() || `Session ${new Date().toLocaleString()}`
+    const sessionId = currentSessionId || Date.now().toString()
+
+    const newSession: Session = {
+      id: sessionId,
+      name,
+      timestamp: new Date(),
+      originalImage,
+      currentImage,
+      history
+    }
+
+    setSessions(prev => {
+      const existing = prev.findIndex(s => s.id === sessionId)
+      if (existing >= 0) {
+        const updated = [...prev]
+        updated[existing] = newSession
+        return updated
+      }
+      return [newSession, ...prev].slice(0, 50) // Keep max 50 sessions
+    })
+
+    setCurrentSessionId(sessionId)
+    setSessionName('')
+    setSubmitMessage('Session saved!')
+    setTimeout(() => setSubmitMessage(''), 3000)
+  }
+
+  // Load a session
+  const loadSession = (session: Session) => {
+    setCurrentImage(session.currentImage)
+    setOriginalImage(session.originalImage)
+    setHistory(session.history)
+    setCurrentSessionId(session.id)
+    setSelectedFile(null)
+    setInstructions('')
+    setShowSidebar(false)
+  }
+
+  // Delete a session
+  const deleteSession = (sessionId: string) => {
+    setSessions(prev => prev.filter(s => s.id !== sessionId))
+    if (currentSessionId === sessionId) {
+      setCurrentSessionId(null)
+    }
+  }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -251,7 +344,109 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen p-4 flex flex-col items-center">
+    <div className="min-h-screen flex">
+      {/* Sidebar */}
+      <div className={`fixed left-0 top-0 h-full bg-gray-900 text-white transition-all duration-300 z-40 ${
+        showSidebar ? 'w-80' : 'w-0'
+      } overflow-hidden`}>
+        <div className="p-4 w-80">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold">Sessions</h2>
+            <button
+              onClick={() => setShowSidebar(false)}
+              className="text-gray-400 hover:text-white"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Save current session */}
+          {(currentImage || originalImage) && (
+            <div className="mb-4 p-3 bg-gray-800 rounded-lg">
+              <input
+                type="text"
+                placeholder="Session name (optional)"
+                value={sessionName}
+                onChange={(e) => setSessionName(e.target.value)}
+                className="w-full mb-2 px-3 py-2 bg-gray-700 rounded text-white placeholder-gray-400"
+              />
+              <button
+                onClick={saveSession}
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded transition-colors"
+              >
+                Save Current Session
+              </button>
+            </div>
+          )}
+
+          {/* Sessions list */}
+          <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+            {sessions.length === 0 ? (
+              <p className="text-gray-400 text-center py-8">No saved sessions</p>
+            ) : (
+              sessions.map((session) => (
+                <div
+                  key={session.id}
+                  className={`mb-2 p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors ${
+                    currentSessionId === session.id ? 'ring-2 ring-orange-500' : ''
+                  }`}
+                  onClick={() => loadSession(session)}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-medium text-sm truncate flex-1">{session.name}</h3>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (confirm('Delete this session?')) {
+                          deleteSession(session.id)
+                        }
+                      }}
+                      className="text-gray-500 hover:text-red-400 ml-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    {new Date(session.timestamp).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {session.history.length} edits
+                  </p>
+                  {session.currentImage && (
+                    <img
+                      src={session.currentImage}
+                      alt={session.name}
+                      className="w-full h-24 object-cover rounded mt-2"
+                    />
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Toggle sidebar button */}
+      <button
+        onClick={() => setShowSidebar(!showSidebar)}
+        className={`fixed left-4 top-4 z-50 bg-gray-900 text-white p-2 rounded-lg hover:bg-gray-800 transition-all ${
+          showSidebar ? 'translate-x-80' : ''
+        }`}
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d={showSidebar ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+        </svg>
+      </button>
+
+      {/* Main content */}
+      <div className={`flex-1 p-4 flex flex-col items-center transition-all duration-300 ${
+        showSidebar ? 'ml-80' : ''
+      }`}>
       {/* Zoom Modal */}
       {zoomedImage && (
         <div
@@ -634,6 +829,7 @@ export default function Home() {
             </div>
           </>
         )}
+      </div>
       </div>
     </div>
   )
