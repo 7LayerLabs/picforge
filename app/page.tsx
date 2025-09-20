@@ -390,9 +390,9 @@ export default function Home() {
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <div className={`fixed left-0 top-0 h-full bg-gray-900 text-white transition-all duration-300 z-40 ${
-        showSidebar ? 'w-80' : 'w-0'
+        showSidebar ? 'w-full sm:w-80' : 'w-0'
       } overflow-hidden`}>
-        <div className="p-4 w-80">
+        <div className="p-4 w-full sm:w-80">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold">Sessions</h2>
             <button
@@ -476,23 +476,23 @@ export default function Home() {
       {/* Toggle sidebar button */}
       <button
         onClick={() => setShowSidebar(!showSidebar)}
-        className={`fixed left-4 top-24 z-50 bg-orange-600 text-white px-4 py-3 rounded-lg hover:bg-orange-700 shadow-lg transition-all flex items-center gap-2 ${
-          showSidebar ? 'translate-x-80' : ''
+        className={`fixed left-2 sm:left-4 top-20 sm:top-24 z-50 bg-orange-600 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg hover:bg-orange-700 shadow-lg transition-all flex items-center gap-1 sm:gap-2 ${
+          showSidebar ? 'translate-x-full sm:translate-x-80' : ''
         }`}
         title={showSidebar ? "Close sidebar" : "Open sessions"}
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
             d={showSidebar ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
         </svg>
-        <span className="text-sm font-medium">
+        <span className="text-xs sm:text-sm font-medium hidden sm:inline">
           {showSidebar ? 'Close' : 'Sessions'}
         </span>
       </button>
 
       {/* Main content */}
-      <div className={`flex-1 p-4 flex flex-col items-center transition-all duration-300 ${
-        showSidebar ? 'ml-80' : ''
+      <div className={`flex-1 p-2 sm:p-4 flex flex-col items-center transition-all duration-300 ${
+        showSidebar ? 'ml-0 sm:ml-80' : ''
       }`}>
       {/* Zoom Modal */}
       {zoomedImage && (
@@ -589,14 +589,14 @@ export default function Home() {
         </div>
       )}
 
-      <div className="max-w-7xl w-full space-y-4">
+      <div className="max-w-7xl w-full space-y-3 sm:space-y-4">
         <div className="flex justify-between items-center">
           <a
             href="https://pic-forge.com"
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity"
             aria-label="PicForge Home"
           >
-            <div className="w-[60px] h-[60px] relative">
+            <div className="w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] relative">
               <Image
                 src="/logo.svg"
                 alt="PicForge Logo"
@@ -607,10 +607,10 @@ export default function Home() {
               />
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                 PicForge
               </h1>
-              <p className="text-gray-600 text-xs">Forge your images into art</p>
+              <p className="text-gray-600 text-[10px] sm:text-xs">Forge your images into art</p>
             </div>
           </a>
           {currentImage && (
@@ -639,24 +639,24 @@ export default function Home() {
             <button
               type="button"
               onClick={() => document.getElementById('image-upload-input')?.click()}
-              className="px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg cursor-pointer hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg cursor-pointer hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg"
             >
               <div className="flex items-center gap-2">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2C10 6 8 8 8 12c0 2.2 1.8 4 4 4s4-1.8 4-4c0-4-2-6-4-10zm0 14c-1.1 0-2-.9-2-2 0-2 1-3 2-5 1 2 2 3 2 5 0 1.1-.9 2-2 2zm7.5-2c0 3.59-2.91 6.5-6.5 6.5S6.5 17.59 6.5 14c0-1.5.5-2.89 1.34-4 .29-.39.85-.47 1.24-.18.39.29.47.85.18 1.24C8.67 11.89 8.5 12.93 8.5 14c0 2.49 2.01 4.5 4.5 4.5s4.5-2.01 4.5-4.5c0-1.5-.5-2.89-1.34-4-.29-.39-.26-.95.13-1.24.39-.29.95-.26 1.24.13.84 1.11 1.34 2.5 1.34 4.11z"/>
                 </svg>
-                Start Forging Your Images
+                <span className="text-sm sm:text-base">Start Forging Your Images</span>
               </div>
             </button>
             <p className="text-gray-500 text-sm mt-4">Upload an image to forge something new</p>
           </div>
         ) : (
           <>
-            <div className="flex gap-4">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
               {/* Left side - Main Image and Form */}
-              <div className="flex-1 flex flex-col space-y-3">
+              <div className="flex-1 flex flex-col space-y-2 sm:space-y-3">
                 {/* Main Image Display */}
-                <div className="relative w-full h-[500px] border-2 border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 rounded-lg overflow-hidden bg-gray-50">
                 {currentImage && (
                   <>
                     <Image
@@ -685,19 +685,19 @@ export default function Home() {
                 </div>
 
                 {/* Input Form */}
-                <form onSubmit={handleSubmit} className="w-full space-y-3">
+                <form onSubmit={handleSubmit} className="w-full space-y-2 sm:space-y-3">
                 <input
                   type="text"
                   value={instructions}
                   onChange={(e) => setInstructions(e.target.value)}
-                  placeholder="Enter editing instructions (e.g., 'change background to beach')..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  placeholder="Enter editing instructions..."
+                  className="w-full px-2 sm:px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
                   disabled={isSubmitting}
                 />
 
                 {/* Additional Image Upload Section */}
                 <div
-                  className={`border-2 border-dashed rounded-lg p-3 transition-all ${
+                  className={`border-2 border-dashed rounded-lg p-2 sm:p-3 transition-all ${
                     isDraggingAdditional
                       ? 'border-orange-500 bg-orange-50'
                       : 'border-gray-300 hover:border-gray-400'
@@ -720,18 +720,18 @@ export default function Home() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <p className="text-sm font-medium text-gray-700 mb-1">
-                          {isDraggingAdditional ? 'Drop image here' : 'Drag & drop additional image'}
+                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                          {isDraggingAdditional ? 'Drop image here' : 'Add another image'}
                         </p>
-                        <p className="text-xs text-gray-500 mb-3">or</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500 mb-2 sm:mb-3">or</p>
                         <button
                           type="button"
                           onClick={() => document.getElementById('additional-image-upload')?.click()}
-                          className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                          className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                         >
                           Browse Files
                         </button>
-                        <p className="text-xs text-gray-500 mt-3">Add another image to blend or combine with your main image</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500 mt-2 sm:mt-3 px-2">Blend or combine images</p>
                       </div>
                     </div>
                   ) : (
@@ -810,11 +810,11 @@ export default function Home() {
                     {history.map((item, index) => (
                       <div
                         key={index}
-                        className={`border-2 rounded-lg p-2 hover:shadow-xl transition-all ${
+                        className={`border rounded-lg p-1 sm:p-2 hover:shadow-xl transition-all ${
                           currentImage === item.image ? 'border-blue-500 shadow-lg' : 'border-gray-200'
                         } ${item.isOriginal ? 'bg-green-50' : 'bg-white'} relative group`}
                       >
-                        <div className="relative h-32 w-full rounded overflow-hidden bg-gray-50 mb-1">
+                        <div className="relative h-20 sm:h-32 w-full rounded overflow-hidden bg-gray-50 mb-0.5 sm:mb-1">
                           {item.image && (
                             <>
                               <Image
