@@ -58,8 +58,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error generating image:', error)
 
+    const err = error as { error?: { type?: string; code?: string; message?: string }; message?: string }
+
     // Handle specific OpenAI errors
-    if (error?.error?.type === 'insufficient_quota' || error?.error?.code === 'billing_hard_limit_reached') {
+    if (err?.error?.type === 'insufficient_quota' || err?.error?.code === 'billing_hard_limit_reached') {
       return NextResponse.json(
         {
           error: 'OpenAI billing limit reached. To fix this:\n1. Add credits at platform.openai.com\n2. Or increase your spending limit\n3. Or wait for your monthly limit to reset',
@@ -69,7 +71,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (error?.message?.includes('billing') || error?.message?.includes('limit')) {
+    if (err?.message?.includes('billing') || err?.message?.includes('limit')) {
       return NextResponse.json(
         {
           error: 'OpenAI billing limit reached. Please add credits to your OpenAI account at platform.openai.com',
@@ -79,9 +81,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (error?.error?.message) {
+    if (err?.error?.message) {
       return NextResponse.json(
-        { error: error.error.message },
+        { error: err.error.message },
         { status: 500 }
       )
     }

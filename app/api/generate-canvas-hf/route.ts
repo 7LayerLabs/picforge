@@ -70,8 +70,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error generating image:', error)
 
+    const errorMessage = error instanceof Error ? error.message : 'Failed to generate image'
+
     return NextResponse.json(
-      { error: error.message || 'Failed to generate image. Please try again.' },
+      { error: errorMessage || 'Failed to generate image. Please try again.' },
       { status: 500 }
     )
   }

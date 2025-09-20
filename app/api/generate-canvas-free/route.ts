@@ -79,19 +79,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error generating image:', error)
 
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+
     // Handle rate limiting
-    if (error?.status === 429 || error?.message?.includes('rate')) {
+    if (errorMessage.includes('429') || errorMessage.includes('rate')) {
       return NextResponse.json(
         { error: 'Rate limit reached. Please wait a moment and try again.' },
         { status: 429 }
-      )
-    }
-
-    // Handle API errors
-    if (error?.error?.message) {
-      return NextResponse.json(
-        { error: error.error.message },
-        { status: 500 }
       )
     }
 
