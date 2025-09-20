@@ -36,6 +36,13 @@ export default function Home() {
   const [zoomLevel, setZoomLevel] = useState(1)
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
 
+  // AI Canvas states
+  const [showAICanvas, setShowAICanvas] = useState(false)
+  const [canvasPrompt, setCanvasPrompt] = useState('')
+  const [isGeneratingCanvas, setIsGeneratingCanvas] = useState(false)
+  const [canvasSize, setCanvasSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024')
+  const [canvasQuality, setCanvasQuality] = useState<'standard' | 'hd'>('standard')
+
   // Session management
   const [sessions, setSessions] = useState<Session[]>([])
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null)
@@ -366,6 +373,76 @@ export default function Home() {
     }
   }
 
+  const generateCanvas = async () => {
+    if (!canvasPrompt.trim()) {
+      setSubmitMessage('Please enter a prompt for your canvas')
+      setTimeout(() => setSubmitMessage(''), 3000)
+      return
+    }
+
+    setIsGeneratingCanvas(true)
+    setSubmitMessage('Generating your canvas...')
+
+    try {
+      console.log('Sending request to generate canvas:', { canvasPrompt, canvasSize, canvasQuality })
+
+      const response = await fetch('/api/generate-canvas-pollinations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: canvasPrompt,
+        }),
+      })
+
+      const data = await response.json()
+      console.log('API Response:', data)
+
+      if (response.ok && data.image) {
+        // Set the generated image as the current image
+        setCurrentImage(data.image)
+        setOriginalImage(data.image)
+
+        // Convert to file for editing
+        const res = await fetch(data.image)
+        const blob = await res.blob()
+        const file = new File([blob], 'ai-canvas.png', { type: 'image/png' })
+        setSelectedFile(file)
+
+        // Add to history
+        setHistory([{
+          prompt: `AI Canvas: ${data.revisedPrompt || canvasPrompt}`,
+          image: data.image,
+          timestamp: new Date(),
+          isOriginal: true
+        }])
+
+        setShowAICanvas(false)
+        setCanvasPrompt('')
+        setSubmitMessage('Canvas generated successfully!')
+      } else {
+        // Display error with proper formatting
+        if (data.billingIssue) {
+          setSubmitMessage('⚠️ ' + data.error)
+        } else {
+          setSubmitMessage(data.error || 'Failed to generate canvas')
+        }
+      }
+    } catch (error) {
+      console.error('Error generating canvas:', error)
+      setSubmitMessage('Failed to generate canvas. Please check the console for details.')
+    } finally {
+      setIsGeneratingCanvas(false)
+      // Clear error message after delay
+      setTimeout(() => {
+        if (!currentImage) {
+          setSubmitMessage('')
+        }
+      }, 10000)
+    }
+  }
+
   const deleteHistoryItem = (indexToDelete: number) => {
     const itemToDelete = history[indexToDelete]
 
@@ -628,27 +705,100 @@ export default function Home() {
         </div>
 
         {!currentImage ? (
-          <div className="flex flex-col items-center space-y-4">
-            <input
-              type="file"
-              accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
-              onChange={handleImageUpload}
-              style={{ display: 'none' }}
-              id="image-upload-input"
-            />
-            <button
-              type="button"
-              onClick={() => document.getElementById('image-upload-input')?.click()}
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg cursor-pointer hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg"
-            >
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C10 6 8 8 8 12c0 2.2 1.8 4 4 4s4-1.8 4-4c0-4-2-6-4-10zm0 14c-1.1 0-2-.9-2-2 0-2 1-3 2-5 1 2 2 3 2 5 0 1.1-.9 2-2 2zm7.5-2c0 3.59-2.91 6.5-6.5 6.5S6.5 17.59 6.5 14c0-1.5.5-2.89 1.34-4 .29-.39.85-.47 1.24-.18.39.29.47.85.18 1.24C8.67 11.89 8.5 12.93 8.5 14c0 2.49 2.01 4.5 4.5 4.5s4.5-2.01 4.5-4.5c0-1.5-.5-2.89-1.34-4-.29-.39-.26-.95.13-1.24.39-.29.95-.26 1.24.13.84 1.11 1.34 2.5 1.34 4.11z"/>
-                </svg>
-                <span className="text-sm sm:text-base">Start Forging Your Images</span>
+          <div className="flex flex-col items-center space-y-6">
+            <div className="flex flex-col items-center space-y-3">
+              <input
+                type="file"
+                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                onChange={handleImageUpload}
+                style={{ display: 'none' }}
+                id="image-upload-input"
+              />
+              <button
+                type="button"
+                onClick={() => document.getElementById('image-upload-input')?.click()}
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg cursor-pointer hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C10 6 8 8 8 12c0 2.2 1.8 4 4 4s4-1.8 4-4c0-4-2-6-4-10zm0 14c-1.1 0-2-.9-2-2 0-2 1-3 2-5 1 2 2 3 2 5 0 1.1-.9 2-2 2zm7.5-2c0 3.59-2.91 6.5-6.5 6.5S6.5 17.59 6.5 14c0-1.5.5-2.89 1.34-4 .29-.39.85-.47 1.24-.18.39.29.47.85.18 1.24C8.67 11.89 8.5 12.93 8.5 14c0 2.49 2.01 4.5 4.5 4.5s4.5-2.01 4.5-4.5c0-1.5-.5-2.89-1.34-4-.29-.39-.26-.95.13-1.24.39-.29.95-.26 1.24.13.84 1.11 1.34 2.5 1.34 4.11z"/>
+                  </svg>
+                  <span className="text-sm sm:text-base">Start Forging Your Images</span>
+                </div>
+              </button>
+              <p className="text-gray-500 text-xs sm:text-sm">Upload an image to forge something new</p>
+            </div>
+
+            {/* AI Canvas Design Section */}
+            <div className="w-full max-w-2xl border-t border-gray-200 pt-6">
+              <div className="text-center mb-4">
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Design Your Own Canvas</h2>
+                <p className="text-xs sm:text-sm text-gray-600">Create custom backgrounds and images with FREE AI</p>
+                <p className="text-[10px] text-green-600 mt-1">✨ No API key needed - 100% Free Forever!</p>
               </div>
-            </button>
-            <p className="text-gray-500 text-sm mt-4">Upload an image to forge something new</p>
+
+              {!showAICanvas ? (
+                <button
+                  onClick={() => setShowAICanvas(true)}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                  <span className="text-sm sm:text-base font-medium">Create AI Canvas</span>
+                </button>
+              ) : (
+                <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+                  <textarea
+                    value={canvasPrompt}
+                    onChange={(e) => setCanvasPrompt(e.target.value)}
+                    placeholder="Describe your canvas... (e.g., 'A serene beach sunset with golden sand and purple sky')"                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm resize-none"
+                    rows={3}
+                    disabled={isGeneratingCanvas}
+                  />
+
+                  <div className="text-center text-xs text-gray-500 mb-2">
+                    💡 Tip: Be descriptive! Try "oil painting of..." or "photorealistic..." for better results
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={generateCanvas}
+                      disabled={isGeneratingCanvas || !canvasPrompt.trim()}
+                      className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:bg-gray-400 text-sm font-medium"
+                    >
+                      {isGeneratingCanvas ? 'Generating...' : 'Generate Canvas'}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowAICanvas(false)
+                        setCanvasPrompt('')
+                      }}
+                      disabled={isGeneratingCanvas}
+                      className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+
+                  {submitMessage && (
+                    <div className={`p-3 rounded-lg text-xs sm:text-sm mt-2 ${
+                      submitMessage.includes('Error') || submitMessage.includes('Failed') || submitMessage.includes('error') || submitMessage.includes('⚠️')
+                        ? 'bg-red-100 text-red-700 border border-red-300'
+                        : submitMessage.includes('Generating')
+                        ? 'bg-blue-100 text-blue-700 animate-pulse'
+                        : 'bg-green-100 text-green-700'
+                    }`}>
+                      {submitMessage.split('\n').map((line, idx) => (
+                        <div key={idx} className={idx === 0 ? 'font-semibold' : 'mt-1'}>
+                          {line}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <>
