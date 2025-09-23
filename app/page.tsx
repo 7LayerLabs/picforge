@@ -80,6 +80,7 @@ export default function Home() {
         const storedSessions = localStorage.getItem('picforge_sessions')
         if (storedSessions) {
           const parsed = JSON.parse(storedSessions)
+          console.log('Loading sessions from localStorage:', parsed.length, 'sessions')
           setSessions(parsed.map((s: Session) => ({
             ...s,
             timestamp: new Date(s.timestamp),
@@ -102,9 +103,11 @@ export default function Home() {
   // Save sessions to localStorage whenever they change
   useEffect(() => {
     // Only run on client side
-    if (typeof window !== 'undefined' && sessions.length > 0) {
+    if (typeof window !== 'undefined') {
       try {
+        // Always save, even if empty array (to persist the state)
         localStorage.setItem('picforge_sessions', JSON.stringify(sessions))
+        console.log('Saved sessions to localStorage:', sessions.length, 'sessions')
       } catch (e) {
         console.error('Failed to save sessions:', e)
         // Try to save with smaller data if quota exceeded
@@ -113,6 +116,7 @@ export default function Home() {
             // Keep only last 10 sessions
             const reducedSessions = sessions.slice(0, 10)
             localStorage.setItem('picforge_sessions', JSON.stringify(reducedSessions))
+            console.log('Saved reduced sessions due to quota:', reducedSessions.length)
           } catch {}
         }
       }
@@ -169,6 +173,7 @@ export default function Home() {
 
   // Load a session
   const loadSession = (session: Session) => {
+    console.log('Loading session:', session.name, 'ID:', session.id)
     setCurrentImage(session.currentImage)
     setOriginalImage(session.originalImage)
     setHistory(session.history)
@@ -213,6 +218,9 @@ export default function Home() {
             timestamp: new Date(),
             isOriginal: true
           }])
+          setCurrentSessionId(null)  // Start fresh session for new image
+          setSessionName('')  // Clear session name
+          console.log('New image loaded: cleared session context')
         }
       }
       reader.readAsDataURL(file)
@@ -362,6 +370,9 @@ export default function Home() {
     setHistory([])
     setAdditionalImage(null)
     setAdditionalImagePreview(null)
+    setCurrentSessionId(null)  // Clear current session when resetting
+    setSessionName('')  // Clear session name
+    console.log('Reset: cleared session context')
   }
 
   const restoreFromHistory = async (item: HistoryItem) => {
@@ -447,6 +458,10 @@ export default function Home() {
         // Set the generated image as the current image
         setCurrentImage(data.image)
         setOriginalImage(data.image)
+
+        // Clear session context for new AI generated image
+        setCurrentSessionId(null)
+        setSessionName('')
 
         // Convert to file for editing
         const res = await fetch(data.image)
