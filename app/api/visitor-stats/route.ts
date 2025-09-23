@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Use Vercel KV in production, fallback to mock data for development
     if (process.env.KV_URL) {

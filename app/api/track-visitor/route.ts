@@ -3,12 +3,12 @@ import { headers } from 'next/headers'
 import { kv } from '@vercel/kv'
 
 // Simple in-memory storage for development
-let visitorData: { count: number; ips: Set<string> } = {
+const visitorData: { count: number; ips: Set<string> } = {
   count: 0,
   ips: new Set()
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const headersList = headers()
 
