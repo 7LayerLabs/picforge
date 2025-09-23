@@ -10,7 +10,7 @@ const visitorData: { count: number; ips: Set<string> } = {
 
 export async function GET() {
   try {
-    const headersList = headers()
+    const headersList = await headers()
 
     // Get IP address from various headers (Vercel provides these)
     const ip = headersList.get('x-forwarded-for')?.split(',')[0] ||
@@ -54,7 +54,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const headersList = headers()
+    const headersList = await headers()
     const body = await request.json()
 
     // Get IP and user agent
