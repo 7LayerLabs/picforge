@@ -48,20 +48,35 @@ export default function Home() {
   useEffect(() => {
     const trackVisitor = async () => {
       try {
+        console.log('Tracking visitor...')
         const response = await fetch('/api/track-visitor', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ page: '/' })
         })
+        console.log('Track response status:', response.status)
         if (response.ok) {
           const data = await response.json()
+          console.log('Visitor data:', data)
           setVisitorStats({
-            totalVisits: data.totalVisits,
-            uniqueVisitors: data.uniqueVisitors
+            totalVisits: data.totalVisits || 0,
+            uniqueVisitors: data.uniqueVisitors || 0
+          })
+        } else {
+          // Show counter with zero values if API fails
+          console.error('Track API failed:', response.status)
+          setVisitorStats({
+            totalVisits: 0,
+            uniqueVisitors: 0
           })
         }
       } catch (error) {
         console.error('Failed to track visitor:', error)
+        // Show counter with zero values on error
+        setVisitorStats({
+          totalVisits: 0,
+          uniqueVisitors: 0
+        })
       }
     }
     trackVisitor()
