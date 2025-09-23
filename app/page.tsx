@@ -25,6 +25,7 @@ export default function Home() {
   const [additionalImage, setAdditionalImage] = useState<File | null>(null)
   const [additionalImagePreview, setAdditionalImagePreview] = useState<string | null>(null)
   const [isDraggingAdditional, setIsDraggingAdditional] = useState(false)
+  const [isDraggingMain, setIsDraggingMain] = useState(false)
   const [zoomedImage, setZoomedImage] = useState<string | null>(null)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
@@ -43,6 +44,44 @@ export default function Home() {
   } | null>(null)
 
   // Removed session management - simplified interface
+
+  // Handle paste from clipboard
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items
+      if (!items) return
+
+      for (const item of Array.from(items)) {
+        if (item.type.startsWith('image/')) {
+          e.preventDefault()
+          const file = item.getAsFile()
+          if (file && !currentImage) {
+            // Process the pasted image
+            const reader = new FileReader()
+            reader.onloadend = () => {
+              const imageData = reader.result as string
+              if (imageData) {
+                setCurrentImage(imageData)
+                setOriginalImage(imageData)
+                setHistory([{
+                  prompt: 'Original Image (Pasted)',
+                  image: imageData,
+                  timestamp: new Date(),
+                  isOriginal: true
+                }])
+                setSelectedFile(file)
+              }
+            }
+            reader.readAsDataURL(file)
+          }
+          break
+        }
+      }
+    }
+
+    document.addEventListener('paste', handlePaste)
+    return () => document.removeEventListener('paste', handlePaste)
+  }, [currentImage])
 
   // Track visitor on mount
   useEffect(() => {
@@ -565,19 +604,63 @@ export default function Home() {
                 style={{ display: 'none' }}
                 id="image-upload-input"
               />
-              <button
-                type="button"
+              <div
                 onClick={() => document.getElementById('image-upload-input')?.click()}
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg cursor-pointer hover:from-orange-700 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg"
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  setIsDraggingMain(true)
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault()
+                  setIsDraggingMain(false)
+                }}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  setIsDraggingMain(false)
+                  const files = e.dataTransfer.files
+                  if (files && files[0] && files[0].type.startsWith('image/')) {
+                    const file = files[0]
+                    setSelectedFile(file)
+                    const reader = new FileReader()
+                    reader.onloadend = () => {
+                      const imageData = reader.result as string
+                      if (imageData) {
+                        setCurrentImage(imageData)
+                        setOriginalImage(imageData)
+                        setHistory([{
+                          prompt: 'Original Image',
+                          image: imageData,
+                          timestamp: new Date(),
+                          isOriginal: true
+                        }])
+                      }
+                    }
+                    reader.readAsDataURL(file)
+                  }
+                }}
+                className={`px-6 sm:px-8 py-8 sm:py-10 rounded-lg cursor-pointer transition-all transform hover:scale-105 shadow-lg ${
+                  isDraggingMain
+                    ? 'bg-orange-100 border-2 border-dashed border-orange-500'
+                    : 'bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700'
+                }`}
               >
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+                <div className="flex flex-col items-center gap-3">
+                  <svg className={`w-8 h-8 sm:w-10 sm:h-10 ${isDraggingMain ? 'text-orange-600' : 'text-white'}`} fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C10 6 8 8 8 12c0 2.2 1.8 4 4 4s4-1.8 4-4c0-4-2-6-4-10zm0 14c-1.1 0-2-.9-2-2 0-2 1-3 2-5 1 2 2 3 2 5 0 1.1-.9 2-2 2zm7.5-2c0 3.59-2.91 6.5-6.5 6.5S6.5 17.59 6.5 14c0-1.5.5-2.89 1.34-4 .29-.39.85-.47 1.24-.18.39.29.47.85.18 1.24C8.67 11.89 8.5 12.93 8.5 14c0 2.49 2.01 4.5 4.5 4.5s4.5-2.01 4.5-4.5c0-1.5-.5-2.89-1.34-4-.29-.39-.26-.95.13-1.24.39-.29.95-.26 1.24.13.84 1.11 1.34 2.5 1.34 4.11z"/>
                   </svg>
-                  <span className="text-sm sm:text-base">Start Forging Your Images</span>
+                  <div className={isDraggingMain ? 'text-orange-600' : 'text-white'}>
+                    <div className="text-base sm:text-lg font-semibold">
+                      {isDraggingMain ? 'Drop Image Here' : 'Click, Drop or Paste'}
+                    </div>
+                    <div className="text-xs sm:text-sm opacity-90">
+                      {isDraggingMain ? 'Release to upload' : 'Start forging your images'}
+                    </div>
+                  </div>
                 </div>
-              </button>
-              <p className="text-gray-500 text-xs sm:text-sm">Upload an image to forge something new</p>
+              </div>
+              <p className="text-gray-500 text-xs sm:text-sm mt-2">
+                <span className="font-medium">Tip:</span> You can paste images with Ctrl+V
+              </p>
             </div>
 
             {/* AI Canvas Design Section */}
