@@ -49,6 +49,8 @@ export default function Home() {
   const [showSidebar, setShowSidebar] = useState(false)
   const [sessionName, setSessionName] = useState('')
   const [autoSave, setAutoSave] = useState(true)
+  const [editingSessionId, setEditingSessionId] = useState<string | null>(null)
+  const [editSessionName, setEditSessionName] = useState('')
 
   // Reset zoom when opening a new image
   const openZoom = (imageSrc: string) => {
@@ -122,7 +124,11 @@ export default function Home() {
     try {
       if (!currentImage && !originalImage) return
 
-      const name = sessionName.trim() || `Session ${new Date().toLocaleString()}`
+      // Create more descriptive default name
+      const defaultName = history.length > 0
+        ? `${history[history.length - 1].prompt.slice(0, 30)}...`
+        : `Image Edit ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`
+      const name = sessionName.trim() || defaultName
       const sessionId = currentSessionId || Date.now().toString()
 
       const newSession: Session = {
@@ -178,6 +184,16 @@ export default function Home() {
     if (currentSessionId === sessionId) {
       setCurrentSessionId(null)
     }
+  }
+
+  // Rename a session
+  const renameSession = (id: string, newName: string) => {
+    if (!newName.trim()) return
+    setSessions(prev => prev.map(s =>
+      s.id === id ? { ...s, name: newName.trim() } : s
+    ))
+    setEditingSessionId(null)
+    setEditSessionName('')
   }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -513,12 +529,15 @@ export default function Home() {
           {/* Save current session */}
           {(currentImage || originalImage) && (
             <div className="mb-4 p-3 bg-gray-800 rounded-lg">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Session Name
+              </label>
               <input
                 type="text"
-                placeholder="Session name (optional)"
+                placeholder="Enter a custom name or leave blank for auto-generated"
                 value={sessionName}
                 onChange={(e) => setSessionName(e.target.value)}
-                className="w-full mb-2 px-3 py-2 bg-gray-700 rounded text-white placeholder-gray-400"
+                className="w-full mb-2 px-3 py-2 bg-gray-700 rounded text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     saveSession()
@@ -568,20 +587,65 @@ export default function Home() {
                   onClick={() => loadSession(session)}
                 >
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-medium text-sm truncate flex-1">{session.name}</h3>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        if (confirm('Delete this session?')) {
-                          deleteSession(session.id)
-                        }
-                      }}
-                      className="text-gray-500 hover:text-red-400 ml-2"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
+                    {editingSessionId === session.id ? (
+                      <input
+                        type="text"
+                        value={editSessionName}
+                        onChange={(e) => setEditSessionName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            renameSession(session.id, editSessionName)
+                          } else if (e.key === 'Escape') {
+                            setEditingSessionId(null)
+                            setEditSessionName('')
+                          }
+                        }}
+                        onBlur={() => {
+                          if (editSessionName.trim()) {
+                            renameSession(session.id, editSessionName)
+                          } else {
+                            setEditingSessionId(null)
+                            setEditSessionName('')
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex-1 px-2 py-1 bg-gray-700 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        autoFocus
+                      />
+                    ) : (
+                      <h3 className="font-medium text-sm truncate flex-1">{session.name}</h3>
+                    )}
+                    <div className="flex gap-1 ml-2">
+                      {editingSessionId !== session.id && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setEditingSessionId(session.id)
+                            setEditSessionName(session.name)
+                          }}
+                          className="text-gray-500 hover:text-blue-400"
+                          title="Rename session"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                      )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (confirm('Delete this session?')) {
+                            deleteSession(session.id)
+                          }
+                        }}
+                        className="text-gray-500 hover:text-red-400"
+                        title="Delete session"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                   <p className="text-xs text-gray-400">
                     {new Date(session.timestamp).toLocaleString()}
