@@ -10,30 +10,26 @@ The tracking works with in-memory storage during development.
 
 ## Production Setup (Vercel)
 
-### Option 1: Vercel KV (Recommended - Free tier available)
+### Setting up Vercel KV (Recommended - Free tier available)
 
-1. Go to your Vercel dashboard
-2. Select your project (picforge)
-3. Go to "Storage" tab
-4. Click "Create Database" → Select "KV"
-5. Follow the setup wizard
-6. It will automatically add environment variables
+1. **Go to your Vercel dashboard**: https://vercel.com/dashboard
+2. **Select your project**: picforge
+3. **Go to "Storage" tab**
+4. **Click "Browse Storage"** in the Marketplace
+5. **Select "KV Storage"** by Vercel
+6. **Click "Get Started"**
+7. **Create a new KV database**:
+   - Give it a name (e.g., "picforge-visitor-tracking")
+   - Select your preferred region
+   - Click "Create"
+8. **Connect to your project**:
+   - It will automatically add the required environment variables:
+     - `KV_URL`
+     - `KV_REST_API_URL`
+     - `KV_REST_API_TOKEN`
+     - `KV_REST_API_READ_ONLY_TOKEN`
 
-Then update the API endpoints to use Vercel KV:
-
-```bash
-npm install @vercel/kv
-```
-
-Update `/app/api/track-visitor/route.ts` to uncomment the KV code:
-```typescript
-import { kv } from '@vercel/kv'
-
-// In the GET/POST handlers:
-const count = await kv.incr('visitor_count')
-await kv.sadd('visitor_ips', ip)
-const uniqueIps = await kv.scard('visitor_ips')
-```
+The code is already set up to use Vercel KV when these environment variables are present!
 
 ### Option 2: Vercel Postgres
 

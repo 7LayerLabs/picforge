@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
+import { kv } from '@vercel/kv'
 
 // Simple in-memory storage for development
-// In production, you'd use Vercel KV or a database
 let visitorData: { count: number; ips: Set<string> } = {
   count: 0,
   ips: new Set()
@@ -18,22 +18,31 @@ export async function GET(request: NextRequest) {
                headersList.get('cf-connecting-ip') ||
                'unknown'
 
-    // For production with Vercel KV, uncomment and use:
-    // const kv = await import('@vercel/kv')
-    // const count = await kv.incr('visitor_count')
-    // await kv.sadd('visitor_ips', ip)
-    // const uniqueIps = await kv.scard('visitor_ips')
+    // Use Vercel KV in production, fallback to in-memory for development
+    if (process.env.KV_URL) {
+      // Production with Vercel KV
+      const count = await kv.incr('visitor_count')
+      await kv.sadd('visitor_ips', ip)
+      const uniqueIps = await kv.scard('visitor_ips')
 
-    // For now, using in-memory storage
-    visitorData.count++
-    visitorData.ips.add(ip)
+      return NextResponse.json({
+        totalVisits: count,
+        uniqueVisitors: uniqueIps,
+        yourIp: ip,
+        timestamp: new Date().toISOString()
+      })
+    } else {
+      // Development with in-memory storage
+      visitorData.count++
+      visitorData.ips.add(ip)
 
-    return NextResponse.json({
-      totalVisits: visitorData.count,
-      uniqueVisitors: visitorData.ips.size,
-      yourIp: ip,
-      timestamp: new Date().toISOString()
-    })
+      return NextResponse.json({
+        totalVisits: visitorData.count,
+        uniqueVisitors: visitorData.ips.size,
+        yourIp: ip,
+        timestamp: new Date().toISOString()
+      })
+    }
   } catch (error) {
     console.error('Error tracking visitor:', error)
     return NextResponse.json(
@@ -56,11 +65,7 @@ export async function POST(request: NextRequest) {
 
     const userAgent = headersList.get('user-agent') || 'unknown'
 
-    // Track the visit
-    visitorData.count++
-    visitorData.ips.add(ip)
-
-    // Log visit details (in production, save to database)
+    // Log visit details
     console.log('Visit tracked:', {
       ip,
       userAgent,
@@ -68,11 +73,40 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString()
     })
 
-    return NextResponse.json({
-      success: true,
-      totalVisits: visitorData.count,
-      uniqueVisitors: visitorData.ips.size
-    })
+    // Use Vercel KV in production, fallback to in-memory for development
+    if (process.env.KV_URL) {
+      // Production with Vercel KV
+      const count = await kv.incr('visitor_count')
+      await kv.sadd('visitor_ips', ip)
+      const uniqueIps = await kv.scard('visitor_ips')
+
+      // Store visit details
+      await kv.lpush('recent_visits', JSON.stringify({
+        ip,
+        userAgent,
+        page: body.page || '/',
+        timestamp: new Date().toISOString()
+      }))
+
+      // Keep only last 100 visits
+      await kv.ltrim('recent_visits', 0, 99)
+
+      return NextResponse.json({
+        success: true,
+        totalVisits: count,
+        uniqueVisitors: uniqueIps
+      })
+    } else {
+      // Development with in-memory storage
+      visitorData.count++
+      visitorData.ips.add(ip)
+
+      return NextResponse.json({
+        success: true,
+        totalVisits: visitorData.count,
+        uniqueVisitors: visitorData.ips.size
+      })
+    }
   } catch (error) {
     console.error('Error tracking visitor:', error)
     return NextResponse.json(
