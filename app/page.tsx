@@ -36,7 +36,36 @@ export default function Home() {
   const [canvasSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024')
   const [canvasQuality] = useState<'standard' | 'hd'>('standard')
 
+  // Visitor tracking states
+  const [visitorStats, setVisitorStats] = useState<{
+    totalVisits: number
+    uniqueVisitors: number
+  } | null>(null)
+
   // Removed session management - simplified interface
+
+  // Track visitor on mount
+  useEffect(() => {
+    const trackVisitor = async () => {
+      try {
+        const response = await fetch('/api/track-visitor', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ page: '/' })
+        })
+        if (response.ok) {
+          const data = await response.json()
+          setVisitorStats({
+            totalVisits: data.totalVisits,
+            uniqueVisitors: data.uniqueVisitors
+          })
+        }
+      } catch (error) {
+        console.error('Failed to track visitor:', error)
+      }
+    }
+    trackVisitor()
+  }, [])
 
   // Reset zoom when opening a new image
   const openZoom = (imageSrc: string) => {
@@ -843,6 +872,24 @@ export default function Home() {
         )}
       </div>
       </div>
+
+      {/* Visitor Counter - Fixed at bottom right */}
+      {visitorStats && (
+        <div className="fixed bottom-4 right-4 bg-gray-900/90 text-white px-3 py-2 rounded-lg shadow-lg text-xs">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/>
+              </svg>
+              <span>{visitorStats.totalVisits.toLocaleString()}</span>
+            </div>
+            <div className="border-l border-gray-600 pl-3">
+              <span className="text-gray-400">Unique:</span> {visitorStats.uniqueVisitors.toLocaleString()}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
