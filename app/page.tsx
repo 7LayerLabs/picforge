@@ -48,6 +48,7 @@ export default function Home() {
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null)
   const [showSidebar, setShowSidebar] = useState(false)
   const [sessionName, setSessionName] = useState('')
+  const [autoSave, setAutoSave] = useState(true)
 
   // Reset zoom when opening a new image
   const openZoom = (imageSrc: string) => {
@@ -134,18 +135,24 @@ export default function Home() {
       }
 
       setSessions(prev => {
-        const existing = prev.findIndex(s => s.id === sessionId)
-        if (existing >= 0) {
+        const existingIndex = prev.findIndex(s => s.id === sessionId)
+        if (existingIndex >= 0) {
           const updated = [...prev]
-          updated[existing] = newSession
+          updated[existingIndex] = newSession
           return updated
         }
         return [newSession, ...prev].slice(0, 50) // Keep max 50 sessions
       })
 
+      const existing = sessions.findIndex(s => s.id === sessionId)
+
       setCurrentSessionId(sessionId)
       setSessionName('')
-      setSubmitMessage('Session saved!')
+
+      // Show success message where it's visible
+      const message = existing >= 0 ? 'Session updated!' : 'Session saved!'
+      setSubmitMessage(message)
+      console.log('Session saved:', newSession.name)
       setTimeout(() => setSubmitMessage(''), 3000)
     } catch (error) {
       console.error('Failed to save session:', error)
@@ -294,6 +301,11 @@ export default function Home() {
           timestamp: new Date()
         }
         setHistory(prev => [...prev, historyItem])
+
+        // Auto-save if enabled and session exists
+        if (autoSave && currentSessionId) {
+          setTimeout(() => saveSession(), 500)
+        }
 
         // Replace the current image with generated one
         setCurrentImage(data.generatedImage)
@@ -507,13 +519,38 @@ export default function Home() {
                 value={sessionName}
                 onChange={(e) => setSessionName(e.target.value)}
                 className="w-full mb-2 px-3 py-2 bg-gray-700 rounded text-white placeholder-gray-400"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    saveSession()
+                  }
+                }}
               />
               <button
                 onClick={saveSession}
-                className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded transition-colors"
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded transition-colors font-medium"
               >
-                Save Current Session
+                {currentSessionId ? 'Update Session' : 'Save New Session'}
               </button>
+              {submitMessage && submitMessage.includes('Session') && (
+                <div className="mt-2 text-green-400 text-sm text-center animate-pulse">
+                  {submitMessage}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Auto-save toggle */}
+          {currentSessionId && (
+            <div className="mb-4 px-3">
+              <label className="flex items-center text-sm text-gray-300 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={autoSave}
+                  onChange={(e) => setAutoSave(e.target.checked)}
+                  className="mr-2"
+                />
+                <span>Auto-save after edits</span>
+              </label>
             </div>
           )}
 
