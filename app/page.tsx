@@ -12,14 +12,7 @@ interface HistoryItem {
   isOriginal?: boolean
 }
 
-interface Session {
-  id: string
-  name: string
-  timestamp: Date
-  originalImage: string | null
-  currentImage: string | null
-  history: HistoryItem[]
-}
+// Removed Session interface - simplified without session management
 
 export default function Home() {
   const [currentImage, setCurrentImage] = useState<string | null>(null)
@@ -43,14 +36,7 @@ export default function Home() {
   const [canvasSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024')
   const [canvasQuality] = useState<'standard' | 'hd'>('standard')
 
-  // Session management
-  const [sessions, setSessions] = useState<Session[]>([])
-  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null)
-  const [showSidebar, setShowSidebar] = useState(false)
-  const [sessionName, setSessionName] = useState('')
-  const [autoSave, setAutoSave] = useState(true)
-  const [editingSessionId, setEditingSessionId] = useState<string | null>(null)
-  const [editSessionName, setEditSessionName] = useState('')
+  // Removed session management - simplified interface
 
   // Reset zoom when opening a new image
   const openZoom = (imageSrc: string) => {
@@ -72,134 +58,9 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleEsc)
   }, [zoomedImage])
 
-  // Load sessions from localStorage on mount
-  useEffect(() => {
-    // Only run on client side
-    if (typeof window !== 'undefined') {
-      try {
-        const storedSessions = localStorage.getItem('picforge_sessions')
-        if (storedSessions) {
-          const parsed = JSON.parse(storedSessions)
-          console.log('Loading sessions from localStorage:', parsed.length, 'sessions')
-          setSessions(parsed.map((s: Session) => ({
-            ...s,
-            timestamp: new Date(s.timestamp),
-            history: s.history.map((h: HistoryItem) => ({
-              ...h,
-              timestamp: new Date(h.timestamp)
-            }))
-          })))
-        }
-      } catch (e) {
-        console.error('Failed to load sessions:', e)
-        // Clear corrupted localStorage data
-        try {
-          localStorage.removeItem('picforge_sessions')
-        } catch {}
-      }
-    }
-  }, [])
+  // Removed localStorage session management
 
-  // Save sessions to localStorage whenever they change
-  useEffect(() => {
-    // Only run on client side
-    if (typeof window !== 'undefined') {
-      try {
-        // Always save, even if empty array (to persist the state)
-        localStorage.setItem('picforge_sessions', JSON.stringify(sessions))
-        console.log('Saved sessions to localStorage:', sessions.length, 'sessions')
-      } catch (e) {
-        console.error('Failed to save sessions:', e)
-        // Try to save with smaller data if quota exceeded
-        if (e instanceof Error && e.name === 'QuotaExceededError') {
-          try {
-            // Keep only last 10 sessions
-            const reducedSessions = sessions.slice(0, 10)
-            localStorage.setItem('picforge_sessions', JSON.stringify(reducedSessions))
-            console.log('Saved reduced sessions due to quota:', reducedSessions.length)
-          } catch {}
-        }
-      }
-    }
-  }, [sessions])
-
-  // Save current session
-  const saveSession = () => {
-    try {
-      if (!currentImage && !originalImage) return
-
-      // Create more descriptive default name
-      const defaultName = history.length > 0
-        ? `${history[history.length - 1].prompt.slice(0, 30)}...`
-        : `Image Edit ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`
-      const name = sessionName.trim() || defaultName
-      const sessionId = currentSessionId || Date.now().toString()
-
-      const newSession: Session = {
-        id: sessionId,
-        name,
-        timestamp: new Date(),
-        originalImage,
-        currentImage,
-        history
-      }
-
-      setSessions(prev => {
-        const existingIndex = prev.findIndex(s => s.id === sessionId)
-        if (existingIndex >= 0) {
-          const updated = [...prev]
-          updated[existingIndex] = newSession
-          return updated
-        }
-        return [newSession, ...prev].slice(0, 50) // Keep max 50 sessions
-      })
-
-      const existing = sessions.findIndex(s => s.id === sessionId)
-
-      setCurrentSessionId(sessionId)
-      setSessionName('')
-
-      // Show success message where it's visible
-      const message = existing >= 0 ? 'Session updated!' : 'Session saved!'
-      setSubmitMessage(message)
-      console.log('Session saved:', newSession.name)
-      setTimeout(() => setSubmitMessage(''), 3000)
-    } catch (error) {
-      console.error('Failed to save session:', error)
-      setSubmitMessage('Failed to save session')
-      setTimeout(() => setSubmitMessage(''), 3000)
-    }
-  }
-
-  // Load a session
-  const loadSession = (session: Session) => {
-    console.log('Loading session:', session.name, 'ID:', session.id)
-    setCurrentImage(session.currentImage)
-    setOriginalImage(session.originalImage)
-    setHistory(session.history)
-    setCurrentSessionId(session.id)
-    setSelectedFile(null)
-    setInstructions('')
-    setShowSidebar(false)
-  }
-
-  // Delete a session
-  const deleteSession = (sessionId: string) => {
-    setSessions(prev => prev.filter(s => s.id !== sessionId))
-    if (currentSessionId === sessionId) {
-      setCurrentSessionId(null)
-    }
-  }
-
-  // Rename a session
-  const renameSession = (id: string, newName: string) => {
-    if (!newName.trim()) return
-    setSessions(prev => prev.map(s =>
-      s.id === id ? { ...s, name: newName.trim() } : s
-    ))
-    setEditingSessionId(null)
-    setEditSessionName('')
-  }
+  // Removed session management functions
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -218,9 +79,7 @@ export default function Home() {
             timestamp: new Date(),
             isOriginal: true
           }])
-          setCurrentSessionId(null)  // Start fresh session for new image
-          setSessionName('')  // Clear session name
-          console.log('New image loaded: cleared session context')
+          // Simplified - no session management
         }
       }
       reader.readAsDataURL(file)
@@ -326,10 +185,7 @@ export default function Home() {
         }
         setHistory(prev => [...prev, historyItem])
 
-        // Auto-save if enabled and session exists
-        if (autoSave && currentSessionId) {
-          setTimeout(() => saveSession(), 500)
-        }
+        // Removed auto-save functionality
 
         // Replace the current image with generated one
         setCurrentImage(data.generatedImage)
@@ -370,9 +226,7 @@ export default function Home() {
     setHistory([])
     setAdditionalImage(null)
     setAdditionalImagePreview(null)
-    setCurrentSessionId(null)  // Clear current session when resetting
-    setSessionName('')  // Clear session name
-    console.log('Reset: cleared session context')
+    // Simplified - no session management
   }
 
   const restoreFromHistory = async (item: HistoryItem) => {
@@ -459,9 +313,7 @@ export default function Home() {
         setCurrentImage(data.image)
         setOriginalImage(data.image)
 
-        // Clear session context for new AI generated image
-        setCurrentSessionId(null)
-        setSessionName('')
+        // Simplified - no session management
 
         // Convert to file for editing
         const res = await fetch(data.image)
@@ -523,186 +375,9 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Sidebar */}
-      <div className={`fixed left-0 top-0 h-full bg-gray-900 text-white transition-all duration-300 z-40 ${
-        showSidebar ? 'w-full sm:w-80' : 'w-0'
-      } overflow-hidden`}>
-        <div className="p-4 w-full sm:w-80">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold">Sessions</h2>
-            <button
-              onClick={() => setShowSidebar(false)}
-              className="text-gray-400 hover:text-white"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Save current session */}
-          {(currentImage || originalImage) && (
-            <div className="mb-4 p-3 bg-gray-800 rounded-lg">
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Session Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter a custom name or leave blank for auto-generated"
-                value={sessionName}
-                onChange={(e) => setSessionName(e.target.value)}
-                className="w-full mb-2 px-3 py-2 bg-gray-700 rounded text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:outline-none"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    saveSession()
-                  }
-                }}
-              />
-              <button
-                onClick={saveSession}
-                className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded transition-colors font-medium"
-              >
-                {currentSessionId ? 'Update Session' : 'Save New Session'}
-              </button>
-              {submitMessage && submitMessage.includes('Session') && (
-                <div className="mt-2 text-green-400 text-sm text-center animate-pulse">
-                  {submitMessage}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Auto-save toggle */}
-          {currentSessionId && (
-            <div className="mb-4 px-3">
-              <label className="flex items-center text-sm text-gray-300 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={autoSave}
-                  onChange={(e) => setAutoSave(e.target.checked)}
-                  className="mr-2"
-                />
-                <span>Auto-save after edits</span>
-              </label>
-            </div>
-          )}
-
-          {/* Sessions list */}
-          <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
-            {sessions.length === 0 ? (
-              <p className="text-gray-400 text-center py-8">No saved sessions</p>
-            ) : (
-              sessions.map((session) => (
-                <div
-                  key={session.id}
-                  className={`mb-2 p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors ${
-                    currentSessionId === session.id ? 'ring-2 ring-orange-500' : ''
-                  }`}
-                  onClick={() => loadSession(session)}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    {editingSessionId === session.id ? (
-                      <input
-                        type="text"
-                        value={editSessionName}
-                        onChange={(e) => setEditSessionName(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            renameSession(session.id, editSessionName)
-                          } else if (e.key === 'Escape') {
-                            setEditingSessionId(null)
-                            setEditSessionName('')
-                          }
-                        }}
-                        onBlur={() => {
-                          if (editSessionName.trim()) {
-                            renameSession(session.id, editSessionName)
-                          } else {
-                            setEditingSessionId(null)
-                            setEditSessionName('')
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex-1 px-2 py-1 bg-gray-700 rounded text-sm text-white focus:outline-none focus:ring-1 focus:ring-orange-500"
-                        autoFocus
-                      />
-                    ) : (
-                      <h3 className="font-medium text-sm truncate flex-1">{session.name}</h3>
-                    )}
-                    <div className="flex gap-1 ml-2">
-                      {editingSessionId !== session.id && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setEditingSessionId(session.id)
-                            setEditSessionName(session.name)
-                          }}
-                          className="text-gray-500 hover:text-blue-400"
-                          title="Rename session"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                        </button>
-                      )}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          if (confirm('Delete this session?')) {
-                            deleteSession(session.id)
-                          }
-                        }}
-                        className="text-gray-500 hover:text-red-400"
-                        title="Delete session"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-400">
-                    {new Date(session.timestamp).toLocaleString()}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {session.history.length} edits
-                  </p>
-                  {session.currentImage && (
-                    <img
-                      src={session.currentImage}
-                      alt={session.name}
-                      className="w-full h-24 object-cover rounded mt-2"
-                    />
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Toggle sidebar button */}
-      <button
-        onClick={() => setShowSidebar(!showSidebar)}
-        className={`fixed left-2 sm:left-4 top-20 sm:top-24 z-50 bg-orange-600 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg hover:bg-orange-700 shadow-lg transition-all flex items-center gap-1 sm:gap-2 ${
-          showSidebar ? 'translate-x-full sm:translate-x-80' : ''
-        }`}
-        title={showSidebar ? "Close sidebar" : "Open sessions"}
-      >
-        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d={showSidebar ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-        </svg>
-        <span className="text-xs sm:text-sm font-medium hidden sm:inline">
-          {showSidebar ? 'Close' : 'Sessions'}
-        </span>
-      </button>
-
+    <div className="min-h-screen">
       {/* Main content */}
-      <div className={`flex-1 p-2 sm:p-4 flex flex-col items-center transition-all duration-300 ${
-        showSidebar ? 'ml-0 sm:ml-80' : ''
-      }`}>
+      <div className="p-2 sm:p-4 flex flex-col items-center">
       {/* Zoom Modal */}
       {zoomedImage && (
         <div
