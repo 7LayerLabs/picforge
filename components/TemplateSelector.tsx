@@ -96,7 +96,7 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
             {categories.map(category => (
               <button
                 key={category.id}
-                onClick={() => setSelectedCategory(category.id as any)}
+                onClick={() => setSelectedCategory(category.id as 'all' | 'trending' | Template['category'])}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
                   selectedCategory === category.id
                     ? 'bg-orange-600 text-white'
@@ -193,20 +193,3 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
   )
 }
 
-// Add animation styles to global CSS
-const styles = `
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-slideDown {
-  animation: slideDown 0.3s ease-out;
-}
-`

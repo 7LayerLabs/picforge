@@ -170,7 +170,7 @@ export function getTrendingTemplates() {
 }
 
 // Helper function to apply template
-export function getTemplatePrompt(templateId: string, customSettings?: any): string {
+export function getTemplatePrompt(templateId: string, customSettings?: { intensity?: 'light' | 'medium' | 'strong' }): string {
   const template = templates.find(t => t.id === templateId)
   if (!template) return ''
 
