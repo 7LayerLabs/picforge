@@ -6,6 +6,7 @@ import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import ShareModal from '@/components/ShareModal'
 import BeforeAfterSlider from '@/components/BeforeAfterSlider'
+import TemplateSelector from '@/components/TemplateSelector'
 
 interface HistoryItem {
   prompt: string
@@ -242,6 +243,16 @@ export default function Home() {
         reader.readAsDataURL(file)
       }
     }
+  }
+
+  const handleTemplateSelect = (templatePrompt: string, templateName: string) => {
+    setInstructions(templatePrompt)
+    setSubmitMessage(`✨ Applied "${templateName}" template - Click Apply Edit or customize further!`)
+
+    // Clear message after a few seconds
+    setTimeout(() => {
+      setSubmitMessage('')
+    }, 5000)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -829,11 +840,17 @@ export default function Home() {
 
                 {/* Input Form */}
                 <form onSubmit={handleSubmit} className="w-full space-y-2 sm:space-y-3">
+                {/* Template Selector */}
+                <TemplateSelector
+                  onSelectTemplate={handleTemplateSelect}
+                  currentImage={currentImage}
+                />
+
                 <input
                   type="text"
                   value={instructions}
                   onChange={(e) => setInstructions(e.target.value)}
-                  placeholder="Enter editing instructions..."
+                  placeholder="Enter editing instructions or select a template above..."
                   className="w-full px-2 sm:px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
                   disabled={isSubmitting}
                 />
