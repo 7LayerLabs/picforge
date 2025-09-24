@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import BatchUploader from './components/BatchUploader';
-import EditPanel, { EditOperation } from './components/EditPanel';
-import PricingCard from './components/PricingCard';
+import BatchUploader from '../components/BatchUploader';
+import EditPanel, { EditOperation } from '../components/EditPanel';
+import PricingCard from '../components/PricingCard';
 import { getImageProcessor } from '@/lib/imageProcessor';
 import { getGeminiProcessor } from '@/lib/geminiProcessor';
 import {
