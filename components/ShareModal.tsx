@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import BeforeAfterSlider from './BeforeAfterSlider'
 
 interface ShareModalProps {
   isOpen: boolean
@@ -16,6 +17,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
   const [watermarkedImage, setWatermarkedImage] = useState<string>('')
   const [selectedPlatform, setSelectedPlatform] = useState<'twitter' | 'instagram' | 'tiktok'>('twitter')
   const [showCopiedToast, setShowCopiedToast] = useState(false)
+  const [showBeforeAfter, setShowBeforeAfter] = useState(false)
 
   useEffect(() => {
     if (isOpen && imageUrl) {
@@ -180,17 +182,55 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
           <div className="grid md:grid-cols-2 gap-6">
             {/* Image Preview */}
             <div>
-              <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
-                {watermarkedImage && (
-                  <Image
-                    src={watermarkedImage}
-                    alt="Share preview"
-                    fill
-                    className="object-contain"
-                  />
-                )}
-              </div>
-              <p className="text-xs text-gray-500 mt-2 text-center">Preview with watermark</p>
+              {/* Toggle for Before/After if original exists */}
+              {originalImageUrl && originalImageUrl !== imageUrl && (
+                <div className="flex gap-2 mb-3">
+                  <button
+                    onClick={() => setShowBeforeAfter(false)}
+                    className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      !showBeforeAfter
+                        ? 'bg-orange-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Current
+                  </button>
+                  <button
+                    onClick={() => setShowBeforeAfter(true)}
+                    className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      showBeforeAfter
+                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Before/After
+                  </button>
+                </div>
+              )}
+
+              {showBeforeAfter && originalImageUrl && originalImageUrl !== imageUrl ? (
+                <BeforeAfterSlider
+                  beforeImage={originalImageUrl}
+                  afterImage={imageUrl}
+                  beforeLabel="Original"
+                  afterLabel="Edited"
+                  className="w-full"
+                />
+              ) : (
+                <div>
+                  <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
+                    {watermarkedImage && (
+                      <Image
+                        src={watermarkedImage}
+                        alt="Share preview"
+                        fill
+                        className="object-contain"
+                      />
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2 text-center">Preview with watermark</p>
+                </div>
+              )}
             </div>
 
             {/* Sharing Options */}
