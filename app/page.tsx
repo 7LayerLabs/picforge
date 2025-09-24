@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
+import ShareModal from '@/components/ShareModal'
 
 interface HistoryItem {
   prompt: string
@@ -43,6 +44,9 @@ export default function Home() {
     uniqueVisitors: number
   } | null>(null)
 
+  // Share modal state
+  const [showShareModal, setShowShareModal] = useState(false)
+
   // Removed session management - simplified interface
 
   // Handle paste from clipboard
@@ -55,24 +59,39 @@ export default function Home() {
         if (item.type.startsWith('image/')) {
           e.preventDefault()
           const file = item.getAsFile()
-          if (file && !currentImage) {
-            // Process the pasted image
+
+          if (file) {
             const reader = new FileReader()
-            reader.onloadend = () => {
-              const imageData = reader.result as string
-              if (imageData) {
-                setCurrentImage(imageData)
-                setOriginalImage(imageData)
-                setHistory([{
-                  prompt: 'Original Image (Pasted)',
-                  image: imageData,
-                  timestamp: new Date(),
-                  isOriginal: true
-                }])
-                setSelectedFile(file)
+
+            // If we have a main image but no additional image, paste as additional
+            if (currentImage && !additionalImage) {
+              reader.onloadend = () => {
+                const imageData = reader.result as string
+                if (imageData) {
+                  setAdditionalImage(file)
+                  setAdditionalImagePreview(imageData)
+                }
               }
+              reader.readAsDataURL(file)
             }
-            reader.readAsDataURL(file)
+            // Otherwise paste as main image if we don't have one
+            else if (!currentImage) {
+              reader.onloadend = () => {
+                const imageData = reader.result as string
+                if (imageData) {
+                  setCurrentImage(imageData)
+                  setOriginalImage(imageData)
+                  setHistory([{
+                    prompt: 'Original Image (Pasted)',
+                    image: imageData,
+                    timestamp: new Date(),
+                    isOriginal: true
+                  }])
+                  setSelectedFile(file)
+                }
+              }
+              reader.readAsDataURL(file)
+            }
           }
           break
         }
@@ -81,7 +100,7 @@ export default function Home() {
 
     document.addEventListener('paste', handlePaste)
     return () => document.removeEventListener('paste', handlePaste)
-  }, [currentImage])
+  }, [currentImage, additionalImage])
 
   // Track visitor on mount
   useEffect(() => {
@@ -799,7 +818,7 @@ export default function Home() {
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
                         <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">
-                          {isDraggingAdditional ? 'Drop image here' : 'Add another image'}
+                          {isDraggingAdditional ? 'Drop image here' : 'Click, Drop or Paste'}
                         </p>
                         <p className="text-[10px] sm:text-xs text-gray-500 mb-2 sm:mb-3">or</p>
                         <button
@@ -873,16 +892,28 @@ export default function Home() {
                       <h2 className="text-lg font-semibold">Creative Journey</h2>
                       <p className="text-xs text-gray-600">Click to restore</p>
                     </div>
-                    <button
-                      onClick={downloadAllImages}
-                      className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1"
-                      title="Download All Images"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                      </svg>
-                      All ({history.length})
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setShowShareModal(true)}
+                        className="px-3 py-1.5 text-xs bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-1"
+                        title="Share Image"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a9.001 9.001 0 01-7.432 0m9.032-4.026A9.001 9.001 0 0112 3c-4.474 0-8.268 3.12-9.032 7.326M8.684 13.342C7.932 14.726 6.482 15.75 4.75 15.75c-2.485 0-4.5-2.015-4.5-4.5s2.015-4.5 4.5-4.5c1.732 0 3.182 1.024 3.934 2.408" />
+                        </svg>
+                        Share
+                      </button>
+                      <button
+                        onClick={downloadAllImages}
+                        className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1"
+                        title="Download All Images"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                        </svg>
+                        All ({history.length})
+                      </button>
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2 overflow-y-auto max-h-[620px]">
                     {history.map((item, index) => (
@@ -988,6 +1019,14 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        imageUrl={currentImage || ''}
+        originalImageUrl={originalImage || undefined}
+      />
     </div>
   )
 }
