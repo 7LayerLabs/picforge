@@ -11,14 +11,20 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@vercel/kv": "^3.0.0",
+    "canvas": "^3.2.0",
     "crypto-js": "^4.2.0",
     "file-saver": "^2.0.5",
+    "framer-motion": "^12.23.21",
     "jszip": "^3.10.1",
+    "konva": "^10.0.2",
+    "lucide-react": "^0.544.0",
     "next": "15.5.3",
     "openai": "^5.22.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "together-ai": "^0.22.0"
+    "react-dropzone": "^14.3.8",
+    "together-ai": "^0.22.0",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
