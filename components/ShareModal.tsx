@@ -24,6 +24,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
       addWatermark()
       generateCaption(selectedPlatform)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, imageUrl, selectedPlatform])
 
   const addWatermark = async () => {

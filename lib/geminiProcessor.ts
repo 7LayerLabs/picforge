@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || '
 
 export class GeminiProcessor {
   private model;
-  private cache: Map<string, any> = new Map();
+  private cache: Map<string, string> = new Map();
 
   constructor() {
     this.model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
@@ -34,9 +34,9 @@ export class GeminiProcessor {
   // Batch process with Gemini (single API call for all images)
   async processBatch(
     files: File[],
-    operation: 'remove_background' | 'enhance' | 'object_detection' | 'style_transfer',
-    options?: any
-  ): Promise<any[]> {
+    operation: 'remove_background' | 'enhance' | 'object_detection' | 'style_transfer' | 'removeBackground',
+    _options?: Record<string, unknown>
+  ): Promise<unknown[]> {
     try {
       // Convert all files to base64
       const images = await Promise.all(
@@ -88,7 +88,7 @@ export class GeminiProcessor {
   }
 
   // Background removal using Gemini vision
-  async removeBackground(file: File): Promise<any> {
+  async removeBackground(file: File): Promise<string> {
     const hash = await this.getImageHash(file);
     const cacheKey = `bg_${hash}`;
 
@@ -121,7 +121,7 @@ export class GeminiProcessor {
   }
 
   // AI Enhancement
-  async enhanceImage(file: File): Promise<any> {
+  async enhanceImage(file: File): Promise<string> {
     const base64 = await this.fileToBase64(file);
 
     const prompt = `Analyze this image and suggest enhancement parameters:
@@ -148,7 +148,7 @@ export class GeminiProcessor {
   }
 
   // Smart crop suggestions
-  async getSmartCrop(file: File): Promise<any> {
+  async getSmartCrop(file: File): Promise<string> {
     const base64 = await this.fileToBase64(file);
 
     const prompt = `Analyze this image and suggest optimal crop coordinates for:
@@ -173,7 +173,7 @@ export class GeminiProcessor {
   }
 
   // Object detection for e-commerce
-  async detectProducts(file: File): Promise<any> {
+  async detectProducts(file: File): Promise<string> {
     const base64 = await this.fileToBase64(file);
 
     const prompt = `Detect all products in this image. For each product provide:

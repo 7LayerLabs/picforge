@@ -15,7 +15,6 @@ import { motion } from 'framer-motion';
 export default function Home() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [processedFiles, setProcessedFiles] = useState<Blob[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [showPricing, setShowPricing] = useState(false);
 
   const handleFilesReady = (files: File[]) => {
@@ -25,7 +24,6 @@ export default function Home() {
   const handleApplyEdits = async (operations: EditOperation[]) => {
     if (uploadedFiles.length === 0) return;
 
-    setIsProcessing(true);
     const processor = getImageProcessor();
     const gemini = getGeminiProcessor();
     const results: Blob[] = [];
@@ -71,7 +69,7 @@ export default function Home() {
           if (op.type === 'removeBackground' || op.type === 'enhance') {
             const aiResults = await gemini.processBatch(
               uploadedFiles,
-              op.type as any,
+              op.type as 'removeBackground' | 'enhance',
               op.params
             );
             console.log('AI processing complete:', aiResults);
@@ -82,8 +80,6 @@ export default function Home() {
       setProcessedFiles(results);
     } catch (error) {
       console.error('Processing error:', error);
-    } finally {
-      setIsProcessing(false);
     }
   };
 

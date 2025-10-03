@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, X, Image as ImageIcon, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface UploadedFile {
@@ -148,6 +148,7 @@ export default function BatchUploader({ onFilesReady }: { onFilesReady: (files: 
                   className="relative group"
                 >
                   <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={file.preview}
                       alt={file.file.name}

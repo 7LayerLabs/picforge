@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import {
-  Sliders, Crop, RotateCw, Palette, Sparkles,
+  Sliders, RotateCw, Sparkles,
   Package, Home, Coffee, Wand2, Save, Play,
   Sun, Contrast, Droplets, Image, Type, Layers
 } from 'lucide-react';
@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 
 export interface EditOperation {
   type: string;
-  params: any;
+  params: Record<string, unknown>;
   aiPowered?: boolean;
 }
 
@@ -67,7 +67,6 @@ export default function EditPanel({
   imageCount?: number;
 }) {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
-  const [customOperations, setCustomOperations] = useState<EditOperation[]>([]);
   const [activeTab, setActiveTab] = useState<'templates' | 'manual'>('templates');
 
   // Manual edit controls
@@ -300,7 +299,7 @@ export default function EditPanel({
               onClick={() => onApplyEdits([{ type: 'compress', params: { quality: 0.8 } }])}
               className="p-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors"
             >
-              <Image className="w-4 h-4 inline mr-1" />
+              <Image className="w-4 h-4 inline mr-1" aria-hidden="true" />
               Compress
             </button>
           </div>
