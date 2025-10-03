@@ -186,6 +186,61 @@ export default function PromptsPage() {
         "Remove cars from driveway for cleaner exterior shot",
         "Add virtual pool or outdoor features to backyard"
       ]
+    },
+    {
+      category: "Photorealistic (Pro Quality)",
+      icon: "📸",
+      prompts: [
+        "A photorealistic close-up portrait of a person, smiling warmly, set in a sunlit park. The scene is illuminated by natural golden hour lighting, creating a cheerful and inviting atmosphere. Captured with a Canon EOS R5 with 85mm f/1.4 lens, emphasizing soft skin tones and gentle bokeh. The image should be in a 4:5 portrait format",
+        "A photorealistic medium shot of a coffee cup on a wooden table, steam rising gently, set in a cozy café interior. The scene is illuminated by soft window light from the left, creating a warm morning atmosphere. Captured with a Sony A7IV with 35mm f/1.8 lens, emphasizing rich textures and shallow depth of field. The image should be in a 16:9 landscape format",
+        "A photorealistic wide shot of a mountain landscape, with mist rolling through valleys, set at dawn. The scene is illuminated by diffused sunrise light, creating a serene and majestic atmosphere. Captured with a Nikon Z9 with 24-70mm f/2.8 lens at 24mm, emphasizing dramatic depth and sharp foreground details. The image should be in a 3:2 landscape format",
+        "A photorealistic overhead shot of fresh ingredients on a marble countertop, arranged artistically, set in a modern kitchen. The scene is illuminated by soft overhead LED panels, creating a clean and professional atmosphere. Captured with a Fujifilm X-T5 with 16-55mm f/2.8 lens, emphasizing vibrant colors and fine textures. The image should be in a 1:1 square format",
+        "A photorealistic street photography shot of a busy city intersection at night, with light trails from cars, set in an urban downtown area. The scene is illuminated by neon signs and street lights, creating a dynamic and energetic atmosphere. Captured with a Leica Q2 with 28mm f/1.7 lens, emphasizing motion blur and crisp architectural details. The image should be in a 16:9 landscape format"
+      ]
+    },
+    {
+      category: "Character Consistency",
+      icon: "🎭",
+      prompts: [
+        "A consistent character: a young woman with curly red hair, green eyes, wearing a blue denim jacket. First scene: standing in a coffee shop holding a latte. Maintain exact same facial features, hair style, and clothing across all variations",
+        "A consistent character: a golden retriever with a red collar and distinctive white patch on chest. First scene: sitting in a park with autumn leaves. Keep the same dog's facial markings, fur pattern, and collar in all subsequent images",
+        "A consistent character: a businessman in his 40s with salt-and-pepper hair, rimless glasses, wearing a charcoal grey suit. First scene: presenting at a conference. Preserve identical facial features, hairstyle, glasses, and suit across all scenes",
+        "A consistent character: an animated robot with blue metallic body, round friendly eyes, and orange accent lights. First scene: waving hello in a futuristic cityscape. Maintain exact same design, proportions, and color scheme throughout",
+        "A consistent character: a young chef with black hair in a bun, wearing white chef's coat with red apron. First scene: plating a dish in a modern kitchen. Keep identical facial features, hair, and uniform consistent across all scenarios"
+      ]
+    },
+    {
+      category: "Interior Design & Home Staging",
+      icon: "🛋️",
+      prompts: [
+        "Transform this living room into mid-century modern style with teak furniture, geometric patterns, and warm earth tones. Add a sunburst clock, low-profile sofa, and indoor plants. Maintain room dimensions and window placement",
+        "Redesign this bedroom in Scandinavian minimalist style with light wood floors, white walls, cozy textiles, and simple furniture. Add soft natural lighting through sheer curtains and a few green plants. Keep architectural features intact",
+        "Convert this kitchen to farmhouse rustic style with white shiplap walls, butcher block counters, vintage-inspired fixtures, and open shelving. Add mason jar storage and warm pendant lighting. Preserve existing layout and appliance locations",
+        "Restyle this home office in industrial modern aesthetic with exposed brick walls, metal shelving, Edison bulb lighting, and leather seating. Add vintage typewriter and modern tech accessories. Maintain window and door positions",
+        "Transform this bathroom into spa-like sanctuary with natural stone tiles, rainfall shower, floating vanity, and ambient lighting. Add bamboo accents and fluffy white towels. Keep plumbing fixture locations unchanged"
+      ]
+    },
+    {
+      category: "Historical & Era Transformations",
+      icon: "🕰️",
+      prompts: [
+        "Transform to 1920s vintage photograph with sepia tones, slight grain, soft focus edges, and period-appropriate clothing and hairstyles. Add art deco elements and flapper-era aesthetics",
+        "Convert to 1950s Kodachrome photo with saturated colors, slight color shift, and mid-century modern styling. Include pastel color palette and retro fashion elements",
+        "Transform to 1970s polaroid aesthetic with faded edges, warm yellow tint, slightly washed out colors, and disco-era fashion. Add vintage film grain and light leaks",
+        "Convert to 1980s VHS camcorder footage style with scan lines, color bleeding, date stamp in corner, and neon color palette. Include big hair and bold patterns of the era",
+        "Transform to Victorian-era daguerreotype with monochrome tones, formal poses, period-accurate clothing, and vintage photography characteristics. Add slight vignetting and aged appearance"
+      ]
+    },
+    {
+      category: "Advanced Editing Techniques",
+      icon: "⚡",
+      prompts: [
+        "Replace background with a softly lit studio gray gradient; keep subject edges crisp and sharp; maintain original color accuracy on the person; no color spill or contamination",
+        "Enhance only the sky region: make clouds more dramatic and voluminous; increase color saturation in sunset tones; keep foreground landscape completely unchanged; no over-processing",
+        "Localized face retouching: soften skin tones naturally; reduce shine on forehead; brighten eyes subtly; maintain natural texture and pores; avoid plastic or artificial appearance",
+        "Product image refinement: remove dust and imperfections; enhance reflections and highlights; correct color balance for web display; sharpen details without introducing artifacts; maintain transparent background",
+        "Compositional improvement: apply rule of thirds; adjust perspective for professional framing; balance negative space; enhance leading lines; preserve all original content and subject matter"
+      ]
     }
   ]
 
@@ -227,7 +282,7 @@ export default function PromptsPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full mb-4">
             <Copy className="w-4 h-4" />
-            <span className="text-sm font-medium">135+ Ready-to-Use Prompts</span>
+            <span className="text-sm font-medium">165+ Ready-to-Use Prompts</span>
           </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             PicForge Prompt Library

@@ -153,7 +153,7 @@ export default function TipsPage() {
                   href="/prompts"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-pink-600 transition-all hover:scale-105"
                 >
-                  Browse All 135+ Prompts
+                  Browse All 165+ Prompts
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -244,6 +244,56 @@ export default function TipsPage() {
           </div>
         </div>
 
+        {/* Nano Banana Best Practices */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">🍌 Nano Banana Best Practices (2025)</h2>
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-5 rounded-lg border border-yellow-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">✍️ Use Descriptive Sentences, Not Keywords</h3>
+                <p className="text-gray-700 mb-3 text-sm">
+                  Describe the scene in narrative form—AI understands language deeply, so a paragraph beats a keyword list every time.
+                </p>
+                <div className="bg-white p-3 rounded text-xs">
+                  <div className="text-red-600 mb-2">❌ Bad: &quot;sunset, beach, palm trees&quot;</div>
+                  <div className="text-green-600">✅ Good: &quot;A tropical beach at sunset with golden light casting long shadows across the sand, palm trees swaying gently in the warm breeze&quot;</div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-5 rounded-lg border border-blue-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">📸 For Photorealistic: Use Photography Terms</h3>
+                <p className="text-gray-700 mb-3 text-sm">
+                  Mention camera angles, lens types, lighting, and technical details to guide toward photorealistic results.
+                </p>
+                <div className="bg-white p-3 rounded text-xs">
+                  <div className="text-gray-700">Template: &quot;A photorealistic [shot type] of [subject], [action], set in [environment]. Illuminated by [lighting]. Captured with [camera/lens], emphasizing [details].&quot;</div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-50 to-teal-50 p-5 rounded-lg border border-green-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">🎨 Iterative Editing Works Best</h3>
+                <p className="text-gray-700 mb-3 text-sm">
+                  Make single, focused changes per iteration rather than overloading with multiple instructions.
+                </p>
+                <div className="bg-white p-3 rounded text-xs">
+                  <div className="text-red-600 mb-2">❌ Avoid: &quot;Change sky, remove person, add text, adjust colors&quot;</div>
+                  <div className="text-green-600">✅ Better: First pass - &quot;Make sky more dramatic&quot;, then second pass - &quot;Remove person on left&quot;</div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-pink-50 to-red-50 p-5 rounded-lg border border-pink-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">🚫 Use Semantic Negatives</h3>
+                <p className="text-gray-700 mb-3 text-sm">
+                  Specify what you DON&apos;T want to avoid unwanted elements in your generation.
+                </p>
+                <div className="bg-white p-3 rounded text-xs">
+                  <div className="text-gray-700">&quot;No extra fingers or hands; no text except the title; avoid watermarks; avoid clutter; no distortions&quot;</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Pro Techniques */}
         <div className="bg-gradient-to-r from-orange-600 to-pink-600 rounded-2xl p-8 text-white">
           <h2 className="text-3xl font-bold mb-6">🚀 Pro Techniques</h2>
@@ -256,6 +306,8 @@ export default function TipsPage() {
                 <li>• Specify camera settings: &quot;85mm lens&quot;, &quot;f/1.4 bokeh&quot;, &quot;ISO 100&quot;</li>
                 <li>• Add mood descriptors: &quot;moody&quot;, &quot;ethereal&quot;, &quot;dramatic&quot;</li>
                 <li>• Include art references: &quot;in the style of [artist name]&quot;</li>
+                <li>• For localized edits: Be specific about regions and constraints</li>
+                <li>• Character consistency: Define ALL details in first prompt</li>
               </ul>
             </div>
 
@@ -266,6 +318,8 @@ export default function TipsPage() {
                 <li>• Use batch processing for consistent branding</li>
                 <li>• Start with low-res tests, then apply to high-res</li>
                 <li>• Combine multiple passes for complex edits</li>
+                <li>• Apply stepwise edits instead of overloading instructions</li>
+                <li>• Use templates and add custom instructions</li>
               </ul>
             </div>
           </div>
