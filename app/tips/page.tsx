@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
+import Link from 'next/link'
 import { Sparkles, Lightbulb, Zap, Palette, Camera, Wand2, Star, ArrowRight, Copy, Check } from 'lucide-react'
 
 export default function TipsPage() {
@@ -143,7 +143,7 @@ export default function TipsPage() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-6">
-        <a
+        <Link
           href="/"
           className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-orange-600 font-medium hover:bg-orange-50 rounded-xl transition-all duration-200"
         >
@@ -151,7 +151,7 @@ export default function TipsPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Back to Editor
-        </a>
+        </Link>
       </div>
 
       {/* Hero Section */}
@@ -287,10 +287,10 @@ export default function TipsPage() {
             <div>
               <h3 className="text-xl font-semibold mb-3">Advanced Prompt Engineering</h3>
               <ul className="space-y-2 text-orange-50">
-                <li>• Use weight modifiers: "highly detailed", "subtle", "extreme"</li>
-                <li>• Specify camera settings: "85mm lens", "f/1.4 bokeh", "ISO 100"</li>
-                <li>• Add mood descriptors: "moody", "ethereal", "dramatic"</li>
-                <li>• Include art references: "in the style of [artist name]"</li>
+                <li>• Use weight modifiers: &quot;highly detailed&quot;, &quot;subtle&quot;, &quot;extreme&quot;</li>
+                <li>• Specify camera settings: &quot;85mm lens&quot;, &quot;f/1.4 bokeh&quot;, &quot;ISO 100&quot;</li>
+                <li>• Add mood descriptors: &quot;moody&quot;, &quot;ethereal&quot;, &quot;dramatic&quot;</li>
+                <li>• Include art references: &quot;in the style of [artist name]&quot;</li>
               </ul>
             </div>
 
@@ -308,14 +308,14 @@ export default function TipsPage() {
 
         {/* CTA Section */}
         <div className="text-center mt-12">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-pink-600 transition-all duration-200 hover:scale-105 shadow-xl"
           >
             <Sparkles className="w-5 h-5" />
             Start Creating Now
             <ArrowRight className="w-5 h-5" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>
