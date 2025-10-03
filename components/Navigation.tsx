@@ -37,22 +37,31 @@ export default function Navigation() {
                 }`}
               >
                 <ImageIcon className="w-4 h-4 mr-2" />
-                Single Edit
+                Editor
               </Link>
 
               <Link
-                href="/batch"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium relative ${
-                  isActive('/batch')
+                href="/prompts"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  isActive('/prompts')
+                    ? 'border-blue-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Prompts
+              </Link>
+
+              <Link
+                href="/tips"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  isActive('/tips')
                     ? 'border-blue-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
                 <Layers className="w-4 h-4 mr-2" />
-                Batch Processor
-                <span className="absolute -top-1 -right-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
-                  NEW
-                </span>
+                Tips & Tricks
               </Link>
             </div>
           </div>
@@ -60,11 +69,11 @@ export default function Navigation() {
           {/* Right side - CTA */}
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             <Link
-              href="/batch"
+              href="/prompts"
               className="inline-flex items-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <Sparkles className="w-4 h-4" />
-              Try Batch Mode
+              View Prompts
             </Link>
           </div>
 
@@ -99,27 +108,37 @@ export default function Navigation() {
             >
               <div className="flex items-center">
                 <ImageIcon className="w-4 h-4 mr-2" />
-                Single Edit
+                Editor
               </div>
             </Link>
 
             <Link
-              href="/batch"
+              href="/prompts"
               className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                isActive('/batch')
+                isActive('/prompts')
                   ? 'bg-blue-50 border-blue-500 text-blue-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
               }`}
               onClick={() => setMobileMenuOpen(false)}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Layers className="w-4 h-4 mr-2" />
-                  Batch Processor
-                </div>
-                <span className="bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
-                  NEW
-                </span>
+              <div className="flex items-center">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Prompts
+              </div>
+            </Link>
+
+            <Link
+              href="/tips"
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                isActive('/tips')
+                  ? 'bg-blue-50 border-blue-500 text-blue-700'
+                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex items-center">
+                <Layers className="w-4 h-4 mr-2" />
+                Tips & Tricks
               </div>
             </Link>
           </div>
@@ -127,12 +146,12 @@ export default function Navigation() {
           <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="px-4">
               <Link
-                href="/batch"
+                href="/prompts"
                 className="block w-full text-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Sparkles className="w-4 h-4 inline mr-2" />
-                Try Batch Mode Now
+                View Prompt Library
               </Link>
             </div>
           </div>
