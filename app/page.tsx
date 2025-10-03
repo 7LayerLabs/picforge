@@ -645,19 +645,6 @@ export default function Home() {
                   <p className="text-sm text-gray-600 dark:text-gray-400">Your images stay on your device</p>
                 </div>
               </div>
-
-              {/* AI Canvas CTA */}
-              <div className="mt-8 p-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl text-white text-center">
-                <h3 className="font-heading text-2xl font-bold mb-2">Need a Custom Background?</h3>
-                <p className="mb-4 opacity-90">Generate unique backgrounds and scenes with AI Canvas before editing your photos</p>
-                <Link
-                  href="/canvas"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all"
-                >
-                  <Sparkles className="w-5 h-5" />
-                  Try AI Canvas
-                </Link>
-              </div>
             </div>
           </>
         )}
@@ -755,6 +742,15 @@ export default function Home() {
                 </span>
                 <span className="text-xs">Paste images directly with Ctrl+V</span>
               </p>
+            </div>
+
+            {/* AI Canvas CTA */}
+            <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white text-center max-w-md mx-auto">
+              <p className="text-sm font-semibold mb-2">Need a Custom Background?</p>
+              <Link href="/canvas" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-purple-600 font-medium rounded-md hover:bg-gray-100 transition-all text-xs">
+                <Sparkles className="w-3.5 h-3.5" />
+                Try AI Canvas
+              </Link>
             </div>
 
             {/* AI Canvas Design Section */}
