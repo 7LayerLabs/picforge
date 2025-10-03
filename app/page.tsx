@@ -613,44 +613,20 @@ export default function Home() {
       )}
 
       <div className="max-w-7xl w-full space-y-3 sm:space-y-4 relative z-10 animate-fade-in-up">
-        <div className="flex justify-between items-center">
-          <a
-            href="https://pic-forge.com"
-            className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity"
-            aria-label="PicForge Home"
-          >
-            <div className="w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] relative animate-float hover-grow">
-              <Image
-                src="/logo.svg"
-                alt="PicForge Logo"
-                width={60}
-                height={60}
-                className="pointer-events-none animate-pulse-glow"
-                draggable={false}
-              />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-                PicForge
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Forge your images into art</p>
-            </div>
-          </a>
-          <div className="flex items-center gap-2">
-            {currentImage && (
-              <button
-                type="button"
-                onClick={handleReset}
-                className="px-4 py-2 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-1.5 text-sm hover-lift button-press smooth-shadow"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                Start Over
-              </button>
-            )}
+        {currentImage && (
+          <div className="flex justify-end mb-4">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="px-4 py-2 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-1.5 text-sm hover-lift button-press smooth-shadow"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Start Over
+            </button>
           </div>
-        </div>
+        )}
 
         {!currentImage ? (
           <div className="flex flex-col items-center space-y-6">
