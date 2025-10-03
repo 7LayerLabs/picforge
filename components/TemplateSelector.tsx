@@ -10,17 +10,22 @@ interface TemplateSelectorProps {
 
 export default function TemplateSelector({ onSelectTemplate, currentImage }: TemplateSelectorProps) {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'trending' | Template['category']>('all')
-  const [showTemplates, setShowTemplates] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null)
 
   const categories = [
-    { id: 'all', name: 'All Templates', icon: '🎯' },
+    { id: 'all', name: 'All', icon: '🎯' },
     { id: 'trending', name: 'Trending', icon: '🔥' },
-    { id: 'professional', name: 'Professional', icon: '💼' },
-    { id: 'social', name: 'Social Media', icon: '📱' },
-    { id: 'ecommerce', name: 'E-commerce', icon: '🛍️' },
+    { id: 'creative', name: 'Creative', icon: '🎨' },
+    { id: 'professional', name: 'Pro', icon: '💼' },
+    { id: 'social', name: 'Social', icon: '📱' },
+    { id: 'ecommerce', name: 'Shop', icon: '🛍️' },
     { id: 'personal', name: 'Personal', icon: '✨' },
-    { id: 'realestate', name: 'Real Estate', icon: '🏡' }
+    { id: 'realestate', name: 'Real Estate', icon: '🏡' },
+    { id: '3d', name: '3D', icon: '🔮' },
+    { id: 'era', name: 'Era', icon: '⏰' },
+    { id: 'character', name: 'Character', icon: '👤' },
+    { id: 'ar', name: 'AR', icon: '✨' },
+    { id: 'comic', name: 'Comic', icon: '📚' }
   ]
 
   const getFilteredTemplates = () => {
@@ -29,7 +34,10 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
     return templates.filter(t => t.category === selectedCategory)
   }
 
-  const handleSelectTemplate = async (template: Template) => {
+  const handleSelectTemplate = async (template: Template, e?: React.MouseEvent) => {
+    e?.preventDefault()
+    e?.stopPropagation()
+
     setSelectedTemplate(template.id)
     const fullPrompt = template.prompts.join(' ')
     onSelectTemplate(fullPrompt, template.name)
@@ -47,60 +55,38 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
     } catch (error) {
       console.error('Failed to track template usage:', error)
     }
-
-    // Auto-hide templates after selection
-    setTimeout(() => {
-      setShowTemplates(false)
-    }, 500)
   }
 
   if (!currentImage) {
-    return null // Don't show templates until image is uploaded
+    return null
   }
 
   return (
     <div className="w-full space-y-3">
-      {/* Toggle Button */}
-      <button
-        onClick={() => setShowTemplates(!showTemplates)}
-        className={`w-full px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-between ${
-          showTemplates
-            ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
-            : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-        }`}
-      >
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🎨</span>
-          <span>Magic Templates</span>
-          {selectedTemplate && (
-            <span className="px-2 py-1 bg-white/20 rounded-lg text-xs">
-              Active: {templates.find(t => t.id === selectedTemplate)?.name}
-            </span>
-          )}
-        </div>
-        <svg
-          className={`w-5 h-5 transition-transform ${showTemplates ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white">Magic Templates</h3>
+        {selectedTemplate && (
+          <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-lg text-xs font-medium">
+            ✓ Loaded
+          </span>
+        )}
+      </div>
 
-      {/* Template Grid */}
-      {showTemplates && (
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-xl animate-slideDown">
+      {/* Template Grid - Always visible in sidebar */}
+      <div>
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3">
           {/* Category Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-3 mb-4 border-b">
+          <div className="flex flex-wrap gap-1 pb-2 mb-3 border-b border-gray-200 dark:border-gray-700">
             {categories.map(category => (
               <button
+                type="button"
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id as 'all' | 'trending' | Template['category'])}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                className={`px-2 py-1 rounded-md text-[10px] font-medium whitespace-nowrap transition-all ${
                   selectedCategory === category.id
                     ? 'bg-orange-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                    : 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
                 }`}
               >
                 <span className="mr-1">{category.icon}</span>
@@ -109,87 +95,42 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
             ))}
           </div>
 
-          {/* Templates Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
+          {/* Templates List - Single column for sidebar */}
+          <div className="space-y-2 max-h-[400px] overflow-y-auto scrollbar-thin">
             {getFilteredTemplates().map(template => (
               <button
+                type="button"
                 key={template.id}
-                onClick={() => handleSelectTemplate(template)}
-                className={`text-left p-4 rounded-xl border-2 transition-all hover:scale-[1.02] ${
+                onClick={(e) => handleSelectTemplate(template, e)}
+                className={`group w-full text-left p-2 rounded-lg border transition-all ${
                   selectedTemplate === template.id
-                    ? 'border-orange-500 bg-orange-50'
-                    : 'border-gray-200 hover:border-gray-300 bg-white hover:shadow-md'
+                    ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
+                    : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 dark:hover:border-orange-600 bg-white dark:bg-gray-700 hover:bg-orange-50/50 dark:hover:bg-gray-600'
                 }`}
               >
-                {/* Header */}
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">{template.icon}</span>
-                    <div>
-                      <h3 className="font-bold text-sm text-gray-900">{template.name}</h3>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl flex-shrink-0">{template.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1">
+                      <h3 className="font-semibold text-xs text-gray-900 dark:text-white truncate">{template.name}</h3>
                       {template.badge && (
-                        <span className="inline-block mt-1 px-2 py-0.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-[10px] font-bold rounded-full">
-                          {template.badge}
+                        <span className="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-[8px] font-bold rounded">
+                          {template.badge.split(' ')[0]}
                         </span>
                       )}
                     </div>
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate">{template.description}</p>
                   </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-xs text-gray-600 mb-3">{template.description}</p>
-
-                {/* Quick Preview of Effects */}
-                <div className="flex flex-wrap gap-1">
-                  {template.settings?.intensity && (
-                    <span className="px-2 py-1 bg-gray-100 text-[10px] rounded">
-                      {template.settings.intensity} intensity
-                    </span>
-                  )}
-                  {template.settings?.style && (
-                    <span className="px-2 py-1 bg-gray-100 text-[10px] rounded">
-                      {template.settings.style} style
-                    </span>
+                  {selectedTemplate === template.id && (
+                    <span className="text-green-600 dark:text-green-400 flex-shrink-0">✓</span>
                   )}
                 </div>
-
-                {/* Apply Button */}
-                {selectedTemplate === template.id && (
-                  <div className="mt-3 text-center">
-                    <span className="text-xs text-green-600 font-bold">✓ Applied</span>
-                  </div>
-                )}
               </button>
             ))}
           </div>
 
-          {/* Pro Tip */}
-          <div className="mt-4 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
-            <p className="text-xs text-gray-700">
-              <span className="font-bold">💡 Pro Tip:</span> Select a template to instantly apply professional edits,
-              then customize further with your own instructions!
-            </p>
-          </div>
         </div>
-      )}
-
-      {/* Quick Access Bar - Always Visible */}
-      {!showTemplates && currentImage && (
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          <span className="text-xs text-gray-500 py-1">Quick:</span>
-          {getTrendingTemplates().slice(0, 4).map(template => (
-            <button
-              key={template.id}
-              onClick={() => handleSelectTemplate(template)}
-              className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium whitespace-nowrap transition-colors flex items-center gap-1"
-            >
-              <span>{template.icon}</span>
-              {template.name}
-            </button>
-          ))}
-        </div>
-      )}
+      </div>
     </div>
   )
 }
-

@@ -213,37 +213,37 @@ export default function BeforeAfterSlider({
       <div className="flex gap-2 mb-3">
         <button
           onClick={() => quickJump(0)}
-          className="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors font-medium"
+          className="flex-1 px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 font-medium shadow-sm hover:shadow-md"
         >
           Original
         </button>
         <button
           onClick={() => quickJump(25)}
-          className="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          className="flex-1 px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm hover:shadow-md"
         >
           25%
         </button>
         <button
           onClick={() => quickJump(50)}
-          className="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          className="flex-1 px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm hover:shadow-md"
         >
           50%
         </button>
         <button
           onClick={() => quickJump(75)}
-          className="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          className="flex-1 px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm hover:shadow-md"
         >
           75%
         </button>
         <button
           onClick={() => quickJump(100)}
-          className="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors font-medium"
+          className="flex-1 px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 font-medium shadow-sm hover:shadow-md"
         >
           Edited
         </button>
         <button
           onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-          className={`px-3 py-1 text-xs rounded-lg transition-colors font-medium ${
+          className={`px-4 py-1.5 text-xs rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg font-medium ${
             isAutoPlaying
               ? 'bg-orange-600 text-white hover:bg-orange-700'
               : 'bg-gray-100 hover:bg-gray-200'
@@ -255,7 +255,7 @@ export default function BeforeAfterSlider({
 
       <div
         ref={containerRef}
-        className="relative w-full aspect-square overflow-hidden rounded-xl cursor-ew-resize select-none shadow-2xl"
+        className="relative w-full aspect-square overflow-hidden rounded-xl cursor-ew-resize select-none shadow-2xl transition-shadow duration-300 hover:shadow-[0_25px_50px_-12px_rgba(249,115,22,0.3)]"
         onMouseDown={handleStart}
         onMouseMove={handleMouseMove}
         onTouchStart={handleStart}
@@ -290,21 +290,21 @@ export default function BeforeAfterSlider({
 
         {/* Slider Line with Gradient */}
         <div
-          className="absolute top-0 bottom-0 w-1 pointer-events-none transition-all duration-100"
+          className="absolute top-0 bottom-0 w-1 pointer-events-none transition-all duration-100 group"
           style={{
             left: `${sliderPosition}%`,
-            background: 'linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,1), rgba(255,255,255,0.8))',
-            boxShadow: '0 0 20px rgba(255,255,255,0.8), -2px 0 10px rgba(0,0,0,0.3), 2px 0 10px rgba(0,0,0,0.3)'
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,1), rgba(255,255,255,0.9))',
+            boxShadow: '0 0 15px rgba(255,255,255,0.9), -1px 0 8px rgba(0,0,0,0.2), 1px 0 8px rgba(0,0,0,0.2)'
           }}
         >
-          {/* Slider Handle - Improved Design */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          {/* Slider Handle - Positioned at bottom */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
             <div className="relative">
               {/* Outer glow */}
-              <div className="absolute inset-0 w-14 h-14 bg-white/30 rounded-full blur-xl animate-pulse" />
+              <div className="absolute inset-0 w-12 h-12 bg-white/30 rounded-full blur-xl animate-pulse" />
               {/* Main handle */}
-              <div className="relative w-14 h-14 bg-white rounded-full shadow-2xl border-2 border-gray-100 flex items-center justify-center backdrop-blur-sm">
-                <svg className="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="relative w-12 h-12 bg-white rounded-full shadow-2xl border-2 border-gray-100 flex items-center justify-center backdrop-blur-sm hover:scale-110 transition-transform cursor-grab active:cursor-grabbing">
+                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                 </svg>
               </div>
@@ -318,16 +318,16 @@ export default function BeforeAfterSlider({
         </div>
 
         {/* Enhanced Labels */}
-        <div className="absolute top-4 left-4 px-4 py-2 bg-gradient-to-r from-purple-600/80 to-purple-700/80 text-white text-sm font-bold rounded-lg backdrop-blur-sm shadow-lg">
+        <div className="absolute top-4 left-4 px-4 py-2 bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
           {beforeLabel}
         </div>
-        <div className="absolute top-4 right-4 px-4 py-2 bg-gradient-to-r from-orange-600/80 to-orange-700/80 text-white text-sm font-bold rounded-lg backdrop-blur-sm shadow-lg">
+        <div className="absolute top-4 right-4 px-4 py-2 bg-gradient-to-r from-orange-600/90 to-orange-700/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
           {afterLabel}
         </div>
 
         {/* Instructions (show when hovering) */}
         {isHovering && !isDragging && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-lg text-xs backdrop-blur-sm transition-opacity duration-300">
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 glass-dark text-white px-3 py-1.5 rounded-lg text-xs backdrop-blur-md transition-opacity duration-300 shadow-lg border border-white/10" style={{ animation: 'fadeIn 0.3s ease' }}>
             Drag or use ← → arrow keys
           </div>
         )}
@@ -337,7 +337,7 @@ export default function BeforeAfterSlider({
       <button
         onClick={exportAsImage}
         disabled={isExporting}
-        className="mt-4 w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:opacity-90 transition-all hover:scale-[1.02] disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg"
+        className="mt-4 w-full px-4 py-3 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 text-white font-bold rounded-xl hover:from-purple-600 hover:via-pink-500 hover:to-pink-700 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl btn-premium glow-on-hover"
       >
         {isExporting ? (
           <>

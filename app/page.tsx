@@ -7,6 +7,8 @@ import { saveAs } from 'file-saver'
 import ShareModal from '@/components/ShareModal'
 import BeforeAfterSlider from '@/components/BeforeAfterSlider'
 import TemplateSelector from '@/components/TemplateSelector'
+import ImageGallery from '@/components/ImageGallery'
+import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 
 interface HistoryItem {
   prompt: string
@@ -247,12 +249,12 @@ export default function Home() {
 
   const handleTemplateSelect = (templatePrompt: string, templateName: string) => {
     setInstructions(templatePrompt)
-    setSubmitMessage(`✨ Applied "${templateName}" template - Click Apply Edit or customize further!`)
+    setSubmitMessage(`✨ "${templateName}" loaded - Review the prompt below, edit if needed, then click "Apply Edit" to generate!`)
 
     // Clear message after a few seconds
     setTimeout(() => {
       setSubmitMessage('')
-    }, 5000)
+    }, 8000)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -491,6 +493,25 @@ export default function Home() {
     setHistory(prev => prev.filter((_, index) => index !== indexToDelete))
   }
 
+  const handleBatchGenerated = (images: Array<{ image: string; prompt: string; style: string }>) => {
+    // Add all generated images to history
+    const newHistoryItems: HistoryItem[] = images.map(img => ({
+      prompt: `Batch: ${img.prompt}`,
+      image: img.image,
+      timestamp: new Date()
+    }))
+
+    setHistory(prev => [...prev, ...newHistoryItems])
+
+    // Set the first generated image as current
+    if (images.length > 0) {
+      setCurrentImage(images[0].image)
+    }
+
+    setSubmitMessage(`✨ Generated ${images.length} style variations!`)
+    setTimeout(() => setSubmitMessage(''), 5000)
+  }
+
   return (
     <div className="min-h-screen">
       {/* Main content */}
@@ -498,7 +519,7 @@ export default function Home() {
       {/* Zoom Modal */}
       {zoomedImage && (
         <div
-          className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center overflow-hidden"
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center overflow-hidden transition-all duration-300"
           onClick={() => {
             setZoomedImage(null)
             setZoomLevel(1)
@@ -551,13 +572,13 @@ export default function Home() {
           </div>
 
           {/* Zoom controls overlay */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-75 text-white px-4 py-2 rounded-full flex items-center gap-4">
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-black/50 text-white px-6 py-3 rounded-full flex items-center gap-4 shadow-2xl border border-white/20">
             <button
               onClick={(e) => {
                 e.stopPropagation()
                 setZoomLevel(prev => Math.max(prev - 0.25, 0.5))
               }}
-              className="hover:text-orange-400 transition-colors text-xl px-2"
+              className="hover:text-orange-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
             >
               −
             </button>
@@ -567,7 +588,7 @@ export default function Home() {
                 e.stopPropagation()
                 setZoomLevel(prev => Math.min(prev + 0.25, 5))
               }}
-              className="hover:text-orange-400 transition-colors text-xl px-2"
+              className="hover:text-orange-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
             >
               +
             </button>
@@ -577,48 +598,48 @@ export default function Home() {
                 setZoomLevel(1)
                 setZoomPosition({ x: 0, y: 0 })
               }}
-              className="ml-2 text-sm hover:text-orange-400 transition-colors border-l pl-3 border-gray-600"
+              className="ml-2 text-sm hover:text-orange-400 transition-all hover:scale-105 border-l pl-3 border-gray-600 active:scale-95"
             >
               Reset
             </button>
           </div>
 
           {/* Instructions */}
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-75 text-white text-sm px-4 py-2 rounded-full">
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-black/50 text-white text-sm px-5 py-2.5 rounded-full shadow-xl border border-white/20 animate-fade-in">
             Scroll to zoom • {zoomLevel > 1 ? 'Drag to pan' : 'Click to close'} • ESC to exit
           </div>
         </div>
       )}
 
-      <div className="max-w-7xl w-full space-y-3 sm:space-y-4">
+      <div className="max-w-7xl w-full space-y-3 sm:space-y-4 relative z-10 animate-fade-in-up">
         <div className="flex justify-between items-center">
           <a
             href="https://pic-forge.com"
             className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity"
             aria-label="PicForge Home"
           >
-            <div className="w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] relative">
+            <div className="w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] relative animate-float hover-grow">
               <Image
                 src="/logo.svg"
                 alt="PicForge Logo"
                 width={60}
                 height={60}
-                className="animate-pulse pointer-events-none"
+                className="pointer-events-none animate-pulse-glow"
                 draggable={false}
               />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
                 PicForge
               </h1>
-              <p className="text-gray-600 text-[10px] sm:text-xs">Forge your images into art</p>
+              <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Forge your images into art</p>
             </div>
           </a>
           {currentImage && (
             <button
               type="button"
               onClick={handleReset}
-              className="px-3 py-1.5 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1.5 text-sm"
+              className="px-4 py-2 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-1.5 text-sm hover-lift button-press smooth-shadow"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -672,33 +693,42 @@ export default function Home() {
                     reader.readAsDataURL(file)
                   }
                 }}
-                className={`px-6 sm:px-8 py-8 sm:py-10 rounded-lg cursor-pointer transition-all transform hover:scale-105 shadow-lg ${
+                className={`px-8 sm:px-10 py-10 sm:py-12 rounded-2xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02] shadow-2xl relative overflow-hidden animate-scale-in hover-lift ${
                   isDraggingMain
-                    ? 'bg-orange-100 border-2 border-dashed border-orange-500'
-                    : 'bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700'
+                    ? 'bg-orange-100 dark:bg-orange-900/20 border-3 border-dashed border-orange-500 scale-[1.03]'
+                    : 'bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 hover:from-orange-600 hover:via-red-600 hover:to-pink-600'
                 }`}
+                style={{
+                  backgroundSize: '200% 200%'
+                }}
               >
                 <div className="flex flex-col items-center gap-3">
-                  <svg className={`w-8 h-8 sm:w-10 sm:h-10 ${isDraggingMain ? 'text-orange-600' : 'text-white'}`} fill="currentColor" viewBox="0 0 24 24">
+                  <svg className={`w-10 h-10 sm:w-12 sm:h-12 ${isDraggingMain ? 'text-orange-600' : 'text-white drop-shadow-lg'}`} fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C10 6 8 8 8 12c0 2.2 1.8 4 4 4s4-1.8 4-4c0-4-2-6-4-10zm0 14c-1.1 0-2-.9-2-2 0-2 1-3 2-5 1 2 2 3 2 5 0 1.1-.9 2-2 2zm7.5-2c0 3.59-2.91 6.5-6.5 6.5S6.5 17.59 6.5 14c0-1.5.5-2.89 1.34-4 .29-.39.85-.47 1.24-.18.39.29.47.85.18 1.24C8.67 11.89 8.5 12.93 8.5 14c0 2.49 2.01 4.5 4.5 4.5s4.5-2.01 4.5-4.5c0-1.5-.5-2.89-1.34-4-.29-.39-.26-.95.13-1.24.39-.29.95-.26 1.24.13.84 1.11 1.34 2.5 1.34 4.11z"/>
                   </svg>
                   <div className={isDraggingMain ? 'text-orange-600' : 'text-white'}>
-                    <div className="text-base sm:text-lg font-semibold">
+                    <div className="text-lg sm:text-xl font-bold">
                       {isDraggingMain ? 'Drop Image Here' : 'Click, Drop or Paste'}
                     </div>
-                    <div className="text-xs sm:text-sm opacity-90">
+                    <div className="text-sm sm:text-base opacity-90 mt-1">
                       {isDraggingMain ? 'Release to upload' : 'Start forging your images'}
                     </div>
                   </div>
                 </div>
               </div>
-              <p className="text-gray-500 text-xs sm:text-sm mt-2">
-                <span className="font-medium">Tip:</span> You can paste images with Ctrl+V
+              <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-3 flex items-center gap-2 justify-center animate-fade-in delay-300">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700 hover-grow">
+                  <svg className="w-3.5 h-3.5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 7zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.061l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.061l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.061 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z"/>
+                  </svg>
+                  <span className="font-semibold text-xs">Pro Tip</span>
+                </span>
+                <span className="text-xs">Paste images directly with Ctrl+V</span>
               </p>
             </div>
 
             {/* AI Canvas Design Section */}
-            <div className="w-full max-w-xs border-t border-gray-200 pt-3 mx-auto">
+            <div className="w-full max-w-xs border-t border-gray-200 dark:border-gray-700 pt-3 mx-auto animate-fade-in-up delay-400">
               <div className="text-center mb-2">
                 <p className="text-sm text-gray-700">AI Canvas</p>
               </div>
@@ -707,7 +737,7 @@ export default function Home() {
                 <div className="flex justify-center">
                   <button
                     onClick={() => setShowAICanvas(true)}
-                    className="px-6 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm"
+                    className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl transition-all duration-200 text-sm font-semibold shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 btn-premium button-press hover-lift"
                   >
                     Generate Canvas
                   </button>
@@ -719,7 +749,7 @@ export default function Home() {
                     value={canvasPrompt}
                     onChange={(e) => setCanvasPrompt(e.target.value)}
                     placeholder="Describe image..."
-                    className="w-full px-2 py-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 hover:shadow-lg placeholder-gray-400 dark:placeholder-gray-500 font-medium focus-smooth"
                     disabled={isGeneratingCanvas}
                   />
 
@@ -727,7 +757,7 @@ export default function Home() {
                     <button
                       onClick={generateCanvas}
                       disabled={isGeneratingCanvas || !canvasPrompt.trim()}
-                      className="flex-1 px-2 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors disabled:bg-gray-400 text-xs"
+                      className="flex-1 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 text-xs font-medium shadow hover:shadow-lg hover:scale-105 active:scale-95 btn-premium button-press"
                     >
                       {isGeneratingCanvas ? '...' : 'Generate'}
                     </button>
@@ -737,7 +767,7 @@ export default function Home() {
                         setCanvasPrompt('')
                       }}
                       disabled={isGeneratingCanvas}
-                      className="px-2 py-1 text-gray-600 text-xs hover:text-gray-800"
+                      className="px-3 py-1.5 text-gray-600 dark:text-gray-400 text-xs hover:text-red-500 dark:hover:text-red-400 transition-all duration-200 hover:scale-110 active:scale-95 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
                       ✕
                     </button>
@@ -765,7 +795,30 @@ export default function Home() {
         ) : (
           <>
             <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
-              {/* Left side - Main Image and Form */}
+              {/* Left Sidebar - Templates & Batch Generator */}
+              <div className="lg:w-[320px] flex flex-col space-y-3 animate-slide-in-left">
+                <div className="bg-white dark:bg-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 shadow-lg sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+                  <h2 className="text-lg font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    🎨 Creative Studio
+                  </h2>
+
+                  {/* Template Selector */}
+                  <TemplateSelector
+                    onSelectTemplate={handleTemplateSelect}
+                    currentImage={currentImage}
+                  />
+
+                  {/* Batch Style Generator */}
+                  <div className="mt-4">
+                    <BatchStyleGenerator
+                      currentImage={currentImage}
+                      onBatchGenerated={handleBatchGenerated}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Center - Main Image and Form */}
               <div className="flex-1 flex flex-col space-y-2 sm:space-y-3">
                 {/* Main Image Display with Before/After Toggle */}
                 <div className="space-y-2">
@@ -774,7 +827,7 @@ export default function Home() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => setShowBeforeAfter(false)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg ${
                           !showBeforeAfter
                             ? 'bg-orange-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -784,7 +837,7 @@ export default function Home() {
                       </button>
                       <button
                         onClick={() => setShowBeforeAfter(true)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg flex items-center gap-2 ${
                           showBeforeAfter
                             ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -808,7 +861,7 @@ export default function Home() {
                       className="w-full"
                     />
                   ) : (
-                    <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                    <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 shadow-inner transition-all duration-300 card-smooth hover-lift">
                       {currentImage && (
                         <>
                           <Image
@@ -820,7 +873,7 @@ export default function Home() {
                           />
                           <button
                             onClick={() => openZoom(currentImage)}
-                            className="absolute top-2 left-2 bg-black bg-opacity-50 text-white p-2 rounded-lg hover:bg-opacity-70 transition-all"
+                            className="absolute top-2 left-2 glass-dark text-white p-2.5 rounded-lg hover:scale-110 transition-all duration-200 shadow-lg border border-white/10 active:scale-95 hover-grow button-press"
                             title="Click to zoom"
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -830,7 +883,7 @@ export default function Home() {
                         </>
                       )}
                       {history.length > 0 && (
-                        <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                        <div className="absolute top-2 right-2 glass-dark text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg border border-white/10">
                           Edit #{history.length}
                         </div>
                       )}
@@ -840,24 +893,23 @@ export default function Home() {
 
                 {/* Input Form */}
                 <form onSubmit={handleSubmit} className="w-full space-y-2 sm:space-y-3">
-                {/* Template Selector */}
-                <TemplateSelector
-                  onSelectTemplate={handleTemplateSelect}
-                  currentImage={currentImage}
-                />
-
-                <input
-                  type="text"
-                  value={instructions}
-                  onChange={(e) => setInstructions(e.target.value)}
-                  placeholder="Enter editing instructions or select a template above..."
-                  className="w-full px-2 sm:px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
-                  disabled={isSubmitting}
-                />
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Editing Instructions {instructions && <span className="text-orange-500">✏️ (Edit & customize below)</span>}
+                  </label>
+                  <textarea
+                    value={instructions}
+                    onChange={(e) => setInstructions(e.target.value)}
+                    placeholder="Enter editing instructions or select a template above..."
+                    rows={3}
+                    className="w-full px-4 sm:px-5 py-3 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm transition-all duration-200 hover:shadow-lg placeholder-gray-400 dark:placeholder-gray-500 font-medium focus-smooth resize-none"
+                    disabled={isSubmitting}
+                  />
+                </div>
 
                 {/* Additional Image Upload Section */}
                 <div
-                  className={`border-2 border-dashed rounded-lg p-2 sm:p-3 transition-all ${
+                  className={`border-2 border-dashed rounded-xl p-2 sm:p-3 transition-all duration-300 ${
                     isDraggingAdditional
                       ? 'border-orange-500 bg-orange-50'
                       : 'border-gray-300 hover:border-gray-400'
@@ -875,23 +927,22 @@ export default function Home() {
                         style={{ display: 'none' }}
                         id="additional-image-upload"
                       />
-                      <div className="py-4">
-                        <svg className="w-10 h-10 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="py-1.5">
+                        <svg className="w-5 h-5 mx-auto text-gray-400 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                        <p className="text-[9px] font-medium text-gray-700 mb-0.5">
                           {isDraggingAdditional ? 'Drop image here' : 'Click, Drop or Paste'}
                         </p>
-                        <p className="text-[10px] sm:text-xs text-gray-500 mb-2 sm:mb-3">or</p>
                         <button
                           type="button"
                           onClick={() => document.getElementById('additional-image-upload')?.click()}
-                          className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                          className="px-2 py-0.5 text-[9px] bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
                         >
                           Browse Files
                         </button>
-                        <p className="text-[10px] sm:text-xs text-gray-500 mt-2 sm:mt-3 px-2">Blend or combine images</p>
+                        <p className="text-[8px] text-gray-500 mt-0.5">Blend or combine</p>
                       </div>
                     </div>
                   ) : (
@@ -923,18 +974,23 @@ export default function Home() {
                   )}
                 </div>
 
-                <div className="flex gap-4 justify-center">
+                <div className="flex flex-col gap-2 items-center">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 text-sm"
+                    disabled={isSubmitting || !instructions.trim()}
+                    className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 text-sm font-semibold shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 btn-premium button-press hover-lift min-w-[200px]"
                   >
-                    {isSubmitting ? 'Processing...' : 'Apply Edit'}
+                    {isSubmitting ? '⏳ Processing...' : '🚀 Apply Edit & Generate'}
                   </button>
+                  {instructions && !isSubmitting && (
+                    <p className="text-xs text-gray-500 text-center animate-pulse">
+                      👆 Click to generate your image with this prompt
+                    </p>
+                  )}
                 </div>
 
                 {submitMessage && (
-                  <div className={`text-center p-2 rounded-lg text-sm ${
+                  <div className={`text-center p-3 rounded-lg text-sm font-medium shadow-md transition-all duration-300 animate-fadeIn ${
                     submitMessage.includes('Error') || submitMessage.includes('Failed')
                       ? 'bg-red-100 text-red-700'
                       : submitMessage.includes('not available')
@@ -947,18 +1003,14 @@ export default function Home() {
               </form>
               </div>
 
-              {/* Right side - Edit History */}
+              {/* Right side - Enhanced Image Gallery */}
               {history.length > 0 && (
-                <div className="w-80 flex flex-col">
+                <div className="lg:w-[400px] animate-slide-in-right delay-200">
                   <div className="flex justify-between items-center mb-3">
-                    <div>
-                      <h2 className="text-lg font-semibold">Creative Journey</h2>
-                      <p className="text-xs text-gray-600">Click to restore</p>
-                    </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => setShowShareModal(true)}
-                        className="px-3 py-1.5 text-xs bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-1"
+                        className="px-3 py-1.5 text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                         title="Share Image"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -968,7 +1020,7 @@ export default function Home() {
                       </button>
                       <button
                         onClick={downloadAllImages}
-                        className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1"
+                        className="px-3 py-1.5 text-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                         title="Download All Images"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -978,85 +1030,15 @@ export default function Home() {
                       </button>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 overflow-y-auto max-h-[620px]">
-                    {history.map((item, index) => (
-                      <div
-                        key={index}
-                        className={`border rounded-lg p-1 sm:p-2 hover:shadow-xl transition-all ${
-                          currentImage === item.image ? 'border-blue-500 shadow-lg' : 'border-gray-200'
-                        } ${item.isOriginal ? 'bg-green-50' : 'bg-white'} relative group`}
-                      >
-                        <div className="relative h-20 sm:h-32 w-full rounded overflow-hidden bg-gray-50 mb-0.5 sm:mb-1">
-                          {item.image && (
-                            <>
-                              <Image
-                                src={item.image}
-                                alt={`Version ${index}`}
-                                fill
-                                className="object-contain cursor-pointer"
-                                onClick={() => restoreFromHistory(item)}
-                              />
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  openZoom(item.image)
-                                }}
-                                className="absolute top-1 left-1 bg-black bg-opacity-50 text-white p-1 rounded hover:bg-opacity-70 transition-all opacity-0 group-hover:opacity-100"
-                                title="Zoom"
-                              >
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                              </button>
-                            </>
-                          )}
-                          {item.isOriginal && (
-                            <div className="absolute bottom-1 left-1 bg-green-600 text-white text-xs px-2 py-1 rounded">
-                              Original
-                            </div>
-                          )}
-                          {currentImage === item.image && (
-                            <div className="absolute top-1 right-1 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                              Current
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-xs truncate" title={item.prompt}>
-                            {item.isOriginal ? 'Original' : item.prompt}
-                          </p>
-                          <div className="opacity-0 group-hover:opacity-100 absolute bottom-1 right-1 flex gap-1 transition-opacity">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                downloadSingleImage(item, index)
-                              }}
-                              className="p-1 bg-white bg-opacity-90 hover:bg-gray-200 rounded"
-                              title="Download"
-                            >
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                              </svg>
-                            </button>
-                            {!item.isOriginal && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  deleteHistoryItem(index)
-                                }}
-                                className="p-1 bg-white bg-opacity-90 hover:bg-red-100 rounded"
-                                title="Delete"
-                              >
-                                <svg className="w-3 h-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+
+                  <ImageGallery
+                    items={history}
+                    currentImage={currentImage}
+                    onRestore={restoreFromHistory}
+                    onDownload={downloadSingleImage}
+                    onDelete={deleteHistoryItem}
+                    onZoom={openZoom}
+                  />
                 </div>
               )}
             </div>
