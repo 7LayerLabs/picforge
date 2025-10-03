@@ -34,8 +34,7 @@ export class GeminiProcessor {
   // Batch process with Gemini (single API call for all images)
   async processBatch(
     files: File[],
-    operation: 'remove_background' | 'enhance' | 'object_detection' | 'style_transfer' | 'removeBackground',
-    _options?: Record<string, unknown>
+    operation: 'remove_background' | 'enhance' | 'object_detection' | 'style_transfer' | 'removeBackground'
   ): Promise<unknown[]> {
     try {
       // Convert all files to base64

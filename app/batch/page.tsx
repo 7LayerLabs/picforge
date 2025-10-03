@@ -40,22 +40,22 @@ export default function Home() {
         for (const op of standardOps) {
           switch (op.type) {
             case 'resize':
-              result = await processor.resize(file, op.params.width, op.params.height);
+              result = await processor.resize(file, op.params.width as number, op.params.height as number);
               break;
             case 'brightness':
-              result = await processor.adjustBrightness(file, op.params.value);
+              result = await processor.adjustBrightness(file, op.params.value as number);
               break;
             case 'contrast':
-              result = await processor.adjustContrast(file, op.params.value);
+              result = await processor.adjustContrast(file, op.params.value as number);
               break;
             case 'rotate':
-              result = await processor.rotate(file, op.params.degrees);
+              result = await processor.rotate(file, op.params.degrees as number);
               break;
             case 'watermark':
-              result = await processor.addWatermark(file, op.params.text, op.params.position);
+              result = await processor.addWatermark(file, op.params.text as string, op.params.position as string);
               break;
             case 'compress':
-              result = await processor.compress(file, op.params.quality);
+              result = await processor.compress(file, op.params.quality as number);
               break;
           }
         }
@@ -69,8 +69,7 @@ export default function Home() {
           if (op.type === 'removeBackground' || op.type === 'enhance') {
             const aiResults = await gemini.processBatch(
               uploadedFiles,
-              op.type as 'removeBackground' | 'enhance',
-              op.params
+              op.type as 'removeBackground' | 'enhance'
             );
             console.log('AI processing complete:', aiResults);
           }
