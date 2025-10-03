@@ -18,11 +18,12 @@ export default function Navigation() {
           {/* Logo and main nav */}
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <ImageIcon className="w-5 h-5 text-white" />
+              <Link href="/" className="flex items-center gap-3">
+                <div className="text-4xl">🔥</div>
+                <div className="flex flex-col">
+                  <span className="font-bold text-xl bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">PicForge</span>
+                  <span className="text-xs text-gray-600">Forge your images into art</span>
                 </div>
-                <span className="font-bold text-xl text-gray-900">PicForge</span>
               </Link>
             </div>
 
