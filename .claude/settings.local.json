@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(npm run build:*)",
+      "Read(//c/Users/derek/Downloads/**)",
+      "Read(//c/Users/derek/OneDrive/Desktop/**)",
+      "Bash(cat:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c taskkill:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(npm install)",
+      "Bash(git rebase:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nFix ESLint errors for production build\n\n- Fixed @typescript-eslint/no-explicit-any errors in geminiProcessor.ts\n- Fixed @typescript-eslint/no-explicit-any errors in EditPanel.tsx\n- Fixed @typescript-eslint/no-explicit-any errors in batch/page.tsx\n- Removed unused imports (ImageIcon, Crop, Palette)\n- Removed unused isProcessing state variable\n- Added eslint-disable comments for necessary img tags\n- Fixed useEffect dependencies warning in ShareModal\n- Added aria-hidden to decorative icon elements\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit:*)",
+      "WebSearch",
+      "Bash(git rm:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

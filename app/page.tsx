@@ -612,15 +612,49 @@ export default function Home() {
         </div>
       )}
 
-      <div className="max-w-7xl w-full space-y-3 sm:space-y-4 relative z-10 animate-fade-in-up">
+      <div className="max-w-6xl w-full relative z-10 animate-fade-in-up">
+        {!currentImage && (
+          <>
+            {/* Hero Section */}
+            <div className="text-center mb-16 px-4">
+              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                Transform Your Images <br className="hidden sm:block" />
+                <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">with AI</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+                Professional photo editing in seconds – no skills required. Choose from 210+ templates or write your own prompts.
+              </p>
+
+              {/* Feature Highlights */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                  <div className="text-4xl mb-3">⚡</div>
+                  <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Instant Results</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Transform images in seconds with powerful AI</p>
+                </div>
+                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                  <div className="text-4xl mb-3">🎨</div>
+                  <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">210+ Templates</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Professional prompts for every use case</p>
+                </div>
+                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                  <div className="text-4xl mb-3">🔒</div>
+                  <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Private & Secure</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Your images stay on your device</p>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
         {currentImage && (
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-end mb-8 px-4">
             <button
               type="button"
               onClick={handleReset}
-              className="px-4 py-2 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-1.5 text-sm hover-lift button-press smooth-shadow"
+              className="px-6 py-3 text-gray-600 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-2 font-medium"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
               Start Over
@@ -629,7 +663,7 @@ export default function Home() {
         )}
 
         {!currentImage ? (
-          <div className="flex flex-col items-center space-y-6">
+          <div className="flex flex-col items-center space-y-8 px-4">
             <div className="flex flex-col items-center space-y-3">
               <input
                 type="file"
@@ -672,25 +706,27 @@ export default function Home() {
                     reader.readAsDataURL(file)
                   }
                 }}
-                className={`px-8 sm:px-10 py-10 sm:py-12 rounded-2xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02] shadow-2xl relative overflow-hidden animate-scale-in hover-lift ${
+                className={`w-full max-w-3xl mx-auto px-12 py-20 rounded-3xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02] shadow-2xl relative overflow-hidden ${
                   isDraggingMain
-                    ? 'bg-orange-100 dark:bg-orange-900/20 border-3 border-dashed border-orange-500 scale-[1.03]'
-                    : 'bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 hover:from-orange-600 hover:via-red-600 hover:to-pink-600'
+                    ? 'bg-orange-50 dark:bg-orange-900/20 border-4 border-dashed border-orange-500 scale-[1.03]'
+                    : 'bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 hover:from-orange-600 hover:via-red-600 hover:to-pink-600 border-4 border-transparent'
                 }`}
-                style={{
-                  backgroundSize: '200% 200%'
-                }}
               >
-                <div className="flex flex-col items-center gap-3">
-                  <svg className={`w-10 h-10 sm:w-12 sm:h-12 ${isDraggingMain ? 'text-orange-600' : 'text-white drop-shadow-lg'}`} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C10 6 8 8 8 12c0 2.2 1.8 4 4 4s4-1.8 4-4c0-4-2-6-4-10zm0 14c-1.1 0-2-.9-2-2 0-2 1-3 2-5 1 2 2 3 2 5 0 1.1-.9 2-2 2zm7.5-2c0 3.59-2.91 6.5-6.5 6.5S6.5 17.59 6.5 14c0-1.5.5-2.89 1.34-4 .29-.39.85-.47 1.24-.18.39.29.47.85.18 1.24C8.67 11.89 8.5 12.93 8.5 14c0 2.49 2.01 4.5 4.5 4.5s4.5-2.01 4.5-4.5c0-1.5-.5-2.89-1.34-4-.29-.39-.26-.95.13-1.24.39-.29.95-.26 1.24.13.84 1.11 1.34 2.5 1.34 4.11z"/>
-                  </svg>
-                  <div className={isDraggingMain ? 'text-orange-600' : 'text-white'}>
-                    <div className="text-lg sm:text-xl font-bold">
-                      {isDraggingMain ? 'Drop Image Here' : 'Click, Drop or Paste'}
+                <div className="flex flex-col items-center gap-6">
+                  <div className={`p-6 rounded-full ${isDraggingMain ? 'bg-orange-100' : 'bg-white/20'}`}>
+                    <svg className={`w-16 h-16 ${isDraggingMain ? 'text-orange-600' : 'text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                  </div>
+                  <div className={`text-center ${isDraggingMain ? 'text-orange-600' : 'text-white'}`}>
+                    <div className="font-heading text-2xl md:text-3xl font-bold mb-2">
+                      {isDraggingMain ? 'Drop Your Image Here' : 'Upload Your Image'}
                     </div>
-                    <div className="text-sm sm:text-base opacity-90 mt-1">
-                      {isDraggingMain ? 'Release to upload' : 'Start forging your images'}
+                    <div className="text-lg opacity-90">
+                      {isDraggingMain ? 'Release to start transforming' : 'Drag & drop, click to browse, or paste (Ctrl+V)'}
+                    </div>
+                    <div className="mt-4 text-sm opacity-75">
+                      Supports PNG, JPG, GIF, WEBP
                     </div>
                   </div>
                 </div>

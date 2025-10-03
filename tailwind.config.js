@@ -6,6 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        heading: ['var(--font-heading)'],
+        body: ['var(--font-body)'],
+      },
       animation: {
         'float': 'float 6s ease-in-out infinite',
         'fade-in': 'fade-in 0.5s ease-out',
