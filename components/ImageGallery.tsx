@@ -207,35 +207,6 @@ export default function ImageGallery({
                 </div>
               </div>
 
-              {/* Progress Ring for Current */}
-              {currentImage === item.image && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-16 h-16">
-                    <svg className="w-full h-full animate-spin" viewBox="0 0 100 100">
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.1)"
-                        strokeWidth="8"
-                      />
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="8"
-                        strokeDasharray="283"
-                        strokeDashoffset="75"
-                        strokeLinecap="round"
-                        className="drop-shadow-lg"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         ))}
