@@ -220,6 +220,17 @@
     }
   }
 
+  @keyframes pulse-subtle {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+    50% {
+      opacity: 0.95;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.15);
+    }
+  }
+
   @keyframes bounce-soft {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
@@ -251,6 +262,10 @@
 
   .animate-pulse-glow {
     animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .animate-bounce-soft {
