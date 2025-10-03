@@ -96,7 +96,6 @@ export default function EditPanel({
       operations.push({ type: 'rotate', params: { degrees: rotation } });
     }
 
-    setCustomOperations(operations);
     onApplyEdits(operations);
   };
 
