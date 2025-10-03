@@ -106,14 +106,14 @@ export default function Home() {
             Batch Image Processor
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Process 100 images in 10 seconds • AI-powered • 99% profit margins
+            Process up to 10 images at once • AI-powered • Professional results
           </p>
 
           {/* Feature Pills */}
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             <div className="px-4 py-2 bg-green-100 text-green-700 rounded-full flex items-center gap-2">
               <Zap className="w-4 h-4" />
-              10x faster with GPU
+              Batch processing saves time
             </div>
             <div className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
@@ -177,8 +177,8 @@ export default function Home() {
             className="bg-white rounded-xl shadow-lg p-6 text-center"
           >
             <Clock className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-            <div className="text-2xl font-bold text-gray-900">2.3s</div>
-            <div className="text-sm text-gray-600">Avg processing time</div>
+            <div className="text-2xl font-bold text-gray-900">8-10s</div>
+            <div className="text-sm text-gray-600">Per image (AI processing)</div>
           </motion.div>
 
           <motion.div
