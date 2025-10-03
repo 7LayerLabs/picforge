@@ -15,57 +15,174 @@ export default function TipsPage() {
 
   const promptIdeas = [
     {
-      category: "Professional Headshots",
-      icon: "👔",
+      category: "People & Portraits",
+      icon: "👤",
       prompts: [
-        "Professional LinkedIn headshot with soft studio lighting on neutral background",
-        "Corporate executive portrait with confident expression and formal attire",
-        "Friendly approachable business casual headshot with warm smile"
+        "Professional LinkedIn headshot with soft studio lighting on neutral grey background",
+        "Corporate executive portrait with confident expression, formal attire, and office backdrop",
+        "Friendly approachable business casual headshot with warm genuine smile",
+        "Transform into oil painting portrait in classical Renaissance style with dramatic lighting",
+        "Create cinematic movie poster style portrait with dramatic lighting and film grain",
+        "Turn into Disney Pixar 3D animated character with expressive eyes and stylized features",
+        "Professional doctor/medical professional portrait with white coat and clinical setting",
+        "Fashion magazine editorial style with high-end retouching and dramatic poses",
+        "Transform to vintage 1950s portrait with period-appropriate styling and sepia tones",
+        "Create superhero comic book version with dynamic pose and action background",
+        "Professional realtor headshot with friendly smile and modern office background",
+        "Transform into anime/manga character with large eyes and cel-shaded style",
+        "Create LinkedIn banner with professional headshot and industry-relevant background",
+        "Turn into fantasy RPG character with medieval armor and magical effects",
+        "Professional teacher/educator portrait with classroom or library background",
+        "Transform to cyberpunk character with neon lights and futuristic augmentations",
+        "Create professional dating profile photo with natural outdoor lighting",
+        "Turn into classical marble statue bust with museum lighting",
+        "Professional musician/artist portrait with creative studio background",
+        "Transform to watercolor painting portrait with soft edges and artistic splashes",
+        "Create professional Zoom virtual background with home office setting",
+        "Turn into retro 80s portrait with neon colors and synthwave aesthetics",
+        "Professional athlete/fitness portrait with gym or sports facility background",
+        "Transform into chibi/kawaii cute cartoon version with oversized head",
+        "Create professional speaker/presenter portrait with conference stage background"
       ]
     },
     {
-      category: "E-commerce Products",
-      icon: "🛍️",
+      category: "Products & E-commerce",
+      icon: "📦",
       prompts: [
-        "Product on pure white background with professional lighting and subtle shadow",
-        "Lifestyle product shot in modern minimalist setting with natural light",
-        "360-degree product view with consistent lighting and turntable effect"
+        "Product on pure white background with professional studio lighting and subtle shadow",
+        "Lifestyle product shot in modern minimalist home setting with natural light",
+        "360-degree product view with consistent lighting for e-commerce spinner",
+        "Product with transparent background (PNG) for flexible marketing use",
+        "Luxury product presentation with elegant props and premium packaging display",
+        "Product in use demonstration showing hands interacting naturally",
+        "Amazon listing hero image with infographic callouts and feature highlights",
+        "Product flat lay with complementary accessories and branded elements",
+        "Close-up macro detail shot showing textures, materials, and craftsmanship",
+        "Product size comparison with common objects for scale reference",
+        "Holiday/seasonal themed product shot with festive decorations",
+        "Product splash or explosion shot showing dynamic movement and energy",
+        "Before/after transformation showing product effectiveness and results",
+        "Product packaging shot from multiple angles showing all sides clearly",
+        "Minimalist product shot with negative space for text overlay",
+        "Product in outdoor lifestyle setting showing real-world usage",
+        "Professional jewelry/watch shot with reflective surface and dramatic lighting",
+        "Food product shot with appetizing presentation and fresh ingredients visible",
+        "Tech product shot with futuristic background and holographic effects",
+        "Fashion/clothing ghost mannequin shot showing fit without model",
+        "Product bundle or kit layout showing all included items organized",
+        "Cosmetic/beauty product shot with texture swatches and color samples",
+        "Product comparison grid showing different models or variations",
+        "Eco-friendly product shot with natural, sustainable background elements",
+        "Product unboxing sequence showing packaging layers and presentation"
+      ]
+    },
+    {
+      category: "Scenery & Locations",
+      icon: "🏔️",
+      prompts: [
+        "Golden hour landscape with warm sunset lighting and long shadows",
+        "Misty mountain sunrise with fog rolling through valleys and peaks",
+        "Tropical beach paradise with crystal clear water and palm trees",
+        "Urban cityscape at blue hour with illuminated buildings and traffic trails",
+        "Enchanted forest with rays of sunlight filtering through trees",
+        "Northern lights (aurora borealis) dancing over snowy wilderness",
+        "Japanese cherry blossom garden in full bloom with traditional architecture",
+        "Dramatic storm clouds over prairie landscape with lightning strikes",
+        "Underwater coral reef scene with colorful fish and marine life",
+        "Autumn forest with vibrant fall colors and fallen leaves carpet",
+        "Desert landscape with sand dunes and dramatic shadows at sunset",
+        "Winter wonderland with fresh snow and frozen waterfalls",
+        "Mediterranean coastal village with white buildings and blue waters",
+        "Milky Way galaxy over dark sky preserve with no light pollution",
+        "Lavender fields in Provence with purple rows stretching to horizon",
+        "Scottish highlands with misty mountains and ancient castles",
+        "Venice canals with gondolas and historic architecture reflections",
+        "African safari landscape with acacia trees and wildlife silhouettes",
+        "New York City skyline from Brooklyn Bridge at twilight",
+        "Iceland's black sand beaches with basalt columns and crashing waves",
+        "Swiss Alps panorama with snow-capped peaks and mountain villages",
+        "Amazon rainforest canopy with exotic birds and lush vegetation",
+        "Dubai futuristic skyline with Burj Khalifa and modern architecture",
+        "Santorini sunset with white churches and blue domes overlooking caldera",
+        "Grand Canyon panoramic view with layered rock formations and Colorado River"
+      ]
+    },
+    {
+      category: "Creative Styles",
+      icon: "🎨",
+      prompts: [
+        "Transform to Studio Ghibli anime style with soft colors and whimsical details",
+        "Cyberpunk neon aesthetic with glowing edges and futuristic elements",
+        "Van Gogh painting style with swirling brushstrokes and vibrant colors",
+        "80s synthwave/vaporwave with neon grids and retro-futuristic vibes",
+        "Banksy street art stencil style with political message and urban decay",
+        "Tim Burton gothic style with dark whimsy and exaggerated proportions",
+        "Wes Anderson symmetrical composition with pastel color palette",
+        "Marvel/DC comic book style with bold outlines and Ben Day dots",
+        "Minecraft blocky voxel art style with pixelated cubic forms",
+        "Salvador Dali surrealist melting style with dreamlike distortions",
+        "Andy Warhol pop art with bold colors and repeated patterns",
+        "Japanese woodblock print (ukiyo-e) style with flat colors and waves",
+        "Steampunk Victorian era with brass gears and mechanical elements",
+        "Low poly 3D geometric style with triangulated surfaces",
+        "Film noir black and white with dramatic shadows and venetian blinds",
+        "Lisa Frank rainbow style with neon colors and cute animals",
+        "Borderlands cel-shaded video game style with thick black outlines",
+        "Art Nouveau style with organic flowing lines and nature motifs",
+        "Glitch art with digital artifacts and corrupted pixel effects",
+        "Bauhaus minimalist design with geometric shapes and primary colors"
       ]
     },
     {
       category: "Social Media Content",
       icon: "📱",
       prompts: [
-        "Instagram-worthy flat lay with aesthetic props and perfect overhead lighting",
+        "Instagram carousel post with cohesive color scheme across 10 slides",
         "TikTok viral transformation with dramatic before/after split screen",
-        "Pinterest-style mood board collage with cohesive color palette"
+        "Pinterest-worthy infographic with data visualization and icons",
+        "LinkedIn thought leadership post with professional headshot overlay",
+        "YouTube thumbnail with shocked expression and bold text overlay",
+        "Facebook cover photo with family portrait and seasonal theme",
+        "Twitter header with minimalist design and personal branding",
+        "Instagram Reels cover with motion blur and dynamic text",
+        "Snapchat geofilter design with location-specific graphics",
+        "WhatsApp status update with countdown timer overlay",
+        "Discord server banner with gaming theme and animated elements",
+        "Twitch stream overlay with alerts and donation goals",
+        "Instagram story highlight covers with matching icons and colors",
+        "TikTok duet layout with reaction space and original video",
+        "Pinterest mood board with cohesive aesthetic and color palette",
+        "LinkedIn banner with industry keywords and achievements",
+        "YouTube end screen with subscribe button and video suggestions",
+        "Instagram quote post with typography and blurred background",
+        "Facebook event cover with date, time, and location details",
+        "Twitter meme format with relatable text and reaction image"
       ]
     },
     {
-      category: "Creative Art Styles",
-      icon: "🎨",
-      prompts: [
-        "Transform to Studio Ghibli anime style with soft colors and whimsical details",
-        "Cyberpunk neon aesthetic with glowing edges and futuristic elements",
-        "Van Gogh painting style with swirling brushstrokes and vibrant colors"
-      ]
-    },
-    {
-      category: "Real Estate",
+      category: "Real Estate & Architecture",
       icon: "🏡",
       prompts: [
-        "Golden hour lighting with warm sunset glow enhancing property appeal",
-        "Virtual staging with modern furniture in empty room",
-        "Wide-angle HDR shot showing full room with enhanced natural light"
-      ]
-    },
-    {
-      category: "Food Photography",
-      icon: "🍕",
-      prompts: [
-        "Appetizing food shot with steam effects and golden lighting",
-        "Overhead flat lay of meal with rustic table setting",
-        "Close-up macro shot highlighting textures and fresh ingredients"
+        "Golden hour exterior shot with warm lighting enhancing curb appeal",
+        "Virtual staging of empty room with modern furniture and decor",
+        "Wide-angle interior showing spacious layout and natural light",
+        "Twilight photography with interior lights creating warm glow",
+        "Aerial drone view showing property boundaries and neighborhood",
+        "HDR interior balancing window views with indoor lighting",
+        "Kitchen close-up highlighting premium appliances and finishes",
+        "Bathroom spa-like presentation with staged towels and accessories",
+        "Virtual renovation showing potential after improvements",
+        "Day to dusk conversion for dramatic twilight effect",
+        "Remove clutter and personal items for clean listing photos",
+        "Add virtual grass and landscaping to improve yard appeal",
+        "Brighten dark rooms with enhanced lighting and exposure",
+        "Create floor plan overlay showing room dimensions and flow",
+        "Before/after renovation comparison showing improvements",
+        "Add blue sky to overcast exterior photos for better appeal",
+        "Virtual paint colors showing different room color options",
+        "Enhance fireplace with virtual fire for cozy atmosphere",
+        "Remove cars from driveway for cleaner exterior shot",
+        "Add virtual pool or outdoor features to backyard"
       ]
     }
   ]
