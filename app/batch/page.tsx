@@ -52,7 +52,7 @@ export default function Home() {
               result = await processor.rotate(file, op.params.degrees as number);
               break;
             case 'watermark':
-              result = await processor.addWatermark(file, op.params.text as string, op.params.position as string);
+              result = await processor.addWatermark(file, op.params.text as string, op.params.position as 'center' | 'bottom-right' | 'top-left');
               break;
             case 'compress':
               result = await processor.compress(file, op.params.quality as number);
