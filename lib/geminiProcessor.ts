@@ -93,7 +93,7 @@ export class GeminiProcessor {
 
     // Check cache
     if (this.cache.has(cacheKey)) {
-      return this.cache.get(cacheKey);
+      return this.cache.get(cacheKey)!;
     }
 
     const base64 = await this.fileToBase64(file);

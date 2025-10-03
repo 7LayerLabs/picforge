@@ -298,6 +298,7 @@ export default function EditPanel({
               onClick={() => onApplyEdits([{ type: 'compress', params: { quality: 0.8 } }])}
               className="p-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors"
             >
+              {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <Image className="w-4 h-4 inline mr-1" />
               Compress
             </button>
