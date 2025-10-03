@@ -1,7 +1,7 @@
 // Client-side image processing (FREE operations)
 export class ImageProcessor {
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
+  private canvas!: HTMLCanvasElement;
+  private ctx!: CanvasRenderingContext2D;
 
   constructor() {
     if (typeof window !== 'undefined') {
