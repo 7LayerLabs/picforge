@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { Sparkles } from 'lucide-react'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import ShareModal from '@/components/ShareModal'
@@ -642,6 +644,19 @@ export default function Home() {
                   <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Private & Secure</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Your images stay on your device</p>
                 </div>
+              </div>
+
+              {/* AI Canvas CTA */}
+              <div className="mt-8 p-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl text-white text-center">
+                <h3 className="font-heading text-2xl font-bold mb-2">Need a Custom Background?</h3>
+                <p className="mb-4 opacity-90">Generate unique backgrounds and scenes with AI Canvas before editing your photos</p>
+                <Link
+                  href="/canvas"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all"
+                >
+                  <Sparkles className="w-5 h-5" />
+                  Try AI Canvas
+                </Link>
               </div>
             </div>
           </>
