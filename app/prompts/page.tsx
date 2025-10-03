@@ -241,6 +241,58 @@ export default function PromptsPage() {
         "Product image refinement: remove dust and imperfections; enhance reflections and highlights; correct color balance for web display; sharpen details without introducing artifacts; maintain transparent background",
         "Compositional improvement: apply rule of thirds; adjust perspective for professional framing; balance negative space; enhance leading lines; preserve all original content and subject matter"
       ]
+    },
+    {
+      category: "Gaming & Collectibles",
+      icon: "🎮",
+      prompts: [
+        "Transform into RPG character status screen with health/mana bars, stats panel showing strength/agility/intelligence, character portrait in ornate frame, game UI elements, and fantasy-styled text. Include level indicator and experience bar",
+        "Create vintage trading card design with character portrait, holographic border effects, stat numbers for attack/defense/speed, rarity symbol, and flavor text describing abilities. Use 1990s Pokemon/Yu-Gi-Oh aesthetic",
+        "Turn into collectible anime figure with clear display box packaging. Show figure on rotating stand, product name on box in Japanese and English, window showing figure details, and authentic toy company branding",
+        "Generate original Pokemon character based on this image. Include Pokedex number, type icons (fire/water/grass), evolution chain diagram, height/weight stats, and abilities description in official Pokemon style",
+        "Transform into bobblehead figure on dashboard with oversized head, spring-loaded neck, glossy finish, small body with crossed arms pose, circular base with name plate, and realistic toy photography lighting",
+        "Create action figure in original packaging with character visible through plastic window, cardboard backing with character artwork, product description, age rating, barcode, and authentic toy manufacturer branding",
+        "Design as retro arcade game character sprite with pixel art style, 8-bit color palette, idle animation pose, health bar above head, power-up indicators, and classic 1980s video game aesthetics",
+        "Transform into LEGO minifigure with blocky construction, signature yellow skin tone (or character-appropriate color), detailed outfit made of LEGO pieces, classic minifigure smile, and official LEGO product photography style"
+      ]
+    },
+    {
+      category: "Miniature Worlds & Dioramas",
+      icon: "🔬",
+      prompts: [
+        "Create miniature scene inside computer keyboard ESC key. Show tiny office setup with desk, monitor, chair, and working person. Use tilt-shift photography effect with dramatic depth of field. Hyper-detailed miniature craftsmanship",
+        "Transform into tiny diorama scene contained within a crystal ball. Include miniature landscape, buildings, trees, and characters. Crystal ball sits on ornate wooden stand. Soft magical glow from within. Professional product photography",
+        "Design as miniature world built inside a mason jar. Show complete ecosystem with tiny plants, water feature, miniature house, and small pathway. Glass jar on wooden table with soft window lighting. Terrarium aesthetic",
+        "Create tilt-shift effect making real scene look like toy model. Increase color saturation, add selective focus blur on top and bottom, enhance miniature appearance. Make buildings and cars look like tiny scale models",
+        "Transform into snow globe scene with miniature winter village inside. Show small houses, trees, and figures suspended in liquid with floating snow particles. Glass globe on decorative base. Nostalgic holiday aesthetic",
+        "Design as miniature room inside a shoebox diorama. Include tiny furniture, wall decorations, working lights, and detailed accessories. View from open box showing handcrafted miniature interior. Cozy detailed craftsmanship"
+      ]
+    },
+    {
+      category: "Creative Transformations",
+      icon: "✨",
+      prompts: [
+        "Transform into emoji 3D object with glossy plastic finish. Make it look like official Apple emoji merchandise - inflatable pool float, plush cushion, or vinyl toy figure. Bright saturated colors with soft shadows",
+        "Retexture entire image as if made from stained glass. Colorful translucent panels with black leading between sections, light shining through creating colored reflections. Cathedral window aesthetic with geometric patterns",
+        "Convert into voxel/pixel art icon with Minecraft-style blocky 3D construction. Use limited color palette, cubic forms, and isometric perspective. Retro gaming aesthetic meets modern 3D rendering",
+        "Transform map screenshot into ancient treasure map with aged parchment texture, hand-drawn cartography style, decorative compass rose, sea monsters in water areas, and 'X marks the spot' indicators. Pirate map aesthetic",
+        "Turn into inflatable pool toy version with glossy vinyl material, air valve visible, exaggerated proportions, bright summery colors, and floating on pool water with sun reflections. Fun beach toy aesthetic",
+        "Create as embroidered patch design with visible thread texture, felt backing, stitched outlines, fabric material appearance, and slight dimensional depth. Like iron-on jacket patch or scout badge",
+        "Transform into neon sign with glowing tubes, electric buzz effect, dark background, colorful neon gas colors (pink/blue/green), mounting hardware visible, and dramatic nighttime city aesthetic",
+        "Convert to claymation/stop-motion animation style figure with visible fingerprints in clay, matte texture, slightly imperfect handmade appearance, and soft studio lighting. Wallace & Gromit aesthetic"
+      ]
+    },
+    {
+      category: "Vintage & Retro Packaging",
+      icon: "📦",
+      prompts: [
+        "Design as 1980s toy box packaging with character bursting through colorful explosion graphic, bold action words in comic font, 'Collector's Edition' badge, age rating, and barcode. Authentic retro toy aisle aesthetic",
+        "Transform into vintage cereal box featuring character as mascot. Include brand name in retro font, 'FREE TOY INSIDE!' banner, nutrition facts panel, UPC barcode, and 1970s grocery store product design",
+        "Create as retro VHS tape cover with character in action pose, movie title in neon gradient font, 'Be Kind Rewind' sticker, rental store tags, and authentic 1990s video store aesthetic with tracking lines",
+        "Design as vintage passport stamp with circular border, country name, official seal, date stamp, and faded ink texture. Multiple overlapping stamps creating travel document aesthetic from various countries",
+        "Transform into old-school trading card album page with plastic sleeve pockets, handwritten notes in margins, slightly worn edges, and nostalgic collector's binder presentation from childhood",
+        "Create as vintage postage stamp with perforated edges, denomination value, country of origin, official government seal, and character portrait in classic commemorative stamp design style"
+      ]
     }
   ]
 
@@ -282,7 +334,7 @@ export default function PromptsPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full mb-4">
             <Copy className="w-4 h-4" />
-            <span className="text-sm font-medium">165+ Ready-to-Use Prompts</span>
+            <span className="text-sm font-medium">190+ Ready-to-Use Prompts</span>
           </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             PicForge Prompt Library
