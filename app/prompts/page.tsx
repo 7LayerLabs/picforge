@@ -293,6 +293,42 @@ export default function PromptsPage() {
         "Transform into old-school trading card album page with plastic sleeve pockets, handwritten notes in margins, slightly worn edges, and nostalgic collector's binder presentation from childhood",
         "Create as vintage postage stamp with perforated edges, denomination value, country of origin, official government seal, and character portrait in classic commemorative stamp design style"
       ]
+    },
+    {
+      category: "AR & Technical Visualization",
+      icon: "🔧",
+      prompts: [
+        "Create hardware exploded view diagram showing all internal components separated and labeled. Display DSLR camera, smartphone, or laptop with parts floating in organized layers. Technical blueprint aesthetic with measurement lines",
+        "Generate location-based AR information overlay. Highlight points of interest in image with floating annotation cards showing relevant facts, history, and context. Modern AR interface design with semi-transparent data panels",
+        "Transform into technical assembly instructions with numbered steps, exploded component views, and directional arrows showing construction sequence. IKEA-style illustration with clear visual hierarchy",
+        "Create product component breakdown showing materials, parts list, and construction details. Label each element with specifications, dimensions, and material composition. Engineering diagram aesthetic",
+        "Generate interactive maintenance guide with highlighted problem areas, diagnostic information, and repair steps overlaid on equipment image. Professional service manual visualization",
+        "Design technical specification sheet with product cutaway view, annotated features, performance metrics, and dimensional callouts. Professional industrial design presentation"
+      ]
+    },
+    {
+      category: "Perspective & View Transformations",
+      icon: "🗺️",
+      prompts: [
+        "Convert ground-level photograph to top-down aerial map view. Transform street scene into bird's eye perspective with labeled locations, paths, and photographer position marked. Cartographic style with map elements",
+        "Transform 2D architectural floor plan into isometric 3D visualization. Show room layouts with furniture, walls, and dimensions in angled perspective. Professional architectural rendering style",
+        "Convert real photo into Minecraft-style blocky isometric world. Transform buildings, landscape, and objects into pixelated cube construction. Voxel game aesthetic with grid-based design",
+        "Generate cross-section cutaway view revealing internal structure. Slice building, vehicle, or object to show hidden interior layers and components. Architectural section drawing style",
+        "Transform flat map into 3D terrain visualization with elevation, topography, and relief shading. Show mountains, valleys, and geographical features in raised perspective. Topographic map aesthetic",
+        "Convert photograph to blueprint/wireframe technical drawing. Show object outline, dimensions, construction lines, and measurement annotations. Professional CAD drawing style with blue background"
+      ]
+    },
+    {
+      category: "Educational & Infographics",
+      icon: "📊",
+      prompts: [
+        "Create educational infographic about 'Top 5 [topic]' with visual rankings, comparison data, and illustrated facts. Include charts, icons, and color-coded sections. Professional data visualization style",
+        "Transform text information into visual timeline showing historical progression, milestones, and key events. Add dates, icons, connecting lines, and descriptive annotations. Clean chronological design",
+        "Generate comparison infographic showing side-by-side analysis of multiple options. Include pros/cons, feature matrices, and rating scales. Clear visual hierarchy with iconography",
+        "Create 'How It Works' educational diagram explaining complex process in simple visual steps. Show workflow, connections, and transformations with arrows and illustrations. Technical yet accessible style",
+        "Design knowledge map visualizing relationships between concepts. Show connections, hierarchies, and categories in interconnected node structure. Mind map or knowledge graph aesthetic",
+        "Transform statistics into engaging data story with charts, graphs, percentage visualizations, and key takeaway highlights. Magazine-quality infographic design with compelling visual narrative"
+      ]
     }
   ]
 
@@ -334,7 +370,7 @@ export default function PromptsPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full mb-4">
             <Copy className="w-4 h-4" />
-            <span className="text-sm font-medium">190+ Ready-to-Use Prompts</span>
+            <span className="text-sm font-medium">210+ Ready-to-Use Prompts</span>
           </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             PicForge Prompt Library
