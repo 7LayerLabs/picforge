@@ -98,10 +98,16 @@ export async function POST(request: NextRequest) {
       })
 
       // Prepare the image parts
+      // Force PNG/JPEG mime types for Gemini compatibility (convert AVIF/WEBP to supported format)
+      let mimeType = imageFile.type
+      if (mimeType === 'image/avif' || mimeType === 'image/webp' || !mimeType.startsWith('image/')) {
+        mimeType = 'image/png'
+      }
+
       const imagePart = {
         inlineData: {
           data: base64Image,
-          mimeType: imageFile.type
+          mimeType: mimeType
         }
       }
 
@@ -109,10 +115,16 @@ export async function POST(request: NextRequest) {
 
       // Create a clear prompt that tells Gemini to generate an image
       if (base64AdditionalImage && additionalImageType) {
+        // Force PNG/JPEG for additional image as well
+        let additionalMimeType = additionalImageType
+        if (additionalMimeType === 'image/avif' || additionalMimeType === 'image/webp' || !additionalMimeType.startsWith('image/')) {
+          additionalMimeType = 'image/png'
+        }
+
         const additionalImagePart = {
           inlineData: {
             data: base64AdditionalImage,
-            mimeType: additionalImageType
+            mimeType: additionalMimeType
           }
         }
 
