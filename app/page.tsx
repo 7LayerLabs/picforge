@@ -303,8 +303,8 @@ export default function Home() {
 
       // Always use the converted image (currentImage or originalImage) which are PNG base64
       const imageToSend = currentImage !== originalImage ? currentImage : originalImage
-      const response = await fetch(imageToSend)
-      const blob = await response.blob()
+      const imageResponse = await fetch(imageToSend)
+      const blob = await imageResponse.blob()
       const file = new File([blob], 'image.png', { type: 'image/png' })
       formData.append('image', file)
 
