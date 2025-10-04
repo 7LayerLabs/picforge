@@ -23,8 +23,10 @@ export default function CanvasPage() {
       })
 
       const data = await response.json()
-      if (data.imageUrl) {
-        setGeneratedImage(data.imageUrl)
+      if (data.image) {
+        setGeneratedImage(data.image)
+      } else if (data.error) {
+        alert(`Error: ${data.error}`)
       }
     } catch (error) {
       console.error('Generation failed:', error)
