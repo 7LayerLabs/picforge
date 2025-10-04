@@ -198,9 +198,46 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleEsc)
   }, [zoomedImage])
 
-  // Removed localStorage session management
+  // Load saved history from localStorage on mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('imageHistory')
+    const savedCurrentImage = localStorage.getItem('currentImage')
+    const savedOriginalImage = localStorage.getItem('originalImage')
 
-  // Removed session management functions
+    if (savedHistory) {
+      try {
+        const parsedHistory = JSON.parse(savedHistory)
+        setHistory(parsedHistory)
+      } catch (e) {
+        console.error('Failed to parse saved history:', e)
+      }
+    }
+
+    if (savedCurrentImage) {
+      setCurrentImage(savedCurrentImage)
+    }
+
+    if (savedOriginalImage) {
+      setOriginalImage(savedOriginalImage)
+    }
+  }, [])
+
+  // Save history to localStorage whenever it changes
+  useEffect(() => {
+    if (history.length > 0) {
+      localStorage.setItem('imageHistory', JSON.stringify(history))
+    }
+  }, [history])
+
+  // Save current images to localStorage
+  useEffect(() => {
+    if (currentImage) {
+      localStorage.setItem('currentImage', currentImage)
+    }
+    if (originalImage) {
+      localStorage.setItem('originalImage', originalImage)
+    }
+  }, [currentImage, originalImage])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -375,7 +412,10 @@ export default function Home() {
     setHistory([])
     setAdditionalImage(null)
     setAdditionalImagePreview(null)
-    // Simplified - no session management
+    // Clear localStorage
+    localStorage.removeItem('imageHistory')
+    localStorage.removeItem('currentImage')
+    localStorage.removeItem('originalImage')
   }
 
   const restoreFromHistory = async (item: HistoryItem) => {
