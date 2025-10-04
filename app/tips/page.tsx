@@ -114,10 +114,10 @@ export default function TipsPage() {
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">Master PicForge</span>
           </div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="font-heading text-5xl font-bold text-gray-900 mb-4">
             Tips, Tricks & Inspiration
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="font-body text-xl text-gray-600 max-w-2xl mx-auto">
             Unlock the full potential of PicForge with these pro tips, creative prompts, and hidden features
           </p>
         </div>
@@ -147,7 +147,7 @@ export default function TipsPage() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <Lightbulb className="w-6 h-6 text-orange-600" />
-                  <h2 className="text-3xl font-bold text-gray-900">Prompt Library</h2>
+                  <h2 className="font-heading text-3xl font-bold text-gray-900">Prompt Library</h2>
                 </div>
                 <Link
                   href="/prompts"
@@ -202,7 +202,7 @@ export default function TipsPage() {
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
             <Star className="w-6 h-6 text-purple-600" />
-            <h2 className="text-3xl font-bold text-gray-900">Did You Know?</h2>
+            <h2 className="font-heading text-3xl font-bold text-gray-900">Did You Know?</h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -226,7 +226,7 @@ export default function TipsPage() {
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
             <Wand2 className="w-6 h-6 text-green-600" />
-            <h2 className="text-3xl font-bold text-gray-900">Creative Uses for PicForge</h2>
+            <h2 className="font-heading text-3xl font-bold text-gray-900">Creative Uses for PicForge</h2>
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
@@ -250,7 +250,7 @@ export default function TipsPage() {
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-5 rounded-lg border border-yellow-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">✍️ Use Descriptive Sentences, Not Keywords</h3>
+                <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">✍️ Use Descriptive Sentences, Not Keywords</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Describe the scene in narrative form—AI understands language deeply, so a paragraph beats a keyword list every time.
                 </p>
@@ -261,7 +261,7 @@ export default function TipsPage() {
               </div>
 
               <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-5 rounded-lg border border-blue-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">📸 For Photorealistic: Use Photography Terms</h3>
+                <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">📸 For Photorealistic: Use Photography Terms</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Mention camera angles, lens types, lighting, and technical details to guide toward photorealistic results.
                 </p>
@@ -271,7 +271,7 @@ export default function TipsPage() {
               </div>
 
               <div className="bg-gradient-to-br from-green-50 to-teal-50 p-5 rounded-lg border border-green-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">🎨 Iterative Editing Works Best</h3>
+                <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">🎨 Iterative Editing Works Best</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Make single, focused changes per iteration rather than overloading with multiple instructions.
                 </p>
@@ -282,7 +282,7 @@ export default function TipsPage() {
               </div>
 
               <div className="bg-gradient-to-br from-pink-50 to-red-50 p-5 rounded-lg border border-pink-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">🚫 Use Semantic Negatives</h3>
+                <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">🚫 Use Semantic Negatives</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Specify what you DON&apos;T want to avoid unwanted elements in your generation.
                 </p>
@@ -300,7 +300,7 @@ export default function TipsPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-xl font-semibold mb-3">Advanced Prompt Engineering</h3>
+              <h3 className="font-heading text-xl font-semibold mb-3">Advanced Prompt Engineering</h3>
               <ul className="space-y-2 text-orange-50">
                 <li>• Use weight modifiers: &quot;highly detailed&quot;, &quot;subtle&quot;, &quot;extreme&quot;</li>
                 <li>• Specify camera settings: &quot;85mm lens&quot;, &quot;f/1.4 bokeh&quot;, &quot;ISO 100&quot;</li>
@@ -312,7 +312,7 @@ export default function TipsPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-3">Workflow Optimization</h3>
+              <h3 className="font-heading text-xl font-semibold mb-3">Workflow Optimization</h3>
               <ul className="space-y-2 text-orange-50">
                 <li>• Save your favorite prompts for quick access</li>
                 <li>• Use batch processing for consistent branding</li>

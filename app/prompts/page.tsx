@@ -372,10 +372,10 @@ export default function PromptsPage() {
             <Copy className="w-4 h-4" />
             <span className="text-sm font-medium">210+ Ready-to-Use Prompts</span>
           </div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="font-heading text-5xl font-bold text-gray-900 mb-4">
             PicForge Prompt Library
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="font-body text-xl text-gray-600 max-w-3xl mx-auto">
             Professional prompts for every use case. Click any prompt to copy it, then paste into PicForge to transform your images instantly.
           </p>
         </div>
@@ -385,7 +385,7 @@ export default function PromptsPage() {
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             {/* Header */}
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Browse by Category</h3>
+              <h3 className="font-heading text-2xl font-bold text-gray-900 mb-2">Browse by Category</h3>
               <p className="text-gray-600">Select a category to explore specialized prompts</p>
             </div>
 
@@ -432,7 +432,7 @@ export default function PromptsPage() {
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{category.icon}</span>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{category.category}</h2>
+                    <h2 className="font-heading text-2xl font-bold text-gray-900">{category.category}</h2>
                     <p className="text-sm text-gray-600">{category.prompts.length} prompts</p>
                   </div>
                 </div>
@@ -501,7 +501,7 @@ export default function PromptsPage() {
         {/* Tips Section */}
         <div className="max-w-4xl mx-auto mb-12">
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
-            <h2 className="text-2xl font-bold mb-4">💡 Pro Tips for Better Results</h2>
+            <h2 className="font-heading text-2xl font-bold mb-4">💡 Pro Tips for Better Results</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-semibold mb-2">Enhance Your Prompts</h3>
