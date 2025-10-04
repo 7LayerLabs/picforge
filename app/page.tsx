@@ -301,19 +301,19 @@ export default function Home() {
     try {
       const formData = new FormData()
 
-      // If we have a generated image, convert it back to a file
-      if (currentImage !== originalImage && currentImage) {
-        const response = await fetch(currentImage)
-        const blob = await response.blob()
-        const file = new File([blob], 'current.png', { type: 'image/png' })
-        formData.append('image', file)
-      } else {
-        formData.append('image', selectedFile)
-      }
+      // Always use the converted image (currentImage or originalImage) which are PNG base64
+      const imageToSend = currentImage !== originalImage ? currentImage : originalImage
+      const response = await fetch(imageToSend)
+      const blob = await response.blob()
+      const file = new File([blob], 'image.png', { type: 'image/png' })
+      formData.append('image', file)
 
-      // Add the additional image if one is selected
-      if (additionalImage) {
-        formData.append('additionalImage', additionalImage)
+      // Add the additional image if one is selected (use converted preview)
+      if (additionalImage && additionalImagePreview) {
+        const addResponse = await fetch(additionalImagePreview)
+        const addBlob = await addResponse.blob()
+        const addFile = new File([addBlob], 'additional.png', { type: 'image/png' })
+        formData.append('additionalImage', addFile)
       }
 
       formData.append('prompt', instructions)
