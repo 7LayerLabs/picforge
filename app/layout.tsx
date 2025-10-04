@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
+import { Special_Elite, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const specialElite = Special_Elite({
   variable: "--font-heading",
   subsets: ["latin"],
+  weight: "400",
   display: 'swap',
 });
 
-const dmSans = DM_Sans({
+const robotoMono = Roboto_Mono({
   variable: "--font-body",
   subsets: ["latin"],
   display: 'swap',
@@ -51,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${plusJakartaSans.variable} ${dmSans.variable} font-body antialiased`}
+        className={`${specialElite.variable} ${robotoMono.variable} font-body antialiased`}
       >
         <Navigation />
         {children}
