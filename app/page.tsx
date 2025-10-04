@@ -620,11 +620,10 @@ export default function Home() {
             {/* Hero Section */}
             <div className="text-center mb-16 px-4">
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-                Transform Your Images <br className="hidden sm:block" />
-                <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">with AI</span>
+                <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Reimagine. Everything.</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-                Professional photo editing in seconds – no skills required. Choose from 210+ templates or write your own prompts.
+                Professional photo editing in seconds – no skills required. Choose from 210+ templates or write your own prompts. Forge anything from any photo.
               </p>
 
               {/* Feature Highlights */}
