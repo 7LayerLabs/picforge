@@ -58,9 +58,45 @@ export default function Home() {
 
   // Removed session management - simplified interface
 
+  // Convert image to supported format (JPEG/PNG) if needed
+  const convertImageToSupported = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      // If already a supported format, just convert to base64
+      if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg') {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+        return
+      }
+
+      // For unsupported formats (AVIF, WEBP, etc.), convert to PNG
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const img = new Image()
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          canvas.width = img.width
+          canvas.height = img.height
+          const ctx = canvas.getContext('2d')
+          if (!ctx) {
+            reject(new Error('Failed to get canvas context'))
+            return
+          }
+          ctx.drawImage(img, 0, 0)
+          resolve(canvas.toDataURL('image/png'))
+        }
+        img.onerror = () => reject(new Error('Failed to load image'))
+        img.src = reader.result as string
+      }
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+  }
+
   // Handle paste from clipboard
   useEffect(() => {
-    const handlePaste = (e: ClipboardEvent) => {
+    const handlePaste = async (e: ClipboardEvent) => {
       const items = e.clipboardData?.items
       if (!items) return
 
@@ -70,36 +106,29 @@ export default function Home() {
           const file = item.getAsFile()
 
           if (file) {
-            const reader = new FileReader()
+            try {
+              const imageData = await convertImageToSupported(file)
 
-            // If we have a main image but no additional image, paste as additional
-            if (currentImage && !additionalImage) {
-              reader.onloadend = () => {
-                const imageData = reader.result as string
-                if (imageData) {
-                  setAdditionalImage(file)
-                  setAdditionalImagePreview(imageData)
-                }
+              // If we have a main image but no additional image, paste as additional
+              if (currentImage && !additionalImage) {
+                setAdditionalImage(file)
+                setAdditionalImagePreview(imageData)
               }
-              reader.readAsDataURL(file)
-            }
-            // Otherwise paste as main image if we don't have one
-            else if (!currentImage) {
-              reader.onloadend = () => {
-                const imageData = reader.result as string
-                if (imageData) {
-                  setCurrentImage(imageData)
-                  setOriginalImage(imageData)
-                  setHistory([{
-                    prompt: 'Original Image (Pasted)',
-                    image: imageData,
-                    timestamp: new Date(),
-                    isOriginal: true
-                  }])
-                  setSelectedFile(file)
-                }
+              // Otherwise paste as main image if we don't have one
+              else if (!currentImage) {
+                setCurrentImage(imageData)
+                setOriginalImage(imageData)
+                setHistory([{
+                  prompt: 'Original Image (Pasted)',
+                  image: imageData,
+                  timestamp: new Date(),
+                  isOriginal: true
+                }])
+                setSelectedFile(file)
               }
-              reader.readAsDataURL(file)
+            } catch (error) {
+              console.error('Error converting pasted image:', error)
+              alert('Failed to process pasted image. Please try uploading instead.')
             }
           }
           break
@@ -173,42 +202,39 @@ export default function Home() {
 
   // Removed session management functions
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       setSelectedFile(file)
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const imageData = reader.result as string
-        if (imageData) {
-          setCurrentImage(imageData)
-          setOriginalImage(imageData)
-          // Add original image as first history item
-          setHistory([{
-            prompt: 'Original Image',
-            image: imageData,
-            timestamp: new Date(),
-            isOriginal: true
-          }])
-          // Simplified - no session management
-        }
+      try {
+        const imageData = await convertImageToSupported(file)
+        setCurrentImage(imageData)
+        setOriginalImage(imageData)
+        // Add original image as first history item
+        setHistory([{
+          prompt: 'Original Image',
+          image: imageData,
+          timestamp: new Date(),
+          isOriginal: true
+        }])
+      } catch (error) {
+        console.error('Error converting uploaded image:', error)
+        alert('Failed to process image. Please try a different format.')
       }
-      reader.readAsDataURL(file)
     }
   }
 
-  const handleAdditionalImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAdditionalImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       setAdditionalImage(file)
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const imageData = reader.result as string
-        if (imageData) {
-          setAdditionalImagePreview(imageData)
-        }
+      try {
+        const imageData = await convertImageToSupported(file)
+        setAdditionalImagePreview(imageData)
+      } catch (error) {
+        console.error('Error converting additional image:', error)
+        alert('Failed to process additional image. Please try a different format.')
       }
-      reader.readAsDataURL(file)
     }
   }
 
@@ -230,7 +256,7 @@ export default function Home() {
     setIsDraggingAdditional(false)
   }
 
-  const handleAdditionalDrop = (e: React.DragEvent) => {
+  const handleAdditionalDrop = async (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setIsDraggingAdditional(false)
@@ -240,11 +266,13 @@ export default function Home() {
       const file = files[0]
       if (file.type.startsWith('image/')) {
         setAdditionalImage(file)
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          setAdditionalImagePreview(e.target?.result as string)
+        try {
+          const imageData = await convertImageToSupported(file)
+          setAdditionalImagePreview(imageData)
+        } catch (error) {
+          console.error('Error converting dropped image:', error)
+          alert('Failed to process dropped image. Please try a different format.')
         }
-        reader.readAsDataURL(file)
       }
     }
   }
@@ -683,28 +711,27 @@ export default function Home() {
                   e.preventDefault()
                   setIsDraggingMain(false)
                 }}
-                onDrop={(e) => {
+                onDrop={async (e) => {
                   e.preventDefault()
                   setIsDraggingMain(false)
                   const files = e.dataTransfer.files
                   if (files && files[0] && files[0].type.startsWith('image/')) {
                     const file = files[0]
                     setSelectedFile(file)
-                    const reader = new FileReader()
-                    reader.onloadend = () => {
-                      const imageData = reader.result as string
-                      if (imageData) {
-                        setCurrentImage(imageData)
-                        setOriginalImage(imageData)
-                        setHistory([{
-                          prompt: 'Original Image',
-                          image: imageData,
-                          timestamp: new Date(),
-                          isOriginal: true
-                        }])
-                      }
+                    try {
+                      const imageData = await convertImageToSupported(file)
+                      setCurrentImage(imageData)
+                      setOriginalImage(imageData)
+                      setHistory([{
+                        prompt: 'Original Image',
+                        image: imageData,
+                        timestamp: new Date(),
+                        isOriginal: true
+                      }])
+                    } catch (error) {
+                      console.error('Error converting dropped image:', error)
+                      alert('Failed to process dropped image. Please try a different format.')
                     }
-                    reader.readAsDataURL(file)
                   }
                 }}
                 className={`w-full max-w-3xl mx-auto px-12 py-20 rounded-3xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02] shadow-2xl relative overflow-hidden ${
@@ -727,7 +754,7 @@ export default function Home() {
                       {isDraggingMain ? 'Release to start transforming' : 'Drag & drop, click to browse, or paste (Ctrl+V)'}
                     </div>
                     <div className="mt-4 text-sm opacity-75">
-                      Supports PNG, JPG, GIF, WEBP
+                      Supports PNG, JPG, GIF, WEBP, AVIF
                     </div>
                   </div>
                 </div>
