@@ -17,13 +17,9 @@ export default function PromptsPage() {
 
   const scrollToCategory = (category: string) => {
     const elementId = category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')
-    console.log('Scrolling to:', elementId) // Debug
     const element = document.getElementById(elementId)
-    console.log('Element found:', element) // Debug
     if (element) {
-      const yOffset = -100 // Offset for header
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
-      window.scrollTo({ top: y, behavior: 'smooth' })
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
     setSelectedCategory(category)
   }
@@ -437,7 +433,7 @@ export default function PromptsPage() {
             <div
               key={categoryIndex}
               id={category.category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}
-              className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden scroll-mt-20"
+              className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden scroll-mt-32"
             >
               {/* Category Header */}
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-200">
