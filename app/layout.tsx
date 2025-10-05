@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Special_Elite, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import { Analytics } from "@vercel/analytics/react";
 
 const specialElite = Special_Elite({
   variable: "--font-heading",
@@ -56,6 +57,7 @@ export default function RootLayout({
       >
         <Navigation />
         {children}
+        <Analytics />
       </body>
     </html>
   );
