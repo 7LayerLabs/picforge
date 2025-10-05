@@ -50,7 +50,7 @@ export default function Navigation() {
                 }`}
               >
                 <Sparkles className="w-4 h-4 mr-2" />
-                AI Canvas
+                Canvas
               </Link>
 
               <Link
@@ -66,18 +66,6 @@ export default function Navigation() {
               </Link>
 
               <Link
-                href="/tips"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/tips')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Layers className="w-4 h-4 mr-2" />
-                Tips & Tricks
-              </Link>
-
-              <Link
                 href="/examples"
                 className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                   isActive('/examples')
@@ -87,6 +75,18 @@ export default function Navigation() {
               >
                 <ImageIcon className="w-4 h-4 mr-2" />
                 Templates
+              </Link>
+
+              <Link
+                href="/tips"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  isActive('/tips')
+                    ? 'border-blue-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Layers className="w-4 h-4 mr-2" />
+                Tips & Tricks
               </Link>
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function Navigation() {
             >
               <div className="flex items-center">
                 <Sparkles className="w-4 h-4 mr-2" />
-                AI Canvas
+                Canvas
               </div>
             </Link>
 
@@ -157,21 +157,6 @@ export default function Navigation() {
             </Link>
 
             <Link
-              href="/tips"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                isActive('/tips')
-                  ? 'bg-blue-50 border-blue-500 text-blue-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <div className="flex items-center">
-                <Layers className="w-4 h-4 mr-2" />
-                Tips & Tricks
-              </div>
-            </Link>
-
-            <Link
               href="/examples"
               className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
                 isActive('/examples')
@@ -183,6 +168,21 @@ export default function Navigation() {
               <div className="flex items-center">
                 <ImageIcon className="w-4 h-4 mr-2" />
                 Templates
+              </div>
+            </Link>
+
+            <Link
+              href="/tips"
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                isActive('/tips')
+                  ? 'bg-blue-50 border-blue-500 text-blue-700'
+                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex items-center">
+                <Layers className="w-4 h-4 mr-2" />
+                Tips & Tricks
               </div>
             </Link>
           </div>
