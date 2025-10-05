@@ -753,7 +753,7 @@ export default function Home() {
         {!currentImage && (
           <>
             {/* Hero Section */}
-            <div className="text-center mb-16 px-4">
+            <div className="text-center mb-16 px-4 pt-12">
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                 <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">(re)Imagine. Everything.</span>
               </h1>
