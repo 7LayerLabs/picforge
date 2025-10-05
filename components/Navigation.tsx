@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Image as ImageIcon, Layers, Sparkles, Menu, X } from 'lucide-react';
+import { Image as ImageIcon, Layers, Sparkles, Menu, X, Lightbulb } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navigation() {
@@ -85,7 +85,7 @@ export default function Navigation() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Layers className="w-4 h-4 mr-2" />
+                <Lightbulb className="w-4 h-4 mr-2" />
                 Tips & Tricks
               </Link>
             </div>
@@ -181,7 +181,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Layers className="w-4 h-4 mr-2" />
+                <Lightbulb className="w-4 h-4 mr-2" />
                 Tips & Tricks
               </div>
             </Link>
