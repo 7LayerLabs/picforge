@@ -760,8 +760,8 @@ export default function Home() {
               <p className="font-body text-sm md:text-base text-gray-500 dark:text-gray-400 italic mb-6">
                 Nothing is real anymore.
               </p>
-              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-                Your photos deserve better. Make them weird. Make them epic. Make them yours. 210+ templates to break reality. Zero artistic talent required.
+              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed font-bold">
+                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-orange-600">210+ templates</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
               </p>
 
               {/* Feature Highlights */}
@@ -1144,8 +1144,8 @@ export default function Home() {
       </div>
       </div>
 
-      {/* Visitor Counter - Fixed at bottom right */}
-      {visitorStats && (
+      {/* Visitor Counter - Hidden for cleaner UX */}
+      {/* {visitorStats && (
         <div className="fixed bottom-4 right-4 bg-gray-900/90 text-white px-3 py-2 rounded-lg shadow-lg text-xs">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
@@ -1160,7 +1160,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Share Modal */}
       <ShareModal
