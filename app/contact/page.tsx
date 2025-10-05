@@ -62,10 +62,10 @@ export default function ContactPage() {
         <div className="max-w-2xl mx-auto mt-8">
           <div className="text-center mb-8">
             <h1 className="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Get in Touch
+              Something Broke?
             </h1>
-            <p className="text-xl text-gray-600">
-              Found a bug? Have a question? We'd love to hear from you.
+            <p className="text-xl text-gray-700 font-bold">
+              Report bugs, ask questions, or just yell at us. We're listening.
             </p>
           </div>
 

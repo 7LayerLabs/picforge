@@ -97,8 +97,8 @@ export default function ExamplesPage() {
           <h1 className="font-heading text-5xl font-bold text-gray-900 mb-6">
             Templates to Try
           </h1>
-          <p className="font-body text-xl text-gray-600 max-w-3xl mx-auto">
-            Explore {Object.values(sampleImages).flat().length}+ sample images. Click any image to start editing instantly.
+          <p className="font-body text-xl text-gray-700 max-w-3xl mx-auto font-bold">
+            Test drive before you commit. {Object.values(sampleImages).flat().length}+ ready-to-transform images. Click one, break reality.
           </p>
         </div>
 

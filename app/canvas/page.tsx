@@ -63,11 +63,10 @@ export default function CanvasPage() {
             <span className="text-sm font-medium">AI Image Generation</span>
           </div>
           <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Create Images with <br className="hidden sm:block" />
-            <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">AI Canvas</span>
+            <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">Dream It. Type It. Get It.</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Generate custom backgrounds, styles, and scenes from text descriptions. Perfect for creating the perfect backdrop before adding your photos.
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-bold">
+            No photo? No problem. Describe literally anything and watch AI conjure it into existence. Backgrounds, scenes, whatever weird stuff you're thinking.
           </p>
         </div>
 
@@ -75,18 +74,18 @@ export default function CanvasPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white p-6 rounded-2xl shadow-lg">
             <div className="text-4xl mb-3">🎨</div>
-            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Custom Backgrounds</h3>
-            <p className="text-sm text-gray-600">Create unique backgrounds and scenes for your photos</p>
+            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Any Background. Any Scene.</h3>
+            <p className="text-sm text-gray-600">Cyberpunk alleys. Mountain sunsets. Whatever you need.</p>
           </div>
           <div className="bg-white p-6 rounded-2xl shadow-lg">
             <div className="text-4xl mb-3">✨</div>
-            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Any Style</h3>
-            <p className="text-sm text-gray-600">Generate images in any artistic style you can imagine</p>
+            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Zero Limits</h3>
+            <p className="text-sm text-gray-600">If you can type it, AI can create it. Get weird with it.</p>
           </div>
           <div className="bg-white p-6 rounded-2xl shadow-lg">
-            <div className="text-4xl mb-3">🖼️</div>
-            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Studio Quality</h3>
-            <p className="text-sm text-gray-600">Professional-grade image generation powered by AI</p>
+            <div className="text-4xl mb-3">⚡</div>
+            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Instant Results</h3>
+            <p className="text-sm text-gray-600">No waiting. No BS. Just pure creation speed.</p>
           </div>
         </div>
 

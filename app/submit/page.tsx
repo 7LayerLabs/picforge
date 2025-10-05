@@ -63,10 +63,10 @@ export default function SubmitPage() {
           <div className="text-center mb-8">
             <div className="text-6xl mb-4">🎨</div>
             <h1 className="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Submit Your Creation
+              Show Off Your Work
             </h1>
-            <p className="text-xl text-gray-600">
-              Created something awesome? Share it with the community and inspire others!
+            <p className="text-xl text-gray-700 font-bold">
+              Made something sick? Weird? Epic? Share it and inspire the chaos.
             </p>
           </div>
 

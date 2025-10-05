@@ -64,10 +64,10 @@ export default function IdeasPage() {
           <div className="text-center mb-8">
             <div className="text-6xl mb-4">💡</div>
             <h1 className="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Submit an Idea
+              Got a Wild Idea?
             </h1>
-            <p className="text-xl text-gray-600">
-              Got an idea for a feature, template, or improvement? We're all ears!
+            <p className="text-xl text-gray-700 font-bold">
+              Features. Templates. Whatever chaos you're dreaming up. Tell us and we might build it.
             </p>
           </div>
 
