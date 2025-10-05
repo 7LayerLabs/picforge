@@ -66,7 +66,7 @@ export default function CanvasPage() {
             <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">Dream It. Type It. Get It.</span>
           </h1>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-bold">
-            No photo? No problem. Describe literally anything and watch AI conjure it into existence. Backgrounds, scenes, whatever weird stuff you're thinking.
+            No photo? No problem. Describe literally anything and watch AI conjure it into existence. Backgrounds, scenes, whatever weird stuff you&apos;re thinking.
           </p>
         </div>
 

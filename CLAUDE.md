@@ -4,9 +4,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PicForge is an AI-powered image transformation platform built with Next.js 15. It provides two main modes:
-- **Single Image Editor** (/) - AI-powered image editing with templates and custom prompts
+PicForge is an AI-powered image transformation platform built with Next.js 15. It provides multiple modes:
+- **Single Image Editor** (/) - AI-powered image editing with 210+ templates and custom prompts
 - **Batch Processor** (/batch) - Process 100+ images simultaneously with bulk operations
+- **AI Canvas** (/canvas) - Generate images from text descriptions
+- **Templates Gallery** (/examples) - 100+ sample images to try before uploading
+- **Prompts Library** (/prompts) - 211 categorized prompts
+- **Tips & Tricks** (/tips) - Best practices and Nano Banana techniques
+
+## Brand & Tone
+
+**Headline:** (re)Imagine. Everything.
+**Tagline:** Nothing is real anymore.
+
+**Copy Voice:**
+- Edgy, playful, direct (NOT corporate)
+- Bold statements: "Make them weird. Make them epic. Make them yours."
+- "Zero artistic talent required"
+- Examples: "Dream It. Type It. Get It." / "Something Broke?" / "Show Off Your Work"
 
 ## Development Commands
 

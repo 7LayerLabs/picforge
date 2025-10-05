@@ -34,7 +34,7 @@ export default function SubmitPage() {
             Almost there!
           </h2>
           <p className="text-gray-600 mb-6">
-            Your email client should have opened. Please attach your before/after images and hit send. We can't wait to see what you created!
+            Your email client should have opened. Please attach your before/after images and hit send. We can&apos;t wait to see what you created!
           </p>
           <Link
             href="/"
@@ -71,7 +71,7 @@ export default function SubmitPage() {
           </div>
 
           <div className="bg-gradient-to-r from-purple-100 to-orange-100 rounded-xl p-6 mb-8">
-            <h3 className="font-heading font-bold text-lg mb-3">What we're looking for:</h3>
+            <h3 className="font-heading font-bold text-lg mb-3">What we&apos;re looking for:</h3>
             <ul className="space-y-2 text-sm text-gray-700">
               <li>✅ Before & after images</li>
               <li>✅ Clear description of what you created</li>
@@ -150,7 +150,7 @@ export default function SubmitPage() {
                 <div className="flex items-start gap-3">
                   <Upload className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div className="text-sm text-blue-900">
-                    <strong>Next step:</strong> After clicking submit, your email will open. Don't forget to attach your before and after images!
+                    <strong>Next step:</strong> After clicking submit, your email will open. Don&apos;t forget to attach your before and after images!
                   </div>
                 </div>
               </div>

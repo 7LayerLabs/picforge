@@ -67,7 +67,7 @@ export default function IdeasPage() {
               Got a Wild Idea?
             </h1>
             <p className="text-xl text-gray-700 font-bold">
-              Features. Templates. Whatever chaos you're dreaming up. Tell us and we might build it.
+              Features. Templates. Whatever chaos you&apos;re dreaming up. Tell us and we might build it.
             </p>
           </div>
 

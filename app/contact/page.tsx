@@ -65,7 +65,7 @@ export default function ContactPage() {
               Something Broke?
             </h1>
             <p className="text-xl text-gray-700 font-bold">
-              Report bugs, ask questions, or just yell at us. We're listening.
+              Report bugs, ask questions, or just yell at us. We&apos;re listening.
             </p>
           </div>
 
@@ -106,7 +106,7 @@ export default function ContactPage() {
               {/* Type */}
               <div>
                 <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
-                  What's this about?
+                  What&apos;s this about?
                 </label>
                 <select
                   id="type"
@@ -145,8 +145,7 @@ export default function ContactPage() {
                 Send Message
               </button>
             </div>
-            </form>
-          </div>
+          </form>
         </div>
       </div>
     </div>
