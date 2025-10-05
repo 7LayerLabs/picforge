@@ -399,7 +399,7 @@ export default function PromptsPage() {
             </div>
 
             {/* Category Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               {promptLibrary.map(cat => (
                 <button
                   key={cat.category}
