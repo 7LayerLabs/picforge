@@ -437,12 +437,20 @@ export default function PromptsPage() {
             >
               {/* Category Header */}
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-200">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">{category.icon}</span>
-                  <div>
-                    <h2 className="font-heading text-2xl font-bold text-gray-900">{category.category}</h2>
-                    <p className="text-sm text-gray-600">{category.prompts.length} prompts</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{category.icon}</span>
+                    <div>
+                      <h2 className="font-heading text-2xl font-bold text-gray-900">{category.category}</h2>
+                      <p className="text-sm text-gray-600">{category.prompts.length} prompts</p>
+                    </div>
                   </div>
+                  <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="text-xs text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-1"
+                  >
+                    ↑ Top
+                  </button>
                 </div>
               </div>
 
