@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
+import NextImage from 'next/image'
 import Link from 'next/link'
 import { Sparkles } from 'lucide-react'
 import JSZip from 'jszip'
@@ -948,7 +948,7 @@ export default function Home() {
                     <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 shadow-inner transition-all duration-300 card-smooth hover-lift">
                       {currentImage && (
                         <>
-                          <Image
+                          <NextImage
                             src={currentImage}
                             alt="Current image"
                             fill
@@ -1033,7 +1033,7 @@ export default function Home() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="relative w-20 h-20 rounded overflow-hidden bg-gray-50">
-                          <Image
+                          <NextImage
                             src={additionalImagePreview}
                             alt="Additional image"
                             fill
