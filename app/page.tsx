@@ -140,6 +140,36 @@ export default function Home() {
     return () => document.removeEventListener('paste', handlePaste)
   }, [currentImage, additionalImage])
 
+  // Load sample image if selected from gallery
+  useEffect(() => {
+    const selectedSample = localStorage.getItem('selectedSampleImage')
+    if (selectedSample) {
+      // Clear the flag
+      localStorage.removeItem('selectedSampleImage')
+
+      // Load the sample image
+      fetch(selectedSample)
+        .then(res => res.blob())
+        .then(async blob => {
+          const file = new File([blob], 'sample.jpg', { type: blob.type || 'image/jpeg' })
+          // Convert to supported format
+          const imageData = await convertImageToSupported(file)
+          setCurrentImage(imageData)
+          setOriginalImage(imageData)
+          setHistory([{
+            prompt: 'Sample Image',
+            image: imageData,
+            timestamp: new Date(),
+            isOriginal: true
+          }])
+          setSelectedFile(file)
+        })
+        .catch(err => {
+          console.error('Failed to load sample image:', err)
+        })
+    }
+  }, [])
+
   // Track visitor on mount
   useEffect(() => {
     const trackVisitor = async () => {
@@ -340,9 +370,12 @@ export default function Home() {
 
       // Always use the converted image (currentImage or originalImage) which are PNG base64
       const imageToSend = currentImage !== originalImage ? currentImage : originalImage
+      console.log('Image data URL prefix:', imageToSend.substring(0, 50))
       const imageResponse = await fetch(imageToSend)
       const blob = await imageResponse.blob()
+      console.log('Blob type from fetch:', blob.type)
       const file = new File([blob], 'image.png', { type: 'image/png' })
+      console.log('File type after creation:', file.type, 'File size:', file.size)
       formData.append('image', file)
 
       // Add the additional image if one is selected (use converted preview)
