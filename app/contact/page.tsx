@@ -144,6 +144,7 @@ export default function ContactPage() {
                 <Send className="w-5 h-5" />
                 Send Message
               </button>
+            </div>
             </form>
           </div>
         </div>
