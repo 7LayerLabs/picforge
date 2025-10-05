@@ -15,8 +15,8 @@ export default function CanvasPage() {
     setIsGenerating(true)
 
     try {
-      // Call your AI generation API here
-      const response = await fetch('/api/generate-canvas', {
+      // Using Pollinations AI - 100% free, no API key needed
+      const response = await fetch('/api/generate-canvas-pollinations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt })
