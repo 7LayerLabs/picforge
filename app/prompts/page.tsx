@@ -15,6 +15,16 @@ export default function PromptsPage() {
     setTimeout(() => setCopiedPrompt(null), 2000)
   }
 
+  const scrollToCategory = (category: string) => {
+    const element = document.getElementById(category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and'))
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // Offset for fixed header
+      window.scrollBy(0, -80)
+    }
+    setSelectedCategory(category)
+  }
+
   const promptLibrary = [
     {
       category: "People & Portraits",
@@ -332,9 +342,8 @@ export default function PromptsPage() {
     }
   ]
 
-  // Filter prompts based on search and category
+  // Show all categories, no filtering
   const filteredPrompts = promptLibrary
-    .filter(cat => selectedCategory === 'all' || cat.category === selectedCategory)
     .map(cat => ({
       ...cat,
       prompts: cat.prompts.filter(prompt =>
@@ -394,7 +403,7 @@ export default function PromptsPage() {
               {promptLibrary.map(cat => (
                 <button
                   key={cat.category}
-                  onClick={() => setSelectedCategory(cat.category)}
+                  onClick={() => scrollToCategory(cat.category)}
                   className={`px-5 py-4 rounded-xl font-medium transition-all flex flex-col items-center gap-2 text-sm ${
                     selectedCategory === cat.category
                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl scale-105'
@@ -407,17 +416,13 @@ export default function PromptsPage() {
               ))}
             </div>
 
-            {/* Show All Button */}
+            {/* Scroll to Top Button */}
             <div className="text-center pt-4 border-t border-gray-200">
               <button
-                onClick={() => setSelectedCategory('all')}
-                className={`px-8 py-3 rounded-xl font-semibold transition-all text-sm ${
-                  selectedCategory === 'all'
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md'
-                }`}
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="px-8 py-3 rounded-xl font-semibold transition-all text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md"
               >
-                {selectedCategory === 'all' ? '✓ Showing All Categories' : 'Show All Categories'}
+                ↑ Back to Top
               </button>
             </div>
           </div>
@@ -426,7 +431,11 @@ export default function PromptsPage() {
         {/* Prompts Grid */}
         <div className="grid gap-8 mb-12">
           {filteredPrompts.map((category, categoryIndex) => (
-            <div key={categoryIndex} className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div
+              key={categoryIndex}
+              id={category.category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}
+              className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden scroll-mt-20"
+            >
               {/* Category Header */}
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-200">
                 <div className="flex items-center gap-3">
