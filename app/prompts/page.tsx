@@ -452,12 +452,21 @@ export default function PromptsPage() {
                       <p className="text-sm text-gray-600">{category.prompts.length} prompts</p>
                     </div>
                   </div>
-                  <button
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    className="text-xs text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-1"
-                  >
-                    ↑ Top
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <Link
+                      href="/canvas"
+                      className="text-xs font-medium text-purple-600 hover:text-purple-700 transition-colors flex items-center gap-1 px-3 py-1.5 bg-purple-100 hover:bg-purple-200 rounded-lg"
+                    >
+                      <Sparkles className="w-3 h-3" />
+                      Try in Canvas
+                    </Link>
+                    <button
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                      className="text-xs text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-1"
+                    >
+                      ↑ Top
+                    </button>
+                  </div>
                 </div>
               </div>
 
