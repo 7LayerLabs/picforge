@@ -252,20 +252,44 @@ export default function Home() {
     }
   }, [])
 
-  // Save history to localStorage whenever it changes
+  // Save history to localStorage whenever it changes (with quota handling)
   useEffect(() => {
     if (history.length > 0) {
-      localStorage.setItem('imageHistory', JSON.stringify(history))
+      try {
+        // Limit history to last 5 items to prevent quota issues
+        const limitedHistory = history.slice(-5)
+        localStorage.setItem('imageHistory', JSON.stringify(limitedHistory))
+      } catch (e) {
+        if (e instanceof DOMException && e.name === 'QuotaExceededError') {
+          console.warn('localStorage quota exceeded. Reducing history size...')
+          // Try with just the last 2 items
+          try {
+            localStorage.setItem('imageHistory', JSON.stringify(history.slice(-2)))
+          } catch {
+            localStorage.removeItem('imageHistory')
+          }
+        }
+      }
     }
   }, [history])
 
-  // Save current images to localStorage
+  // Save current images to localStorage with error handling
   useEffect(() => {
-    if (currentImage) {
-      localStorage.setItem('currentImage', currentImage)
-    }
-    if (originalImage) {
-      localStorage.setItem('originalImage', originalImage)
+    try {
+      if (currentImage) {
+        localStorage.setItem('currentImage', currentImage)
+      }
+      if (originalImage) {
+        localStorage.setItem('originalImage', originalImage)
+      }
+    } catch (e) {
+      if (e instanceof DOMException && e.name === 'QuotaExceededError') {
+        console.warn('localStorage quota exceeded. Clearing old data...')
+        // Clear old history to make space
+        localStorage.removeItem('imageHistory')
+        localStorage.removeItem('currentImage')
+        localStorage.removeItem('originalImage')
+      }
     }
   }, [currentImage, originalImage])
 
@@ -721,7 +745,7 @@ export default function Home() {
             {/* Hero Section */}
             <div className="text-center mb-16 px-4">
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Reimagine. Everything.</span>
+                <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">(re)Imagine. Everything.</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
                 Professional photo editing in seconds – no skills required. Choose from 210+ templates or write your own prompts. Forge anything from any photo.

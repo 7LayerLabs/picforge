@@ -11,9 +11,7 @@ interface SampleImages {
 
 export default function ExamplesPage() {
   const router = useRouter()
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [sampleImages, setSampleImages] = useState<SampleImages>({})
-  const [categories, setCategories] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -22,7 +20,6 @@ export default function ExamplesPage() {
       .then(res => res.json())
       .then(data => {
         setSampleImages(data.sampleImages || {})
-        setCategories(data.categories || [])
         setLoading(false)
       })
       .catch(err => {
@@ -62,18 +59,17 @@ export default function ExamplesPage() {
     router.push('/')
   }
 
-  // Get all images or filtered by category
+  // Get all images alphabetically
   const getDisplayImages = () => {
-    if (selectedCategory === 'all') {
-      return Object.entries(sampleImages).flatMap(([category, images]) =>
+    return Object.entries(sampleImages)
+      .flatMap(([category, images]) =>
         images.map(img => ({ path: img, category }))
       )
-    } else {
-      return (sampleImages[selectedCategory] || []).map(img => ({
-        path: img,
-        category: selectedCategory
-      }))
-    }
+      .sort((a, b) => {
+        const aName = a.path.split('/').pop() || ''
+        const bName = b.path.split('/').pop() || ''
+        return aName.localeCompare(bName)
+      })
   }
 
   const displayImages = getDisplayImages()
@@ -99,42 +95,11 @@ export default function ExamplesPage() {
             <span className="text-sm font-medium">Try Before You Upload</span>
           </div>
           <h1 className="font-heading text-5xl font-bold text-gray-900 mb-6">
-            Example Gallery
+            Templates to Try
           </h1>
           <p className="font-body text-xl text-gray-600 max-w-3xl mx-auto">
-            Test PicForge with {Object.values(sampleImages).flat().length}+ sample images. Click any image to start editing instantly.
+            Explore {Object.values(sampleImages).flat().length}+ sample images. Click any image to start editing instantly.
           </p>
-        </div>
-
-        {/* Category Filter */}
-        <div className="max-w-6xl mx-auto mb-8">
-          <div className="flex flex-wrap justify-center gap-3">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-5 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${
-                selectedCategory === 'all'
-                  ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-xl scale-105'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              <span className="text-xl">🎨</span>
-              <span>All ({Object.values(sampleImages).flat().length})</span>
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${
-                  selectedCategory === cat
-                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-xl scale-105'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                }`}
-              >
-                <span className="text-xl">{categoryIcons[cat] || '📁'}</span>
-                <span>{getCategoryName(cat)} ({sampleImages[cat]?.length || 0})</span>
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* Image Grid */}

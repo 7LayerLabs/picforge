@@ -85,8 +85,8 @@ export default function Navigation() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Image className="w-4 h-4 mr-2" />
-                Examples
+                <ImageIcon className="w-4 h-4 mr-2" />
+                Templates
               </Link>
             </div>
           </div>
@@ -181,8 +181,8 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Image className="w-4 h-4 mr-2" />
-                Examples
+                <ImageIcon className="w-4 h-4 mr-2" />
+                Templates
               </div>
             </Link>
           </div>
