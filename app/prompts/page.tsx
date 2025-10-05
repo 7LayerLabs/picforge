@@ -16,11 +16,14 @@ export default function PromptsPage() {
   }
 
   const scrollToCategory = (category: string) => {
-    const element = document.getElementById(category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and'))
+    const elementId = category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')
+    console.log('Scrolling to:', elementId) // Debug
+    const element = document.getElementById(elementId)
+    console.log('Element found:', element) // Debug
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      // Offset for fixed header
-      window.scrollBy(0, -80)
+      const yOffset = -100 // Offset for header
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
+      window.scrollTo({ top: y, behavior: 'smooth' })
     }
     setSelectedCategory(category)
   }
