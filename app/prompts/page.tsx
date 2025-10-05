@@ -415,13 +415,20 @@ export default function PromptsPage() {
               ))}
             </div>
 
-            {/* Scroll to Top Button */}
-            <div className="text-center pt-4 border-t border-gray-200">
+            {/* Action Buttons */}
+            <div className="flex items-center justify-center gap-4 pt-4 border-t border-gray-200">
+              <Link
+                href="/canvas"
+                className="px-8 py-3 rounded-xl font-semibold transition-all text-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 hover:shadow-lg flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                Try in Canvas
+              </Link>
               <button
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="px-8 py-3 rounded-xl font-semibold transition-all text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md"
               >
-                ↑ Back to Top
+                ↑ Top
               </button>
             </div>
           </div>
