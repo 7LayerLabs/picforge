@@ -386,6 +386,11 @@ export default function Home() {
       return
     }
 
+    if (!currentImage && !originalImage) {
+      setSubmitMessage('Please wait for the image to load')
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitMessage('')
 
@@ -394,6 +399,11 @@ export default function Home() {
 
       // Always use the converted image (currentImage or originalImage) which are PNG base64
       const imageToSend = currentImage !== originalImage ? currentImage : originalImage
+      if (!imageToSend) {
+        setSubmitMessage('Image not ready. Please try again.')
+        setIsSubmitting(false)
+        return
+      }
       console.log('Image data URL prefix:', imageToSend.substring(0, 50))
       const imageResponse = await fetch(imageToSend)
       const blob = await imageResponse.blob()
