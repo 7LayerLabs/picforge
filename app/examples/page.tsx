@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Upload, Zap } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 interface SampleImages {
   [category: string]: string[]
@@ -59,8 +60,8 @@ export default function ExamplesPage() {
     router.push('/')
   }
 
-  // Get all images alphabetically
-  const getDisplayImages = () => {
+  // Memoize display images to avoid recalculation on every render
+  const displayImages = useMemo(() => {
     return Object.entries(sampleImages)
       .flatMap(([category, images]) =>
         images.map(img => ({ path: img, category }))
@@ -70,9 +71,7 @@ export default function ExamplesPage() {
         const bName = b.path.split('/').pop() || ''
         return aName.localeCompare(bName)
       })
-  }
-
-  const displayImages = getDisplayImages()
+  }, [sampleImages])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
@@ -118,11 +117,14 @@ export default function ExamplesPage() {
                   className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer hover:scale-105 group"
                 >
                   <div className="aspect-square relative overflow-hidden bg-gray-100">
-                    <img
+                    <Image
                       src={img.path}
                       alt={`Sample ${index + 1}`}
+                      width={300}
+                      height={300}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       loading="lazy"
+                      quality={75}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                       <div className="text-white text-xs font-medium flex items-center gap-1">
