@@ -761,7 +761,7 @@ export default function Home() {
                 Nothing is real anymore.
               </p>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-                Professional photo editing in seconds – no skills required. Choose from 210+ templates or write your own prompts. Forge anything from any photo.
+                Your photos deserve better. Make them weird. Make them epic. Make them yours. 210+ templates to break reality. Zero artistic talent required.
               </p>
 
               {/* Feature Highlights */}
