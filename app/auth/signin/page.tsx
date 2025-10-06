@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { FaGoogle, FaGithub } from 'react-icons/fa'
+import { FaGoogle } from 'react-icons/fa'
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState<string | null>(null)
@@ -44,7 +44,7 @@ export default function SignInPage() {
             <button
               onClick={() => handleSignIn('google')}
               disabled={isLoading !== null}
-              className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white border-2 border-gray-200 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-gray-200 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading === 'google' ? (
                 <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
@@ -52,19 +52,6 @@ export default function SignInPage() {
                 <FaGoogle className="w-5 h-5 text-red-500" />
               )}
               Continue with Google
-            </button>
-
-            <button
-              onClick={() => handleSignIn('github')}
-              disabled={isLoading !== null}
-              className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading === 'github' ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <FaGithub className="w-5 h-5" />
-              )}
-              Continue with GitHub
             </button>
           </div>
 

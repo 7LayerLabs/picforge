@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth'
 import { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import GitHubProvider from 'next-auth/providers/github'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/lib/prisma'
 
@@ -18,10 +17,6 @@ export const authOptions: NextAuthOptions = {
           response_type: "code"
         }
       }
-    }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     })
   ],
   callbacks: {

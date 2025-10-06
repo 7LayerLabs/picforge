@@ -54,6 +54,8 @@ model User {
   sessions      Session[]
   images        ProcessedImage[]
   favorites     Favorite[]
+  showcases     Showcase[]
+  showcaseLikes ShowcaseLike[]
 }
 
 model VerificationToken {
@@ -92,4 +94,41 @@ model Favorite {
 
   @@unique([userId, imageId])
   @@index([userId, createdAt])
+}
+
+// Showcase models
+model Showcase {
+  id            String   @id @default(cuid())
+  userId        String
+  title         String
+  description   String?
+  prompt        String
+  originalImage String
+  resultImage   String
+  style         String?  // Style category: anime, realistic, artistic, etc.
+  likes         Int      @default(0)
+  views         Int      @default(0)
+  featured      Boolean  @default(false)
+  approved      Boolean  @default(true) // Auto-approve for now
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likedBy       ShowcaseLike[]
+
+  @@index([createdAt])
+  @@index([likes])
+  @@index([featured])
+}
+
+model ShowcaseLike {
+  id          String   @id @default(cuid())
+  userId      String
+  showcaseId  String
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  showcase    Showcase @relation(fields: [showcaseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, showcaseId])
 }
