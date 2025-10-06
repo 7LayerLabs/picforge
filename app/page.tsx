@@ -40,7 +40,7 @@ export default function Home() {
   // AI Canvas states
   // const [showAICanvas, setShowAICanvas] = useState(false) // Reserved for future use
   const [canvasPrompt, setCanvasPrompt] = useState('')
-  // const [isGeneratingCanvas, setIsGeneratingCanvas] = useState(false) // Reserved for future use
+  const [isGeneratingCanvas, setIsGeneratingCanvas] = useState(false)
   const [canvasSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024')
   const [canvasQuality] = useState<'standard' | 'hd'>('standard')
 
@@ -587,7 +587,7 @@ export default function Home() {
           isOriginal: true
         }])
 
-        setShowAICanvas(false)
+        // setShowAICanvas(false) // Reserved for future use
         setCanvasPrompt('')
         setSubmitMessage('Canvas generated successfully!')
       } else {
