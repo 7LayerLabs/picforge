@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Sparkles, Wand2, Palette, ArrowLeft } from 'lucide-react'
+import { Wand2, Palette, ArrowLeft } from 'lucide-react'
 
 export default function CanvasPage() {
   const [prompt, setPrompt] = useState('')

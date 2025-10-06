@@ -72,7 +72,7 @@ export default function BatchPage() {
     }
     return defaultPresets[0]
   })
-  const [customPresets, setCustomPresets] = useState<ExportPreset[]>([])
+  // const [customPresets, setCustomPresets] = useState<ExportPreset[]>([]) // Reserved for future use
   const [showSettings, setShowSettings] = useState(false)
   const [processedCount, setProcessedCount] = useState(0)
   const [totalTime, setTotalTime] = useState(0)
@@ -521,7 +521,7 @@ export default function BatchPage() {
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
                   <label className="block text-sm font-medium text-gray-700">
-                    Enter Effect(s) - Try: "grayscale contrast" or "invert blur" or "pixelate"
+                    Enter Effect(s) - Try: &quot;grayscale contrast&quot; or &quot;invert blur&quot; or &quot;pixelate&quot;
                   </label>
                   <button
                     onClick={surpriseMe}

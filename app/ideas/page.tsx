@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Lightbulb, Send } from 'lucide-react'
+import { ArrowLeft, Send } from 'lucide-react'
 
 export default function IdeasPage() {
   const [formData, setFormData] = useState({

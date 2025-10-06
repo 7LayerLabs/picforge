@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { GoogleGenerativeAI } from '@google/generative-ai'
+// import { GoogleGenerativeAI } from '@google/generative-ai' // Reserved for future AI processing
 
 // Simplified version that handles JSON properly
 export async function POST(request: NextRequest) {

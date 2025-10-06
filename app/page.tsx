@@ -38,17 +38,17 @@ export default function Home() {
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
 
   // AI Canvas states
-  const [showAICanvas, setShowAICanvas] = useState(false)
+  // const [showAICanvas, setShowAICanvas] = useState(false) // Reserved for future use
   const [canvasPrompt, setCanvasPrompt] = useState('')
-  const [isGeneratingCanvas, setIsGeneratingCanvas] = useState(false)
+  // const [isGeneratingCanvas, setIsGeneratingCanvas] = useState(false) // Reserved for future use
   const [canvasSize] = useState<'1024x1024' | '1792x1024' | '1024x1792'>('1024x1024')
   const [canvasQuality] = useState<'standard' | 'hd'>('standard')
 
   // Visitor tracking states
-  const [visitorStats, setVisitorStats] = useState<{
-    totalVisits: number
-    uniqueVisitors: number
-  } | null>(null)
+  // const [visitorStats, setVisitorStats] = useState<{
+  //   totalVisits: number
+  //   uniqueVisitors: number
+  // } | null>(null) // Reserved for analytics
 
   // Share modal state
   const [showShareModal, setShowShareModal] = useState(false)
@@ -184,25 +184,25 @@ export default function Home() {
         if (response.ok) {
           const data = await response.json()
           console.log('Visitor data:', data)
-          setVisitorStats({
-            totalVisits: data.totalVisits || 0,
-            uniqueVisitors: data.uniqueVisitors || 0
-          })
+          // setVisitorStats({
+          //   totalVisits: data.totalVisits || 0,
+          //   uniqueVisitors: data.uniqueVisitors || 0
+          // })
         } else {
           // Show counter with zero values if API fails
           console.error('Track API failed:', response.status)
-          setVisitorStats({
-            totalVisits: 0,
-            uniqueVisitors: 0
-          })
+          // setVisitorStats({
+          //   totalVisits: 0,
+          //   uniqueVisitors: 0
+          // })
         }
       } catch (error) {
         console.error('Failed to track visitor:', error)
         // Show counter with zero values on error
-        setVisitorStats({
-          totalVisits: 0,
-          uniqueVisitors: 0
-        })
+        // setVisitorStats({
+        //   totalVisits: 0,
+        //   uniqueVisitors: 0
+        // })
       }
     }
     trackVisitor()
@@ -538,6 +538,8 @@ export default function Home() {
     }
   }
 
+  // Reserved for future Canvas generation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const generateCanvas = async () => {
     if (!canvasPrompt.trim()) {
       setSubmitMessage('Please enter a prompt for your canvas')

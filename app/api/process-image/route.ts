@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       if (jsonData.image) {
         base64ImageData = jsonData.image
         // If it's a data URL, extract just the base64 part
-        if (base64ImageData.includes(',')) {
+        if (base64ImageData && base64ImageData.includes(',')) {
           base64ImageData = base64ImageData.split(',')[1]
         }
       }

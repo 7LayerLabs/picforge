@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Copy, Check, ArrowLeft, Sparkles, Search } from 'lucide-react'
+import { Copy, Check, ArrowLeft, Sparkles } from 'lucide-react'
 
 export default function PromptsPage() {
   const [copiedPrompt, setCopiedPrompt] = useState<string | null>(null)
