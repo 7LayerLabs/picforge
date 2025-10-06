@@ -23,7 +23,7 @@ import {
 } from 'lucide-react'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import { ClientImageProcessor } from '@/lib/clientImageProcessor'
+// Remove the import since we'll do processing inline
 
 interface BatchImage {
   id: string
@@ -64,6 +64,98 @@ export default function BatchPage() {
   const [processedCount, setProcessedCount] = useState(0)
   const [totalTime, setTotalTime] = useState(0)
   const [startTime, setStartTime] = useState<number | null>(null)
+
+  // Process image using Canvas API (runs in browser)
+  const processImageWithCanvas = async (base64Image: string, promptText: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')!
+
+        canvas.width = img.width
+        canvas.height = img.height
+        ctx.drawImage(img, 0, 0)
+
+        const promptLower = promptText.toLowerCase()
+
+        // Apply filters based on prompt
+        let filters = []
+
+        if (promptLower.includes('grayscale') || promptLower.includes('black and white')) {
+          filters.push('grayscale(100%)')
+        }
+
+        if (promptLower.includes('blur')) {
+          filters.push('blur(5px)')
+        }
+
+        if (promptLower.includes('sepia') || promptLower.includes('vintage')) {
+          filters.push('sepia(100%)')
+        }
+
+        if (promptLower.includes('bright')) {
+          filters.push('brightness(1.5)')
+        }
+
+        if (promptLower.includes('dark')) {
+          filters.push('brightness(0.5)')
+        }
+
+        if (promptLower.includes('contrast')) {
+          filters.push('contrast(1.5)')
+        }
+
+        if (promptLower.includes('saturate')) {
+          filters.push('saturate(2)')
+        }
+
+        if (promptLower.includes('invert')) {
+          filters.push('invert(100%)')
+        }
+
+        if (promptLower.includes('enhance')) {
+          filters.push('contrast(1.2) brightness(1.1) saturate(1.2)')
+        }
+
+        if (promptLower.includes('professional') || promptLower.includes('studio')) {
+          filters.push('contrast(1.1) saturate(0.9) brightness(1.05)')
+        }
+
+        // Apply all filters
+        if (filters.length > 0) {
+          ctx.filter = filters.join(' ')
+          ctx.drawImage(canvas, 0, 0)
+        }
+
+        // Special handling for background removal
+        if (promptLower.includes('remove background') || promptLower.includes('transparent')) {
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i]
+            const g = data[i + 1]
+            const b = data[i + 2]
+
+            // Remove white/light backgrounds
+            if (r > 240 && g > 240 && b > 240) {
+              data[i + 3] = 0
+            } else if (r > 200 && g > 200 && b > 200) {
+              data[i + 3] = Math.floor(data[i + 3] * 0.5)
+            }
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        // Return processed image
+        resolve(canvas.toDataURL('image/png'))
+      }
+
+      img.src = base64Image
+    })
+  }
 
   // Update timer
   useEffect(() => {
@@ -116,9 +208,6 @@ export default function BatchPage() {
     setStartTime(Date.now())
     setProcessedCount(0)
 
-    // Create processor instance
-    const processor = new ClientImageProcessor()
-
     // Sort by priority
     const sortedImages = [...images].sort((a, b) => {
       if (a.priority === 'high' && b.priority === 'normal') return -1
@@ -154,49 +243,33 @@ export default function BatchPage() {
           reader.readAsDataURL(image.file)
         })
 
-        // Update progress
+        // Update progress to 30%
         setImages(prev => prev.map(img =>
           img.id === image.id ? { ...img, progress: 30 } : img
         ))
 
-        // Process image client-side with Canvas API
-        const processedImage = await processor.processImage(base64, prompt)
+        console.log('Processing image with prompt:', prompt)
 
-        // Update progress
+        // Process image with Canvas API in browser
+        const processedImage = await processImageWithCanvas(base64, prompt)
+
+        // Update progress to 80%
         setImages(prev => prev.map(img =>
-          img.id === image.id ? { ...img, progress: 70 } : img
+          img.id === image.id ? { ...img, progress: 80 } : img
         ))
 
-        // Optional: Send to API for additional processing or just use client result
-        const useAPI = false // Set to true if you want to use API processing too
+        // Small delay to show progress
+        await new Promise(resolve => setTimeout(resolve, 100))
 
-        let finalImage = processedImage
-
-        if (useAPI) {
-          const response = await fetch('/api/process-image-v2', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              image: processedImage,
-              prompt: prompt
-            })
-          })
-
-          const data = await response.json()
-          if (data.success && data.processedImage) {
-            finalImage = data.processedImage
-          }
-        }
-
-        // Mark as completed
+        // Mark as completed with processed image
         setImages(prev => prev.map(img =>
           img.id === image.id
-            ? { ...img, status: 'completed', progress: 100, result: finalImage }
+            ? { ...img, status: 'completed', progress: 100, result: processedImage }
             : img
         ))
         setProcessedCount(prev => prev + 1)
+
+        console.log('Image processed successfully')
       } catch (error) {
         setImages(prev => prev.map(img =>
           img.id === image.id
