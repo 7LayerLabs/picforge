@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
+import { ClientImageProcessor } from '@/lib/clientImageProcessor'
 
 interface BatchImage {
   id: string
@@ -115,6 +116,9 @@ export default function BatchPage() {
     setStartTime(Date.now())
     setProcessedCount(0)
 
+    // Create processor instance
+    const processor = new ClientImageProcessor()
+
     // Sort by priority
     const sortedImages = [...images].sort((a, b) => {
       if (a.priority === 'high' && b.priority === 'normal') return -1
@@ -150,41 +154,49 @@ export default function BatchPage() {
           reader.readAsDataURL(image.file)
         })
 
-        // Simulate progress updates
-        for (let i = 20; i <= 70; i += 10) {
-          setImages(prev => prev.map(img =>
-            img.id === image.id ? { ...img, progress: i } : img
-          ))
-          await new Promise(resolve => setTimeout(resolve, 200))
-        }
+        // Update progress
+        setImages(prev => prev.map(img =>
+          img.id === image.id ? { ...img, progress: 30 } : img
+        ))
 
-        // Use the new v2 endpoint
-        console.log('Sending request with prompt:', prompt)
-        const response = await fetch('/api/process-image-v2', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            image: base64,
-            prompt: prompt
+        // Process image client-side with Canvas API
+        const processedImage = await processor.processImage(base64, prompt)
+
+        // Update progress
+        setImages(prev => prev.map(img =>
+          img.id === image.id ? { ...img, progress: 70 } : img
+        ))
+
+        // Optional: Send to API for additional processing or just use client result
+        const useAPI = false // Set to true if you want to use API processing too
+
+        let finalImage = processedImage
+
+        if (useAPI) {
+          const response = await fetch('/api/process-image-v2', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              image: processedImage,
+              prompt: prompt
+            })
           })
-        })
 
-        const data = await response.json()
-        console.log('Response:', data)
-
-        if (data.success && data.processedImage) {
-          // Use the processed image from the API
-          setImages(prev => prev.map(img =>
-            img.id === image.id
-              ? { ...img, status: 'completed', progress: 100, result: data.processedImage }
-              : img
-          ))
-          setProcessedCount(prev => prev + 1)
-        } else {
-          throw new Error(data.error || 'Processing failed')
+          const data = await response.json()
+          if (data.success && data.processedImage) {
+            finalImage = data.processedImage
+          }
         }
+
+        // Mark as completed
+        setImages(prev => prev.map(img =>
+          img.id === image.id
+            ? { ...img, status: 'completed', progress: 100, result: finalImage }
+            : img
+        ))
+        setProcessedCount(prev => prev + 1)
       } catch (error) {
         setImages(prev => prev.map(img =>
           img.id === image.id
