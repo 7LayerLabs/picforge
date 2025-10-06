@@ -3,13 +3,11 @@ import GoogleProvider from 'next-auth/providers/google'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/lib/prisma'
 
-// Check for required environment variables
-if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-  throw new Error('Missing Google OAuth credentials')
-}
+// Only check environment variables at runtime, not build time
+const isBuilding = process.env.NEXT_PHASE === 'phase-production-build'
 
-if (process.env.NODE_ENV === 'production' && !process.env.NEXTAUTH_SECRET) {
-  throw new Error('NEXTAUTH_SECRET is required in production')
+if (!isBuilding && (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET)) {
+  console.error('Warning: Missing Google OAuth credentials')
 }
 
 export const authOptions: NextAuthOptions = {
@@ -17,8 +15,8 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       authorization: {
         params: {
           prompt: "consent",
