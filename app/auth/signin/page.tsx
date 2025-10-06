@@ -44,14 +44,14 @@ export default function SignInPage() {
             <button
               onClick={() => handleSignIn('google')}
               disabled={isLoading !== null}
-              className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white border-2 border-gray-200 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-sm"
             >
               {isLoading === 'google' ? (
                 <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
               ) : (
-                <FaGoogle className="w-5 h-5 text-red-500" />
+                <FaGoogle className="w-4 h-4 text-red-500" />
               )}
-              <span className="whitespace-nowrap">Sign in with Google</span>
+              <span className="whitespace-nowrap text-sm">Sign in with Google</span>
             </button>
           </div>
 
