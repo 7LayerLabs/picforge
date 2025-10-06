@@ -158,21 +158,27 @@ export default function BatchPage() {
           await new Promise(resolve => setTimeout(resolve, 200))
         }
 
-        // Process with API
-        const response = await fetch('/api/process-image', {
+        // Use the new v2 endpoint
+        console.log('Sending request with prompt:', prompt)
+        const response = await fetch('/api/process-image-v2', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image: base64, prompt })
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            image: base64,
+            prompt: prompt
+          })
         })
 
         const data = await response.json()
+        console.log('Response:', data)
 
-        if (data.success) {
-          // For now, return the original image with a success message
-          // In production, this would return the actual processed image
+        if (data.success && data.processedImage) {
+          // Use the processed image from the API
           setImages(prev => prev.map(img =>
             img.id === image.id
-              ? { ...img, status: 'completed', progress: 100, result: base64 }
+              ? { ...img, status: 'completed', progress: 100, result: data.processedImage }
               : img
           ))
           setProcessedCount(prev => prev + 1)

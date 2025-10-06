@@ -6,6 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check content type to handle both JSON and FormData
     const contentType = request.headers.get('content-type') || ''
+    console.log('Received request with content-type:', contentType)
 
     let imageFile: File | null = null
     let additionalImageFile: File | null = null
@@ -32,12 +33,18 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         )
       }
-    } else {
+    } else if (contentType.includes('multipart/form-data') || contentType.includes('application/x-www-form-urlencoded')) {
       // Handle FormData request (from regular upload)
       const formData = await request.formData()
       imageFile = formData.get('image') as File
       additionalImageFile = formData.get('additionalImage') as File | null
       prompt = formData.get('prompt') as string
+    } else {
+      // Unsupported content type
+      return NextResponse.json(
+        { error: `Unsupported content type: ${contentType}. Use application/json or multipart/form-data.` },
+        { status: 400 }
+      )
     }
 
     if (!imageFile && !base64ImageData) {
