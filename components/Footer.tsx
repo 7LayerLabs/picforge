@@ -1,13 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { Bug, Upload, Lightbulb } from 'lucide-react'
+import { Bug, Upload, Lightbulb, Shield, FileText } from 'lucide-react'
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -41,6 +41,25 @@ export default function Footer() {
                 <Link href="/ideas" className="text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2">
                   <Lightbulb className="w-4 h-4" />
                   Submit an Idea
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="font-heading font-bold text-lg mb-3">Legal</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/terms" className="text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  Privacy Policy
                 </Link>
               </li>
             </ul>
