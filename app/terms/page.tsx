@@ -21,7 +21,7 @@ export default function TermsPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">1. Acceptance of Terms</h2>
               <p className="text-gray-600 mb-4">
-                By accessing or using PicForge ("the Service"), you agree to be bound by these Terms of Service.
+                By accessing or using PicForge (&quot;the Service&quot;), you agree to be bound by these Terms of Service.
                 If you do not agree to these terms, please do not use our Service.
               </p>
             </section>
@@ -99,7 +99,7 @@ export default function TermsPage() {
               <ul className="list-disc pl-6 text-gray-600 mb-4">
                 <li>You have the necessary rights to the source images</li>
                 <li>You comply with applicable laws and these Terms</li>
-                <li>You acknowledge that AI-generated content may be similar to other users' creations</li>
+                <li>You acknowledge that AI-generated content may be similar to other users&apos; creations</li>
               </ul>
 
               <h3 className="text-xl font-semibold text-gray-700 mb-2">Our Property</h3>
@@ -139,7 +139,7 @@ export default function TermsPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">9. Disclaimer of Warranties</h2>
               <p className="text-gray-600 mb-4">
-                PicForge is provided "as is" without warranties of any kind. We do not guarantee that:
+                PicForge is provided &quot;as is&quot; without warranties of any kind. We do not guarantee that:
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
                 <li>The Service will be uninterrupted or error-free</li>

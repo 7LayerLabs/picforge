@@ -43,7 +43,7 @@ export default function PrivacyPage() {
                 <li><strong>Images:</strong> Photos you upload for processing</li>
                 <li><strong>Prompts & Settings:</strong> Text prompts and transformation settings you use</li>
                 <li><strong>Showcase Content:</strong> Images and descriptions you choose to share publicly</li>
-                <li><strong>Payment Information:</strong> Processed securely by our payment providers (we don't store card details)</li>
+                <li><strong>Payment Information:</strong> Processed securely by our payment providers (we don&apos;t store card details)</li>
               </ul>
 
               <h3 className="text-xl font-semibold text-gray-700 mb-2">Information Collected Automatically</h3>
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
                 <li><strong>Cookies:</strong> Session management and preferences (essential cookies only)</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">Information We DON'T Collect</h3>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">Information We DON&apos;T Collect</h3>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
                 <li>Tracking cookies or advertising identifiers</li>
                 <li>Location data (beyond general region from IP)</li>
@@ -84,7 +84,7 @@ export default function PrivacyPage() {
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
                 <li>Images are processed using Google Gemini, OpenAI, or local processing</li>
-                <li>We don't use your images to train AI models</li>
+                <li>We don&apos;t use your images to train AI models</li>
                 <li>Prompts may be logged for quality improvement (anonymized after 30 days)</li>
                 <li>Processed images are deleted from our servers after 30 days unless saved to your account</li>
               </ul>
@@ -125,7 +125,7 @@ export default function PrivacyPage() {
               <ul className="list-disc pl-6 text-gray-600 mb-4">
                 <li><strong>You Explicitly Share:</strong> Posting to the community showcase</li>
                 <li><strong>Service Providers:</strong> AI processing (Gemini, OpenAI), hosting (Vercel), database (Supabase)</li>
-                <li><strong>Legal Requirements:</strong> Court orders, law enforcement requests (we'll notify you when possible)</li>
+                <li><strong>Legal Requirements:</strong> Court orders, law enforcement requests (we&apos;ll notify you when possible)</li>
                 <li><strong>Safety:</strong> To prevent harm, fraud, or security threats</li>
                 <li><strong>Business Transfer:</strong> If PicForge is acquired (with notice to users)</li>
               </ul>
@@ -182,7 +182,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">7. Children's Privacy</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">7. Children&apos;s Privacy</h2>
               <p className="text-gray-600 mb-4">
                 PicForge is not intended for children under 13. We do not knowingly collect personal
                 information from children. If you believe a child has provided us with personal information,
@@ -267,8 +267,8 @@ export default function PrivacyPage() {
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
                 <li>Right to know what personal information is collected</li>
-                <li>Right to know if personal information is sold (we don't sell data)</li>
-                <li>Right to opt-out of sale (not applicable as we don't sell data)</li>
+                <li>Right to know if personal information is sold (we don&apos;t sell data)</li>
+                <li>Right to opt-out of sale (not applicable as we don&apos;t sell data)</li>
                 <li>Right to deletion</li>
                 <li>Right to non-discrimination for exercising privacy rights</li>
               </ul>
@@ -277,7 +277,7 @@ export default function PrivacyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">12. European Privacy Rights (GDPR)</h2>
               <p className="text-gray-600 mb-4">
-                If you're in the European Economic Area, you have rights under GDPR including:
+                If you&apos;re in the European Economic Area, you have rights under GDPR including:
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
                 <li>Legal basis disclosure (we process based on consent and legitimate interests)</li>
