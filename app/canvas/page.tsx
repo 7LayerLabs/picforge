@@ -146,7 +146,14 @@ export default function CanvasPage() {
               <img src={generatedImage} alt="Generated" className="w-full h-full object-cover" />
             </div>
             <div className="mt-6 flex gap-4">
-              <button className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all">
+              <button
+                onClick={() => {
+                  const link = document.createElement('a')
+                  link.href = generatedImage
+                  link.download = `ai-generated-${Date.now()}.png`
+                  link.click()
+                }}
+                className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all">
                 Download
               </button>
               <Link
