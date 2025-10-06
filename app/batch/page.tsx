@@ -24,6 +24,7 @@ import {
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import { applyImageEffect } from '@/lib/imageEffects'
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 
 interface BatchImage {
   id: string
@@ -58,13 +59,94 @@ export default function BatchPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [prompt, setPrompt] = useState('')
-  const [selectedPreset, setSelectedPreset] = useState<ExportPreset>(defaultPresets[0])
+  const [isDraggingPage, setIsDraggingPage] = useState(false)
+  const [selectedPreset, setSelectedPreset] = useState<ExportPreset>(() => {
+    // Load saved preset from localStorage
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('selectedPreset')
+      if (saved) {
+        try {
+          return JSON.parse(saved)
+        } catch {}
+      }
+    }
+    return defaultPresets[0]
+  })
   const [customPresets, setCustomPresets] = useState<ExportPreset[]>([])
   const [showSettings, setShowSettings] = useState(false)
   const [processedCount, setProcessedCount] = useState(0)
   const [totalTime, setTotalTime] = useState(0)
   const [startTime, setStartTime] = useState<number | null>(null)
 
+  // Save preset preference
+  useEffect(() => {
+    localStorage.setItem('selectedPreset', JSON.stringify(selectedPreset))
+  }, [selectedPreset])
+
+  // Surprise Me functionality
+  const surpriseEffects = [
+    'grayscale contrast',
+    'invert',
+    'sepia dark',
+    'blur bright',
+    'pixelate',
+    'red contrast',
+    'blue dark',
+    'green bright',
+    'grayscale pixelate',
+    'invert blur'
+  ]
+
+  const surpriseMe = () => {
+    const randomEffect = surpriseEffects[Math.floor(Math.random() * surpriseEffects.length)]
+    setPrompt(randomEffect)
+    console.log('Surprise effect:', randomEffect)
+  }
+
+
+  // Full page drag and drop
+  useEffect(() => {
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault()
+      setIsDraggingPage(true)
+    }
+
+    const handleDragLeave = (e: DragEvent) => {
+      if (e.clientX === 0 && e.clientY === 0) {
+        setIsDraggingPage(false)
+      }
+    }
+
+    const handleDrop = (e: DragEvent) => {
+      e.preventDefault()
+      setIsDraggingPage(false)
+
+      const files = Array.from(e.dataTransfer?.files || [])
+      const imageFiles = files.filter(file => file.type.startsWith('image/'))
+
+      if (imageFiles.length > 0) {
+        const newImages = imageFiles.map(file => ({
+          id: Math.random().toString(36).substring(7),
+          file,
+          preview: URL.createObjectURL(file),
+          status: 'queued' as const,
+          progress: 0,
+          priority: 'normal' as const
+        }))
+        setImages(prev => [...prev, ...newImages])
+      }
+    }
+
+    document.addEventListener('dragover', handleDragOver)
+    document.addEventListener('dragleave', handleDragLeave)
+    document.addEventListener('drop', handleDrop)
+
+    return () => {
+      document.removeEventListener('dragover', handleDragOver)
+      document.removeEventListener('dragleave', handleDragLeave)
+      document.removeEventListener('drop', handleDrop)
+    }
+  }, [])
 
   // Update timer
   useEffect(() => {
@@ -76,6 +158,59 @@ export default function BatchPage() {
     }
     return () => clearInterval(interval)
   }, [isProcessing, isPaused, startTime])
+
+  // Clipboard paste support
+  useEffect(() => {
+    const handlePaste = async (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items
+      if (!items) return
+
+      const imageItems = Array.from(items).filter(item => item.type.startsWith('image/'))
+
+      for (const item of imageItems) {
+        const file = item.getAsFile()
+        if (file) {
+          const newImage: BatchImage = {
+            id: Math.random().toString(36).substring(7),
+            file,
+            preview: URL.createObjectURL(file),
+            status: 'queued',
+            progress: 0,
+            priority: 'normal'
+          }
+          setImages(prev => [...prev, newImage])
+          console.log('Pasted image from clipboard')
+        }
+      }
+    }
+
+    document.addEventListener('paste', handlePaste)
+    return () => document.removeEventListener('paste', handlePaste)
+  }, [])
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    onSave: () => {
+      if (images.filter(img => img.status === 'completed').length > 0) {
+        downloadAll()
+      }
+    },
+    onDelete: () => {
+      // Remove selected or last image
+      if (images.length > 0) {
+        setImages(prev => prev.slice(0, -1))
+      }
+    },
+    onPaste: () => {
+      // Paste is handled by the paste event listener above
+      console.log('Paste shortcut triggered')
+    },
+    onEscape: () => {
+      if (isProcessing) {
+        setIsPaused(true)
+      }
+    }
+  })
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newImages = acceptedFiles.map(file => ({
@@ -206,21 +341,46 @@ export default function BatchPage() {
   }
 
   const downloadAll = async () => {
-    const zip = new JSZip()
-    const completedImages = images.filter(img => img.status === 'completed' && img.result)
+    try {
+      const zip = new JSZip()
+      const completedImages = images.filter(img => img.status === 'completed' && img.result)
 
-    for (let i = 0; i < completedImages.length; i++) {
-      const img = completedImages[i]
-      if (img.result) {
-        const response = await fetch(img.result)
-        const blob = await response.blob()
-        const fileName = `${selectedPreset.prefix || ''}image_${i + 1}${selectedPreset.suffix || ''}.${selectedPreset.format}`
-        zip.file(fileName, blob)
+      console.log(`Starting ZIP download for ${completedImages.length} images`)
+
+      for (let i = 0; i < completedImages.length; i++) {
+        const img = completedImages[i]
+        if (img.result) {
+          // Extract base64 data
+          let base64Data = img.result
+          if (base64Data.includes('base64,')) {
+            base64Data = base64Data.split('base64,')[1]
+          }
+
+          // Convert base64 to blob
+          const byteCharacters = atob(base64Data)
+          const byteNumbers = new Array(byteCharacters.length)
+          for (let j = 0; j < byteCharacters.length; j++) {
+            byteNumbers[j] = byteCharacters.charCodeAt(j)
+          }
+          const byteArray = new Uint8Array(byteNumbers)
+          const blob = new Blob([byteArray], { type: `image/${selectedPreset.format}` })
+
+          // Generate filename
+          const originalName = img.file.name.split('.')[0]
+          const fileName = `${selectedPreset.prefix || ''}${originalName}_${i + 1}${selectedPreset.suffix || ''}.${selectedPreset.format}`
+
+          zip.file(fileName, blob)
+          console.log(`Added ${fileName} to ZIP`)
+        }
       }
-    }
 
-    const content = await zip.generateAsync({ type: 'blob' })
-    saveAs(content, `batch_export_${Date.now()}.zip`)
+      const content = await zip.generateAsync({ type: 'blob' })
+      saveAs(content, `batch_export_${new Date().toISOString().split('T')[0]}.zip`)
+      console.log('ZIP download started successfully')
+    } catch (error) {
+      console.error('ZIP download failed:', error)
+      alert('Failed to create ZIP file. Please try downloading images individually.')
+    }
   }
 
   const downloadSingle = async (image: BatchImage) => {
@@ -247,7 +407,16 @@ export default function BatchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 relative">
+      {/* Full page drag indicator */}
+      {isDraggingPage && (
+        <div className="fixed inset-0 z-50 bg-purple-500/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+          <div className="bg-white rounded-2xl p-12 shadow-2xl">
+            <Upload className="w-24 h-24 text-purple-500 mx-auto mb-4 animate-bounce" />
+            <p className="text-2xl font-bold text-gray-900">Drop images anywhere!</p>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
@@ -350,9 +519,19 @@ export default function BatchPage() {
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <div className="flex gap-4 mb-4">
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Enter Effect(s) - Try: "grayscale contrast" or "invert blur" or "pixelate"
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Enter Effect(s) - Try: "grayscale contrast" or "invert blur" or "pixelate"
+                  </label>
+                  <button
+                    onClick={surpriseMe}
+                    disabled={isProcessing}
+                    className="px-4 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-sm font-medium rounded-lg hover:from-pink-600 hover:to-purple-600 transition-all disabled:opacity-50 flex items-center gap-2"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Surprise Me!
+                  </button>
+                </div>
                 <textarea
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
@@ -476,7 +655,10 @@ export default function BatchPage() {
                         />
                         {image.status === 'processing' && (
                           <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                            <Loader2 className="w-6 h-6 text-white animate-spin" />
+                            <div className="relative">
+                              <Loader2 className="w-6 h-6 text-white animate-spin" />
+                              <div className="absolute inset-0 w-6 h-6 bg-white/20 rounded-full animate-ping" />
+                            </div>
                           </div>
                         )}
                       </div>
