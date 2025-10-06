@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// NextAuth models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String          @id @default(cuid())
+  email         String?         @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  // User settings
+  settings      String?         @default("{}")
+  credits       Int             @default(500) // Free credits per day
+  isPro         Boolean         @default(false)
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  images        ProcessedImage[]
+  favorites     Favorite[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// PicForge specific models
+model ProcessedImage {
+  id          String   @id @default(cuid())
+  userId      String
+  prompt      String
+  originalUrl String
+  processedUrl String?
+  template    String?
+  settings    String?
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  favorites   Favorite[]
+
+  @@index([userId, createdAt])
+}
+
+model Favorite {
+  id        String         @id @default(cuid())
+  userId    String
+  imageId   String
+  createdAt DateTime       @default(now())
+
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  image     ProcessedImage @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, imageId])
+  @@index([userId, createdAt])
+}

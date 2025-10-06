@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.10.0",
     "@google/generative-ai": "^0.24.1",
+    "@prisma/client": "^6.16.3",
     "@vercel/analytics": "^1.5.0",
     "@vercel/kv": "^3.0.0",
     "canvas": "^3.2.0",
@@ -20,10 +22,13 @@
     "konva": "^10.0.2",
     "lucide-react": "^0.544.0",
     "next": "15.5.3",
+    "next-auth": "^4.24.11",
     "openai": "^5.22.0",
+    "prisma": "^6.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-dropzone": "^14.3.8",
+    "react-icons": "^5.5.0",
     "together-ai": "^0.22.0",
     "zustand": "^5.0.8"
   },
@@ -34,6 +39,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.21",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "postcss": "^8.5.6",

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Image as ImageIcon, Layers, Sparkles, Menu, X, Lightbulb } from 'lucide-react';
 import { useState } from 'react';
+import UserMenu from './UserMenu';
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -103,8 +104,14 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center sm:hidden">
+          {/* Right side - User menu for desktop */}
+          <div className="hidden sm:flex items-center">
+            <UserMenu />
+          </div>
+
+          {/* Mobile menu button and user menu */}
+          <div className="flex items-center sm:hidden gap-2">
+            <UserMenu />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
