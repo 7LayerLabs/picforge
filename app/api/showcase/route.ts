@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth-options'
 import { prisma } from '@/lib/prisma'
 
 // GET - Fetch showcase items
@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit
 
     // Build query conditions
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {
       approved: true
     }
@@ -24,6 +25,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Build order by
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let orderBy: any = { createdAt: 'desc' }
     if (sort === 'popular') {
       orderBy = { likes: 'desc' }

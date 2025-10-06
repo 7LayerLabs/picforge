@@ -4,11 +4,11 @@ import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { User, Mail, Calendar, Crown, Settings, Heart, History, ArrowLeft } from 'lucide-react'
+import { Mail, Calendar, Crown, Settings, Heart, History, ArrowLeft } from 'lucide-react'
 
 export default function ProfilePage() {
   const { data: session, status } = useSession()
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalImages: 0,
     totalFavorites: 0,
     creditsUsed: 0,

@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Upload, Send, Image as ImageIcon } from 'lucide-react'
+import { ArrowLeft, Upload, Send } from 'lucide-react'
 
 export default function ShowcaseSubmitPage() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [formData, setFormData] = useState({
@@ -18,6 +18,26 @@ export default function ShowcaseSubmitPage() {
   })
   const [originalImage, setOriginalImage] = useState<string>('')
   const [resultImage, setResultImage] = useState<string>('')
+
+  // Get images from sessionStorage if coming from editor
+  useEffect(() => {
+    const storedOriginal = sessionStorage.getItem('showcaseOriginal')
+    const storedResult = sessionStorage.getItem('showcaseResult')
+    const storedPrompt = sessionStorage.getItem('showcasePrompt')
+
+    if (storedOriginal) {
+      setOriginalImage(storedOriginal)
+      sessionStorage.removeItem('showcaseOriginal')
+    }
+    if (storedResult) {
+      setResultImage(storedResult)
+      sessionStorage.removeItem('showcaseResult')
+    }
+    if (storedPrompt) {
+      setFormData(prev => ({ ...prev, prompt: storedPrompt }))
+      sessionStorage.removeItem('showcasePrompt')
+    }
+  }, [])
 
   // Redirect if not signed in
   if (status === 'unauthenticated') {
@@ -76,26 +96,6 @@ export default function ShowcaseSubmitPage() {
       setSubmitting(false)
     }
   }
-
-  // Get images from sessionStorage if coming from editor
-  useState(() => {
-    const storedOriginal = sessionStorage.getItem('showcaseOriginal')
-    const storedResult = sessionStorage.getItem('showcaseResult')
-    const storedPrompt = sessionStorage.getItem('showcasePrompt')
-
-    if (storedOriginal) {
-      setOriginalImage(storedOriginal)
-      sessionStorage.removeItem('showcaseOriginal')
-    }
-    if (storedResult) {
-      setResultImage(storedResult)
-      sessionStorage.removeItem('showcaseResult')
-    }
-    if (storedPrompt) {
-      setFormData(prev => ({ ...prev, prompt: storedPrompt }))
-      sessionStorage.removeItem('showcasePrompt')
-    }
-  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">

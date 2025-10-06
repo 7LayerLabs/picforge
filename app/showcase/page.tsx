@@ -64,6 +64,7 @@ export default function ShowcasePage() {
 
   useEffect(() => {
     fetchShowcases()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, style, page])
 
   // Handle like/unlike
