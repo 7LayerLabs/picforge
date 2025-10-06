@@ -759,9 +759,6 @@ export default function Home() {
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                 <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 bg-gradient-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent mr-1">(re)</span><span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Imagine. Everything.</span>
               </h1>
-              <p className="font-body text-sm md:text-base text-gray-500 dark:text-gray-400 italic mb-6">
-                Nothing is real anymore.
-              </p>
               <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed font-bold">
                 Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-orange-600">210+ templates</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
               </p>
