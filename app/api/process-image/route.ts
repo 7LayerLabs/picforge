@@ -4,14 +4,52 @@ import { checkRateLimit } from './rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData()
-    const imageFile = formData.get('image') as File
-    const additionalImageFile = formData.get('additionalImage') as File | null
-    const prompt = formData.get('prompt') as string
+    // Check content type to handle both JSON and FormData
+    const contentType = request.headers.get('content-type') || ''
 
-    if (!imageFile || !prompt) {
+    let imageFile: File | null = null
+    let additionalImageFile: File | null = null
+    let prompt: string = ''
+    let base64ImageData: string | null = null
+
+    if (contentType.includes('application/json')) {
+      // Handle JSON request (from batch processor)
+      const jsonData = await request.json()
+      prompt = jsonData.prompt
+
+      // Extract base64 image data
+      if (jsonData.image) {
+        base64ImageData = jsonData.image
+        // If it's a data URL, extract just the base64 part
+        if (base64ImageData.includes(',')) {
+          base64ImageData = base64ImageData.split(',')[1]
+        }
+      }
+
+      if (!base64ImageData || !prompt) {
+        return NextResponse.json(
+          { error: 'Missing image or prompt' },
+          { status: 400 }
+        )
+      }
+    } else {
+      // Handle FormData request (from regular upload)
+      const formData = await request.formData()
+      imageFile = formData.get('image') as File
+      additionalImageFile = formData.get('additionalImage') as File | null
+      prompt = formData.get('prompt') as string
+    }
+
+    if (!imageFile && !base64ImageData) {
       return NextResponse.json(
-        { error: 'Missing image or prompt' },
+        { error: 'Missing image data' },
+        { status: 400 }
+      )
+    }
+
+    if (!prompt) {
+      return NextResponse.json(
+        { error: 'Missing prompt' },
         { status: 400 }
       )
     }
@@ -50,17 +88,36 @@ export async function POST(request: NextRequest) {
     }
 
     // Get image size in bytes
-    const imageSize = imageFile.size
+    let imageSize = 0
+    let imageName = 'unknown'
+    let imageType = 'image/png'
+
+    if (imageFile) {
+      imageSize = imageFile.size
+      imageName = imageFile.name
+      imageType = imageFile.type
+    } else if (base64ImageData) {
+      // Estimate size from base64 (rough estimate)
+      imageSize = Math.round(base64ImageData.length * 0.75)
+      imageName = 'batch-image'
+      // Try to detect type from data URL if present
+      if (base64ImageData.startsWith('data:')) {
+        const matches = base64ImageData.match(/data:([^;]+);/)
+        if (matches) imageType = matches[1]
+      }
+    }
+
     const sizeInKB = (imageSize / 1024).toFixed(2)
     const sizeInMB = (imageSize / (1024 * 1024)).toFixed(2)
 
     // Log to server console
     console.log('=====================================')
-    console.log('Received form submission:')
+    console.log('Received submission:')
     console.log('User Prompt:', prompt)
-    console.log('Main Image Name:', imageFile.name)
-    console.log('Main Image Type:', imageFile.type)
+    console.log('Main Image Name:', imageName)
+    console.log('Main Image Type:', imageType)
     console.log('Main Image Size:', `${imageSize} bytes (${sizeInKB} KB / ${sizeInMB} MB)`)
+    console.log('Request Type:', contentType.includes('json') ? 'JSON (Batch)' : 'FormData')
 
     if (additionalImageFile) {
       const addImageSize = additionalImageFile.size
@@ -73,9 +130,15 @@ export async function POST(request: NextRequest) {
 
     console.log('=====================================')
 
-    // Convert the main image file to base64
-    const arrayBuffer = await imageFile.arrayBuffer()
-    const base64Image = Buffer.from(arrayBuffer).toString('base64')
+    // Convert the main image to base64
+    let base64Image: string
+    if (imageFile) {
+      const arrayBuffer = await imageFile.arrayBuffer()
+      base64Image = Buffer.from(arrayBuffer).toString('base64')
+    } else {
+      // Already have base64 data
+      base64Image = base64ImageData!
+    }
 
     // Convert additional image to base64 if provided
     let base64AdditionalImage: string | null = null
@@ -99,7 +162,7 @@ export async function POST(request: NextRequest) {
 
       // Prepare the image parts
       // Force PNG/JPEG mime types for Gemini compatibility (convert AVIF/WEBP to supported format)
-      let mimeType = imageFile.type
+      let mimeType = imageType
       if (mimeType === 'image/avif' || mimeType === 'image/webp' || !mimeType.startsWith('image/')) {
         mimeType = 'image/png'
       }
@@ -231,7 +294,7 @@ Requirements:
         const imagePart = {
           inlineData: {
             data: base64Image,
-            mimeType: imageFile.type
+            mimeType: imageType
           }
         }
 
