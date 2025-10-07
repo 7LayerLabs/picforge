@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Together from 'together-ai'
 
-const together = new Together({
-  apiKey: process.env.TOGETHER_API_KEY,
-})
-
 export async function POST(request: NextRequest) {
   try {
     const { image, prompt } = await request.json()
@@ -15,6 +11,11 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Initialize Together AI client at runtime
+    const together = new Together({
+      apiKey: process.env.TOGETHER_API_KEY,
+    })
 
     console.log('Processing NSFW image with Together AI...')
 
