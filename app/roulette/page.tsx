@@ -453,11 +453,12 @@ export default function TransformRoulette() {
     const spins = Math.floor(Math.random() * 3) + 3
     const segmentIndex = Math.floor(Math.random() * 8)
 
-    // Pointer is at TOP (0 degrees in our coordinate system)
-    // Segments are drawn starting from index 0 at top, going clockwise
-    // We want the wheel to spin and land with the chosen segment at the top
+    // Pointer is at TOP (0 degrees)
+    // Segments start at 0° (top), going clockwise in 45° slices
+    // Add 22.5° offset to land in CENTER of segment (not edge)
     const degreesPerSegment = 360 / 8 // 45 degrees per segment
-    const targetAngle = -(segmentIndex * degreesPerSegment) // Negative because wheel rotates
+    const segmentCenterOffset = 22.5 // Offset to center of segment
+    const targetAngle = -(segmentIndex * degreesPerSegment + segmentCenterOffset)
     const totalRotation = wheelRotation + (spins * 360) + targetAngle
 
     setWheelRotation(totalRotation)
@@ -682,7 +683,8 @@ export default function TransformRoulette() {
                     {/* Add segment labels positioned absolutely */}
                     {WHEEL_SEGMENTS.map((segment, i) => {
                       // Calculate position for each label around the wheel
-                      const angle = (i * 45) - 90 // Start from top (0 index at top)
+                      // Offset by 22.5° to center text in middle of each 45° segment
+                      const angle = (i * 45) + 22.5 - 90 // Start from top, offset to segment center
                       const radius = 110 // Distance from center
                       const radians = (angle * Math.PI) / 180
                       const x = 50 + (radius / 160) * 50 * Math.cos(radians) // Percentage from center
