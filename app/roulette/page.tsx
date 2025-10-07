@@ -679,20 +679,29 @@ export default function TransformRoulette() {
                       transform: `rotate(${wheelRotation}deg)`,
                     }}
                   >
-                    {/* Add segment lines and labels */}
-                    {WHEEL_SEGMENTS.map((segment, i) => (
-                      <div
-                        key={i}
-                        className={styles.wheelSegment}
-                        style={{
-                          transform: `rotate(${i * 45}deg)`,
-                        }}
-                      >
-                        <span className={styles.segmentText}>
+                    {/* Add segment labels positioned absolutely */}
+                    {WHEEL_SEGMENTS.map((segment, i) => {
+                      // Calculate position for each label around the wheel
+                      const angle = (i * 45) - 90 // Start from top (0 index at top)
+                      const radius = 110 // Distance from center
+                      const radians = (angle * Math.PI) / 180
+                      const x = 50 + (radius / 160) * 50 * Math.cos(radians) // Percentage from center
+                      const y = 50 + (radius / 160) * 50 * Math.sin(radians)
+
+                      return (
+                        <div
+                          key={i}
+                          className={styles.wheelLabel}
+                          style={{
+                            left: `${x}%`,
+                            top: `${y}%`,
+                            transform: `translate(-50%, -50%) rotate(${angle + 90}deg)`
+                          }}
+                        >
                           {segment.icon} {segment.displayName}
-                        </span>
-                      </div>
-                    ))}
+                        </div>
+                      )
+                    })}
                   </div>
 
                   {/* Center button */}
