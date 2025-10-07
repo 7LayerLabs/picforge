@@ -166,9 +166,12 @@ export default function TransformRoulette() {
 
       const data = await response.json()
 
+      // Handle the response - look for generatedImage or processedImage
+      const transformedImage = data.generatedImage || data.processedImage || uploadedImage
+
       setResult({
         prompt: prompt,
-        transformedImage: data.processedImage || uploadedImage
+        transformedImage: transformedImage
       })
 
       // Play success sound
