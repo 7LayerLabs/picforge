@@ -76,7 +76,7 @@ CATEGORY: [category]`
       const response = result.response.text()
 
       // Parse the response
-      const roastMatch = response.match(/ROAST:\s*(.+?)(?:\n|CATEGORY:|$)/s)
+      const roastMatch = response.match(/ROAST:\s*([\s\S]+?)(?:CATEGORY:|$)/)
       const categoryMatch = response.match(/CATEGORY:\s*(\w+)/i)
 
       const roastText = roastMatch
