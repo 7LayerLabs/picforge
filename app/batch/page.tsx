@@ -83,7 +83,7 @@ export default function BatchPage() {
     localStorage.setItem('selectedPreset', JSON.stringify(selectedPreset))
   }, [selectedPreset])
 
-  // Surprise Me functionality
+  // Surprise Me functionality - now with 21 effects!
   const surpriseEffects = [
     'grayscale contrast',
     'invert',
@@ -93,8 +93,19 @@ export default function BatchPage() {
     'red contrast',
     'blue dark',
     'green bright',
-    'grayscale pixelate',
-    'invert blur'
+    'sharpen',
+    'vignette',
+    'saturation',
+    'warm',
+    'cool',
+    'grain',
+    'glitch',
+    'sketch',
+    'resize',
+    'enhance',
+    'warm vignette',
+    'cool grain',
+    'sepia vignette'
   ]
 
   const surpriseMe = () => {
@@ -496,23 +507,36 @@ export default function BatchPage() {
             </div>
           </div>
 
-          {/* Available Effects */}
+          {/* Available Effects - UPDATED with 11 NEW effects! */}
           <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 mb-6">
-            <h3 className="font-semibold text-purple-900 mb-2">✨ Available Effects (100% Working!)</h3>
-            <div className="grid grid-cols-4 gap-2 text-sm">
-              <div className="bg-white px-3 py-1 rounded-lg">🎨 <b>grayscale</b> - B&W</div>
-              <div className="bg-white px-3 py-1 rounded-lg">🔄 <b>invert</b> - Negative</div>
-              <div className="bg-white px-3 py-1 rounded-lg">📜 <b>sepia</b> - Vintage</div>
-              <div className="bg-white px-3 py-1 rounded-lg">💫 <b>blur</b> - Soft focus</div>
-              <div className="bg-white px-3 py-1 rounded-lg">☀️ <b>bright</b> - Lighten</div>
-              <div className="bg-white px-3 py-1 rounded-lg">🌙 <b>dark</b> - Darken</div>
-              <div className="bg-white px-3 py-1 rounded-lg">⚡ <b>contrast</b> - Pop</div>
-              <div className="bg-white px-3 py-1 rounded-lg">🟥 <b>red</b> - Red tint</div>
-              <div className="bg-white px-3 py-1 rounded-lg">🟦 <b>blue</b> - Blue tint</div>
-              <div className="bg-white px-3 py-1 rounded-lg">🟩 <b>green</b> - Green tint</div>
-              <div className="bg-white px-3 py-1 rounded-lg">🎮 <b>pixelate</b> - 8-bit</div>
-              <div className="bg-white px-3 py-1 rounded-lg">🎯 <b>Multiple OK!</b></div>
+            <h3 className="font-semibold text-purple-900 mb-2">✨ 21 Available Effects - Mix & Match!</h3>
+            <div className="grid grid-cols-3 md:grid-cols-7 gap-2 text-xs">
+              {/* Original Effects */}
+              <div className="bg-white px-2 py-1 rounded-lg">🎨 <b>grayscale</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🔄 <b>invert</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">📜 <b>sepia</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">💫 <b>blur</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">☀️ <b>bright</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🌙 <b>dark</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">⚡ <b>contrast</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🟥 <b>red</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🟦 <b>blue</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🟩 <b>green</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🎮 <b>pixelate</b></div>
+
+              {/* NEW EFFECTS - Highlighted */}
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">✨ <b>sharpen</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">📷 <b>vignette</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">🎨 <b>saturation</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">🔥 <b>warm</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">❄️ <b>cool</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">🎞️ <b>grain</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">📺 <b>glitch</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">✏️ <b>sketch</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">📐 <b>resize</b></div>
+              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">⚙️ <b>enhance</b></div>
             </div>
+            <p className="text-xs mt-2 text-purple-700">💡 Combine effects: &quot;warm vignette&quot;, &quot;sepia grain&quot;, &quot;sketch sharpen&quot;</p>
           </div>
 
           {/* Controls */}
@@ -535,7 +559,7 @@ export default function BatchPage() {
                 <textarea
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Type any effect from above: grayscale, invert, sepia, blur, bright, dark, red, blue, green, pixelate, contrast"
+                  placeholder="Type effects: sharpen, vignette, saturation, warm, cool, grain, glitch, sketch, resize, enhance, or combine: warm vignette, sepia grain, etc."
                   className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none resize-none h-24"
                   disabled={isProcessing}
                 />

@@ -203,6 +203,246 @@ export const applyImageEffect = async (
           ctx.putImageData(imageData, 0, 0)
         }
 
+        // NEW EFFECTS
+
+        if (effectLower.includes('sharpen')) {
+          console.log('Applying SHARPEN')
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+          const width = canvas.width
+          const height = canvas.height
+
+          // Sharpening kernel
+          const kernel = [
+            0, -1, 0,
+            -1, 5, -1,
+            0, -1, 0
+          ]
+
+          const tempData = new Uint8ClampedArray(data)
+
+          for (let y = 1; y < height - 1; y++) {
+            for (let x = 1; x < width - 1; x++) {
+              for (let c = 0; c < 3; c++) {
+                let sum = 0
+                for (let ky = -1; ky <= 1; ky++) {
+                  for (let kx = -1; kx <= 1; kx++) {
+                    const idx = ((y + ky) * width + (x + kx)) * 4 + c
+                    const kernelIdx = (ky + 1) * 3 + (kx + 1)
+                    sum += tempData[idx] * kernel[kernelIdx]
+                  }
+                }
+                const idx = (y * width + x) * 4 + c
+                data[idx] = Math.max(0, Math.min(255, sum))
+              }
+            }
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        if (effectLower.includes('vignette')) {
+          console.log('Applying VIGNETTE')
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+          const centerX = canvas.width / 2
+          const centerY = canvas.height / 2
+          const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY)
+
+          for (let y = 0; y < canvas.height; y++) {
+            for (let x = 0; x < canvas.width; x++) {
+              const dx = x - centerX
+              const dy = y - centerY
+              const distance = Math.sqrt(dx * dx + dy * dy)
+              const vignette = 1 - Math.pow(distance / maxDistance, 2) * 0.7
+
+              const idx = (y * canvas.width + x) * 4
+              data[idx] = data[idx] * vignette
+              data[idx + 1] = data[idx + 1] * vignette
+              data[idx + 2] = data[idx + 2] * vignette
+            }
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        if (effectLower.includes('saturation')) {
+          console.log('Applying SATURATION')
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+          const saturation = effectLower.includes('reduce') ? 0.3 : 1.8
+
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i]
+            const g = data[i + 1]
+            const b = data[i + 2]
+
+            const gray = 0.299 * r + 0.587 * g + 0.114 * b
+
+            data[i] = Math.max(0, Math.min(255, gray + saturation * (r - gray)))
+            data[i + 1] = Math.max(0, Math.min(255, gray + saturation * (g - gray)))
+            data[i + 2] = Math.max(0, Math.min(255, gray + saturation * (b - gray)))
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        if (effectLower.includes('warm')) {
+          console.log('Applying WARM TONE')
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+
+          for (let i = 0; i < data.length; i += 4) {
+            data[i] = Math.min(255, data[i] * 1.15)     // boost red
+            data[i + 1] = Math.min(255, data[i + 1] * 1.05) // slight boost green
+            data[i + 2] = data[i + 2] * 0.9             // reduce blue
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        if (effectLower.includes('cool')) {
+          console.log('Applying COOL TONE')
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+
+          for (let i = 0; i < data.length; i += 4) {
+            data[i] = data[i] * 0.9                     // reduce red
+            data[i + 1] = Math.min(255, data[i + 1] * 1.05) // slight boost green
+            data[i + 2] = Math.min(255, data[i + 2] * 1.15) // boost blue
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        if (effectLower.includes('grain') || effectLower.includes('film')) {
+          console.log('Applying VINTAGE FILM GRAIN')
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+
+          for (let i = 0; i < data.length; i += 4) {
+            const noise = (Math.random() - 0.5) * 30
+            data[i] = Math.max(0, Math.min(255, data[i] + noise))
+            data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise))
+            data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise))
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        if (effectLower.includes('glitch') || effectLower.includes('vhs')) {
+          console.log('Applying GLITCH/VHS')
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+
+          // RGB channel shift
+          for (let i = 0; i < data.length; i += 4) {
+            if (i + 12 < data.length) {
+              data[i] = data[i + 8]       // shift red
+              data[i + 2] = data[i + 4]   // shift blue
+            }
+          }
+
+          // Add scanlines
+          for (let y = 0; y < canvas.height; y += 3) {
+            for (let x = 0; x < canvas.width; x++) {
+              const idx = (y * canvas.width + x) * 4
+              data[idx] = data[idx] * 0.8
+              data[idx + 1] = data[idx + 1] * 0.8
+              data[idx + 2] = data[idx + 2] * 0.8
+            }
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        if (effectLower.includes('sketch')) {
+          console.log('Applying SKETCH')
+          // First convert to grayscale
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+
+          for (let i = 0; i < data.length; i += 4) {
+            const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114
+            data[i] = gray
+            data[i + 1] = gray
+            data[i + 2] = gray
+          }
+
+          // Edge detection
+          const width = canvas.width
+          const height = canvas.height
+          const tempData = new Uint8ClampedArray(data)
+
+          for (let y = 1; y < height - 1; y++) {
+            for (let x = 1; x < width - 1; x++) {
+              const idx = (y * width + x) * 4
+              const gx = -tempData[((y-1) * width + (x-1)) * 4] + tempData[((y-1) * width + (x+1)) * 4]
+                       -2 * tempData[(y * width + (x-1)) * 4] + 2 * tempData[(y * width + (x+1)) * 4]
+                       -tempData[((y+1) * width + (x-1)) * 4] + tempData[((y+1) * width + (x+1)) * 4]
+
+              const gy = -tempData[((y-1) * width + (x-1)) * 4] - 2 * tempData[((y-1) * width + x) * 4] - tempData[((y-1) * width + (x+1)) * 4]
+                       +tempData[((y+1) * width + (x-1)) * 4] + 2 * tempData[((y+1) * width + x) * 4] + tempData[((y+1) * width + (x+1)) * 4]
+
+              const magnitude = 255 - Math.min(255, Math.sqrt(gx * gx + gy * gy))
+
+              data[idx] = magnitude
+              data[idx + 1] = magnitude
+              data[idx + 2] = magnitude
+            }
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
+        if (effectLower.includes('resize')) {
+          console.log('Applying RESIZE')
+          // Resize to max 1920px width while maintaining aspect ratio
+          const maxWidth = 1920
+          if (canvas.width > maxWidth) {
+            const ratio = maxWidth / canvas.width
+            const newWidth = maxWidth
+            const newHeight = canvas.height * ratio
+
+            const tempCanvas = document.createElement('canvas')
+            tempCanvas.width = newWidth
+            tempCanvas.height = newHeight
+            const tempCtx = tempCanvas.getContext('2d')
+
+            if (tempCtx) {
+              tempCtx.drawImage(canvas, 0, 0, newWidth, newHeight)
+              canvas.width = newWidth
+              canvas.height = newHeight
+              ctx.drawImage(tempCanvas, 0, 0)
+            }
+          }
+        }
+
+        if (effectLower.includes('enhance') || effectLower.includes('auto')) {
+          console.log('Applying AUTO-ENHANCE')
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+
+          // Auto-levels: stretch histogram
+          let min = 255, max = 0
+          for (let i = 0; i < data.length; i += 4) {
+            const avg = (data[i] + data[i + 1] + data[i + 2]) / 3
+            if (avg < min) min = avg
+            if (avg > max) max = avg
+          }
+
+          const range = max - min
+          if (range > 0) {
+            for (let i = 0; i < data.length; i += 4) {
+              data[i] = ((data[i] - min) / range) * 255
+              data[i + 1] = ((data[i + 1] - min) / range) * 255
+              data[i + 2] = ((data[i + 2] - min) / range) * 255
+            }
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+        }
+
         // Get the final result
         const result = canvas.toDataURL('image/png', 1.0)
         console.log(`Effect applied successfully: ${effect}`)
