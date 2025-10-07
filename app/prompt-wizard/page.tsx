@@ -319,7 +319,7 @@ export default function PromptWizard() {
                         <strong>💡 Tip:</strong> Include time of day, weather, and lighting
                       </div>
                       <div className="text-xs text-gray-500 italic">
-                        Examples: "golden hour sunset" • "misty morning fog" • "dramatic storm clouds" • "soft indoor lighting"
+                        Examples: &ldquo;golden hour sunset&rdquo; • &ldquo;misty morning fog&rdquo; • &ldquo;dramatic storm clouds&rdquo; • &ldquo;soft indoor lighting&rdquo;
                       </div>
                     </div>
                   </div>
@@ -347,7 +347,7 @@ export default function PromptWizard() {
                         <strong>💡 Tip:</strong> Mention lens type, lighting, composition, quality
                       </div>
                       <div className="text-xs text-gray-500 italic">
-                        Examples: "85mm portrait lens" • "dramatic side lighting" • "cinematic color grading" • "4K ultra-sharp"
+                        Examples: &ldquo;85mm portrait lens&rdquo; • &ldquo;dramatic side lighting&rdquo; • &ldquo;cinematic color grading&rdquo; • &ldquo;4K ultra-sharp&rdquo;
                       </div>
                     </div>
                   </div>
@@ -357,7 +357,7 @@ export default function PromptWizard() {
               {currentStep === 4 && (
                 <div>
                   <p className="text-gray-600 mb-4 text-sm">
-                    Specify what you DON'T want to see
+                    Specify what you DON&apos;T want to see
                   </p>
                   <div>
                     <label className="block text-sm font-bold mb-2 text-gray-900">
@@ -375,7 +375,7 @@ export default function PromptWizard() {
                         <strong>⚠️ Common:</strong> extra fingers, blurry, watermarks, distortions
                       </div>
                       <div className="text-xs text-gray-500 italic">
-                        Examples: "no extra limbs" • "no text overlays" • "no blurry details" • "no harsh shadows"
+                        Examples: &ldquo;no extra limbs&rdquo; • &ldquo;no text overlays&rdquo; • &ldquo;no blurry details&rdquo; • &ldquo;no harsh shadows&rdquo;
                       </div>
                     </div>
                   </div>

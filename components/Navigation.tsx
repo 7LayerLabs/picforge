@@ -19,13 +19,13 @@ export default function Navigation() {
           {/* Logo and main nav */}
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex items-center gap-3">
+              <a href="/" className="flex items-center gap-3">
                 <div className="text-4xl">🔥</div>
                 <div className="flex flex-col">
                   <span className="font-bold text-xl bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">PicForge</span>
                   <span className="text-xs text-gray-600">Forge your images into art</span>
                 </div>
-              </Link>
+              </a>
             </div>
 
             {/* Desktop Navigation */}
