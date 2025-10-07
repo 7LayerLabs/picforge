@@ -80,6 +80,54 @@ export default function Navigation() {
                 Wizard
               </Link>
 
+              <Link
+                href="/tips"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  isActive('/tips')
+                    ? 'border-blue-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Lightbulb className="w-4 h-4 mr-2" />
+                Tips
+              </Link>
+
+              <Link
+                href="/prompts"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  isActive('/prompts')
+                    ? 'border-blue-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Layers className="w-4 h-4 mr-2" />
+                Prompts
+              </Link>
+
+              <Link
+                href="/examples"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  isActive('/examples')
+                    ? 'border-green-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <ImageIcon className="w-4 h-4 mr-2" />
+                Templates
+              </Link>
+
+              <Link
+                href="/showcase"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  isActive('/showcase')
+                    ? 'border-orange-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Trophy className="w-4 h-4 mr-2" />
+                Showcase
+              </Link>
+
               {/* Games Dropdown */}
               <div
                 className="relative"
@@ -125,54 +173,6 @@ export default function Navigation() {
                   </div>
                 )}
               </div>
-
-              <Link
-                href="/prompts"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/prompts')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Layers className="w-4 h-4 mr-2" />
-                Prompts
-              </Link>
-
-              <Link
-                href="/examples"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/examples')
-                    ? 'border-green-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <ImageIcon className="w-4 h-4 mr-2" />
-                Templates
-              </Link>
-
-              <Link
-                href="/tips"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/tips')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Lightbulb className="w-4 h-4 mr-2" />
-                Tips
-              </Link>
-
-              <Link
-                href="/showcase"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/showcase')
-                    ? 'border-orange-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Trophy className="w-4 h-4 mr-2" />
-                Showcase
-              </Link>
             </div>
           </div>
 

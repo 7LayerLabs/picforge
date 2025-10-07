@@ -475,29 +475,24 @@ export default function TransformRoulette() {
     setIsProcessing(true)
 
     try {
-      // First try server-side transformation
-      const response = await fetch('/api/process-image', {
+      // Use Pollinations AI for free image generation
+      const response = await fetch('/api/generate-canvas-pollinations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          image: uploadedImage,
-          prompt: prompt,
-          style: 'enhance'
+          prompt: `${prompt}. Based on this image style and composition.`
         })
       })
 
       const data = await response.json()
       console.log('Transform response:', data) // Debug log
 
-      // Check if we got a transformed image
-      const transformedImage = data.generatedImage || data.processedImage
-
-      if (transformedImage) {
-        // Server-side transformation successful
+      if (data.image) {
+        // AI generation successful
         setResult({
           category: category,
           prompt: prompt,
-          transformedImage: transformedImage
+          transformedImage: data.image
         })
       } else {
         // Fallback to client-side transformation
@@ -667,17 +662,20 @@ export default function TransformRoulette() {
                       transform: `rotate(${wheelRotation}deg)`,
                     }}
                   >
-                    {/* Add segment lines and icons */}
+                    {/* Add segment lines and labels */}
                     {WHEEL_SEGMENTS.map((segment, i) => (
                       <div
                         key={i}
                         className={styles.wheelSegment}
                         style={{
                           transform: `rotate(${i * 45}deg)`,
-                          backgroundColor: segment.color,
                         }}
                       >
-                        <span className={styles.segmentText}>{segment.icon}</span>
+                        <span className={styles.segmentText}>
+                          {segment.icon}
+                          <br />
+                          {segment.name}
+                        </span>
                       </div>
                     ))}
                   </div>
