@@ -69,24 +69,6 @@ export default function ImageGallery({
             {items.length} {items.length === 1 ? 'version' : 'versions'} • Click to restore
           </p>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              // Switch to grid view
-              const gallery = galleryRef.current
-              if (gallery) {
-                gallery.classList.toggle('masonry-layout')
-              }
-            }}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
-            title="Toggle layout"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-            </svg>
-          </button>
-        </div>
       </div>
 
       {/* Masonry Gallery */}
