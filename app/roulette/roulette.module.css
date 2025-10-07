@@ -56,13 +56,19 @@
 .segmentText {
   position: absolute;
   color: white;
-  font-weight: bold;
-  font-size: 11px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  transform: rotate(22.5deg) translateX(60px);
-  max-width: 80px;
+  font-weight: 700;
+  font-size: 9px;
+  text-shadow:
+    1px 1px 3px rgba(0, 0, 0, 0.9),
+    -1px -1px 3px rgba(0, 0, 0, 0.9),
+    1px -1px 3px rgba(0, 0, 0, 0.9),
+    -1px 1px 3px rgba(0, 0, 0, 0.9);
+  transform: rotate(22.5deg) translateX(90px);
+  width: 70px;
   text-align: center;
-  line-height: 1.2;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: visible;
 }
 
 .pointer {

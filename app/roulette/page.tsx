@@ -377,9 +377,16 @@ const PROMPT_CATEGORIES = {
   }
 }
 
-// Wheel segments (8 categories)
+// Wheel segments (8 categories with short display names)
 const WHEEL_SEGMENTS = Object.entries(PROMPT_CATEGORIES).map(([name, data]) => ({
   name,
+  displayName: name.replace('Art Styles', 'Art')
+                  .replace('Movie Magic', 'Movies')
+                  .replace('Time Warp', 'Time')
+                  .replace('Chaos Mode', 'Chaos')
+                  .replace('Weird World', 'Weird')
+                  .replace('Nature Extreme', 'Nature')
+                  .replace('Digital Dimension', 'Digital'),
   color: data.color,
   icon: data.icon
 }))
@@ -445,9 +452,15 @@ export default function TransformRoulette() {
     // Random spin amount (3-5 full rotations plus land on a segment)
     const spins = Math.floor(Math.random() * 3) + 3
     const segmentIndex = Math.floor(Math.random() * 8)
-    const segmentAngle = segmentIndex * 45 // Each segment is 45 degrees
-    const randomWithinSegment = Math.random() * 45 // Random position within the segment
-    const totalRotation = wheelRotation + (spins * 360) + segmentAngle + randomWithinSegment
+
+    // Pointer is at TOP (12 o'clock), so we need to land segment center at top
+    // Segments start at 0 degrees (right side) and go counter-clockwise
+    // To land segment at top, rotate so segment center points up (270 degrees or -90)
+    const segmentStartAngle = segmentIndex * 45
+    const segmentCenterOffset = 22.5 // Center of 45-degree segment
+    const pointerAngle = 270 // Top of wheel
+    const targetAngle = pointerAngle - (segmentStartAngle + segmentCenterOffset)
+    const totalRotation = wheelRotation + (spins * 360) + targetAngle
 
     setWheelRotation(totalRotation)
 
@@ -475,24 +488,28 @@ export default function TransformRoulette() {
     setIsProcessing(true)
 
     try {
-      // Use Pollinations AI for free image generation
-      const response = await fetch('/api/generate-canvas-pollinations', {
+      // Try Gemini image transformation first (best quality)
+      const response = await fetch('/api/process-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: `${prompt}. Based on this image style and composition.`
+          image: uploadedImage,
+          prompt: prompt,
+          operation: 'transform' // Use transform instead of enhance
         })
       })
 
       const data = await response.json()
-      console.log('Transform response:', data) // Debug log
+      console.log('Transform response:', data)
 
-      if (data.image) {
-        // AI generation successful
+      const transformedImage = data.generatedImage || data.processedImage
+
+      if (transformedImage) {
+        // AI transformation successful
         setResult({
           category: category,
           prompt: prompt,
-          transformedImage: data.image
+          transformedImage: transformedImage
         })
       } else {
         // Fallback to client-side transformation
@@ -524,10 +541,12 @@ export default function TransformRoulette() {
         })
       } catch (clientError) {
         console.error('Client transform also failed:', clientError)
+        // Last resort: just use client transform
+        const finalTransform = await applyClientTransform(uploadedImage, prompt)
         setResult({
           category: category,
           prompt: prompt,
-          transformedImage: uploadedImage
+          transformedImage: finalTransform
         })
       }
     } finally {
@@ -672,9 +691,7 @@ export default function TransformRoulette() {
                         }}
                       >
                         <span className={styles.segmentText}>
-                          {segment.icon}
-                          <br />
-                          {segment.name}
+                          {segment.icon} {segment.displayName}
                         </span>
                       </div>
                     ))}
