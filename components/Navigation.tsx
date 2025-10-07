@@ -240,6 +240,9 @@ export default function Navigation() {
                       <Shuffle className="w-4 h-4 mr-2" />
                       Transform Roulette
                     </Link>
+                    <div className="border-t border-gray-200 mt-2 pt-2 px-4 py-2">
+                      <p className="text-xs text-gray-500 italic">More coming soon...</p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -415,6 +418,10 @@ export default function Navigation() {
                 Transform Roulette
               </div>
             </Link>
+
+            <div className="pl-6 pr-4 py-2">
+              <p className="text-xs text-gray-500 italic">More coming soon...</p>
+            </div>
 
             <Link
               href="/prompts"
