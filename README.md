@@ -1,37 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔥 PicForge
 
-## Getting Started
+**AI-Powered Image Transformation Platform**
 
-First, run the development server:
+Transform your images with 320+ AI effects across 8 categories. From zombie apocalypses to Van Gogh paintings - nothing is real anymore.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🌐 **Live Site:** [pic-forge.com](https://pic-forge.com)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎨 Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Single Image Editor** - AI-powered transformations with 210+ templates
+- **Batch Processor** - Process 100+ images simultaneously
+- **AI Canvas** - Generate images from text descriptions
+- **Transform Roulette** - Spin the wheel for random AI transformations (8 categories, 320+ prompts)
+- **Roast Mode** - Get hilariously brutal AI feedback on your photos
+- **Prompt Wizard** - Build perfect prompts step-by-step
+- **Templates Gallery** - 100+ sample transformations
+- **Tips & Tricks** - Master the art of AI image editing
 
-## Learn More
+## 🚀 Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** Next.js 15 (App Router)
+- **Styling:** Tailwind CSS
+- **AI:** Google Gemini Vision API, Pollinations AI, OpenAI DALL-E
+- **Deployment:** Vercel
+- **Analytics:** Vercel KV
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📜 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Copyright © 2025 Derek Bobola / PicForge
 
-## Deploy on Vercel
+Licensed under the MIT License - see [LICENSE](LICENSE) file for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Commercial Use:** You may use this code commercially, but you must retain the copyright notice.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Trigger rebuild
+## 🔐 Security
+
+This is a **private repository**. Unauthorized copying, distribution, or use is prohibited.
+
+## 💡 About
+
+Created by [Derek Bobola](https://github.com/7LayerLabs) - Serial entrepreneur, restaurant owner, and AI enthusiast.
+
+---
+
+**(re)Imagine. Everything. Nothing is real anymore.** 🔥
