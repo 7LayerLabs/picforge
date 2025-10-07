@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { Upload, Shuffle, Share2, Download, RefreshCw, Sparkles } from 'lucide-react'
-import BeforeAfterSlider from '@/components/BeforeAfterSlider'
 
 // Wild transformation prompts organized by category
 const ROULETTE_PROMPTS = [
@@ -162,24 +161,34 @@ export default function TransformRoulette() {
         })
       })
 
-      if (!response.ok) throw new Error('Transformation failed')
-
       const data = await response.json()
+      console.log('Transform response:', data) // Debug log
 
       // Handle the response - look for generatedImage or processedImage
-      const transformedImage = data.generatedImage || data.processedImage || uploadedImage
+      const transformedImage = data.generatedImage || data.processedImage
 
-      setResult({
-        prompt: prompt,
-        transformedImage: transformedImage
-      })
+      if (transformedImage) {
+        setResult({
+          prompt: prompt,
+          transformedImage: transformedImage
+        })
 
-      // Play success sound
-      const successAudio = new Audio('/sounds/success.mp3')
-      successAudio.volume = 0.4
-      successAudio.play().catch(() => {})
+        // Play success sound
+        const successAudio = new Audio('/sounds/success.mp3')
+        successAudio.volume = 0.4
+        successAudio.play().catch(() => {})
+      } else {
+        // No image was generated, show error
+        console.error('No transformed image in response:', data)
+        alert('Image transformation is currently unavailable. The AI processed your request but could not generate an image.')
+        setResult({
+          prompt: prompt,
+          transformedImage: uploadedImage
+        })
+      }
     } catch (error) {
       console.error('Error transforming image:', error)
+      alert('Failed to transform image. Please try again.')
       setResult({
         prompt: prompt,
         transformedImage: uploadedImage
@@ -436,11 +445,25 @@ export default function TransformRoulette() {
 
                 {result ? (
                   <div>
-                    <BeforeAfterSlider
-                      beforeImage={uploadedImage}
-                      afterImage={result.transformedImage}
-                      className="rounded-lg overflow-hidden mb-6"
-                    />
+                    {/* Before/After Display */}
+                    <div className="grid grid-cols-2 gap-2 mb-6">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 mb-1 text-center">Before</p>
+                        <img
+                          src={uploadedImage}
+                          alt="Original"
+                          className="w-full rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 mb-1 text-center">After</p>
+                        <img
+                          src={result.transformedImage}
+                          alt="Transformed"
+                          className="w-full rounded-lg"
+                        />
+                      </div>
+                    </div>
 
                     {/* Action Buttons */}
                     <div className="flex gap-3">
