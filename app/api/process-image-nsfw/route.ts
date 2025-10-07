@@ -12,7 +12,10 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('Processing NSFW image with Replicate SDXL...')
+    console.log('Prompt:', prompt)
+    console.log('Image size:', image.length)
 
+    // Replicate expects data URIs, which we already have
     // Use Replicate's SDXL img2img for unrestricted transformations
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
@@ -25,20 +28,27 @@ export async function POST(request: NextRequest) {
         input: {
           image: image,
           prompt: `${prompt}, photorealistic, detailed, high quality, professional photography`,
-          strength: 0.8, // How much to transform (0.0 = original, 1.0 = completely new)
-          num_inference_steps: 50,
+          strength: 0.75, // How much to transform (0.0 = original, 1.0 = completely new)
+          num_inference_steps: 40,
           guidance_scale: 7.5,
         }
       })
     })
 
+    console.log('Replicate response status:', response.status)
+
     if (!response.ok) {
       const error = await response.text()
       console.error('Replicate API error:', error)
-      throw new Error(`Replicate API failed: ${response.status}`)
+      console.error('Full response:', response)
+      return NextResponse.json(
+        { error: `Replicate API failed: ${response.status} - ${error}` },
+        { status: 500 }
+      )
     }
 
     const prediction = await response.json()
+    console.log('Prediction started:', prediction.id, 'Status:', prediction.status)
 
     // Poll for completion
     let result = prediction
@@ -59,14 +69,29 @@ export async function POST(request: NextRequest) {
 
       result = await pollResponse.json()
       attempts++
+
+      if (attempts % 5 === 0) {
+        console.log(`Polling attempt ${attempts}, status: ${result.status}`)
+      }
     }
 
+    console.log('Final status:', result.status)
+    console.log('Result:', JSON.stringify(result))
+
     if (result.status === 'failed') {
-      throw new Error('Image transformation failed')
+      console.error('Transformation failed. Error:', result.error)
+      return NextResponse.json(
+        { error: `Transformation failed: ${result.error || 'Unknown error'}` },
+        { status: 500 }
+      )
     }
 
     if (!result.output || !result.output[0]) {
-      throw new Error('No output image from transformation')
+      console.error('No output. Full result:', result)
+      return NextResponse.json(
+        { error: 'No output image from transformation' },
+        { status: 500 }
+      )
     }
 
     // Fetch the result image and convert to base64
