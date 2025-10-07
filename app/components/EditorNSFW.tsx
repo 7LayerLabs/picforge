@@ -56,13 +56,21 @@ export default function EditorNSFW() {
         })
       })
 
-      if (!response.ok) throw new Error('Transformation failed')
-
       const data = await response.json()
+
+      if (!response.ok) {
+        console.error('API Error:', data)
+        throw new Error(data.error || 'Transformation failed')
+      }
+
+      if (!data.result) {
+        throw new Error('No result returned from API')
+      }
+
       setTransformedImage(data.result)
     } catch (error) {
       console.error('Error transforming image:', error)
-      alert('Transformation failed. Please try again.')
+      alert(`Transformation failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setIsProcessing(false)
     }
