@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Image as ImageIcon, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle } from 'lucide-react';
+import { Image as ImageIcon, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2 } from 'lucide-react';
 import { useState } from 'react';
 // import UserMenu from './UserMenu'; // Temporarily disabled - authentication not needed yet
 
@@ -100,6 +100,18 @@ export default function Navigation() {
               >
                 <Shuffle className="w-4 h-4 mr-2" />
                 Roulette
+              </Link>
+
+              <Link
+                href="/prompt-wizard"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  isActive('/prompt-wizard')
+                    ? 'border-purple-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Wand2 className="w-4 h-4 mr-2" />
+                Wizard
               </Link>
 
               <Link
@@ -253,6 +265,21 @@ export default function Navigation() {
               <div className="flex items-center">
                 <Shuffle className="w-4 h-4 mr-2" />
                 Roulette
+              </div>
+            </Link>
+
+            <Link
+              href="/prompt-wizard"
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                isActive('/prompt-wizard')
+                  ? 'bg-purple-50 border-purple-500 text-purple-700'
+                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex items-center">
+                <Wand2 className="w-4 h-4 mr-2" />
+                Wizard
               </div>
             </Link>
 

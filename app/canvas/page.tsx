@@ -1,13 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { Wand2, Palette, ArrowLeft } from 'lucide-react'
 
 export default function CanvasPage() {
+  const searchParams = useSearchParams()
   const [prompt, setPrompt] = useState('')
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
+
+  useEffect(() => {
+    const urlPrompt = searchParams.get('prompt')
+    if (urlPrompt) {
+      setPrompt(urlPrompt)
+    }
+  }, [searchParams])
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return
