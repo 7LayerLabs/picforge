@@ -719,8 +719,8 @@ export default function TransformRoulette() {
                 {/* Selected Prompt Display */}
                 {selectedPrompt && !isSpinning && (
                   <div className={styles.promptDisplay}>
-                    <p className="text-sm text-gray-500 mb-1">Your transformation:</p>
-                    <p className="font-semibold">&quot;{selectedPrompt}&quot;</p>
+                    <p className="text-sm text-white/80 mb-1">Your transformation:</p>
+                    <p className="font-semibold text-white">&quot;{selectedPrompt}&quot;</p>
                   </div>
                 )}
 
