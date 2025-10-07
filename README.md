@@ -10,22 +10,36 @@ Transform your images with 320+ AI effects across 8 categories. From zombie apoc
 
 ## 🎨 Features
 
+### Main Editors
 - **Single Image Editor** - AI-powered transformations with 210+ templates
-- **Batch Processor** - Process 100+ images simultaneously
+- **18+ Editor** 🔞 - Unrestricted adult/graphic content editor with age verification
+- **Batch Processor** - Process 100+ images with 21 effects (sharpen, vignette, glitch/vhs, sketch, etc.)
+- **18+ Batch** 🔞 - Unrestricted batch processing for adult content
 - **AI Canvas** - Generate images from text descriptions
-- **Transform Roulette** - Spin the wheel for random AI transformations (8 categories, 320+ prompts)
-- **Roast Mode** - Get hilariously brutal AI feedback on your photos
-- **Prompt Wizard** - Build perfect prompts step-by-step
+
+### Fun & Games
+- **Transform Roulette** 🎰 - Spin the wheel for random AI transformations (8 categories, 320+ prompts)
+- **Roast Mode** 🔥 - Get hilariously brutal AI feedback on your photos (mild/spicy/nuclear)
+- **Prompt Wizard** 🪄 - Build perfect prompts step-by-step
+
+### Resources
 - **Templates Gallery** - 100+ sample transformations
+- **Prompts Library** - 211 categorized prompts
 - **Tips & Tricks** - Master the art of AI image editing
+- **Showcase** - User-submitted transformations gallery
 
 ## 🚀 Tech Stack
 
-- **Framework:** Next.js 15 (App Router)
+- **Framework:** Next.js 15 (App Router) with Turbopack
 - **Styling:** Tailwind CSS
-- **AI:** Google Gemini Vision API, Pollinations AI, OpenAI DALL-E
+- **AI Providers:**
+  - Google Gemini Vision API (primary image processing)
+  - Replicate SDXL (NSFW/unrestricted content - ~$0.023/image)
+  - Pollinations AI (free generation)
+  - OpenAI DALL-E (canvas generation)
 - **Deployment:** Vercel
 - **Analytics:** Vercel KV
+- **Image Processing:** Canvas API (client-side) + 21 effects library
 
 ## 📜 License
 

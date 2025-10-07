@@ -6,11 +6,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 PicForge is an AI-powered image transformation platform built with Next.js 15. It provides multiple modes:
 - **Single Image Editor** (/) - AI-powered image editing with 210+ templates and custom prompts
-- **Batch Processor** (/batch) - Process 100+ images simultaneously with bulk operations
+- **18+ Editor** (/editor-nsfw) - Unrestricted adult/graphic content editor with age verification
+- **Batch Processor** (/batch) - Process 100+ images simultaneously with bulk operations and 21 effects
+- **18+ Batch** (/batch-nsfw) - Unrestricted batch processing for adult content
 - **AI Canvas** (/canvas) - Generate images from text descriptions
+- **Transform Roulette** (/roulette) - Gamified random transformation with 8 categories (320 prompts)
+- **Roast Mode** (/roast) - AI roasts your photos with 3 intensity levels
+- **Prompt Wizard** (/prompt-wizard) - 5-step guided prompt builder
 - **Templates Gallery** (/examples) - 100+ sample images to try before uploading
 - **Prompts Library** (/prompts) - 211 categorized prompts
 - **Tips & Tricks** (/tips) - Best practices and Nano Banana techniques
+- **Showcase** (/showcase) - User-submitted transformations gallery
 
 ## Brand & Tone
 
@@ -54,9 +60,12 @@ npm run lint
 
 2. **API Routes** (`app/api/`)
    - `process-image/` - Main image processing with Gemini Vision API, includes rate limiting (500/day/IP)
+   - `process-image-nsfw/` - Unrestricted image processing using Replicate SDXL img2img (bypasses Gemini restrictions)
+   - `roast/` - AI photo roasting with intensity levels (mild/spicy/nuclear)
    - `generate-canvas/` - AI image generation using DALL-E
    - `generate-canvas-free/`, `generate-canvas-hf/`, `generate-canvas-pollinations/` - Alternative free generation APIs
    - `track-visitor/`, `track-share/`, `track-template/` - Analytics endpoints using Vercel KV
+   - `test-replicate/` - Test endpoint to verify Replicate API token configuration
 
 3. **Rate Limiting**
    - `app/api/process-image/rate-limit.ts` - In-memory rate limiting per IP
@@ -66,7 +75,8 @@ npm run lint
 ### AI Integrations
 
 The app uses multiple AI providers:
-- **Google Gemini** (`@google/generative-ai`) - Primary image processing and vision tasks
+- **Google Gemini** (`@google/generative-ai`) - Primary image processing and vision tasks (blocks NSFW)
+- **Replicate** - SDXL img2img for unrestricted adult/graphic content transformations (~$0.023/image)
 - **OpenAI** (`openai`) - DALL-E image generation
 - **Together AI** (`together-ai`) - Alternative AI model provider
 - **Pollinations/HuggingFace** - Free image generation alternatives
@@ -76,6 +86,7 @@ The app uses multiple AI providers:
 Required in `.env.local`:
 ```
 GEMINI_API_KEY=your_gemini_key
+REPLICATE_API_TOKEN=your_replicate_token (required for NSFW editor - costs ~$0.023/image)
 OPENAI_API_KEY=your_openai_key (optional for canvas generation)
 TOGETHER_API_KEY=your_together_key (optional)
 KV_URL=your_vercel_kv_url (for analytics)
@@ -84,15 +95,20 @@ KV_REST_API_TOKEN=your_vercel_kv_token
 KV_REST_API_READ_ONLY_TOKEN=your_vercel_kv_read_token
 ```
 
+**Note:** REPLICATE_API_TOKEN is for the NSFW editor (/editor-nsfw and /batch-nsfw). Get token at https://replicate.com/account/api-tokens. Requires paid credits (~$2 = 86 images).
+
 ### Key UI Components
 
-- `components/Navigation.tsx` - Site-wide navigation with single/batch mode toggle
+- `components/Navigation.tsx` - Site-wide navigation with Editor/Batch/Games dropdowns
 - `components/BeforeAfterSlider.tsx` - Interactive comparison slider
 - `components/ShareModal.tsx` - Social sharing functionality
 - `components/TemplateSelector.tsx` - Pre-built prompt templates
 - `app/components/BatchUploader.tsx` - Drag-and-drop for multiple images
+- `app/components/BatchProcessorNSFW.tsx` - NSFW batch processor (dark theme)
+- `app/components/EditorNSFW.tsx` - NSFW single-image editor (dark theme)
 - `app/components/EditPanel.tsx` - Batch editing controls
 - `app/components/PricingCard.tsx` - Tiered pricing display
+- `lib/imageEffects.ts` - 21 client-side image effects (sharpen, vignette, glitch, etc.)
 
 ### State Management
 
@@ -121,9 +137,23 @@ KV_REST_API_READ_ONLY_TOKEN=your_vercel_kv_read_token
    - Results displayed with download option
 
 5. **Batch Processing**:
-   - Processes multiple images with single Gemini API call when possible
-   - Optimizes for cost efficiency (99% profit margins)
-   - Smart caching for similar images
+   - Regular batch: 21 client-side effects (sharpen, vignette, saturation, warm, cool, grain, glitch/vhs, sketch, resize, enhance, etc.)
+   - NSFW batch: Uses Replicate API for unrestricted transformations
+   - Processes images sequentially with priority queue support
+   - Export presets: Web Optimized, Social Media, High Quality, Thumbnail
+
+6. **NSFW Content Handling**:
+   - Age verification gate (18+) using sessionStorage
+   - Separate routes: /editor-nsfw and /batch-nsfw
+   - Uses Replicate SDXL img2img (bypasses Gemini restrictions)
+   - Dark red/gray theme to distinguish from regular editor
+   - Legal disclaimers and warnings
+   - No content storage - ephemeral processing only
+
+7. **Gamification Features**:
+   - **Transform Roulette**: Spin-the-wheel with 8 categories (Art Styles, Movie Magic, Time Travel, Nature, Fantasy, Sci-Fi, Artistic, Abstract) - 320 total prompts
+   - **Roast Mode**: AI photo roasting with 3 intensity levels (mild, spicy, nuclear)
+   - **Prompt Wizard**: 5-step guided prompt builder
 
 ## Testing
 
