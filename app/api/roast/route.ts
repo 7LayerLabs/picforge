@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { getRandomRoast, detectImageType } from '@/lib/roastLibrary'
 
 // Initialize Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
@@ -121,22 +122,23 @@ CATEGORY: [category]`
     } catch (error) {
       console.error('Gemini API error:', error)
 
-      // Fallback roasts if API fails
-      const fallbackRoasts = [
-        "Even AI couldn't find anything interesting to say about this photo. That's the real roast.",
-        "I've seen more personality in a stock photo. At least those are trying.",
-        "This image made my circuits hurt. Thanks for that.",
-        "I'd roast this photo, but it looks like life already did.",
-        "This is what happens when you hit 'random' on character creation."
-      ]
+      // Use roast library as fallback
+      const imageType = detectImageType('general photo')
+      const roastText = getRandomRoast(intensity as 'mild' | 'spicy' | 'nuclear', imageType)
 
-      const roastText = fallbackRoasts[Math.floor(Math.random() * fallbackRoasts.length)]
+      // Select appropriate transformation based on intensity
+      const transformPrompts = {
+        mild: "add a funny cartoon filter",
+        spicy: "make it look dramatically terrible",
+        nuclear: "destroy this image with maximum chaos"
+      }
 
       return NextResponse.json({
         roastText,
-        transformPrompt: "make it interesting",
+        transformPrompt: transformPrompts[intensity as keyof typeof transformPrompts] || "make it interesting",
         transformedImage: image,
-        category: 'default'
+        category: imageType,
+        intensity
       })
     }
 
