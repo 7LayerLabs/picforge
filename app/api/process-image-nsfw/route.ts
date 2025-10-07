@@ -18,30 +18,37 @@ export async function POST(request: NextRequest) {
 
     console.log('Processing NSFW image with Together AI...')
 
-    // Use Together AI's image-to-image endpoint with SDXL
+    // Use Together AI's image generation endpoint with SDXL
     // Together AI allows adult content processing
     const response = await together.images.create({
       model: 'stabilityai/stable-diffusion-xl-base-1.0',
       prompt: `${prompt}, photorealistic, detailed, high quality, professional photography`,
-      // Together AI uses different parameters than standard APIs
       width: 1024,
       height: 1024,
       steps: 40,
       n: 1,
     })
 
-    // Together AI returns image URLs
-    const imageUrl = response.data[0]?.url
+    // Together AI returns base64 data
+    const imageData = response.data[0]
 
-    if (!imageUrl) {
-      throw new Error('No image URL returned from Together AI')
+    if (!imageData) {
+      throw new Error('No image data returned from Together AI')
     }
 
-    // Fetch the image and convert to base64
-    const imageResponse = await fetch(imageUrl)
-    const imageBuffer = await imageResponse.arrayBuffer()
-    const base64Image = Buffer.from(imageBuffer).toString('base64')
-    const dataUrl = `data:image/png;base64,${base64Image}`
+    // Check if it's base64 or URL
+    let dataUrl: string
+    if ('b64_json' in imageData && imageData.b64_json) {
+      dataUrl = `data:image/png;base64,${imageData.b64_json}`
+    } else if ('url' in imageData && imageData.url) {
+      // If URL, fetch and convert to base64
+      const imageResponse = await fetch(imageData.url)
+      const imageBuffer = await imageResponse.arrayBuffer()
+      const base64Image = Buffer.from(imageBuffer).toString('base64')
+      dataUrl = `data:image/png;base64,${base64Image}`
+    } else {
+      throw new Error('Invalid image data format from Together AI')
+    }
 
     return NextResponse.json({
       result: dataUrl,
