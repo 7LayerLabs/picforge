@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Wand2, Palette, ArrowLeft } from 'lucide-react'
 
-export default function CanvasPage() {
+function CanvasContent() {
   const searchParams = useSearchParams()
   const [prompt, setPrompt] = useState('')
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
@@ -198,5 +198,20 @@ export default function CanvasPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CanvasPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading Canvas...</p>
+        </div>
+      </div>
+    }>
+      <CanvasContent />
+    </Suspense>
   )
 }
