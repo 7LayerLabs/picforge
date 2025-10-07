@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { Upload, Flame, Share2, Download, RefreshCw, Volume2, VolumeX } from 'lucide-react'
-import Link from 'next/link'
 import BeforeAfterSlider from '@/components/BeforeAfterSlider'
 
 interface RoastResult {
@@ -434,7 +433,7 @@ export default function RoastMode() {
           <p className="text-sm text-yellow-800 text-center">
             <strong>Disclaimer:</strong> AI Roast Mode is meant for fun and entertainment.
             Roasts are randomly generated and not meant to be taken seriously.
-            If you're easily offended, maybe stick to the regular filters!
+            If you&apos;re easily offended, maybe stick to the regular filters!
           </p>
         </div>
       </div>

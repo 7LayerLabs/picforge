@@ -1,7 +1,6 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Mail, Calendar, Crown, Settings, Heart, History, ArrowLeft } from 'lucide-react'
