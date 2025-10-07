@@ -316,9 +316,9 @@ export default function RoastMode() {
                 <p className="text-gray-600 mb-4">
                   (If you dare...)
                 </p>
-                <button className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all">
+                <div className="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all">
                   Choose Photo to Roast
-                </button>
+                </div>
               </div>
             </label>
 
