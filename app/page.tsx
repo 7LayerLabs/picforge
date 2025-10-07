@@ -56,6 +56,9 @@ export default function Home() {
   // Before/After slider state
   const [showBeforeAfter, setShowBeforeAfter] = useState(false)
 
+  // Lock composition checkbox state
+  const [lockComposition, setLockComposition] = useState(false)
+
   // Removed session management - simplified interface
 
   // Convert image to supported format (JPEG/PNG) if needed
@@ -420,7 +423,13 @@ export default function Home() {
         formData.append('additionalImage', addFile)
       }
 
-      formData.append('prompt', instructions)
+      // Append lock composition instruction if checked
+      let finalPrompt = instructions
+      if (lockComposition) {
+        finalPrompt = `${instructions}. IMPORTANT: Do not alter anything else in the image - keep the composition, layout, other objects, and background exactly the same. Only apply the specific change requested above.`
+      }
+
+      formData.append('prompt', finalPrompt)
 
       const response = await fetch('/api/process-image', {
         method: 'POST',
@@ -1001,6 +1010,25 @@ export default function Home() {
                     className="w-full px-4 sm:px-5 py-3 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm transition-all duration-200 hover:shadow-lg placeholder-gray-400 dark:placeholder-gray-500 font-medium focus-smooth resize-none"
                     disabled={isSubmitting}
                   />
+
+                  {/* Lock Composition Checkbox */}
+                  <div className="mt-2 flex items-center gap-2 px-2">
+                    <input
+                      type="checkbox"
+                      id="lock-composition"
+                      checked={lockComposition}
+                      onChange={(e) => setLockComposition(e.target.checked)}
+                      className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500 focus:ring-2 cursor-pointer"
+                      disabled={isSubmitting}
+                    />
+                    <label
+                      htmlFor="lock-composition"
+                      className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer select-none flex items-center gap-1.5"
+                    >
+                      <span className="font-medium">🔒 Lock Composition</span>
+                      <span className="text-xs text-gray-500">- Keep everything else the same, only apply my edit</span>
+                    </label>
+                  </div>
                 </div>
 
                 {/* Additional Image Upload Section */}
