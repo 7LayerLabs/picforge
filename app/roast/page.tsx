@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Upload, Flame, Share2, Download, RefreshCw, Volume2, VolumeX } from 'lucide-react'
-import BeforeAfterSlider from '@/components/BeforeAfterSlider'
+// Removed BeforeAfterSlider - just show single image
 
 interface RoastResult {
   roastText: string
@@ -334,7 +334,28 @@ export default function RoastMode() {
             </div>
           </div>
         ) : (
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-2xl mx-auto">
+            {/* Roast Button at Top */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
+              <button
+                onClick={generateRoast}
+                disabled={isProcessing}
+                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold text-lg hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                    Preparing the Roast...
+                  </>
+                ) : (
+                  <>
+                    <Flame className="w-6 h-6" />
+                    ROAST THIS PHOTO
+                  </>
+                )}
+              </button>
+            </div>
+
             {/* Roast Display */}
             {roastResult && (
               <div className="bg-black text-white rounded-2xl shadow-2xl p-6 mb-6 relative overflow-hidden">
@@ -353,77 +374,51 @@ export default function RoastMode() {
               </div>
             )}
 
-            {/* Image Display */}
+            {/* Image Display - Smaller */}
             <div className="bg-white rounded-2xl shadow-xl p-6">
-              {roastResult ? (
-                <div>
-                  <BeforeAfterSlider
-                    beforeImage={uploadedImage}
-                    afterImage={roastResult.transformedImage}
-                    className="rounded-lg overflow-hidden"
-                  />
+              <div className="max-w-md mx-auto">
+                <img
+                  src={uploadedImage}
+                  alt="Photo to roast"
+                  className="w-full rounded-lg shadow-md"
+                />
+              </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-3 mt-6">
-                    <button
-                      onClick={generateRoast}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all"
-                    >
-                      <RefreshCw className="w-5 h-5" />
-                      Roast Again
-                    </button>
-                    <button
-                      onClick={shareRoast}
-                      className="px-4 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all"
-                    >
-                      <Share2 className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={downloadResult}
-                      className="px-4 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition-all"
-                    >
-                      <Download className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <img
-                    src={uploadedImage}
-                    alt="Uploaded"
-                    className="w-full rounded-lg mb-6"
-                  />
+              {/* Action Buttons */}
+              {roastResult && (
+                <div className="flex gap-3 mt-6">
                   <button
-                    onClick={generateRoast}
-                    disabled={isProcessing}
-                    className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold text-lg hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={shareRoast}
+                    className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all flex items-center justify-center gap-2"
                   >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                        Preparing the Roast...
-                      </>
-                    ) : (
-                      <>
-                        <Flame className="w-6 h-6" />
-                        ROAST THIS PHOTO
-                      </>
-                    )}
+                    <Share2 className="w-5 h-5" />
+                    Share
+                  </button>
+                  <button
+                    onClick={() => {
+                      setUploadedImage('')
+                      setRoastResult(null)
+                      setDisplayedText('')
+                    }}
+                    className="flex-1 px-4 py-3 bg-gray-500 text-white rounded-xl font-semibold hover:bg-gray-600 transition-all"
+                  >
+                    New Photo
                   </button>
                 </div>
               )}
 
-              {/* Change Photo Button */}
-              <button
-                onClick={() => {
-                  setUploadedImage('')
-                  setRoastResult(null)
-                  setDisplayedText('')
-                }}
-                className="w-full mt-3 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Upload Different Photo
-              </button>
+              {!roastResult && (
+                <button
+                  onClick={() => {
+                    setUploadedImage('')
+                    setRoastResult(null)
+                    setDisplayedText('')
+                  }}
+                  className="w-full mt-3 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  Upload Different Photo
+                </button>
+              )}
             </div>
           </div>
         )}
