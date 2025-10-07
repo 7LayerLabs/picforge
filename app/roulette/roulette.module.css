@@ -47,28 +47,30 @@
   position: absolute;
   width: 50%;
   height: 50%;
-  transform-origin: right bottom;
+  transform-origin: 100% 100%;
+  left: 50%;
+  top: 50%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  pointer-events: none;
 }
 
 .segmentText {
   position: absolute;
   color: white;
-  font-weight: 700;
-  font-size: 9px;
+  font-weight: 800;
+  font-size: 11px;
   text-shadow:
-    1px 1px 3px rgba(0, 0, 0, 0.9),
-    -1px -1px 3px rgba(0, 0, 0, 0.9),
-    1px -1px 3px rgba(0, 0, 0, 0.9),
-    -1px 1px 3px rgba(0, 0, 0, 0.9);
-  transform: rotate(22.5deg) translateX(90px);
-  width: 70px;
-  text-align: center;
-  line-height: 1.1;
+    2px 2px 4px rgba(0, 0, 0, 1),
+    -1px -1px 3px rgba(0, 0, 0, 0.8);
+  left: 55%;
+  top: 12px;
+  transform: rotate(22.5deg);
+  transform-origin: left center;
   white-space: nowrap;
-  overflow: visible;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .pointer {
