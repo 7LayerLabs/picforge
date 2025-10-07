@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Upload, Shuffle, Share2, Download, RefreshCw, Sparkles } from 'lucide-react'
+import { Upload, Shuffle, Share2, Download, RefreshCw, Sparkles, Maximize2, X } from 'lucide-react'
 import { applyClientTransform } from '@/lib/clientTransforms'
 import styles from './roulette.module.css'
 
@@ -89,6 +89,7 @@ export default function TransformRoulette() {
   const [wheelRotation, setWheelRotation] = useState(0)
   const [result, setResult] = useState<RouletteResult | null>(null)
   const [dragActive, setDragActive] = useState(false)
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null)
 
   const handleImageUpload = (file: File) => {
     const reader = new FileReader()
@@ -396,19 +397,29 @@ export default function TransformRoulette() {
                     <div className="grid grid-cols-2 gap-2 mb-6">
                       <div>
                         <p className="text-sm font-medium text-gray-600 mb-1 text-center">Before</p>
-                        <img
-                          src={uploadedImage}
-                          alt="Original"
-                          className="w-full rounded-lg shadow-md"
-                        />
+                        <div className="relative group cursor-pointer" onClick={() => setLightboxImage(uploadedImage)}>
+                          <img
+                            src={uploadedImage}
+                            alt="Original"
+                            className="w-full rounded-lg shadow-md"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg flex items-center justify-center">
+                            <Maximize2 className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        </div>
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-600 mb-1 text-center">After</p>
-                        <img
-                          src={result.transformedImage}
-                          alt="Transformed"
-                          className="w-full rounded-lg shadow-md"
-                        />
+                        <div className="relative group cursor-pointer" onClick={() => setLightboxImage(result.transformedImage)}>
+                          <img
+                            src={result.transformedImage}
+                            alt="Transformed"
+                            className="w-full rounded-lg shadow-md"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg flex items-center justify-center">
+                            <Maximize2 className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -501,6 +512,27 @@ export default function TransformRoulette() {
           </div>
         )}
       </div>
+
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4"
+          onClick={() => setLightboxImage(null)}
+        >
+          <button
+            onClick={() => setLightboxImage(null)}
+            className="absolute top-4 right-4 p-2 bg-white rounded-full hover:bg-gray-100 transition-all"
+          >
+            <X className="w-6 h-6 text-gray-800" />
+          </button>
+          <img
+            src={lightboxImage}
+            alt="Enlarged view"
+            className="max-w-full max-h-full object-contain rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   )
 }
