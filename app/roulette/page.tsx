@@ -453,13 +453,11 @@ export default function TransformRoulette() {
     const spins = Math.floor(Math.random() * 3) + 3
     const segmentIndex = Math.floor(Math.random() * 8)
 
-    // Pointer is at TOP (12 o'clock), so we need to land segment center at top
-    // Segments start at 0 degrees (right side) and go counter-clockwise
-    // To land segment at top, rotate so segment center points up (270 degrees or -90)
-    const segmentStartAngle = segmentIndex * 45
-    const segmentCenterOffset = 22.5 // Center of 45-degree segment
-    const pointerAngle = 270 // Top of wheel
-    const targetAngle = pointerAngle - (segmentStartAngle + segmentCenterOffset)
+    // Pointer is at TOP (0 degrees in our coordinate system)
+    // Segments are drawn starting from index 0 at top, going clockwise
+    // We want the wheel to spin and land with the chosen segment at the top
+    const degreesPerSegment = 360 / 8 // 45 degrees per segment
+    const targetAngle = -(segmentIndex * degreesPerSegment) // Negative because wheel rotates
     const totalRotation = wheelRotation + (spins * 360) + targetAngle
 
     setWheelRotation(totalRotation)

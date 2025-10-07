@@ -60,17 +60,20 @@
   position: absolute;
   color: white;
   font-weight: 800;
-  font-size: 11px;
+  font-size: 10px;
   text-shadow:
     2px 2px 4px rgba(0, 0, 0, 1),
-    -1px -1px 3px rgba(0, 0, 0, 0.8);
-  left: 55%;
-  top: 12px;
-  transform: rotate(22.5deg);
-  transform-origin: left center;
+    -1px -1px 3px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(0, 0, 0, 0.5);
+  left: 50%;
+  top: 20%;
+  transform: rotate(22.5deg) translateX(30px);
+  transform-origin: center;
   white-space: nowrap;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .pointer {
