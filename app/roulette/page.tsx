@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { Upload, Shuffle, Share2, Download, RefreshCw, Sparkles } from 'lucide-react'
+import { applyClientTransform } from '@/lib/clientTransforms'
+import styles from './roulette.module.css'
 
 // Wild transformation prompts organized by category
 const ROULETTE_PROMPTS = [
@@ -62,6 +64,18 @@ const ROULETTE_PROMPTS = [
   "Turn into a magical kingdom"
 ]
 
+// Wheel segments (8 colorful sections)
+const WHEEL_SEGMENTS = [
+  { color: '#8b5cf6', icon: '🎨' },
+  { color: '#ec4899', icon: '🔥' },
+  { color: '#f59e0b', icon: '✨' },
+  { color: '#10b981', icon: '🌟' },
+  { color: '#3b82f6', icon: '🎭' },
+  { color: '#ef4444', icon: '🎪' },
+  { color: '#a855f7', icon: '🚀' },
+  { color: '#f97316', icon: '🎯' }
+]
+
 interface RouletteResult {
   prompt: string
   transformedImage: string
@@ -75,13 +89,6 @@ export default function TransformRoulette() {
   const [wheelRotation, setWheelRotation] = useState(0)
   const [result, setResult] = useState<RouletteResult | null>(null)
   const [dragActive, setDragActive] = useState(false)
-  const [displayedPrompts, setDisplayedPrompts] = useState<string[]>([])
-
-  // Initialize wheel prompts (show 8 at a time)
-  useEffect(() => {
-    const shuffled = [...ROULETTE_PROMPTS].sort(() => Math.random() - 0.5)
-    setDisplayedPrompts(shuffled.slice(0, 8))
-  }, [])
 
   const handleImageUpload = (file: File) => {
     const reader = new FileReader()
@@ -151,6 +158,7 @@ export default function TransformRoulette() {
     setIsProcessing(true)
 
     try {
+      // First try server-side transformation
       const response = await fetch('/api/process-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -164,35 +172,48 @@ export default function TransformRoulette() {
       const data = await response.json()
       console.log('Transform response:', data) // Debug log
 
-      // Handle the response - look for generatedImage or processedImage
+      // Check if we got a transformed image
       const transformedImage = data.generatedImage || data.processedImage
 
       if (transformedImage) {
+        // Server-side transformation successful
         setResult({
           prompt: prompt,
           transformedImage: transformedImage
         })
-
-        // Play success sound
-        const successAudio = new Audio('/sounds/success.mp3')
-        successAudio.volume = 0.4
-        successAudio.play().catch(() => {})
       } else {
-        // No image was generated, show error
-        console.error('No transformed image in response:', data)
-        alert('Image transformation is currently unavailable. The AI processed your request but could not generate an image.')
+        // Fallback to client-side transformation
+        console.log('Using client-side transformation as fallback')
+        const clientTransformed = await applyClientTransform(uploadedImage, prompt)
+
+        setResult({
+          prompt: prompt,
+          transformedImage: clientTransformed
+        })
+      }
+
+      // Play success sound
+      const successAudio = new Audio('/sounds/success.mp3')
+      successAudio.volume = 0.4
+      successAudio.play().catch(() => {})
+
+    } catch (error) {
+      console.error('Error transforming image:', error)
+
+      // Use client-side transformation as fallback
+      try {
+        const clientTransformed = await applyClientTransform(uploadedImage, prompt)
+        setResult({
+          prompt: prompt,
+          transformedImage: clientTransformed
+        })
+      } catch (clientError) {
+        console.error('Client transform also failed:', clientError)
         setResult({
           prompt: prompt,
           transformedImage: uploadedImage
         })
       }
-    } catch (error) {
-      console.error('Error transforming image:', error)
-      alert('Failed to transform image. Please try again.')
-      setResult({
-        prompt: prompt,
-        transformedImage: uploadedImage
-      })
     } finally {
       setIsProcessing(false)
     }
@@ -221,67 +242,10 @@ export default function TransformRoulette() {
   const downloadResult = () => {
     if (!result) return
 
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    const img = new Image()
-
-    img.onload = () => {
-      canvas.width = img.width
-      canvas.height = img.height + 100
-
-      if (ctx) {
-        // Draw transformed image
-        ctx.fillStyle = '#000'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-        ctx.drawImage(img, 0, 0)
-
-        // Add prompt overlay
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
-        ctx.fillRect(0, img.height, canvas.width, 100)
-
-        ctx.fillStyle = '#fff'
-        ctx.font = 'bold 20px sans-serif'
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
-
-        // Wrap text if needed
-        const words = result.prompt.split(' ')
-        let line = ''
-        let y = img.height + 35
-        const lineHeight = 25
-
-        words.forEach(word => {
-          const testLine = line + word + ' '
-          const metrics = ctx.measureText(testLine)
-          if (metrics.width > canvas.width - 40 && line) {
-            ctx.fillText(line, canvas.width / 2, y)
-            line = word + ' '
-            y += lineHeight
-          } else {
-            line = testLine
-          }
-        })
-        ctx.fillText(line, canvas.width / 2, y)
-
-        // Add watermark
-        ctx.fillStyle = '#fbbf24'
-        ctx.font = 'bold 14px sans-serif'
-        ctx.fillText('🎲 pic-forge.com/roulette', canvas.width / 2, img.height + 80)
-
-        // Download
-        canvas.toBlob(blob => {
-          if (blob) {
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = 'transform-roulette.png'
-            a.click()
-          }
-        })
-      }
-    }
-
-    img.src = result.transformedImage
+    const link = document.createElement('a')
+    link.href = result.transformedImage
+    link.download = 'transform-roulette.png'
+    link.click()
   }
 
   return (
@@ -365,44 +329,29 @@ export default function TransformRoulette() {
                 </h2>
 
                 {/* Wheel Container */}
-                <div className="relative w-64 h-64 mx-auto mb-6">
+                <div className={styles.wheelContainer}>
                   {/* Pointer */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 z-20">
-                    <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[30px] border-t-red-500"></div>
+                  <div className={styles.pointer}>
+                    <div className={styles.pointerTriangle}></div>
                   </div>
 
                   {/* Spinning Wheel */}
                   <div
-                    className="absolute inset-0 rounded-full border-8 border-purple-500 overflow-hidden shadow-2xl"
+                    className={styles.wheel}
                     style={{
                       transform: `rotate(${wheelRotation}deg)`,
-                      transition: isSpinning ? 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none'
                     }}
                   >
-                    {/* Wheel Segments */}
-                    {[...Array(8)].map((_, i) => (
+                    {/* Add segment lines and icons */}
+                    {WHEEL_SEGMENTS.map((segment, i) => (
                       <div
                         key={i}
-                        className="absolute w-full h-full"
+                        className={styles.wheelSegment}
                         style={{
                           transform: `rotate(${i * 45}deg)`,
                         }}
                       >
-                        <div
-                          className={`absolute w-1/2 h-full origin-right ${
-                            i % 2 === 0
-                              ? 'bg-gradient-to-r from-purple-400 to-purple-500'
-                              : 'bg-gradient-to-r from-pink-400 to-pink-500'
-                          }`}
-                          style={{
-                            clipPath: 'polygon(0 0, 100% 0, 100% 100%)',
-                          }}
-                        >
-                          <div className="absolute inset-0 flex items-center justify-start pl-2 text-white text-xs font-medium"
-                               style={{ transform: `rotate(22.5deg)` }}>
-                            <Sparkles className="w-4 h-4" />
-                          </div>
-                        </div>
+                        <span className={styles.segmentText}>{segment.icon}</span>
                       </div>
                     ))}
                   </div>
@@ -411,7 +360,7 @@ export default function TransformRoulette() {
                   <button
                     onClick={spinWheel}
                     disabled={isSpinning || isProcessing}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full text-white font-bold text-lg shadow-xl hover:from-yellow-500 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                    className={styles.spinButton}
                   >
                     {isSpinning ? '...' : 'SPIN!'}
                   </button>
@@ -419,10 +368,8 @@ export default function TransformRoulette() {
 
                 {/* Selected Prompt Display */}
                 {selectedPrompt && !isSpinning && (
-                  <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-4 animate-pulse">
-                    <p className="text-center font-semibold text-purple-900">
-                      &quot;{selectedPrompt}&quot;
-                    </p>
+                  <div className={styles.promptDisplay}>
+                    <p>&quot;{selectedPrompt}&quot;</p>
                   </div>
                 )}
 
@@ -431,7 +378,7 @@ export default function TransformRoulette() {
                   <div className="mt-4 text-center">
                     <div className="inline-flex items-center gap-2 text-purple-600">
                       <div className="w-5 h-5 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
-                      <span>Transforming your image...</span>
+                      <span>Applying transformation magic...</span>
                     </div>
                   </div>
                 )}
@@ -452,7 +399,7 @@ export default function TransformRoulette() {
                         <img
                           src={uploadedImage}
                           alt="Original"
-                          className="w-full rounded-lg"
+                          className="w-full rounded-lg shadow-md"
                         />
                       </div>
                       <div>
@@ -460,7 +407,7 @@ export default function TransformRoulette() {
                         <img
                           src={result.transformedImage}
                           alt="Transformed"
-                          className="w-full rounded-lg"
+                          className="w-full rounded-lg shadow-md"
                         />
                       </div>
                     </div>
@@ -494,12 +441,12 @@ export default function TransformRoulette() {
                     <img
                       src={uploadedImage}
                       alt="Uploaded"
-                      className="w-full rounded-lg mb-6"
+                      className="w-full rounded-lg mb-6 shadow-md"
                     />
                     <button
                       onClick={spinWheel}
                       disabled={isSpinning || isProcessing}
-                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold text-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold text-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                     >
                       {isSpinning ? (
                         <>
@@ -522,6 +469,7 @@ export default function TransformRoulette() {
                     setUploadedImage('')
                     setResult(null)
                     setSelectedPrompt('')
+                    setWheelRotation(0)
                   }}
                   className="w-full mt-3 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
                 >
