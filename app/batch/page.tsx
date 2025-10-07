@@ -524,17 +524,17 @@ export default function BatchPage() {
               <div className="bg-white px-2 py-1 rounded-lg">🟩 <b>green</b></div>
               <div className="bg-white px-2 py-1 rounded-lg">🎮 <b>pixelate</b></div>
 
-              {/* NEW EFFECTS - Highlighted */}
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">✨ <b>sharpen</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">📷 <b>vignette</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">🎨 <b>saturation</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">🔥 <b>warm</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">❄️ <b>cool</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">🎞️ <b>grain</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">📺 <b>glitch</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">✏️ <b>sketch</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">📐 <b>resize</b></div>
-              <div className="bg-yellow-200 px-2 py-1 rounded-lg font-bold">⚙️ <b>enhance</b></div>
+              {/* Additional Effects */}
+              <div className="bg-white px-2 py-1 rounded-lg">✨ <b>sharpen</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">📷 <b>vignette</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🎨 <b>saturation</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🔥 <b>warm</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">❄️ <b>cool</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">🎞️ <b>grain</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">📺 <b>glitch/vhs</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">✏️ <b>sketch</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">📐 <b>resize</b></div>
+              <div className="bg-white px-2 py-1 rounded-lg">⚙️ <b>enhance</b></div>
             </div>
             <p className="text-xs mt-2 text-purple-700">💡 Combine effects: &quot;warm vignette&quot;, &quot;sepia grain&quot;, &quot;sketch sharpen&quot;</p>
           </div>
@@ -559,7 +559,7 @@ export default function BatchPage() {
                 <textarea
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Type effects: sharpen, vignette, saturation, warm, cool, grain, glitch, sketch, resize, enhance, or combine: warm vignette, sepia grain, etc."
+                  placeholder="Type effects: sharpen, vignette, saturation, warm, cool, grain, glitch/vhs, sketch, resize, enhance, or combine: warm vignette, sepia grain, etc."
                   className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none resize-none h-24"
                   disabled={isProcessing}
                 />
