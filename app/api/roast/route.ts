@@ -1,0 +1,150 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { GoogleGenerativeAI } from '@google/generative-ai'
+
+// Initialize Gemini API
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+
+// Roast templates for different photo types
+const roastTemplates = {
+  selfie: [
+    "transform into a dramatic movie poster with explosions",
+    "turn into a renaissance painting",
+    "make it look like a superhero movie poster",
+    "transform into a vintage 80s album cover"
+  ],
+  group: [
+    "turn everyone into cartoon characters",
+    "make it look like a boy band album cover",
+    "transform into an awkward family portrait painting",
+    "turn into a superhero team poster"
+  ],
+  food: [
+    "make it look burned and inedible",
+    "transform into fine dining presentation",
+    "turn into a horror movie scene",
+    "make it look like prison food"
+  ],
+  pet: [
+    "transform pet into a majestic lion",
+    "turn into a fantasy creature",
+    "make it look like a royal portrait",
+    "transform into a superhero pet"
+  ],
+  default: [
+    "make it dramatically epic with explosions",
+    "transform into abstract art",
+    "turn into a movie poster",
+    "make it surreal and weird"
+  ]
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const { image, intensity, prompt } = await request.json()
+
+    if (!image) {
+      return NextResponse.json(
+        { error: 'No image provided' },
+        { status: 400 }
+      )
+    }
+
+    // Remove data:image prefix if present
+    const base64Image = image.replace(/^data:image\/\w+;base64,/, '')
+
+    // Generate roast using Gemini Vision
+    const roastPrompt = `${prompt || "Give a witty, sarcastic 2-sentence roast of this photo. Be funny but not mean."}
+
+After the roast, categorize the image as one of: selfie, group, food, pet, or default.
+
+Format your response as:
+ROAST: [your roast here]
+CATEGORY: [category]`
+
+    try {
+      const result = await model.generateContent([
+        roastPrompt,
+        {
+          inlineData: {
+            mimeType: 'image/jpeg',
+            data: base64Image
+          }
+        }
+      ])
+
+      const response = result.response.text()
+
+      // Parse the response
+      const roastMatch = response.match(/ROAST:\s*(.+?)(?:\n|CATEGORY:|$)/s)
+      const categoryMatch = response.match(/CATEGORY:\s*(\w+)/i)
+
+      const roastText = roastMatch
+        ? roastMatch[1].trim()
+        : "This image is so unique, even AI is speechless. That's... something."
+
+      const category = categoryMatch
+        ? categoryMatch[1].toLowerCase()
+        : 'default'
+
+      // Select random transformation based on category
+      const templates = roastTemplates[category as keyof typeof roastTemplates] || roastTemplates.default
+      const transformPrompt = templates[Math.floor(Math.random() * templates.length)]
+
+      // Generate transformed image using the same process-image endpoint
+      const transformResponse = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/process-image`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          image,
+          prompt: transformPrompt,
+          style: 'enhance'
+        })
+      })
+
+      let transformedImage = image // Default to original if transformation fails
+
+      if (transformResponse.ok) {
+        const transformData = await transformResponse.json()
+        if (transformData.processedImage) {
+          transformedImage = transformData.processedImage
+        }
+      }
+
+      return NextResponse.json({
+        roastText,
+        transformPrompt,
+        transformedImage,
+        category
+      })
+
+    } catch (error) {
+      console.error('Gemini API error:', error)
+
+      // Fallback roasts if API fails
+      const fallbackRoasts = [
+        "Even AI couldn't find anything interesting to say about this photo. That's the real roast.",
+        "I've seen more personality in a stock photo. At least those are trying.",
+        "This image made my circuits hurt. Thanks for that.",
+        "I'd roast this photo, but it looks like life already did.",
+        "This is what happens when you hit 'random' on character creation."
+      ]
+
+      const roastText = fallbackRoasts[Math.floor(Math.random() * fallbackRoasts.length)]
+
+      return NextResponse.json({
+        roastText,
+        transformPrompt: "make it interesting",
+        transformedImage: image,
+        category: 'default'
+      })
+    }
+
+  } catch (error) {
+    console.error('Roast API error:', error)
+    return NextResponse.json(
+      { error: 'Failed to generate roast' },
+      { status: 500 }
+    )
+  }
+}

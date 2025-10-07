@@ -39,10 +39,28 @@ export default function ShowcaseSubmitPage() {
     }
   }, [])
 
-  // Redirect if not signed in
+  // Authentication temporarily disabled
   if (status === 'unauthenticated') {
-    router.push('/auth/signin')
-    return null
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="text-6xl mb-4">🔒</div>
+          <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
+            Coming Soon!
+          </h1>
+          <p className="text-gray-600 mb-6">
+            Showcase submissions will be available once sign-in is enabled.
+          </p>
+          <Link
+            href="/showcase"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back to Showcase
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   // Handle image upload

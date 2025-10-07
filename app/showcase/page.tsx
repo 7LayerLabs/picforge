@@ -71,8 +71,14 @@ export default function ShowcasePage() {
   const handleLike = async (showcaseId: string, e: React.MouseEvent) => {
     e.stopPropagation()
 
+    // Authentication disabled - likes not available
     if (!session) {
-      router.push('/auth/signin')
+      // Show toast notification that likes require sign-in
+      const toast = document.createElement('div')
+      toast.className = 'fixed bottom-4 right-4 bg-gray-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in'
+      toast.textContent = 'Sign-in feature coming soon!'
+      document.body.appendChild(toast)
+      setTimeout(() => toast.remove(), 2000)
       return
     }
 
