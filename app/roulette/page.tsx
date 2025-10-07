@@ -5,78 +5,387 @@ import { Upload, Shuffle, Share2, Download, RefreshCw, Sparkles, Maximize2, X } 
 import { applyClientTransform } from '@/lib/clientTransforms'
 import styles from './roulette.module.css'
 
-// Wild transformation prompts organized by category
-const ROULETTE_PROMPTS = [
-  // Apocalyptic
-  "Turn this into a zombie apocalypse movie poster",
-  "Make it look like a meteor is about to strike",
-  "Transform into a post-nuclear wasteland",
-  "Add alien invasion chaos",
-  "Make it look like the world is ending",
+// Wild transformation prompts organized by 8 categories
+const PROMPT_CATEGORIES = {
+  'Art Styles': {
+    color: '#8b5cf6',
+    icon: '🎨',
+    prompts: [
+      "Transform into Van Gogh's Starry Night style",
+      "Make it look like a Renaissance painting",
+      "Turn into 80s retro synthwave art",
+      "Transform into Japanese anime style",
+      "Make it look like Banksy street art",
+      "Convert to pop art like Andy Warhol",
+      "Transform into impressionist painting",
+      "Make it look like a Picasso cubist masterpiece",
+      "Turn into watercolor painting",
+      "Transform into oil painting with thick brush strokes",
+      "Make it look like street graffiti art",
+      "Convert to pixel art 8-bit style",
+      "Transform into minimalist line art",
+      "Make it look like art deco poster",
+      "Turn into pointillism dots style",
+      "Transform into abstract expressionism",
+      "Make it look like stained glass window",
+      "Convert to comic book art style",
+      "Transform into charcoal sketch",
+      "Make it look like Japanese ukiyo-e woodblock print",
+      "Turn into psychedelic 60s poster art",
+      "Transform into bauhaus geometric art",
+      "Make it look like art nouveau style",
+      "Convert to cyberpunk neon art",
+      "Transform into surrealist collage",
+      "Make it look like medieval illuminated manuscript",
+      "Turn into vaporwave aesthetic",
+      "Transform into Memphis design style",
+      "Make it look like Soviet propaganda poster",
+      "Convert to low poly geometric art",
+      "Transform into glitch art",
+      "Make it look like risograph print",
+      "Turn into vintage travel poster",
+      "Transform into constructivist design",
+      "Make it look like dadaist artwork",
+      "Convert to suprematist composition",
+      "Transform into futurist dynamic painting",
+      "Make it look like fauvism bold colors",
+      "Turn into expressionist dramatic style",
+      "Transform into neoclassical painting"
+    ]
+  },
+  'Movie Magic': {
+    color: '#ec4899',
+    icon: '🎬',
+    prompts: [
+      "Turn this into a Marvel superhero poster",
+      "Make it look like a horror movie scene",
+      "Transform into a romantic comedy poster",
+      "Make it look like Star Wars",
+      "Turn into a western movie scene",
+      "Transform into Wes Anderson symmetrical style",
+      "Make it look like a Tarantino film frame",
+      "Turn into James Bond movie poster",
+      "Transform into Christopher Nolan epic scene",
+      "Make it look like Disney Pixar animation",
+      "Turn into Tim Burton gothic style",
+      "Transform into Blade Runner cyberpunk",
+      "Make it look like The Matrix green tint",
+      "Turn into Mad Max post-apocalyptic",
+      "Transform into Studio Ghibli animation",
+      "Make it look like noir detective film",
+      "Turn into 80s action movie poster",
+      "Transform into Spielberg dramatic lighting",
+      "Make it look like Kubrick symmetric shot",
+      "Turn into Hitchcock suspense thriller",
+      "Transform into Lord of the Rings epic fantasy",
+      "Make it look like Inception dreamscape",
+      "Turn into Guardians of the Galaxy cosmic",
+      "Transform into John Wick action scene",
+      "Make it look like Jurassic Park adventure",
+      "Turn into Back to the Future time travel",
+      "Transform into Alien sci-fi horror",
+      "Make it look like The Godfather mafia drama",
+      "Turn into Harry Potter magical world",
+      "Transform into Pirates of the Caribbean",
+      "Make it look like Dune desert epic",
+      "Turn into Avatar alien planet",
+      "Transform into Tron digital world",
+      "Make it look like The Grand Budapest Hotel",
+      "Turn into Interstellar space odyssey",
+      "Transform into Kill Bill revenge film",
+      "Make it look like Scarface crime drama",
+      "Turn into Mission Impossible spy thriller",
+      "Transform into The Fifth Element future",
+      "Make it look like Pacific Rim kaiju battle"
+    ]
+  },
+  'Time Warp': {
+    color: '#f59e0b',
+    icon: '⏰',
+    prompts: [
+      "Make it look like ancient Egypt",
+      "Transform to the year 3000",
+      "Turn into a medieval scene",
+      "Make it look like the 1920s",
+      "Transform into prehistoric times",
+      "Make it look like ancient Rome",
+      "Turn into Victorian era 1890s",
+      "Transform into ancient Greece",
+      "Make it look like Renaissance Italy",
+      "Turn into Wild West 1880s",
+      "Transform into Roaring Twenties jazz age",
+      "Make it look like ancient China dynasty",
+      "Turn into 1950s retro Americana",
+      "Transform into 1960s hippie era",
+      "Make it look like 1970s disco fever",
+      "Turn into 1980s neon excess",
+      "Transform into 1990s grunge aesthetic",
+      "Make it look like ancient Mayan civilization",
+      "Turn into Industrial Revolution era",
+      "Transform into Stone Age caveman times",
+      "Make it look like Viking age",
+      "Turn into Samurai feudal Japan",
+      "Transform into Art Deco 1930s",
+      "Make it look like post-war 1940s",
+      "Turn into Edwardian era elegance",
+      "Transform into ancient Babylon",
+      "Make it look like colonial America",
+      "Turn into Belle Époque Paris",
+      "Transform into Aztec empire",
+      "Make it look like year 2500 utopia",
+      "Turn into year 3500 cyberpunk dystopia",
+      "Transform into ancient Persia",
+      "Make it look like Prohibition era",
+      "Turn into ancient India",
+      "Transform into Byzantine Empire",
+      "Make it look like Ice Age 10000 BC",
+      "Turn into far future year 5000",
+      "Transform into ancient Celtic tribes",
+      "Make it look like Ottoman Empire",
+      "Turn into distant future year 10000"
+    ]
+  },
+  'Fantasy': {
+    color: '#10b981',
+    icon: '🧙',
+    prompts: [
+      "Add dragons flying overhead",
+      "Make everyone look like wizards",
+      "Transform into a fairy tale",
+      "Add unicorns and rainbows",
+      "Turn into a magical kingdom",
+      "Transform into enchanted forest",
+      "Make it look like elven realm",
+      "Add phoenix birds and magic",
+      "Turn into wizard's tower",
+      "Transform into mermaid underwater kingdom",
+      "Make it look like dwarf mountain fortress",
+      "Add magical floating islands",
+      "Turn into vampire gothic castle",
+      "Transform into werewolf moonlit scene",
+      "Make it look like fairy garden",
+      "Add centaurs and mythology",
+      "Turn into angel heavenly realm",
+      "Transform into demon underworld",
+      "Make it look like pegasus sky palace",
+      "Add griffin and mythical beasts",
+      "Turn into sorcerer's lair",
+      "Transform into crystal cave magic",
+      "Make it look like goblin market",
+      "Add leprechaun rainbow world",
+      "Turn into genie Arabian nights",
+      "Transform into yeti mountain peak",
+      "Make it look like kraken ocean depths",
+      "Add basilisk mythical creature",
+      "Turn into chimera beast realm",
+      "Transform into sphinx desert mystery",
+      "Make it look like hydra swamp",
+      "Add cyclops giant world",
+      "Turn into minotaur labyrinth",
+      "Transform into satyr forest party",
+      "Make it look like nymph waterfall",
+      "Add valkyrie warrior heaven",
+      "Turn into troll bridge scene",
+      "Transform into banshee haunted moor",
+      "Make it look like kitsune fox spirit",
+      "Add thunderbird sky spirit"
+    ]
+  },
+  'Chaos Mode': {
+    color: '#3b82f6',
+    icon: '💥',
+    prompts: [
+      "Turn this into a zombie apocalypse",
+      "Make it look like a meteor is striking",
+      "Transform into a post-nuclear wasteland",
+      "Add alien invasion chaos",
+      "Make it look like the world is ending",
+      "Add tornado destroying everything",
+      "Make it look like volcanic eruption",
+      "Turn into earthquake destruction",
+      "Transform into tsunami wave",
+      "Add lightning storm chaos",
+      "Make it look like blizzard whiteout",
+      "Turn into sandstorm desert",
+      "Transform into wildfire spreading",
+      "Add giant monster attack",
+      "Make it look like robot uprising",
+      "Turn into kaiju city destruction",
+      "Transform into demon portal opening",
+      "Add ghost invasion haunting",
+      "Make it look like vampire outbreak",
+      "Turn into werewolf rampage",
+      "Transform into plague doctor apocalypse",
+      "Add mutant creature chaos",
+      "Make it look like cyborg takeover",
+      "Turn into clone army invasion",
+      "Transform into void consuming reality",
+      "Add cosmic horror from space",
+      "Make it look like dimensions colliding",
+      "Turn into reality glitching out",
+      "Transform into time breaking down",
+      "Add gravity reversing chaos",
+      "Make it look like plants taking over",
+      "Turn into insect swarm attack",
+      "Transform into ocean flooding world",
+      "Add ice age freezing everything",
+      "Make it look like sun dying out",
+      "Turn into black hole approaching",
+      "Transform into supernova explosion",
+      "Add asteroid belt impact",
+      "Make it look like gamma ray burst",
+      "Turn into antimatter annihilation"
+    ]
+  },
+  'Weird World': {
+    color: '#ef4444',
+    icon: '🌀',
+    prompts: [
+      "Make it look like it's melting",
+      "Turn everything into candy",
+      "Make it look underwater but in the sky",
+      "Transform into Salvador Dali painting",
+      "Make everything float in zero gravity",
+      "Replace everyone with rubber ducks",
+      "Make everything neon and glowing",
+      "Turn into a pizza universe",
+      "Transform everyone into robots",
+      "Make it rain tacos",
+      "Turn everything into balloons",
+      "Make it look like jello world",
+      "Transform into clockwork mechanism",
+      "Make everything made of cheese",
+      "Turn into bubble universe",
+      "Transform into origami folded world",
+      "Make everything look like toys",
+      "Turn into mushroom forest",
+      "Transform into cloud city",
+      "Make everything crystalline",
+      "Turn into mirror dimension",
+      "Transform into upside down world",
+      "Make everything fuzzy and soft",
+      "Turn into static TV noise",
+      "Transform into honeycomb pattern",
+      "Make everything look holographic",
+      "Turn into kaleidoscope vision",
+      "Transform into thermal camera view",
+      "Make everything look like X-ray",
+      "Turn into infrared camera view",
+      "Transform into ASCII art text",
+      "Make everything look like claymation",
+      "Turn into stop motion animation",
+      "Transform into pencil sketch world",
+      "Make everything look transparent",
+      "Turn into wireframe 3D model",
+      "Transform into mosaic tiles",
+      "Make everything look like LEGO",
+      "Turn into cross-stitch pattern",
+      "Transform into magnetic field lines"
+    ]
+  },
+  'Nature Extreme': {
+    color: '#a855f7',
+    icon: '🌪️',
+    prompts: [
+      "Add dinosaurs roaming around",
+      "Turn into an enchanted forest",
+      "Make it look like it's on fire",
+      "Transform into an ice age scene",
+      "Add northern lights aurora",
+      "Make it look like bioluminescent jungle",
+      "Turn into coral reef underwater",
+      "Transform into desert oasis",
+      "Add redwood giant trees",
+      "Make it look like cherry blossom spring",
+      "Turn into autumn fall colors",
+      "Transform into snowy winter wonderland",
+      "Add tropical rainforest",
+      "Make it look like savanna plains",
+      "Turn into bamboo forest",
+      "Transform into tundra frozen land",
+      "Add volcano lava flow",
+      "Make it look like geyser field",
+      "Turn into hot spring paradise",
+      "Transform into cave stalactites",
+      "Add waterfall cascade",
+      "Make it look like river rapids",
+      "Turn into ocean waves",
+      "Transform into beach paradise",
+      "Add mountain peaks summit",
+      "Make it look like canyon depths",
+      "Turn into valley meadow",
+      "Transform into wetland marsh",
+      "Add lake reflection mirror",
+      "Make it look like fjord cliffs",
+      "Turn into glacier ice field",
+      "Transform into quicksand desert",
+      "Add meteor crater impact",
+      "Make it look like geothermal springs",
+      "Turn into salt flats expanse",
+      "Transform into cloud forest mist",
+      "Add mangrove swamp roots",
+      "Make it look like kelp forest",
+      "Turn into tide pool ecosystem",
+      "Transform into prehistoric jungle"
+    ]
+  },
+  'Digital Dimension': {
+    color: '#f97316',
+    icon: '🤖',
+    prompts: [
+      "Transform into Matrix digital rain",
+      "Make it look like Tron grid world",
+      "Turn into cyberpunk neon city",
+      "Transform into virtual reality",
+      "Add hologram projection effect",
+      "Make it look like computer circuit board",
+      "Turn into video game 3D render",
+      "Transform into augmented reality overlay",
+      "Add laser light show effects",
+      "Make it look like blockchain network",
+      "Turn into data visualization",
+      "Transform into neural network nodes",
+      "Add quantum computing glow",
+      "Make it look like AI generated dream",
+      "Turn into metaverse digital space",
+      "Transform into crypto art NFT style",
+      "Add scanning laser grid",
+      "Make it look like digital glitch",
+      "Turn into retro computer graphics",
+      "Transform into wireframe hologram",
+      "Add binary code matrix",
+      "Make it look like satellite view",
+      "Turn into thermal imaging",
+      "Transform into night vision green",
+      "Add sonar echo location",
+      "Make it look like radar display",
+      "Turn into oscilloscope wave",
+      "Transform into EKG heart monitor",
+      "Add spectrogram frequency view",
+      "Make it look like CAD blueprint",
+      "Turn into 3D printer rendering",
+      "Transform into VHS tape glitch",
+      "Add CRT screen scanlines",
+      "Make it look like old film grain",
+      "Turn into photocopy distortion",
+      "Transform into fax machine quality",
+      "Add dial-up modem aesthetic",
+      "Make it look like corrupted file",
+      "Turn into loading screen buffer",
+      "Transform into pixel sorting algorithm"
+    ]
+  }
+}
 
-  // Surreal
-  "Make it look like it's melting",
-  "Turn everything into candy",
-  "Make it look underwater but in the sky",
-  "Transform into a Salvador Dali painting",
-  "Make everything float in zero gravity",
-
-  // Movie Styles
-  "Turn this into a Marvel superhero poster",
-  "Make it look like a horror movie scene",
-  "Transform into a romantic comedy poster",
-  "Make it look like Star Wars",
-  "Turn into a western movie scene",
-
-  // Art Styles
-  "Transform into Van Gogh's Starry Night style",
-  "Make it look like a Renaissance painting",
-  "Turn into 80s retro synthwave art",
-  "Transform into Japanese anime style",
-  "Make it look like Banksy street art",
-
-  // Weird & Wacky
-  "Replace everyone with rubber ducks",
-  "Make everything neon and glowing",
-  "Turn into a pizza universe",
-  "Transform everyone into robots",
-  "Make it rain tacos",
-
-  // Nature Gone Wild
-  "Add a tornado in the background",
-  "Make it look like it's on fire (but safe)",
-  "Transform into an ice age scene",
-  "Add dinosaurs roaming around",
-  "Turn into an enchanted forest",
-
-  // Time Travel
-  "Make it look like ancient Egypt",
-  "Transform to the year 3000",
-  "Turn into a medieval scene",
-  "Make it look like the 1920s",
-  "Transform into prehistoric times",
-
-  // Fantasy
-  "Add dragons flying overhead",
-  "Make everyone look like wizards",
-  "Transform into a fairy tale",
-  "Add unicorns and rainbows",
-  "Turn into a magical kingdom"
-]
-
-// Wheel segments (8 colorful sections)
-const WHEEL_SEGMENTS = [
-  { color: '#8b5cf6', icon: '🎨' },
-  { color: '#ec4899', icon: '🔥' },
-  { color: '#f59e0b', icon: '✨' },
-  { color: '#10b981', icon: '🌟' },
-  { color: '#3b82f6', icon: '🎭' },
-  { color: '#ef4444', icon: '🎪' },
-  { color: '#a855f7', icon: '🚀' },
-  { color: '#f97316', icon: '🎯' }
-]
+// Wheel segments (8 categories)
+const WHEEL_SEGMENTS = Object.entries(PROMPT_CATEGORIES).map(([name, data]) => ({
+  name,
+  color: data.color,
+  icon: data.icon
+}))
 
 interface RouletteResult {
+  category: string
   prompt: string
   transformedImage: string
 }
@@ -86,6 +395,7 @@ export default function TransformRoulette() {
   const [isSpinning, setIsSpinning] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [selectedPrompt, setSelectedPrompt] = useState<string>('')
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [wheelRotation, setWheelRotation] = useState(0)
   const [result, setResult] = useState<RouletteResult | null>(null)
   const [dragActive, setDragActive] = useState(false)
@@ -132,16 +442,22 @@ export default function TransformRoulette() {
     audio.volume = 0.3
     audio.play().catch(() => {})
 
-    // Random spin amount (3-5 full rotations plus random position)
+    // Random spin amount (3-5 full rotations plus land on a segment)
     const spins = Math.floor(Math.random() * 3) + 3
-    const randomAngle = Math.random() * 360
-    const totalRotation = wheelRotation + (spins * 360) + randomAngle
+    const segmentIndex = Math.floor(Math.random() * 8)
+    const segmentAngle = segmentIndex * 45 // Each segment is 45 degrees
+    const randomWithinSegment = Math.random() * 45 // Random position within the segment
+    const totalRotation = wheelRotation + (spins * 360) + segmentAngle + randomWithinSegment
 
     setWheelRotation(totalRotation)
 
-    // Select random prompt after spin completes
+    // Select random prompt from the landed category after spin completes
     setTimeout(() => {
-      const randomPrompt = ROULETTE_PROMPTS[Math.floor(Math.random() * ROULETTE_PROMPTS.length)]
+      const categoryName = WHEEL_SEGMENTS[segmentIndex].name
+      const categoryData = PROMPT_CATEGORIES[categoryName as keyof typeof PROMPT_CATEGORIES]
+      const randomPrompt = categoryData.prompts[Math.floor(Math.random() * categoryData.prompts.length)]
+
+      setSelectedCategory(categoryName)
       setSelectedPrompt(randomPrompt)
       setIsSpinning(false)
 
@@ -151,11 +467,11 @@ export default function TransformRoulette() {
       dingAudio.play().catch(() => {})
 
       // Auto-transform after selection
-      transformImage(randomPrompt)
+      transformImage(categoryName, randomPrompt)
     }, 3000)
   }
 
-  const transformImage = async (prompt: string) => {
+  const transformImage = async (category: string, prompt: string) => {
     setIsProcessing(true)
 
     try {
@@ -179,6 +495,7 @@ export default function TransformRoulette() {
       if (transformedImage) {
         // Server-side transformation successful
         setResult({
+          category: category,
           prompt: prompt,
           transformedImage: transformedImage
         })
@@ -188,6 +505,7 @@ export default function TransformRoulette() {
         const clientTransformed = await applyClientTransform(uploadedImage, prompt)
 
         setResult({
+          category: category,
           prompt: prompt,
           transformedImage: clientTransformed
         })
@@ -205,12 +523,14 @@ export default function TransformRoulette() {
       try {
         const clientTransformed = await applyClientTransform(uploadedImage, prompt)
         setResult({
+          category: category,
           prompt: prompt,
           transformedImage: clientTransformed
         })
       } catch (clientError) {
         console.error('Client transform also failed:', clientError)
         setResult({
+          category: category,
           prompt: prompt,
           transformedImage: uploadedImage
         })
@@ -223,7 +543,7 @@ export default function TransformRoulette() {
   const shareResult = async () => {
     if (!result) return
 
-    const shareText = `🎲 Transform Roulette gave me:\n\n"${result.prompt}"\n\nTry your luck at pic-forge.com/roulette`
+    const shareText = `🎲 Transform Roulette landed on ${result.category}!\n\n"${result.prompt}"\n\nTry your luck at pic-forge.com/roulette`
 
     if (navigator.share) {
       try {
@@ -305,19 +625,23 @@ export default function TransformRoulette() {
               </div>
             </label>
 
-            {/* Preview of possible transformations */}
+            {/* Preview of categories */}
             <div className="mt-8 pt-8 border-t border-gray-200">
-              <p className="text-sm text-gray-500 text-center mb-4">Possible transformations include:</p>
+              <p className="text-sm text-gray-500 text-center mb-4">Spin to land on a category:</p>
               <div className="flex flex-wrap gap-2 justify-center">
-                {ROULETTE_PROMPTS.slice(0, 6).map((prompt, i) => (
-                  <div key={i} className="px-3 py-1 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-xs">
-                    {prompt.substring(0, 30)}...
+                {WHEEL_SEGMENTS.map((segment, i) => (
+                  <div
+                    key={i}
+                    className="px-3 py-1 text-white rounded-full text-xs font-semibold"
+                    style={{ backgroundColor: segment.color }}
+                  >
+                    {segment.icon} {segment.name}
                   </div>
                 ))}
-                <div className="px-3 py-1 bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-700 rounded-full text-xs font-semibold">
-                  + {ROULETTE_PROMPTS.length - 6} more!
-                </div>
               </div>
+              <p className="text-xs text-gray-400 text-center mt-3">
+                320+ unique transformations across 8 wild categories!
+              </p>
             </div>
           </div>
         ) : (
@@ -326,7 +650,7 @@ export default function TransformRoulette() {
               {/* Spinning Wheel */}
               <div className="bg-white rounded-2xl shadow-xl p-8">
                 <h2 className="text-xl font-bold text-center mb-6">
-                  {isSpinning ? 'Spinning...' : selectedPrompt ? 'Your Fate:' : 'Spin the Wheel!'}
+                  {isSpinning ? 'Spinning...' : selectedCategory ? `${PROMPT_CATEGORIES[selectedCategory as keyof typeof PROMPT_CATEGORIES].icon} ${selectedCategory}` : 'Spin the Wheel!'}
                 </h2>
 
                 {/* Wheel Container */}
@@ -350,6 +674,7 @@ export default function TransformRoulette() {
                         className={styles.wheelSegment}
                         style={{
                           transform: `rotate(${i * 45}deg)`,
+                          backgroundColor: segment.color,
                         }}
                       >
                         <span className={styles.segmentText}>{segment.icon}</span>
@@ -370,7 +695,8 @@ export default function TransformRoulette() {
                 {/* Selected Prompt Display */}
                 {selectedPrompt && !isSpinning && (
                   <div className={styles.promptDisplay}>
-                    <p>&quot;{selectedPrompt}&quot;</p>
+                    <p className="text-sm text-gray-500 mb-1">Your transformation:</p>
+                    <p className="font-semibold">&quot;{selectedPrompt}&quot;</p>
                   </div>
                 )}
 
