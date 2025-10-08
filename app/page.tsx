@@ -68,12 +68,12 @@ export default function Home() {
       if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg') {
         const reader = new FileReader()
         reader.onloadend = () => resolve(reader.result as string)
-        reader.onerror = reject
+        reader.onerror = () => reject(new Error(`Failed to read ${file.type} file. Please try again.`))
         reader.readAsDataURL(file)
         return
       }
 
-      // For unsupported formats (AVIF, WEBP, etc.), convert to PNG
+      // For unsupported formats (HEIC, AVIF, WEBP, etc.), convert to PNG
       const reader = new FileReader()
       reader.onloadend = () => {
         const img = new Image()
@@ -83,16 +83,22 @@ export default function Home() {
           canvas.height = img.height
           const ctx = canvas.getContext('2d')
           if (!ctx) {
-            reject(new Error('Failed to get canvas context'))
+            reject(new Error('Browser canvas not available. Try a different browser.'))
             return
           }
           ctx.drawImage(img, 0, 0)
           resolve(canvas.toDataURL('image/png'))
         }
-        img.onerror = () => reject(new Error('Failed to load image'))
+        img.onerror = () => {
+          if (file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+            reject(new Error('HEIC/HEIF format detected. Please convert to JPEG/PNG first or use a different image.'))
+          } else {
+            reject(new Error(`Unable to process ${file.name}. Try JPEG or PNG format.`))
+          }
+        }
         img.src = reader.result as string
       }
-      reader.onerror = reject
+      reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`))
       reader.readAsDataURL(file)
     })
   }
@@ -313,7 +319,8 @@ export default function Home() {
         }])
       } catch (error) {
         console.error('Error converting uploaded image:', error)
-        alert('Failed to process image. Please try a different format.')
+        const errorMessage = error instanceof Error ? error.message : 'Failed to process image. Please try a different format.'
+        alert(errorMessage)
       }
     }
   }
@@ -327,7 +334,8 @@ export default function Home() {
         setAdditionalImagePreview(imageData)
       } catch (error) {
         console.error('Error converting additional image:', error)
-        alert('Failed to process additional image. Please try a different format.')
+        const errorMessage = error instanceof Error ? error.message : 'Failed to process additional image. Please try a different format.'
+        alert(errorMessage)
       }
     }
   }
@@ -814,7 +822,7 @@ export default function Home() {
             <div className="flex flex-col items-center space-y-3">
               <input
                 type="file"
-                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                accept="image/*"
                 onChange={handleImageUpload}
                 style={{ display: 'none' }}
                 id="image-upload-input"
@@ -1031,9 +1039,11 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Additional Image Upload Section */}
-                <div
-                  className={`border-2 border-dashed rounded-xl p-2 sm:p-3 transition-all duration-300 ${
+                {/* Fusion Dock - Additional Image Upload Section */}
+                <div className="relative">
+                  <span className="absolute -top-2 left-4 bg-white px-2 text-xs font-bold text-orange-600 z-10">🔥 FUSION DOCK</span>
+                  <div
+                    className={`border-2 border-dashed rounded-xl p-2 sm:p-3 transition-all duration-300 ${
                     isDraggingAdditional
                       ? 'border-orange-500 bg-orange-50'
                       : 'border-gray-300 hover:border-gray-400'
@@ -1046,7 +1056,7 @@ export default function Home() {
                     <div className="text-center">
                       <input
                         type="file"
-                        accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                        accept="image/*"
                         onChange={handleAdditionalImageUpload}
                         style={{ display: 'none' }}
                         id="additional-image-upload"
@@ -1066,10 +1076,10 @@ export default function Home() {
                         >
                           Browse Files
                         </button>
-                        <p className="text-[8px] text-gray-500 mt-0.5">Blend or combine</p>
+                        <p className="text-[8px] text-gray-500 mt-0.5">Blend, combine, or fuse images</p>
                       </div>
-                    </div>
-                  ) : (
+                      </div>
+                    ) : (
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="relative w-20 h-20 rounded overflow-hidden bg-gray-50">
@@ -1096,6 +1106,7 @@ export default function Home() {
                       </button>
                     </div>
                   )}
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-2 items-center">
