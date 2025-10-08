@@ -42,7 +42,7 @@ export default function Navigation() {
               >
                 <button
                   className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium h-full ${
-                    isActive('/') || isActive('/editor-nsfw')
+                    isActive('/')
                       ? 'border-blue-500 text-gray-900'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
@@ -65,17 +65,6 @@ export default function Navigation() {
                       <ImageIcon className="w-4 h-4 mr-2" />
                       Regular Editor
                     </Link>
-                    <Link
-                      href="/editor-nsfw"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/editor-nsfw')
-                          ? 'bg-red-50 text-red-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Shield className="w-4 h-4 mr-2" />
-                      18+ Editor
-                    </Link>
                   </div>
                 )}
               </div>
@@ -88,7 +77,7 @@ export default function Navigation() {
               >
                 <button
                   className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium h-full ${
-                    isActive('/batch') || isActive('/batch-nsfw')
+                    isActive('/batch')
                       ? 'border-purple-500 text-gray-900'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
@@ -110,17 +99,6 @@ export default function Navigation() {
                     >
                       <Layers className="w-4 h-4 mr-2" />
                       Regular Batch
-                    </Link>
-                    <Link
-                      href="/batch-nsfw"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/batch-nsfw')
-                          ? 'bg-red-50 text-red-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Shield className="w-4 h-4 mr-2" />
-                      18+ Batch
                     </Link>
                   </div>
                 )}
@@ -298,21 +276,6 @@ export default function Navigation() {
               </div>
             </Link>
 
-            <Link
-              href="/editor-nsfw"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
-                isActive('/editor-nsfw')
-                  ? 'bg-red-50 border-red-500 text-red-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <div className="flex items-center">
-                <Shield className="w-4 h-4 mr-2" />
-                18+ Editor
-              </div>
-            </Link>
-
             {/* Batch Section */}
             <div className="px-3 py-2">
               <div className="flex items-center text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
@@ -333,21 +296,6 @@ export default function Navigation() {
               <div className="flex items-center">
                 <Layers className="w-4 h-4 mr-2" />
                 Regular Batch
-              </div>
-            </Link>
-
-            <Link
-              href="/batch-nsfw"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
-                isActive('/batch-nsfw')
-                  ? 'bg-red-50 border-red-500 text-red-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <div className="flex items-center">
-                <Shield className="w-4 h-4 mr-2" />
-                18+ Batch
               </div>
             </Link>
 
