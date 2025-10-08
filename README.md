@@ -11,22 +11,28 @@ Transform your images with 320+ AI effects across 8 categories. From zombie apoc
 ## 🎨 Features
 
 ### Main Editors
-- **Single Image Editor** - AI-powered transformations with 210+ templates
-- **18+ Editor** 🔞 - Unrestricted adult/graphic content editor with age verification
+- **Single Image Editor** - AI-powered transformations with 210+ templates and Lock Composition feature
+- **18+ Editor** 🔞 - COMING SOON (Q1 2026) - Dramatic ribbon design page
 - **Batch Processor** - Process 100+ images with 21 effects (sharpen, vignette, glitch/vhs, sketch, etc.)
-- **18+ Batch** 🔞 - Unrestricted batch processing for adult content
+- **18+ Batch** 🔞 - Unrestricted batch processing for adult content (access restricted)
 - **AI Canvas** - Generate images from text descriptions
 
 ### Fun & Games
-- **Transform Roulette** 🎰 - Spin the wheel for random AI transformations (8 categories, 320+ prompts)
+- **Transform Roulette** 🎰 - Spin the wheel for random AI transformations (8 categories, 320+ prompts including Banksy)
 - **Roast Mode** 🔥 - Get hilariously brutal AI feedback on your photos (mild/spicy/nuclear)
 - **Prompt Wizard** 🪄 - Build perfect prompts step-by-step
 
 ### Resources
-- **Templates Gallery** - 100+ sample transformations
-- **Prompts Library** - 211 categorized prompts
+- **Templates Gallery** - 110+ sample transformations
+- **Prompts Library** - 211 categorized prompts (includes Banksy street art)
 - **Tips & Tricks** - Master the art of AI image editing
 - **Showcase** - User-submitted transformations gallery
+
+### UX Features
+- **Lock Composition** - Preserve image composition during iterative edits
+- **Creative Journey** - Masonry gallery of all edit versions
+- **Download All** - Bulk export to ZIP
+- **Before/After Slider** - Interactive comparison view
 
 ## 🚀 Tech Stack
 

@@ -5,16 +5,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 PicForge is an AI-powered image transformation platform built with Next.js 15. It provides multiple modes:
-- **Single Image Editor** (/) - AI-powered image editing with 210+ templates and custom prompts
-- **18+ Editor** (/editor-nsfw) - Unrestricted adult/graphic content editor with age verification
+- **Single Image Editor** (/) - AI-powered image editing with 210+ templates, custom prompts, and Lock Composition feature
+- **18+ Editor** (/editor-nsfw) - COMING SOON page with ribbon design (Q1 2026 launch)
 - **Batch Processor** (/batch) - Process 100+ images simultaneously with bulk operations and 21 effects
-- **18+ Batch** (/batch-nsfw) - Unrestricted batch processing for adult content
+- **18+ Batch** (/batch-nsfw) - Unrestricted batch processing for adult content (access restricted)
 - **AI Canvas** (/canvas) - Generate images from text descriptions
-- **Transform Roulette** (/roulette) - Gamified random transformation with 8 categories (320 prompts)
+- **Transform Roulette** (/roulette) - Gamified random transformation with 8 categories (320 prompts including Banksy art)
 - **Roast Mode** (/roast) - AI roasts your photos with 3 intensity levels
 - **Prompt Wizard** (/prompt-wizard) - 5-step guided prompt builder
-- **Templates Gallery** (/examples) - 100+ sample images to try before uploading
-- **Prompts Library** (/prompts) - 211 categorized prompts
+- **Templates Gallery** (/examples) - 110+ sample images to try before uploading
+- **Prompts Library** (/prompts) - 211 categorized prompts (includes Banksy street art)
 - **Tips & Tricks** (/tips) - Best practices and Nano Banana techniques
 - **Showcase** (/showcase) - User-submitted transformations gallery
 
@@ -143,17 +143,26 @@ KV_REST_API_READ_ONLY_TOKEN=your_vercel_kv_read_token
    - Export presets: Web Optimized, Social Media, High Quality, Thumbnail
 
 6. **NSFW Content Handling**:
-   - Age verification gate (18+) using sessionStorage
-   - Separate routes: /editor-nsfw and /batch-nsfw
-   - Uses Replicate SDXL img2img (bypasses Gemini restrictions)
-   - Dark red/gray theme to distinguish from regular editor
-   - Legal disclaimers and warnings
+   - **18+ Editor**: Currently showing "Coming Soon" page with ribbon design (Q1 2026 expected launch)
+   - **18+ Batch**: Active but access restricted from editor-nsfw page
+   - Separate routes: /editor-nsfw (coming soon page) and /batch-nsfw (active)
+   - Uses Replicate SDXL img2img (bypasses Gemini restrictions) - ~$0.023/image
+   - Dark red/gray/orange gradient theme to distinguish from regular editor
+   - Legal disclaimers and age verification warnings
    - No content storage - ephemeral processing only
+   - User responsibility clearly stated in Terms of Service
 
 7. **Gamification Features**:
-   - **Transform Roulette**: Spin-the-wheel with 8 categories (Art Styles, Movie Magic, Time Travel, Nature, Fantasy, Sci-Fi, Artistic, Abstract) - 320 total prompts
+   - **Transform Roulette**: Spin-the-wheel with 8 categories (Art Styles, Movie Magic, Time Travel, Nature, Fantasy, Sci-Fi, Artistic, Abstract) - 320 total prompts including Banksy art
    - **Roast Mode**: AI photo roasting with 3 intensity levels (mild, spicy, nuclear)
    - **Prompt Wizard**: 5-step guided prompt builder
+
+8. **User Experience Features**:
+   - **Lock Composition**: Checkbox on main editor to preserve composition during iterative edits (auto-appends "don't change anything else" to prompts)
+   - **Creative Journey**: Image gallery with masonry layout showing edit history
+   - **Download All**: Bulk download all versions as ZIP file
+   - **Before/After Slider**: Interactive comparison view
+   - **Share Modal**: Social sharing functionality
 
 ## Testing
 
