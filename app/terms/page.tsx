@@ -149,24 +149,53 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">10. Limitation of Liability</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">10. User Responsibility for Generated Content</h2>
+              <p className="text-gray-600 mb-4">
+                You are solely responsible for all content you create, generate, or transform using PicForge. By using our Service, you acknowledge and agree that:
+              </p>
+              <ul className="list-disc pl-6 text-gray-600 mb-4">
+                <li>You are fully accountable for the content you create and how you use it</li>
+                <li>You will not hold PicForge responsible for any content created using our platform</li>
+                <li>You assume all legal, ethical, and social responsibility for AI-generated images</li>
+                <li>You will ensure all generated content complies with applicable laws and regulations</li>
+                <li>You will not use generated content to deceive, defraud, harass, or harm others</li>
+                <li>You are responsible for obtaining necessary rights, permissions, or licenses for source images</li>
+                <li>You will clearly disclose when content is AI-generated where appropriate or required by law</li>
+              </ul>
+              <p className="text-gray-600 mb-4 font-semibold">
+                PicForge is a tool. Like any tool, it can be used responsibly or irresponsibly. You, the user,
+                bear full responsibility for how you choose to use it and what you create with it.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">11. Limitation of Liability</h2>
               <p className="text-gray-600 mb-4">
                 To the maximum extent permitted by law, PicForge and its operators shall not be liable for
                 any indirect, incidental, special, consequential, or punitive damages resulting from your use
-                or inability to use the Service.
+                or inability to use the Service, including but not limited to:
               </p>
+              <ul className="list-disc pl-6 text-gray-600 mb-4">
+                <li>Any content created or generated using PicForge</li>
+                <li>How you choose to use, distribute, or display generated content</li>
+                <li>Any legal consequences arising from your use of generated content</li>
+                <li>Claims by third parties related to content you create</li>
+                <li>Misuse or unintended results from AI-generated transformations</li>
+              </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">11. Indemnification</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">12. Indemnification</h2>
               <p className="text-gray-600 mb-4">
                 You agree to indemnify and hold harmless PicForge and its operators from any claims, damages,
-                or expenses arising from your use of the Service or violation of these Terms.
+                or expenses arising from your use of the Service, content you create, or violation of these Terms.
+                This includes any claims related to content you generate using PicForge, regardless of how that
+                content is used or distributed.
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">12. Modifications to Service and Terms</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">13. Modifications to Service and Terms</h2>
               <p className="text-gray-600 mb-4">
                 We reserve the right to:
               </p>
@@ -181,7 +210,7 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">13. Termination</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">14. Termination</h2>
               <p className="text-gray-600 mb-4">
                 We may terminate or suspend your access to PicForge immediately, without prior notice, for:
               </p>
@@ -194,7 +223,7 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">14. Governing Law</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">15. Governing Law</h2>
               <p className="text-gray-600 mb-4">
                 These Terms shall be governed by and construed in accordance with the laws of the United States
                 and the State of California, without regard to conflict of law provisions.
@@ -202,7 +231,7 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">15. Contact Information</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">16. Contact Information</h2>
               <p className="text-gray-600 mb-4">
                 If you have any questions about these Terms of Service, please contact us at:
               </p>
@@ -213,7 +242,7 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">16. Severability</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">17. Severability</h2>
               <p className="text-gray-600 mb-4">
                 If any provision of these Terms is found to be unenforceable or invalid, that provision shall
                 be limited or eliminated to the minimum extent necessary, and the remaining provisions shall
