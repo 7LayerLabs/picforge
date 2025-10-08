@@ -55,7 +55,7 @@ export default function EditorNSFWPage() {
           <div className="bg-gradient-to-br from-gray-900/80 to-black/60 rounded-2xl p-8 mb-8 border border-red-500/20 backdrop-blur-sm">
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <span className="text-red-400">🔥</span>
-              What's Coming
+              What&apos;s Coming
             </h2>
             <ul className="space-y-3 text-gray-300">
               <li className="flex items-start gap-3">
