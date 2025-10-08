@@ -1,121 +1,135 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { AlertTriangle, Shield, ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Clock, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
-// Import the actual editor component
-import EditorNSFW from '@/app/components/EditorNSFW'
-
 export default function EditorNSFWPage() {
-  const [isVerified, setIsVerified] = useState(false)
-  const [isChecking, setIsChecking] = useState(true)
-  const router = useRouter()
-
-  useEffect(() => {
-    // Check if user has verified before (session storage)
-    const verified = sessionStorage.getItem('nsfw_verified')
-    if (verified === 'true') {
-      setIsVerified(true)
-    }
-    setIsChecking(false)
-  }, [])
-
-  const handleVerify = (confirm: boolean) => {
-    if (confirm) {
-      sessionStorage.setItem('nsfw_verified', 'true')
-      setIsVerified(true)
-    } else {
-      router.push('/')
-    }
-  }
-
-  if (isChecking) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-        <div className="animate-pulse text-white">Loading...</div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
-    )
-  }
 
-  if (!isVerified) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-2xl p-8 border-2 border-red-500">
-          {/* Warning Icon */}
-          <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center">
-              <AlertTriangle className="w-12 h-12 text-red-500" />
+      {/* Main content */}
+      <div className="relative z-10 max-w-2xl w-full">
+        {/* Coming Soon Ribbon - Top Right Corner */}
+        <div className="absolute -top-8 -right-8 z-20">
+          <div className="relative">
+            {/* Ribbon */}
+            <div className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 text-white font-bold px-12 py-3 shadow-2xl transform rotate-45 translate-x-8 translate-y-8">
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 animate-pulse" />
+                <span className="text-lg tracking-wider">COMING SOON</span>
+              </div>
+            </div>
+            {/* Ribbon shadow */}
+            <div className="absolute inset-0 bg-black/20 blur-md transform rotate-45 translate-x-8 translate-y-9 -z-10" />
+          </div>
+        </div>
+
+        {/* Card */}
+        <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl p-12 border-2 border-red-500/30 relative overflow-hidden">
+          {/* Glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-orange-500/5 pointer-events-none" />
+
+          {/* Shield Icon */}
+          <div className="relative flex justify-center mb-8">
+            <div className="w-24 h-24 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-full flex items-center justify-center border-2 border-red-500/30 shadow-lg">
+              <Sparkles className="w-12 h-12 text-red-400 animate-pulse" />
             </div>
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl font-bold text-white text-center mb-4">
-            Adult Content Warning
-          </h1>
-
-          {/* Warning Text */}
-          <div className="bg-gray-900 rounded-xl p-4 mb-6 space-y-3 text-sm text-gray-300">
-            <p className="flex items-start gap-2">
-              <Shield className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-              <span>This editor allows unrestricted adult, graphic, and gory content</span>
-            </p>
-            <p className="flex items-start gap-2">
-              <Shield className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-              <span>You must be 18 years or older to proceed</span>
-            </p>
-            <p className="flex items-start gap-2">
-              <Shield className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-              <span>All content must comply with local laws and regulations</span>
-            </p>
-            <p className="flex items-start gap-2">
-              <Shield className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-              <span>No illegal content will be processed or stored</span>
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-red-400 mb-3 animate-gradient">
+              18+ Unrestricted Editor
+            </h1>
+            <p className="text-xl text-gray-400 font-semibold">
+              Opening Soon
             </p>
           </div>
 
-          {/* Age Verification */}
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-6">
-            <p className="text-white font-semibold text-center mb-2">
-              Are you 18 years or older?
+          {/* Description */}
+          <div className="bg-gradient-to-br from-gray-900/80 to-black/60 rounded-2xl p-8 mb-8 border border-red-500/20 backdrop-blur-sm">
+            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <span className="text-red-400">🔥</span>
+              What's Coming
+            </h2>
+            <ul className="space-y-3 text-gray-300">
+              <li className="flex items-start gap-3">
+                <span className="text-red-400 text-xl flex-shrink-0">•</span>
+                <span><strong className="text-white">Unrestricted AI Transformations</strong> - No content filters, no limitations</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-red-400 text-xl flex-shrink-0">•</span>
+                <span><strong className="text-white">Adult Content Support</strong> - Safe, private processing for mature themes</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-red-400 text-xl flex-shrink-0">•</span>
+                <span><strong className="text-white">Horror & Gore Effects</strong> - Dark, intense, and uncensored transformations</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-red-400 text-xl flex-shrink-0">•</span>
+                <span><strong className="text-white">Complete Privacy</strong> - No storage, no tracking, ephemeral processing</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal Notice */}
+          <div className="bg-red-500/10 border-2 border-red-500/30 rounded-xl p-6 mb-8">
+            <p className="text-sm text-gray-300 text-center leading-relaxed">
+              <span className="font-bold text-red-400">18+ Only.</span> This editor will require age verification and is intended for legal adult use only.
+              All content must comply with applicable laws. Users are solely responsible for content created.
             </p>
-            <p className="text-xs text-gray-400 text-center">
-              By clicking YES, you confirm you are of legal age in your jurisdiction
-            </p>
+          </div>
+
+          {/* Notify Me Section */}
+          <div className="text-center mb-8">
+            <div className="inline-block bg-gradient-to-r from-gray-800 to-gray-900 px-6 py-4 rounded-xl border border-gray-700">
+              <p className="text-gray-400 text-sm mb-2">Want early access?</p>
+              <p className="text-white font-semibold">Follow us on social media for launch updates</p>
+            </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => handleVerify(false)}
-              className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-xl transition-all"
-            >
-              NO - Exit
-            </button>
-            <button
-              onClick={() => handleVerify(true)}
-              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all"
-            >
-              YES - Enter
-            </button>
-          </div>
-
-          {/* Footer */}
-          <div className="mt-6 pt-6 border-t border-gray-700">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/"
-              className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl transition-all shadow-lg border border-gray-600"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-5 h-5" />
               Return to Regular Editor
+            </Link>
+            <Link
+              href="/batch-nsfw"
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-semibold rounded-xl transition-all shadow-lg"
+            >
+              <Sparkles className="w-5 h-5" />
+              Try 18+ Batch Instead
             </Link>
           </div>
         </div>
-      </div>
-    )
-  }
 
-  // User is verified, show the editor
-  return <EditorNSFW />
+        {/* Footer note */}
+        <div className="text-center mt-6">
+          <p className="text-gray-500 text-sm">
+            Currently in development • Expected launch: Q1 2026
+          </p>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes gradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+      `}</style>
+    </div>
+  )
 }
