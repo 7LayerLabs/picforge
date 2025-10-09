@@ -14,7 +14,7 @@ module.exports = {
       },
       fontFamily: {
         heading: ['var(--font-heading)'],
-        body: ['BBH Sans Bogle', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'system-ui', 'sans-serif'],
+        body: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Helvetica Neue', 'sans-serif'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
