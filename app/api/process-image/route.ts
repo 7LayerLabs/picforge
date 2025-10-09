@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { checkRateLimit } from './rate-limit'
+import { checkRateLimit } from '@/lib/rateLimiter'
+import { getVIPCodeFromCookie } from '@/lib/vipCodes'
 
 export async function POST(request: NextRequest) {
   try {
@@ -66,23 +67,31 @@ export async function POST(request: NextRequest) {
                request.headers.get('x-real-ip') ||
                'unknown'
 
-    // Check rate limit - 500 images per day per IP
-    const rateLimitResult = checkRateLimit(ip, 500, 24 * 60 * 60 * 1000)
+    // Check for VIP code first
+    const cookieHeader = request.headers.get('cookie')
+    const vipCode = getVIPCodeFromCookie(cookieHeader)
 
-    if (!rateLimitResult.allowed) {
-      const resetDate = new Date(rateLimitResult.resetTime)
-      const hoursUntilReset = Math.ceil((rateLimitResult.resetTime - Date.now()) / (1000 * 60 * 60))
+    // Skip rate limit for VIP users
+    if (!vipCode) {
+      // Check rate limit - 20 images per day per IP
+      const rateLimitResult = await checkRateLimit(ip)
+
+      if (!rateLimitResult.success) {
+      const hoursUntilReset = Math.ceil((rateLimitResult.reset.getTime() - Date.now()) / (1000 * 60 * 60))
       return NextResponse.json(
         {
-          error: `You've reached today's limit of 500 free images. Try again in ${hoursUntilReset} hours!`,
+          error: `You've reached today's limit of 20 free images. Try again in ${hoursUntilReset} hours! (Pro version coming soon - unlimited for $8/month)`,
           remaining: 0,
-          resetTime: resetDate.toISOString()
+          resetTime: rateLimitResult.reset.toISOString()
         },
         { status: 429 }
       )
-    }
+      }
 
-    console.log(`Rate limit check - IP: ${ip}, Remaining: ${rateLimitResult.remaining}`)
+      console.log(`Rate limit check - IP: ${ip}, Remaining: ${rateLimitResult.remaining}`)
+    } else {
+      console.log(`VIP user detected with code: ${vipCode} - Skipping rate limit`)
+    }
 
     // Use the app's API key
     const apiKey = process.env.GEMINI_API_KEY
