@@ -16,9 +16,6 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
 
-  // Enable SWC minification
-  swcMinify: true,
-
   // Optimize CSS
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

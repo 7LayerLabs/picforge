@@ -97,7 +97,9 @@ export class ImageCache {
     // Implement LRU cache
     if (this.cache.size >= this.maxSize && !this.cache.has(key)) {
       const firstKey = this.cache.keys().next().value
-      this.cache.delete(firstKey)
+      if (firstKey !== undefined) {
+        this.cache.delete(firstKey)
+      }
     }
 
     // Delete and re-add to move to end (most recently used)
