@@ -24,12 +24,12 @@ export default function Navigation() {
               <Link
                 href="/"
                 className="flex items-center gap-3"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   // Clear all localStorage to reset state
-                  localStorage.removeItem('imageHistory');
-                  localStorage.removeItem('currentImage');
-                  localStorage.removeItem('originalImage');
-                  localStorage.removeItem('selectedSampleImage');
+                  localStorage.clear();
+                  // Force full page reload to reset all state
+                  window.location.href = '/';
                 }}
               >
                 <div className="text-4xl">🔥</div>
