@@ -13,7 +13,9 @@ export default function EditorNSFWPage() {
 }
 
 // Coming Soon version - kept for reference
-export function ComingSoonVersion() {
+// Uncomment this function if you want to use the coming soon page instead
+/*
+function ComingSoonVersion() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-gray-900 flex items-center justify-center p-4 py-20 relative overflow-hidden">
       {/* Animated background elements */}
@@ -136,3 +138,4 @@ export function ComingSoonVersion() {
     </div>
   )
 }
+*/
