@@ -26,7 +26,7 @@ export default function Navigation() {
               <Link href="/" className="flex items-center gap-3">
                 <div className="text-4xl">🔥</div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-xl bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">PicForge</span>
+                  <span className="font-bold text-xl bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">PicForge</span>
                   <span className="text-xs text-gray-600">Forge your images into art</span>
                 </div>
               </Link>
@@ -168,7 +168,7 @@ export default function Navigation() {
                 href="/showcase"
                 className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                   isActive('/showcase')
-                    ? 'border-orange-500 text-gray-900'
+                    ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -200,7 +200,7 @@ export default function Navigation() {
                       href="/roast"
                       className={`flex items-center px-4 py-2 text-sm ${
                         isActive('/roast')
-                          ? 'bg-red-50 text-red-700 font-medium'
+                          ? 'bg-amber-50 text-red-700 font-medium'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -341,7 +341,7 @@ export default function Navigation() {
               href="/roast"
               className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
                 isActive('/roast')
-                  ? 'bg-red-50 border-red-500 text-red-700'
+                  ? 'bg-amber-50 border-coral-500 text-red-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -420,7 +420,7 @@ export default function Navigation() {
               href="/showcase"
               className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
                 isActive('/showcase')
-                  ? 'bg-orange-50 border-orange-500 text-orange-700'
+                  ? 'bg-teal-50 border-teal-500 text-orange-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
               }`}
               onClick={() => setMobileMenuOpen(false)}

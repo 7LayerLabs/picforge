@@ -116,7 +116,7 @@ export default function EditorNSFW() {
               Back to Regular Editor
             </Link>
 
-            <div className="flex items-center gap-2 px-3 py-1 bg-red-500/20 border border-red-500/30 rounded-lg">
+            <div className="flex items-center gap-2 px-3 py-1 bg-coral-500/20 border border-coral-500/30 rounded-lg">
               <Shield className="w-4 h-4 text-red-400" />
               <span className="text-sm text-red-400 font-medium">18+ Unrestricted Mode</span>
             </div>
@@ -130,7 +130,7 @@ export default function EditorNSFW() {
           {/* Title */}
           <div className="text-center mb-8">
             <h1 className="font-heading text-5xl font-bold text-white mb-4">
-              <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-red-400 to-teal-400 bg-clip-text text-transparent">
                 Unrestricted Editor
               </span>
             </h1>
@@ -143,7 +143,7 @@ export default function EditorNSFW() {
             /* Upload Area */
             <div
               className={`max-w-2xl mx-auto bg-gray-800 border-2 ${
-                dragActive ? 'border-red-500 bg-red-500/10' : 'border-gray-700'
+                dragActive ? 'border-coral-500 bg-coral-500/10' : 'border-gray-700'
               } border-dashed rounded-2xl shadow-xl p-12`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
@@ -168,7 +168,7 @@ export default function EditorNSFW() {
                   <p className="text-gray-400 mb-4">
                     Drop image here or click to browse
                   </p>
-                  <div className="inline-block px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-orange-700 transition-all">
+                  <div className="inline-block px-6 py-3 bg-gradient-to-r from-coral-600 to-teal-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-orange-700 transition-all">
                     Choose Image
                   </div>
                 </div>
@@ -185,7 +185,7 @@ export default function EditorNSFW() {
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   placeholder="Example: add dramatic lighting, horror movie aesthetic, enhance details, add gore effects..."
-                  className="w-full p-4 border-2 border-gray-700 bg-gray-900 text-white rounded-xl focus:border-red-500 focus:outline-none resize-none h-32"
+                  className="w-full p-4 border-2 border-gray-700 bg-gray-900 text-white rounded-xl focus:border-coral-500 focus:outline-none resize-none h-32"
                   disabled={isProcessing}
                 />
 
@@ -211,7 +211,7 @@ export default function EditorNSFW() {
                   <button
                     onClick={transformImage}
                     disabled={isProcessing || !prompt.trim()}
-                    className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-orange-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-coral-600 to-teal-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-orange-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isProcessing ? (
                       <>

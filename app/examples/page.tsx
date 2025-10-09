@@ -74,12 +74,12 @@ export default function ExamplesPage() {
   }, [sampleImages])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-orange-600 font-medium hover:bg-orange-50 rounded-xl transition-all duration-200"
+          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-teal-600 font-medium hover:bg-teal-50 rounded-xl transition-all duration-200"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Editor
@@ -89,7 +89,7 @@ export default function ExamplesPage() {
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-100 text-orange-700 rounded-full mb-4">
             <Zap className="w-4 h-4" />
             <span className="text-sm font-medium">Try Before You Upload</span>
           </div>
@@ -105,7 +105,7 @@ export default function ExamplesPage() {
         <div className="max-w-7xl mx-auto">
           {loading ? (
             <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto mb-4"></div>
               <p className="text-gray-600">Loading sample images...</p>
             </div>
           ) : displayImages.length > 0 ? (
@@ -148,7 +148,7 @@ export default function ExamplesPage() {
               <p className="text-gray-600 mb-4">No sample images found</p>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-pink-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-pink-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-pink-600 transition-all"
               >
                 <Upload className="w-4 h-4" />
                 Upload Your Own Image
@@ -162,7 +162,7 @@ export default function ExamplesPage() {
           <div className="text-center mt-16">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-pink-600 transition-all duration-200 hover:scale-105 shadow-xl"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-500 to-pink-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-pink-600 transition-all duration-200 hover:scale-105 shadow-xl"
             >
               <Upload className="w-5 h-5" />
               Upload Your Own Image

@@ -735,7 +735,7 @@ export default function Home() {
                 e.stopPropagation()
                 setZoomLevel(prev => Math.max(prev - 0.25, 0.5))
               }}
-              className="hover:text-orange-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
+              className="hover:text-teal-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
             >
               −
             </button>
@@ -745,7 +745,7 @@ export default function Home() {
                 e.stopPropagation()
                 setZoomLevel(prev => Math.min(prev + 0.25, 5))
               }}
-              className="hover:text-orange-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
+              className="hover:text-teal-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
             >
               +
             </button>
@@ -755,7 +755,7 @@ export default function Home() {
                 setZoomLevel(1)
                 setZoomPosition({ x: 0, y: 0 })
               }}
-              className="ml-2 text-sm hover:text-orange-400 transition-all hover:scale-105 border-l pl-3 border-gray-600 active:scale-95"
+              className="ml-2 text-sm hover:text-teal-400 transition-all hover:scale-105 border-l pl-3 border-gray-600 active:scale-95"
             >
               Reset
             </button>
@@ -774,25 +774,25 @@ export default function Home() {
             {/* Hero Section */}
             <div className="text-center mb-16 px-4 pt-12">
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
-                <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 bg-gradient-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent mr-1">(re)</span><span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Imagine. Everything.</span>
+                <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900 dark:text-white">Imagine<span className="text-4xl md:text-5xl lg:text-6xl">.</span> Everything<span className="text-4xl md:text-5xl lg:text-6xl">.</span></span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed font-bold">
-                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-orange-600">210+ templates</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
+                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">210+ templates</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
               </p>
 
               {/* Feature Highlights */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
-                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 border border-gray-100 dark:border-gray-700">
                   <div className="text-4xl mb-3">⚡</div>
                   <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Instant Results</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Transform images in seconds with powerful AI</p>
                 </div>
-                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 border border-gray-100 dark:border-gray-700">
                   <div className="text-4xl mb-3">🎨</div>
                   <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">210+ Templates</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Professional prompts for every use case</p>
                 </div>
-                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 border border-gray-100 dark:border-gray-700">
                   <div className="text-4xl mb-3">🔒</div>
                   <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Private & Secure</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Your images stay on your device</p>
@@ -860,34 +860,29 @@ export default function Home() {
                     }
                   }
                 }}
-                className={`w-full max-w-3xl mx-auto px-12 py-20 rounded-3xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02] shadow-2xl relative overflow-hidden ${
+                className={`w-full max-w-2xl mx-auto px-8 py-12 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
                   isDraggingMain
-                    ? 'bg-orange-50 dark:bg-orange-900/20 border-4 border-dashed border-orange-500 scale-[1.03]'
-                    : 'bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 hover:from-orange-600 hover:via-red-600 hover:to-pink-600 border-4 border-transparent'
+                    ? 'bg-teal-50 dark:bg-teal-900/20 border-teal-500 scale-[1.01]'
+                    : 'bg-gray-900 dark:bg-gray-800 hover:bg-black dark:hover:bg-gray-900 border-gray-800 dark:border-gray-700'
                 }`}
               >
-                <div className="flex flex-col items-center gap-6">
-                  <div className={`p-6 rounded-full ${isDraggingMain ? 'bg-orange-100' : 'bg-white/20'}`}>
-                    <svg className={`w-16 h-16 ${isDraggingMain ? 'text-orange-600' : 'text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                  </div>
-                  <div className={`text-center ${isDraggingMain ? 'text-orange-600' : 'text-white'}`}>
-                    <div className="font-heading text-2xl md:text-3xl font-bold mb-2">
-                      {isDraggingMain ? 'Drop Your Image Here' : 'Upload Your Image'}
+                <div className="flex flex-col items-center gap-4">
+                  <svg className={`w-12 h-12 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-white'}`}>
+                    <div className="text-lg font-semibold mb-1">
+                      {isDraggingMain ? 'Drop to upload' : 'Upload your image'}
                     </div>
-                    <div className="text-lg opacity-90">
-                      {isDraggingMain ? 'Release to start transforming' : 'Drag & drop, click to browse, or paste (Ctrl+V)'}
-                    </div>
-                    <div className="mt-4 text-sm opacity-75">
-                      Supports PNG, JPG, GIF, WEBP, AVIF
+                    <div className="text-sm opacity-75">
+                      {isDraggingMain ? 'Release to start' : 'Drag & drop, click, or paste (Ctrl+V)'}
                     </div>
                   </div>
                 </div>
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-3 flex items-center gap-2 justify-center animate-fade-in delay-300">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700 hover-grow">
-                  <svg className="w-3.5 h-3.5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 7zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.061l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.061l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.061 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z"/>
                   </svg>
                   <span className="font-semibold text-xs">Pro Tip</span>
@@ -896,12 +891,16 @@ export default function Home() {
               </p>
             </div>
 
-            {/* AI Canvas CTA */}
-            <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white text-center max-w-md mx-auto">
-              <p className="text-sm font-semibold mb-2">Need a Custom Background?</p>
-              <Link href="/canvas" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-purple-600 font-medium rounded-md hover:bg-gray-100 transition-all text-xs">
-                <Sparkles className="w-3.5 h-3.5" />
-                Try AI Canvas
+            {/* AI Canvas Link */}
+            <div className="text-center mt-6">
+              <Link href="/canvas" className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors group">
+                Need to generate a background?
+                <span className="inline-flex items-center gap-1 font-medium text-teal-600 group-hover:gap-2 transition-all">
+                  Try Canvas
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
               </Link>
             </div>
           </div>
@@ -942,7 +941,7 @@ export default function Home() {
                         onClick={() => setShowBeforeAfter(false)}
                         className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg ${
                           !showBeforeAfter
-                            ? 'bg-orange-600 text-white'
+                            ? 'bg-teal-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                         }`}
                       >
@@ -1008,14 +1007,14 @@ export default function Home() {
                 <form onSubmit={handleSubmit} className="w-full space-y-2 sm:space-y-3">
                 <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Editing Instructions {instructions && <span className="text-orange-500">✏️ (Edit & customize below)</span>}
+                    Editing Instructions {instructions && <span className="text-teal-500">✏️ (Edit & customize below)</span>}
                   </label>
                   <textarea
                     value={instructions}
                     onChange={(e) => setInstructions(e.target.value)}
                     placeholder="Enter editing instructions or select a template above..."
                     rows={3}
-                    className="w-full px-4 sm:px-5 py-3 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm transition-all duration-200 hover:shadow-lg placeholder-gray-400 dark:placeholder-gray-500 font-medium focus-smooth resize-none"
+                    className="w-full px-4 sm:px-5 py-3 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm transition-all duration-200 hover:shadow-lg placeholder-gray-400 dark:placeholder-gray-500 font-medium focus-smooth resize-none"
                     disabled={isSubmitting}
                   />
 
@@ -1026,7 +1025,7 @@ export default function Home() {
                       id="lock-composition"
                       checked={lockComposition}
                       onChange={(e) => setLockComposition(e.target.checked)}
-                      className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500 focus:ring-2 cursor-pointer"
+                      className="w-4 h-4 text-teal-500 border-gray-300 rounded focus:ring-teal-500 focus:ring-2 cursor-pointer"
                       disabled={isSubmitting}
                     />
                     <label
@@ -1041,11 +1040,11 @@ export default function Home() {
 
                 {/* Fusion Dock - Additional Image Upload Section */}
                 <div className="relative">
-                  <span className="absolute -top-2 left-4 bg-white px-2 text-xs font-bold text-orange-600 z-10">🔥 FUSION DOCK</span>
+                  <span className="absolute -top-2 left-4 bg-white px-2 text-xs font-bold text-teal-600 z-10">🔥 FUSION DOCK</span>
                   <div
                     className={`border-2 border-dashed rounded-xl p-2 sm:p-3 transition-all duration-300 ${
                     isDraggingAdditional
-                      ? 'border-orange-500 bg-orange-50'
+                      ? 'border-teal-500 bg-teal-50'
                       : 'border-gray-300 hover:border-gray-400'
                   }`}
                   onDragOver={handleAdditionalDragOver}
@@ -1098,7 +1097,7 @@ export default function Home() {
                       <button
                         type="button"
                         onClick={removeAdditionalImage}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-2 text-coral-600 hover:bg-amber-50 rounded-lg transition-colors"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1145,7 +1144,7 @@ export default function Home() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => setShowShareModal(true)}
-                        className="px-3 py-1.5 text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                        className="px-3 py-1.5 text-xs bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-lg hover:from-teal-600 hover:to-coral-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                         title="Share Image"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

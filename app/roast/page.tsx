@@ -223,14 +223,14 @@ export default function RoastMode() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-teal-50 to-yellow-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="font-heading text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <Flame className="w-8 h-8 text-orange-500" />
+                <Flame className="w-8 h-8 text-teal-500" />
                 AI Roast Mode
               </h1>
               <p className="text-gray-600 mt-2">
@@ -264,7 +264,7 @@ export default function RoastMode() {
                 onClick={() => setRoastIntensity('spicy')}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   roastIntensity === 'spicy'
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-teal-500 text-white'
                     : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
@@ -274,7 +274,7 @@ export default function RoastMode() {
                 onClick={() => setRoastIntensity('nuclear')}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   roastIntensity === 'nuclear'
-                    ? 'bg-red-500 text-white'
+                    ? 'bg-coral-500 text-white'
                     : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
@@ -291,7 +291,7 @@ export default function RoastMode() {
           /* Upload Area */
           <div
             className={`max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-12 ${
-              dragActive ? 'border-4 border-orange-500' : 'border-2 border-dashed border-gray-300'
+              dragActive ? 'border-4 border-teal-500' : 'border-2 border-dashed border-gray-300'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -316,7 +316,7 @@ export default function RoastMode() {
                 <p className="text-gray-600 mb-4">
                   (If you dare...)
                 </p>
-                <div className="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all">
+                <div className="inline-block px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all">
                   Choose Photo to Roast
                 </div>
               </div>
@@ -340,7 +340,7 @@ export default function RoastMode() {
               <button
                 onClick={generateRoast}
                 disabled={isProcessing}
-                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold text-lg hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-bold text-lg hover:from-teal-600 hover:to-coral-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isProcessing ? (
                   <>
@@ -359,10 +359,10 @@ export default function RoastMode() {
             {/* Roast Display */}
             {roastResult && (
               <div className="bg-black text-white rounded-2xl shadow-2xl p-6 mb-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 animate-pulse" />
+                <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-coral-500/20 animate-pulse" />
                 <div className="relative">
                   <div className="flex items-start gap-3">
-                    <Flame className="w-6 h-6 text-orange-500 mt-1 flex-shrink-0" />
+                    <Flame className="w-6 h-6 text-teal-500 mt-1 flex-shrink-0" />
                     <div className="flex-1">
                       <p className="text-lg font-medium leading-relaxed">
                         {displayedText}

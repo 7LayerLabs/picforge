@@ -499,7 +499,7 @@ export default function BatchPage() {
               <p className="text-2xl font-bold text-gray-900">{stats.completed}</p>
             </div>
             <div className="bg-white rounded-xl p-4 shadow-sm">
-              <div className="flex items-center gap-2 text-red-600 mb-1">
+              <div className="flex items-center gap-2 text-coral-600 mb-1">
                 <AlertCircle className="w-4 h-4" />
                 <span className="text-sm">Errors</span>
               </div>
@@ -707,7 +707,7 @@ export default function BatchPage() {
                         )}
 
                         {image.error && (
-                          <p className="text-sm text-red-600 mt-1">{image.error}</p>
+                          <p className="text-sm text-coral-600 mt-1">{image.error}</p>
                         )}
                       </div>
 
@@ -745,14 +745,14 @@ export default function BatchPage() {
                           </>
                         )}
                         {image.status === 'error' && (
-                          <AlertCircle className="w-5 h-5 text-red-500" />
+                          <AlertCircle className="w-5 h-5 text-coral-500" />
                         )}
 
                         <button
                           onClick={() => removeImage(image.id)}
                           className="p-2 hover:bg-red-100 rounded-lg transition-all"
                         >
-                          <X className="w-4 h-4 text-gray-600 hover:text-red-600" />
+                          <X className="w-4 h-4 text-gray-600 hover:text-coral-600" />
                         </button>
                       </div>
                     </div>

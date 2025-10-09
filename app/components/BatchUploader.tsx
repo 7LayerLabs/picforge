@@ -159,9 +159,9 @@ export default function BatchUploader({ onFilesReady }: { onFilesReady: (files: 
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => removeFile(file.id)}
-                        className="absolute top-2 right-2 p-1 bg-white rounded-full hover:bg-red-50"
+                        className="absolute top-2 right-2 p-1 bg-white rounded-full hover:bg-amber-50"
                       >
-                        <X className="w-4 h-4 text-red-600" />
+                        <X className="w-4 h-4 text-coral-600" />
                       </button>
                     </div>
 
@@ -174,7 +174,7 @@ export default function BatchUploader({ onFilesReady }: { onFilesReady: (files: 
                         <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin bg-white" />
                       )}
                       {file.status === 'error' && (
-                        <AlertCircle className="w-5 h-5 text-red-500 bg-white rounded-full" />
+                        <AlertCircle className="w-5 h-5 text-coral-500 bg-white rounded-full" />
                       )}
                     </div>
 

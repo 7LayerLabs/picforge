@@ -27,7 +27,7 @@ export default function SubmitPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
           <div className="text-6xl mb-4">🎨</div>
           <h2 className="font-heading text-3xl font-bold text-gray-900 mb-4">
@@ -38,7 +38,7 @@ export default function SubmitPage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -49,11 +49,11 @@ export default function SubmitPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
       <div className="container mx-auto px-4 pt-6 pb-20">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-orange-600 font-medium hover:bg-orange-50 rounded-xl transition-all duration-200"
+          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-teal-600 font-medium hover:bg-teal-50 rounded-xl transition-all duration-200"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
@@ -70,7 +70,7 @@ export default function SubmitPage() {
             </p>
           </div>
 
-          <div className="bg-gradient-to-r from-purple-100 to-orange-100 rounded-xl p-6 mb-8">
+          <div className="bg-gradient-to-r from-purple-100 to-teal-100 rounded-xl p-6 mb-8">
             <h3 className="font-heading font-bold text-lg mb-3">What we&apos;re looking for:</h3>
             <ul className="space-y-2 text-sm text-gray-700">
               <li>✅ Before & after images</li>
@@ -93,7 +93,7 @@ export default function SubmitPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all"
                   placeholder="How should we credit you?"
                 />
               </div>
@@ -109,7 +109,7 @@ export default function SubmitPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all"
                   placeholder="your@email.com"
                 />
               </div>
@@ -124,7 +124,7 @@ export default function SubmitPage() {
                   id="template"
                   value={formData.template}
                   onChange={(e) => setFormData({ ...formData, template: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all"
                   placeholder="e.g., 'American Comic Book' or custom prompt"
                 />
               </div>
@@ -140,7 +140,7 @@ export default function SubmitPage() {
                   rows={5}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all resize-none"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all resize-none"
                   placeholder="Tell us about your creation. What did you transform? Why is it cool?"
                 />
               </div>
@@ -158,7 +158,7 @@ export default function SubmitPage() {
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-purple-500 to-orange-500 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-orange-600 transition-all duration-200 hover:scale-105 shadow-lg"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-purple-500 to-teal-500 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-teal-600 transition-all duration-200 hover:scale-105 shadow-lg"
               >
                 <Send className="w-5 h-5" />
                 Submit Your Creation

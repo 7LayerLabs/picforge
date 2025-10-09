@@ -93,12 +93,12 @@ export default function TipsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-orange-600 font-medium hover:bg-orange-50 rounded-xl transition-all duration-200"
+          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-teal-600 font-medium hover:bg-teal-50 rounded-xl transition-all duration-200"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -110,7 +110,7 @@ export default function TipsPage() {
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-100 text-orange-700 rounded-full mb-4">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">Master PicForge</span>
           </div>
@@ -130,7 +130,7 @@ export default function TipsPage() {
               className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 border border-gray-100"
             >
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-gradient-to-br from-orange-500 to-pink-500 text-white rounded-lg">
+                <div className="p-2 bg-gradient-to-br from-teal-500 to-pink-500 text-white rounded-lg">
                   {tip.icon}
                 </div>
                 <h3 className="font-semibold text-gray-900">{tip.title}</h3>
@@ -146,12 +146,12 @@ export default function TipsPage() {
             <div className="p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <Lightbulb className="w-6 h-6 text-orange-600" />
+                  <Lightbulb className="w-6 h-6 text-teal-600" />
                   <h2 className="font-heading text-3xl font-bold text-gray-900">Prompt Library</h2>
                 </div>
                 <Link
                   href="/prompts"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-pink-600 transition-all hover:scale-105"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-pink-500 text-white rounded-xl font-medium hover:from-teal-600 hover:to-pink-600 transition-all hover:scale-105"
                 >
                   Browse All 210+ Prompts
                   <ArrowRight className="w-4 h-4" />
@@ -167,7 +167,7 @@ export default function TipsPage() {
                 {quickPrompts.map((prompt, index) => (
                   <div
                     key={index}
-                    className="group relative p-3 bg-gray-50 rounded-lg hover:bg-orange-50 transition-colors cursor-pointer border border-gray-200"
+                    className="group relative p-3 bg-gray-50 rounded-lg hover:bg-teal-50 transition-colors cursor-pointer border border-gray-200"
                     onClick={() => copyPrompt(prompt)}
                   >
                     <p className="text-sm text-gray-700 pr-8">{prompt}</p>
@@ -181,14 +181,14 @@ export default function TipsPage() {
                       {copiedPrompt === prompt ? (
                         <Check className="w-4 h-4 text-green-600" />
                       ) : (
-                        <Copy className="w-4 h-4 text-gray-500 hover:text-orange-600" />
+                        <Copy className="w-4 h-4 text-gray-500 hover:text-teal-600" />
                       )}
                     </button>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-orange-50 rounded-lg border border-orange-200">
+              <div className="mt-6 p-4 bg-teal-50 rounded-lg border border-orange-200">
                 <p className="text-sm text-orange-800 flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   <span className="font-medium">New!</span> Visit our dedicated Prompt Library with search, filters, and categories for easy browsing.
@@ -249,13 +249,13 @@ export default function TipsPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-6">🍌 Nano Banana Best Practices (2025)</h2>
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-5 rounded-lg border border-yellow-200">
+              <div className="bg-gradient-to-br from-yellow-50 to-teal-50 p-5 rounded-lg border border-yellow-200">
                 <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">✍️ Use Descriptive Sentences, Not Keywords</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Describe the scene in narrative form—AI understands language deeply, so a paragraph beats a keyword list every time.
                 </p>
                 <div className="bg-white p-3 rounded text-xs">
-                  <div className="text-red-600 mb-2">❌ Bad: &quot;sunset, beach, palm trees&quot;</div>
+                  <div className="text-coral-600 mb-2">❌ Bad: &quot;sunset, beach, palm trees&quot;</div>
                   <div className="text-green-600">✅ Good: &quot;A tropical beach at sunset with golden light casting long shadows across the sand, palm trees swaying gently in the warm breeze&quot;</div>
                 </div>
               </div>
@@ -276,12 +276,12 @@ export default function TipsPage() {
                   Make single, focused changes per iteration rather than overloading with multiple instructions.
                 </p>
                 <div className="bg-white p-3 rounded text-xs">
-                  <div className="text-red-600 mb-2">❌ Avoid: &quot;Change sky, remove person, add text, adjust colors&quot;</div>
+                  <div className="text-coral-600 mb-2">❌ Avoid: &quot;Change sky, remove person, add text, adjust colors&quot;</div>
                   <div className="text-green-600">✅ Better: First pass - &quot;Make sky more dramatic&quot;, then second pass - &quot;Remove person on left&quot;</div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-pink-50 to-red-50 p-5 rounded-lg border border-pink-200">
+              <div className="bg-gradient-to-br from-pink-50 to-amber-50 p-5 rounded-lg border border-pink-200">
                 <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">🚫 Use Semantic Negatives</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Specify what you DON&apos;T want to avoid unwanted elements in your generation.
@@ -295,13 +295,13 @@ export default function TipsPage() {
         </div>
 
         {/* Pro Techniques */}
-        <div className="bg-gradient-to-r from-orange-600 to-pink-600 rounded-2xl p-8 text-white">
+        <div className="bg-gradient-to-r from-teal-600 to-pink-600 rounded-2xl p-8 text-white">
           <h2 className="text-3xl font-bold mb-6">🚀 Pro Techniques</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-heading text-xl font-semibold mb-3">Advanced Prompt Engineering</h3>
-              <ul className="space-y-2 text-orange-50">
+              <ul className="space-y-2 text-teal-50">
                 <li>• Use weight modifiers: &quot;highly detailed&quot;, &quot;subtle&quot;, &quot;extreme&quot;</li>
                 <li>• Specify camera settings: &quot;85mm lens&quot;, &quot;f/1.4 bokeh&quot;, &quot;ISO 100&quot;</li>
                 <li>• Add mood descriptors: &quot;moody&quot;, &quot;ethereal&quot;, &quot;dramatic&quot;</li>
@@ -313,7 +313,7 @@ export default function TipsPage() {
 
             <div>
               <h3 className="font-heading text-xl font-semibold mb-3">Workflow Optimization</h3>
-              <ul className="space-y-2 text-orange-50">
+              <ul className="space-y-2 text-teal-50">
                 <li>• Save your favorite prompts for quick access</li>
                 <li>• Use batch processing for consistent branding</li>
                 <li>• Start with low-res tests, then apply to high-res</li>
@@ -329,7 +329,7 @@ export default function TipsPage() {
         <div className="text-center mt-12">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-pink-600 transition-all duration-200 hover:scale-105 shadow-xl"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-500 to-pink-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-pink-600 transition-all duration-200 hover:scale-105 shadow-xl"
           >
             <Sparkles className="w-5 h-5" />
             Start Creating Now

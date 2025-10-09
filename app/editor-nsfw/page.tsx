@@ -8,8 +8,8 @@ export default function EditorNSFWPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-gray-900 flex items-center justify-center p-4 py-20 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-coral-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
       {/* Main content */}
@@ -18,7 +18,7 @@ export default function EditorNSFWPage() {
         <div className="absolute -top-2 -right-2 z-20 overflow-hidden" style={{ width: '120px', height: '120px' }}>
           <div className="absolute top-0 right-0">
             {/* Ribbon */}
-            <div className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 text-white font-bold px-8 py-2 shadow-2xl transform rotate-45 translate-x-6 translate-y-6">
+            <div className="bg-gradient-to-r from-coral-600 via-coral-500 to-teal-500 text-white font-bold px-8 py-2 shadow-2xl transform rotate-45 translate-x-6 translate-y-6">
               <div className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 animate-pulse" />
                 <span className="text-sm tracking-wider whitespace-nowrap">COMING SOON</span>
@@ -30,20 +30,20 @@ export default function EditorNSFWPage() {
         </div>
 
         {/* Card */}
-        <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-red-500/30 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-coral-500/30 relative overflow-hidden">
           {/* Glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-orange-500/5 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-coral-500/5 via-transparent to-teal-500/5 pointer-events-none" />
 
           {/* Shield Icon */}
           <div className="relative flex justify-center mb-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-full flex items-center justify-center border-2 border-red-500/30 shadow-lg">
+            <div className="w-24 h-24 bg-gradient-to-br from-coral-500/20 to-teal-500/20 rounded-full flex items-center justify-center border-2 border-coral-500/30 shadow-lg">
               <Sparkles className="w-12 h-12 text-red-400 animate-pulse" />
             </div>
           </div>
 
           {/* Title */}
           <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-red-400 mb-2 animate-gradient">
+            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-teal-400 to-red-400 mb-2 animate-gradient">
               18+ Unrestricted Editor
             </h1>
             <p className="text-lg text-gray-400 font-semibold">
@@ -52,7 +52,7 @@ export default function EditorNSFWPage() {
           </div>
 
           {/* Description */}
-          <div className="bg-gradient-to-br from-gray-900/80 to-black/60 rounded-2xl p-6 mb-6 border border-red-500/20 backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-gray-900/80 to-black/60 rounded-2xl p-6 mb-6 border border-coral-500/20 backdrop-blur-sm">
             <h2 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
               <span className="text-red-400">🔥</span>
               What&apos;s Coming
@@ -78,7 +78,7 @@ export default function EditorNSFWPage() {
           </div>
 
           {/* Legal Notice */}
-          <div className="bg-red-500/10 border-2 border-red-500/30 rounded-xl p-4 mb-6">
+          <div className="bg-coral-500/10 border-2 border-coral-500/30 rounded-xl p-4 mb-6">
             <p className="text-xs text-gray-300 text-center leading-relaxed">
               <span className="font-bold text-red-400">18+ Only.</span> This editor will require age verification and is intended for legal adult use only.
               All content must comply with applicable laws. Users are solely responsible for content created.

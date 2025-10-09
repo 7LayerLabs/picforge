@@ -3,11 +3,11 @@ import { ArrowLeft, Shield, Lock, Eye, Database, Globe, UserCheck, AlertTriangle
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 mb-8 text-gray-600 hover:text-orange-600 transition-colors"
+          className="inline-flex items-center gap-2 mb-8 text-gray-600 hover:text-teal-600 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
@@ -15,13 +15,13 @@ export default function PrivacyPage() {
 
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
           <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-8 h-8 text-orange-500" />
+            <Shield className="w-8 h-8 text-teal-500" />
             <h1 className="text-4xl font-bold text-gray-900">Privacy Policy</h1>
           </div>
           <p className="text-gray-500 mb-8">Effective Date: October 1, 2025</p>
 
           {/* Privacy Commitment Banner */}
-          <div className="bg-gradient-to-r from-orange-50 to-purple-50 rounded-xl p-6 mb-8">
+          <div className="bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-2">Our Privacy Commitment</h2>
             <p className="text-gray-700">
               At PicForge, we believe your images and data belong to you. We process images locally whenever possible,
@@ -33,7 +33,7 @@ export default function PrivacyPage() {
           <div className="prose prose-gray max-w-none">
             <section className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Eye className="w-6 h-6 text-orange-500" />
+                <Eye className="w-6 h-6 text-teal-500" />
                 <h2 className="text-2xl font-semibold text-gray-800 m-0">1. Information We Collect</h2>
               </div>
 
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
 
             <section className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Database className="w-6 h-6 text-orange-500" />
+                <Database className="w-6 h-6 text-teal-500" />
                 <h2 className="text-2xl font-semibold text-gray-800 m-0">2. How We Use Your Information</h2>
               </div>
 
@@ -92,7 +92,7 @@ export default function PrivacyPage() {
 
             <section className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Lock className="w-6 h-6 text-orange-500" />
+                <Lock className="w-6 h-6 text-teal-500" />
                 <h2 className="text-2xl font-semibold text-gray-800 m-0">3. Data Storage and Security</h2>
               </div>
 
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
 
             <section className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Globe className="w-6 h-6 text-orange-500" />
+                <Globe className="w-6 h-6 text-teal-500" />
                 <h2 className="text-2xl font-semibold text-gray-800 m-0">4. Information Sharing</h2>
               </div>
 
@@ -141,7 +141,7 @@ export default function PrivacyPage() {
 
             <section className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <UserCheck className="w-6 h-6 text-orange-500" />
+                <UserCheck className="w-6 h-6 text-teal-500" />
                 <h2 className="text-2xl font-semibold text-gray-800 m-0">5. Your Rights and Controls</h2>
               </div>
 
@@ -243,7 +243,7 @@ export default function PrivacyPage() {
 
             <section className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <AlertTriangle className="w-6 h-6 text-orange-500" />
+                <AlertTriangle className="w-6 h-6 text-teal-500" />
                 <h2 className="text-2xl font-semibold text-gray-800 m-0">10. Privacy Policy Changes</h2>
               </div>
               <p className="text-gray-600 mb-4">
@@ -305,7 +305,7 @@ export default function PrivacyPage() {
               </div>
             </section>
 
-            <div className="mt-12 p-6 bg-gradient-to-r from-orange-50 to-purple-50 rounded-lg">
+            <div className="mt-12 p-6 bg-gradient-to-r from-teal-50 to-purple-50 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">Privacy at a Glance</h3>
               <ul className="text-sm text-gray-700 space-y-1">
                 <li>✓ We process images locally when possible</li>

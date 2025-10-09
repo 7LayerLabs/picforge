@@ -67,7 +67,7 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-bold text-gray-900 dark:text-white">Magic Templates</h3>
         {selectedTemplate && (
-          <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-lg text-xs font-medium">
+          <span className="px-2 py-1 bg-teal-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-lg text-xs font-medium">
             ✓ Loaded
           </span>
         )}
@@ -85,7 +85,7 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
                 onClick={() => setSelectedCategory(category.id as 'all' | 'trending' | Template['category'])}
                 className={`px-2 py-1 rounded-md text-[10px] font-medium whitespace-nowrap transition-all ${
                   selectedCategory === category.id
-                    ? 'bg-orange-600 text-white'
+                    ? 'bg-teal-600 text-white'
                     : 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
                 }`}
               >
@@ -104,8 +104,8 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
                 onClick={(e) => handleSelectTemplate(template, e)}
                 className={`group w-full text-left p-2 rounded-lg border transition-all ${
                   selectedTemplate === template.id
-                    ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                    : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 dark:hover:border-orange-600 bg-white dark:bg-gray-700 hover:bg-orange-50/50 dark:hover:bg-gray-600'
+                    ? 'border-teal-500 bg-teal-50 dark:bg-orange-900/20'
+                    : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 dark:hover:border-teal-600 bg-white dark:bg-gray-700 hover:bg-teal-50/50 dark:hover:bg-gray-600'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -114,7 +114,7 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
                     <div className="flex items-center gap-1">
                       <h3 className="font-semibold text-xs text-gray-900 dark:text-white truncate">{template.name}</h3>
                       {template.badge && (
-                        <span className="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-[8px] font-bold rounded">
+                        <span className="px-1.5 py-0.5 bg-gradient-to-r from-teal-500 to-pink-500 text-white text-[8px] font-bold rounded">
                           {template.badge.split(' ')[0]}
                         </span>
                       )}

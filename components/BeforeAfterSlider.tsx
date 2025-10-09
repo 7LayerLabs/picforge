@@ -245,7 +245,7 @@ export default function BeforeAfterSlider({
           onClick={() => setIsAutoPlaying(!isAutoPlaying)}
           className={`px-4 py-1.5 text-xs rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg font-medium ${
             isAutoPlaying
-              ? 'bg-orange-600 text-white hover:bg-orange-700'
+              ? 'bg-teal-600 text-white hover:bg-orange-700'
               : 'bg-gray-100 hover:bg-gray-200'
           }`}
         >
@@ -321,7 +321,7 @@ export default function BeforeAfterSlider({
         <div className="absolute top-4 left-4 px-4 py-2 bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
           {beforeLabel}
         </div>
-        <div className="absolute top-4 right-4 px-4 py-2 bg-gradient-to-r from-orange-600/90 to-orange-700/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
+        <div className="absolute top-4 right-4 px-4 py-2 bg-gradient-to-r from-teal-600/90 to-orange-700/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
           {afterLabel}
         </div>
 

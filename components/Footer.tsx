@@ -13,7 +13,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-2">
               <span className="text-2xl">🔥</span>
               <h3 className="font-heading text-xl font-bold">
-                <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">PicForge</span>
+                <span className="bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">PicForge</span>
               </h3>
             </div>
             <p className="text-gray-500 text-xs">
@@ -26,19 +26,19 @@ export default function Footer() {
             <h4 className="font-heading font-bold text-lg mb-3">Get in Touch</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2">
+                <Link href="/contact" className="text-gray-400 hover:text-teal-500 transition-colors flex items-center gap-2">
                   <Bug className="w-4 h-4" />
                   Report an Issue
                 </Link>
               </li>
               <li>
-                <Link href="/submit" className="text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2">
+                <Link href="/submit" className="text-gray-400 hover:text-teal-500 transition-colors flex items-center gap-2">
                   <Upload className="w-4 h-4" />
                   Submit Your Creation
                 </Link>
               </li>
               <li>
-                <Link href="/ideas" className="text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2">
+                <Link href="/ideas" className="text-gray-400 hover:text-teal-500 transition-colors flex items-center gap-2">
                   <Lightbulb className="w-4 h-4" />
                   Submit an Idea
                 </Link>
@@ -51,13 +51,13 @@ export default function Footer() {
             <h4 className="font-heading font-bold text-lg mb-3">Legal</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/terms" className="text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2">
+                <Link href="/terms" className="text-gray-400 hover:text-teal-500 transition-colors flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-gray-400 hover:text-orange-500 transition-colors flex items-center gap-2">
+                <Link href="/privacy" className="text-gray-400 hover:text-teal-500 transition-colors flex items-center gap-2">
                   <Shield className="w-4 h-4" />
                   Privacy Policy
                 </Link>

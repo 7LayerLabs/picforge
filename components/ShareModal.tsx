@@ -190,7 +190,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                     onClick={() => setShowBeforeAfter(false)}
                     className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                       !showBeforeAfter
-                        ? 'bg-orange-600 text-white'
+                        ? 'bg-teal-600 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -247,7 +247,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                     }}
                     className={`px-4 py-2 font-medium capitalize transition-colors ${
                       selectedPlatform === platform
-                        ? 'text-orange-600 border-b-2 border-orange-600'
+                        ? 'text-teal-600 border-b-2 border-teal-600'
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -261,13 +261,13 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                 <label className="block text-sm font-medium mb-2">
                   AI-Generated Caption
                   {isGeneratingCaption && (
-                    <span className="ml-2 text-orange-600">✨ Generating...</span>
+                    <span className="ml-2 text-teal-600">✨ Generating...</span>
                   )}
                 </label>
                 <textarea
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  className="w-full h-32 p-3 border rounded-lg resize-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full h-32 p-3 border rounded-lg resize-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                   placeholder="Your caption will appear here..."
                 />
               </div>

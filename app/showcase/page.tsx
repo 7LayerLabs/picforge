@@ -122,7 +122,7 @@ export default function ShowcasePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-16 z-40">
         <div className="container mx-auto px-4 py-6">
@@ -139,7 +139,7 @@ export default function ShowcasePage() {
             {session && (
               <Link
                 href="/showcase/submit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
               >
                 <Plus className="w-5 h-5" />
                 Submit Your Work
@@ -155,7 +155,7 @@ export default function ShowcasePage() {
                 onClick={() => setSort('popular')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'popular'
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-teal-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -166,7 +166,7 @@ export default function ShowcasePage() {
                 onClick={() => setSort('recent')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'recent'
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-teal-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -177,7 +177,7 @@ export default function ShowcasePage() {
                 onClick={() => setSort('featured')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'featured'
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-teal-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -190,7 +190,7 @@ export default function ShowcasePage() {
             <select
               value={style}
               onChange={(e) => setStyle(e.target.value)}
-              className="px-4 py-2 bg-white border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="px-4 py-2 bg-white border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="all">All Styles</option>
               <option value="anime">Anime</option>
@@ -226,7 +226,7 @@ export default function ShowcasePage() {
             {session && (
               <Link
                 href="/showcase/submit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
               >
                 <Plus className="w-5 h-5" />
                 Submit Your Work
@@ -286,7 +286,7 @@ export default function ShowcasePage() {
                         className="w-6 h-6 rounded-full"
                       />
                     ) : (
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-white text-xs font-bold">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-teal-500 to-coral-500 flex items-center justify-center text-white text-xs font-bold">
                         {showcase.user.name?.[0] || 'U'}
                       </div>
                     )}
@@ -301,7 +301,7 @@ export default function ShowcasePage() {
                       <button
                         onClick={(e) => handleLike(showcase.id, e)}
                         className={`flex items-center gap-1 transition-colors ${
-                          showcase.isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
+                          showcase.isLiked ? 'text-coral-500' : 'text-gray-500 hover:text-coral-500'
                         }`}
                       >
                         <Heart className={`w-4 h-4 ${showcase.isLiked ? 'fill-current' : ''}`} />
@@ -315,7 +315,7 @@ export default function ShowcasePage() {
 
                     <button
                       onClick={(e) => copyPrompt(showcase.prompt, e)}
-                      className="p-2 text-gray-500 hover:text-orange-500 transition-colors"
+                      className="p-2 text-gray-500 hover:text-teal-500 transition-colors"
                       title="Copy prompt"
                     >
                       <Copy className="w-4 h-4" />
@@ -345,7 +345,7 @@ export default function ShowcasePage() {
                   onClick={() => setPage(i + 1)}
                   className={`w-10 h-10 rounded-lg font-medium transition-all ${
                     page === i + 1
-                      ? 'bg-orange-500 text-white'
+                      ? 'bg-teal-500 text-white'
                       : 'bg-white shadow-lg hover:bg-gray-50'
                   }`}
                 >
@@ -412,7 +412,7 @@ export default function ShowcasePage() {
                   </button>
                   <button
                     onClick={(e) => tryPrompt(selectedShowcase.prompt, e)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-lg hover:from-teal-600 hover:to-coral-600 transition-all"
                   >
                     Try This Prompt
                   </button>
@@ -437,7 +437,7 @@ export default function ShowcasePage() {
                       className="w-10 h-10 rounded-full"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-white font-bold">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-500 to-coral-500 flex items-center justify-center text-white font-bold">
                       {selectedShowcase.user.name?.[0] || 'U'}
                     </div>
                   )}

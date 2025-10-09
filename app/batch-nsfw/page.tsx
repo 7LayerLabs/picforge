@@ -42,11 +42,11 @@ export default function BatchNSFWPage() {
   if (!isVerified) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-2xl p-8 border-2 border-red-500">
+        <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-2xl p-8 border-2 border-coral-500">
           {/* Warning Icon */}
           <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center">
-              <AlertTriangle className="w-12 h-12 text-red-500" />
+            <div className="w-20 h-20 bg-coral-500/20 rounded-full flex items-center justify-center">
+              <AlertTriangle className="w-12 h-12 text-coral-500" />
             </div>
           </div>
 
@@ -58,25 +58,25 @@ export default function BatchNSFWPage() {
           {/* Warning Text */}
           <div className="bg-gray-900 rounded-xl p-4 mb-6 space-y-3 text-sm text-gray-300">
             <p className="flex items-start gap-2">
-              <Shield className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <Shield className="w-5 h-5 text-coral-500 flex-shrink-0 mt-0.5" />
               <span>This area contains tools for processing adult (18+) content</span>
             </p>
             <p className="flex items-start gap-2">
-              <Shield className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <Shield className="w-5 h-5 text-coral-500 flex-shrink-0 mt-0.5" />
               <span>You must be 18 years or older to proceed</span>
             </p>
             <p className="flex items-start gap-2">
-              <Shield className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <Shield className="w-5 h-5 text-coral-500 flex-shrink-0 mt-0.5" />
               <span>All content must comply with local laws and regulations</span>
             </p>
             <p className="flex items-start gap-2">
-              <Shield className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <Shield className="w-5 h-5 text-coral-500 flex-shrink-0 mt-0.5" />
               <span>No illegal content will be processed or stored</span>
             </p>
           </div>
 
           {/* Age Verification */}
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-6">
+          <div className="bg-coral-500/10 border border-coral-500/30 rounded-xl p-4 mb-6">
             <p className="text-white font-semibold text-center mb-2">
               Are you 18 years or older?
             </p>
@@ -95,7 +95,7 @@ export default function BatchNSFWPage() {
             </button>
             <button
               onClick={() => handleVerify(true)}
-              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all"
+              className="px-6 py-3 bg-coral-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all"
             >
               YES - Enter
             </button>

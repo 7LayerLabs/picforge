@@ -850,7 +850,7 @@ export default function TransformRoulette() {
                 <div className="bg-white rounded-xl shadow-lg p-4 text-center">
                   <div className="text-2xl mb-1">🔥</div>
                   <div className="text-sm text-gray-600">Chaos Level</div>
-                  <div className="font-bold text-orange-600">Maximum</div>
+                  <div className="font-bold text-teal-600">Maximum</div>
                 </div>
                 <div className="bg-white rounded-xl shadow-lg p-4 text-center">
                   <div className="text-2xl mb-1">✨</div>

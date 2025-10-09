@@ -20,11 +20,11 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 mb-8 text-gray-600 hover:text-orange-600 transition-colors"
+          className="inline-flex items-center gap-2 mb-8 text-gray-600 hover:text-teal-600 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
@@ -49,13 +49,13 @@ export default function SignInPage() {
               {isLoading === 'google' ? (
                 <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
               ) : (
-                <FaGoogle className="w-4 h-4 text-red-500" />
+                <FaGoogle className="w-4 h-4 text-coral-500" />
               )}
               <span className="whitespace-nowrap text-sm">Sign in with Google</span>
             </button>
           </div>
 
-          <div className="mt-8 p-4 bg-gradient-to-r from-purple-50 to-orange-50 rounded-xl">
+          <div className="mt-8 p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
             <h3 className="font-semibold text-sm mb-2">Why sign in?</h3>
             <ul className="space-y-1 text-xs text-gray-600">
               <li>• Save your image history</li>
@@ -68,11 +68,11 @@ export default function SignInPage() {
 
           <p className="mt-6 text-center text-xs text-gray-500">
             By signing in, you agree to our{' '}
-            <Link href="/terms" className="text-orange-600 hover:underline">
+            <Link href="/terms" className="text-teal-600 hover:underline">
               Terms
             </Link>
             {' and '}
-            <Link href="/privacy" className="text-orange-600 hover:underline">
+            <Link href="/privacy" className="text-teal-600 hover:underline">
               Privacy Policy
             </Link>
           </p>

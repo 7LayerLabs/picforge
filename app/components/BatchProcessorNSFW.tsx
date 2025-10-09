@@ -388,9 +388,9 @@ export default function BatchProcessorNSFW() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 relative">
       {isDraggingPage && (
-        <div className="fixed inset-0 z-50 bg-red-500/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
-          <div className="bg-gray-800 rounded-2xl p-12 shadow-2xl border-2 border-red-500">
-            <Upload className="w-24 h-24 text-red-500 mx-auto mb-4 animate-bounce" />
+        <div className="fixed inset-0 z-50 bg-coral-500/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+          <div className="bg-gray-800 rounded-2xl p-12 shadow-2xl border-2 border-coral-500">
+            <Upload className="w-24 h-24 text-coral-500 mx-auto mb-4 animate-bounce" />
             <p className="text-2xl font-bold text-white">Drop images anywhere!</p>
           </div>
         </div>
@@ -409,7 +409,7 @@ export default function BatchProcessorNSFW() {
             </Link>
 
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-1 bg-red-500/20 border border-red-500/30 rounded-lg">
+              <div className="flex items-center gap-2 px-3 py-1 bg-coral-500/20 border border-coral-500/30 rounded-lg">
                 <Shield className="w-4 h-4 text-red-400" />
                 <span className="text-sm text-red-400 font-medium">18+ Mode</span>
               </div>
@@ -426,12 +426,12 @@ export default function BatchProcessorNSFW() {
         <div className="max-w-7xl mx-auto">
           {/* Title Section */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-full mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-coral-500/20 border border-coral-500/30 text-red-400 rounded-full mb-4">
               <Layers className="w-4 h-4" />
               <span className="text-sm font-medium">Adult Batch Processing</span>
             </div>
             <h1 className="font-heading text-5xl font-bold text-white mb-4">
-              <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-red-400 to-teal-400 bg-clip-text text-transparent">
                 NSFW Image Processing
               </span>
             </h1>
@@ -490,7 +490,7 @@ export default function BatchProcessorNSFW() {
                   <button
                     onClick={surpriseMe}
                     disabled={isProcessing}
-                    className="px-4 py-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm font-medium rounded-lg hover:from-red-600 hover:to-orange-600 transition-all disabled:opacity-50 flex items-center gap-2"
+                    className="px-4 py-1 bg-gradient-to-r from-coral-500 to-teal-500 text-white text-sm font-medium rounded-lg hover:from-coral-600 hover:to-teal-600 transition-all disabled:opacity-50 flex items-center gap-2"
                   >
                     <Sparkles className="w-4 h-4" />
                     Surprise Me!
@@ -500,7 +500,7 @@ export default function BatchProcessorNSFW() {
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   placeholder="Example: enhance lighting and details, dramatic cinematic look, soft focus glamour, professional studio lighting..."
-                  className="w-full p-3 border-2 border-gray-700 bg-gray-900 text-white rounded-xl focus:border-red-500 focus:outline-none resize-none h-24"
+                  className="w-full p-3 border-2 border-gray-700 bg-gray-900 text-white rounded-xl focus:border-coral-500 focus:outline-none resize-none h-24"
                   disabled={isProcessing}
                 />
               </div>
@@ -517,7 +517,7 @@ export default function BatchProcessorNSFW() {
                   <button
                     onClick={processImages}
                     disabled={!prompt.trim() || images.length === 0}
-                    className="px-8 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold rounded-xl hover:from-red-700 hover:to-orange-700 transition-all disabled:opacity-50 flex items-center gap-2"
+                    className="px-8 py-3 bg-gradient-to-r from-coral-600 to-teal-600 text-white font-semibold rounded-xl hover:from-red-700 hover:to-orange-700 transition-all disabled:opacity-50 flex items-center gap-2"
                   >
                     <Play className="w-5 h-5" />
                     Start Processing
@@ -545,7 +545,7 @@ export default function BatchProcessorNSFW() {
                       onClick={() => setSelectedPreset(preset)}
                       className={`p-3 rounded-lg border-2 transition-all ${
                         selectedPreset.name === preset.name
-                          ? 'border-red-500 bg-red-500/20'
+                          ? 'border-coral-500 bg-coral-500/20'
                           : 'border-gray-700 hover:border-gray-600'
                       }`}
                     >
@@ -567,8 +567,8 @@ export default function BatchProcessorNSFW() {
               {...getRootProps()}
               className={`border-3 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all ${
                 isDragActive
-                  ? 'border-red-500 bg-red-500/10'
-                  : 'border-gray-700 bg-gray-800 hover:border-red-500 hover:bg-red-500/5'
+                  ? 'border-coral-500 bg-coral-500/10'
+                  : 'border-gray-700 bg-gray-800 hover:border-coral-500 hover:bg-coral-500/5'
               }`}
             >
               <input {...getInputProps()} />
@@ -586,7 +586,7 @@ export default function BatchProcessorNSFW() {
               <div className="flex justify-between items-center">
                 <div {...getRootProps()} className="inline-block">
                   <input {...getInputProps()} />
-                  <button className="px-4 py-2 bg-gray-800 border-2 border-gray-700 hover:border-red-500 text-gray-300 rounded-xl font-medium transition-all flex items-center gap-2">
+                  <button className="px-4 py-2 bg-gray-800 border-2 border-gray-700 hover:border-coral-500 text-gray-300 rounded-xl font-medium transition-all flex items-center gap-2">
                     <Upload className="w-4 h-4" />
                     Add More Images
                   </button>
@@ -635,7 +635,7 @@ export default function BatchProcessorNSFW() {
                           <div className="mt-2">
                             <div className="w-full bg-gray-700 rounded-full h-2">
                               <div
-                                className="bg-gradient-to-r from-red-600 to-orange-600 h-2 rounded-full transition-all"
+                                className="bg-gradient-to-r from-coral-600 to-teal-600 h-2 rounded-full transition-all"
                                 style={{ width: `${image.progress}%` }}
                               />
                             </div>

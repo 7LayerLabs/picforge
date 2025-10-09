@@ -3,11 +3,11 @@ import { ArrowLeft } from 'lucide-react'
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 mb-8 text-gray-600 hover:text-orange-600 transition-colors"
+          className="inline-flex items-center gap-2 mb-8 text-gray-600 hover:text-teal-600 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
