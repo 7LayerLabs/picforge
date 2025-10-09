@@ -166,10 +166,10 @@ export default function PromptWizard() {
     <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto px-4 py-12 max-w-6xl">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-3 text-gray-900">
+          <h1 className="text-4xl font-heading font-bold mb-3 text-gray-900">
             Prompt Wizard
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg font-heading text-gray-600">
             Build the perfect AI prompt in 5 easy steps
           </p>
         </div>
@@ -177,10 +177,10 @@ export default function PromptWizard() {
         {showTemplates && (
           <div className="mb-8 bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Quick Start Templates</h2>
+              <h2 className="text-xl font-heading font-bold text-gray-900">Quick Start Templates</h2>
               <button
                 onClick={() => setShowTemplates(false)}
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="text-sm font-heading text-blue-600 hover:text-blue-700 font-medium"
               >
                 Skip to wizard →
               </button>
@@ -195,9 +195,9 @@ export default function PromptWizard() {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <Wand2 className="w-4 h-4 text-blue-600" />
-                    <h3 className="font-bold text-gray-900">{template.name}</h3>
+                    <h3 className="font-heading font-bold text-gray-900">{template.name}</h3>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm font-heading text-gray-600">
                     {STYLES.find(s => s.id === template.style)?.description}
                   </p>
                 </button>
@@ -234,7 +234,7 @@ export default function PromptWizard() {
                 ))}
               </div>
               <div className="text-center">
-                <h3 className="text-lg font-bold text-gray-900">{steps[currentStep].title}</h3>
+                <h3 className="text-lg font-heading font-bold text-gray-900">{steps[currentStep].title}</h3>
               </div>
             </div>
 
@@ -242,7 +242,7 @@ export default function PromptWizard() {
             <div className="mb-6 min-h-[300px]">
               {currentStep === 0 && (
                 <div>
-                  <p className="text-gray-600 mb-4 text-sm">
+                  <p className="font-heading text-gray-600 mb-4 text-sm">
                     Choose the style that best matches your vision
                   </p>
                   <div className="space-y-2">
@@ -256,8 +256,8 @@ export default function PromptWizard() {
                             : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                         }`}
                       >
-                        <div className="font-bold text-gray-900 mb-1 text-sm">{style.name}</div>
-                        <div className="text-xs text-gray-600">{style.description}</div>
+                        <div className="font-heading font-bold text-gray-900 mb-1 text-sm">{style.name}</div>
+                        <div className="font-heading text-xs text-gray-600">{style.description}</div>
                       </button>
                     ))}
                   </div>
@@ -266,12 +266,12 @@ export default function PromptWizard() {
 
               {currentStep === 1 && (
                 <div>
-                  <p className="text-gray-600 mb-4 text-sm">
+                  <p className="font-heading text-gray-600 mb-4 text-sm">
                     Describe what you want to see. Be specific and descriptive.
                   </p>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-bold mb-2 text-gray-900">
+                      <label className="block font-heading text-sm font-bold mb-2 text-gray-900">
                         Subject (What is the main focus?)
                       </label>
                       <textarea
@@ -283,7 +283,7 @@ export default function PromptWizard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-bold mb-2 text-gray-900">
+                      <label className="block font-heading text-sm font-bold mb-2 text-gray-900">
                         Action (Optional)
                       </label>
                       <textarea
@@ -300,11 +300,11 @@ export default function PromptWizard() {
 
               {currentStep === 2 && (
                 <div>
-                  <p className="text-gray-600 mb-4 text-sm">
+                  <p className="font-heading text-gray-600 mb-4 text-sm">
                     Set the scene. Where is this taking place?
                   </p>
                   <div>
-                    <label className="block text-sm font-bold mb-2 text-gray-900">
+                    <label className="block font-heading text-sm font-bold mb-2 text-gray-900">
                       Environment & Setting
                     </label>
                     <textarea
@@ -328,11 +328,11 @@ export default function PromptWizard() {
 
               {currentStep === 3 && (
                 <div>
-                  <p className="text-gray-600 mb-4 text-sm">
+                  <p className="font-heading text-gray-600 mb-4 text-sm">
                     Add technical details and quality specifications
                   </p>
                   <div>
-                    <label className="block text-sm font-bold mb-2 text-gray-900">
+                    <label className="block font-heading text-sm font-bold mb-2 text-gray-900">
                       Specific Details
                     </label>
                     <textarea
@@ -356,11 +356,11 @@ export default function PromptWizard() {
 
               {currentStep === 4 && (
                 <div>
-                  <p className="text-gray-600 mb-4 text-sm">
+                  <p className="font-heading text-gray-600 mb-4 text-sm">
                     Specify what you DON&apos;T want to see
                   </p>
                   <div>
-                    <label className="block text-sm font-bold mb-2 text-gray-900">
+                    <label className="block font-heading text-sm font-bold mb-2 text-gray-900">
                       Negative Prompts
                     </label>
                     <textarea
@@ -388,7 +388,7 @@ export default function PromptWizard() {
               <button
                 onClick={prevStep}
                 disabled={currentStep === 0}
-                className="flex items-center gap-2 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg font-heading font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back
@@ -397,7 +397,7 @@ export default function PromptWizard() {
               {currentStep < steps.length - 1 ? (
                 <button
                   onClick={nextStep}
-                  className="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all"
+                  className="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-heading font-medium transition-all"
                 >
                   Next
                   <ArrowRight className="w-4 h-4" />
@@ -405,7 +405,7 @@ export default function PromptWizard() {
               ) : (
                 <button
                   onClick={copyPrompt}
-                  className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all"
+                  className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-heading font-medium transition-all"
                 >
                   {copied ? (
                     <>
@@ -425,18 +425,18 @@ export default function PromptWizard() {
 
           {/* Live Preview */}
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-bold mb-4 text-gray-900">Your Prompt Preview</h3>
+            <h3 className="text-lg font-heading font-bold mb-4 text-gray-900">Your Prompt Preview</h3>
 
             {generatePrompt() ? (
               <div className="space-y-4">
-                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 min-h-[200px] whitespace-pre-wrap text-gray-900 text-sm">
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 min-h-[200px] whitespace-pre-wrap font-heading text-gray-900 text-sm">
                   {generatePrompt()}
                 </div>
 
                 <div className="flex gap-3">
                   <button
                     onClick={copyPrompt}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-heading font-medium transition-all"
                   >
                     {copied ? (
                       <>
@@ -453,14 +453,14 @@ export default function PromptWizard() {
 
                   <a
                     href={`/canvas?prompt=${encodeURIComponent(generatePrompt())}`}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-heading font-medium transition-all"
                   >
                     <Wand2 className="w-4 h-4" />
                     Use in Canvas
                   </a>
                 </div>
 
-                <div className="text-xs text-gray-500 space-y-1">
+                <div className="text-xs font-heading text-gray-500 space-y-1">
                   <div>✅ Using narrative descriptions</div>
                   {formData.negatives && <div>✅ Including negative prompts</div>}
                   {formData.details && <div>✅ Technical details specified</div>}
@@ -468,7 +468,7 @@ export default function PromptWizard() {
                 </div>
               </div>
             ) : (
-              <div className="bg-gray-50 rounded-lg p-8 border border-gray-200 min-h-[200px] flex items-center justify-center text-gray-400 text-center text-sm">
+              <div className="bg-gray-50 rounded-lg p-8 border border-gray-200 min-h-[200px] flex items-center justify-center font-heading text-gray-400 text-center text-sm">
                 Fill out the wizard steps to see your prompt build in real-time
               </div>
             )}

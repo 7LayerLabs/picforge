@@ -40,7 +40,7 @@
   body {
     @apply bg-white dark:bg-black;
     color: var(--foreground);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', system-ui, sans-serif;
+    font-family: 'BBH Sans Bogle', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Special_Elite, Roboto_Mono } from "next/font/google";
+import { Special_Elite } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -10,12 +10,6 @@ const specialElite = Special_Elite({
   variable: "--font-heading",
   subsets: ["latin"],
   weight: "400",
-  display: 'swap',
-});
-
-const robotoMono = Roboto_Mono({
-  variable: "--font-body",
-  subsets: ["latin"],
   display: 'swap',
 });
 
@@ -54,8 +48,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Bogle:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+      </head>
       <body
-        className={`${specialElite.variable} ${robotoMono.variable} font-body antialiased`}
+        className={`${specialElite.variable} font-body antialiased`}
       >
         <AuthSessionProvider>
           <Navigation />
