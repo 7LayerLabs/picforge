@@ -948,6 +948,15 @@ export default function Home() {
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
+                          {/* Original image in corner */}
+                          <div className="absolute top-2 right-2 w-12 h-12 rounded border-2 border-white shadow-lg overflow-hidden bg-gray-100">
+                            <NextImage
+                              src="/examples/elon.jpg"
+                              alt="Original"
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
                         </div>
                         <p className="text-[10px] text-gray-500 text-center">Sketch style</p>
                       </div>
@@ -960,6 +969,15 @@ export default function Home() {
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
+                          {/* Original image in corner */}
+                          <div className="absolute top-2 right-2 w-12 h-12 rounded border-2 border-white shadow-lg overflow-hidden bg-gray-100">
+                            <NextImage
+                              src="/examples/sidney.webp"
+                              alt="Original"
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
                         </div>
                         <p className="text-[10px] text-gray-500 text-center">Sketch style</p>
                       </div>
