@@ -786,30 +786,27 @@ export default function Home() {
         {!currentImage && (
           <>
             {/* Hero Section */}
-            <div className="text-center mb-16 px-4 pt-12">
+            <div className="text-center mb-8 px-4 pt-8">
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                 <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900 dark:text-white">Imagine<span className="text-4xl md:text-5xl lg:text-6xl">.</span> Everything<span className="text-4xl md:text-5xl lg:text-6xl">.</span></span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed font-bold">
+              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
                 Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">210+ templates</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
               </p>
 
-              {/* Feature Highlights */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
-                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 border border-gray-100 dark:border-gray-700">
-                  <div className="text-4xl mb-3">⚡</div>
-                  <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Instant Results</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Transform images in seconds with powerful AI</p>
+              {/* Feature Highlights - Compact Inline Badges */}
+              <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
+                  <span className="text-xl">⚡</span>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">Instant Results</span>
                 </div>
-                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 border border-gray-100 dark:border-gray-700">
-                  <div className="text-4xl mb-3">🎨</div>
-                  <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">210+ Templates</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Professional prompts for every use case</p>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
+                  <span className="text-xl">🎨</span>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">210+ Templates</span>
                 </div>
-                <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 border border-gray-100 dark:border-gray-700">
-                  <div className="text-4xl mb-3">🔒</div>
-                  <h3 className="font-heading text-lg font-semibold text-gray-900 dark:text-white mb-2">Private & Secure</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Your images stay on your device</p>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
+                  <span className="text-xl">🔒</span>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">Private & Secure</span>
                 </div>
               </div>
             </div>
@@ -832,178 +829,186 @@ export default function Home() {
         )}
 
         {!currentImage ? (
-          <div className="flex flex-col items-center space-y-8 px-4">
-            <div className="flex flex-col items-center space-y-3">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                style={{ display: 'none' }}
-                id="image-upload-input"
-              />
-              <div
-                onClick={() => document.getElementById('image-upload-input')?.click()}
-                onDragOver={(e) => {
-                  e.preventDefault()
-                  setIsDraggingMain(true)
-                }}
-                onDragLeave={(e) => {
-                  e.preventDefault()
-                  setIsDraggingMain(false)
-                }}
-                onDrop={async (e) => {
-                  e.preventDefault()
-                  setIsDraggingMain(false)
-                  const files = e.dataTransfer.files
-                  if (files && files[0] && files[0].type.startsWith('image/')) {
-                    const file = files[0]
-                    setSelectedFile(file)
-                    try {
-                      const imageData = await convertImageToSupported(file)
-                      setCurrentImage(imageData)
-                      setOriginalImage(imageData)
-                      setHistory([{
-                        prompt: 'Original Image',
-                        image: imageData,
-                        timestamp: new Date(),
-                        isOriginal: true
-                      }])
-                      // If prompt of day was active, set it in instructions
-                      if (promptOfDayActive) {
-                        setInstructions(PROMPT_OF_THE_DAY)
+          <div className="px-4 pb-8">
+            {/* Two-Column Layout: Upload + Prompt of the Day */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+              {/* LEFT: Upload Section */}
+              <div className="flex flex-col justify-between h-full">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  style={{ display: 'none' }}
+                  id="image-upload-input"
+                />
+                <div
+                  onClick={() => document.getElementById('image-upload-input')?.click()}
+                  onDragOver={(e) => {
+                    e.preventDefault()
+                    setIsDraggingMain(true)
+                  }}
+                  onDragLeave={(e) => {
+                    e.preventDefault()
+                    setIsDraggingMain(false)
+                  }}
+                  onDrop={async (e) => {
+                    e.preventDefault()
+                    setIsDraggingMain(false)
+                    const files = e.dataTransfer.files
+                    if (files && files[0] && files[0].type.startsWith('image/')) {
+                      const file = files[0]
+                      setSelectedFile(file)
+                      try {
+                        const imageData = await convertImageToSupported(file)
+                        setCurrentImage(imageData)
+                        setOriginalImage(imageData)
+                        setHistory([{
+                          prompt: 'Original Image',
+                          image: imageData,
+                          timestamp: new Date(),
+                          isOriginal: true
+                        }])
+                        // If prompt of day was active, set it in instructions
+                        if (promptOfDayActive) {
+                          setInstructions(PROMPT_OF_THE_DAY)
+                        }
+                      } catch (error) {
+                        console.error('Error converting dropped image:', error)
+                        alert('Failed to process dropped image. Please try a different format.')
                       }
-                    } catch (error) {
-                      console.error('Error converting dropped image:', error)
-                      alert('Failed to process dropped image. Please try a different format.')
                     }
-                  }
-                }}
-                className={`w-full max-w-2xl mx-auto px-8 py-12 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
-                  isDraggingMain
-                    ? 'bg-teal-50 dark:bg-teal-900/20 border-teal-500 scale-[1.01]'
-                    : 'bg-gray-900 dark:bg-gray-800 hover:bg-black dark:hover:bg-gray-900 border-gray-800 dark:border-gray-700'
-                }`}
-              >
-                <div className="flex flex-col items-center gap-4">
-                  <svg className={`w-12 h-12 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-white'}`}>
-                    <div className="text-lg font-semibold mb-1">
-                      {isDraggingMain ? 'Drop to upload' : 'Upload your image'}
-                    </div>
-                    <div className="text-sm opacity-75">
-                      {isDraggingMain ? 'Release to start' : 'Drag & drop, click, or paste (Ctrl+V)'}
+                  }}
+                  className={`flex-1 flex flex-col items-center justify-center px-8 py-20 rounded-xl cursor-pointer transition-all duration-200 border-2 min-h-[400px] ${
+                    isDraggingMain
+                      ? 'bg-teal-50 dark:bg-teal-900/20 border-teal-500 scale-[1.01]'
+                      : 'bg-gray-900 dark:bg-gray-800 hover:bg-black dark:hover:bg-gray-900 border-gray-800 dark:border-gray-700'
+                  }`}
+                >
+                  <div className="flex flex-col items-center gap-6">
+                    <svg className={`w-20 h-20 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-white'}`}>
+                      <div className="text-2xl font-semibold mb-3">
+                        {isDraggingMain ? 'Drop to upload' : 'Upload your image'}
+                      </div>
+                      <div className="text-base opacity-75">
+                        {isDraggingMain ? 'Release to start' : 'Drag & drop, click, or paste (Ctrl+V)'}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-3 flex items-center gap-2 justify-center animate-fade-in delay-300">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700 hover-grow">
-                  <svg className="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 7zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.061l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.061l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.061 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z"/>
-                  </svg>
-                  <span className="font-semibold text-xs">Pro Tip</span>
-                </span>
-                <span className="text-xs">Paste images directly with Ctrl+V</span>
-              </p>
-            </div>
-
-            {/* Prompt of the Day */}
-            <div className="max-w-2xl mx-auto mb-6">
-              <div className={`border-2 rounded-xl p-4 shadow-md transition-all duration-300 ${
-                promptOfDayActive
-                  ? 'bg-gradient-to-r from-purple-100 to-pink-100 border-purple-400 ring-2 ring-purple-300 ring-opacity-50'
-                  : 'bg-gradient-to-r from-teal-50 to-cyan-50 border-teal-200'
-              }`}>
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">✨</span>
-                    <h3 className="font-bold text-lg text-gray-800">Prompt of the Day</h3>
-                  </div>
-                  {promptOfDayActive && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-500 text-white text-xs font-medium rounded-full animate-pulse">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Will Apply on Upload
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-700 italic mb-3">
-                  &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
+                <p className="text-gray-500 dark:text-gray-400 text-xs flex items-center gap-2 justify-center mt-3">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700">
+                    <svg className="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 7zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.061l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.061l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.061 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z"/>
+                    </svg>
+                    <span className="font-semibold text-xs">Pro Tip:</span>
+                  </span>
+                  <span className="text-xs">Paste images with Ctrl+V</span>
                 </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(PROMPT_OF_THE_DAY);
-                      setCopiedPrompt(true);
-                      setTimeout(() => setCopiedPrompt(false), 2000);
-                    }}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-colors ${
-                      copiedPrompt ? 'bg-green-500' : 'bg-teal-500 hover:bg-teal-600'
-                    }`}
-                  >
-                  {copiedPrompt ? (
-                    <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                      </svg>
-                      Copy Prompt
-                    </>
-                  )}
-                  </button>
-                  <button
-                    onClick={() => {
-                      setPromptOfDayActive(!promptOfDayActive);
-                      if (!promptOfDayActive) {
-                        setInstructions(PROMPT_OF_THE_DAY);
-                      } else {
-                        setInstructions('');
-                      }
-                    }}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-colors ${
-                      promptOfDayActive ? 'bg-purple-500' : 'bg-gray-500 hover:bg-gray-600'
-                    }`}
-                  >
-                    {promptOfDayActive ? (
+              </div>
+
+              {/* RIGHT: Prompt of the Day + Canvas Link */}
+              <div className="flex flex-col space-y-4 h-full">
+                {/* Prompt of the Day */}
+                <div className={`border-2 rounded-xl p-5 shadow-lg transition-all duration-300 ${
+                  promptOfDayActive
+                    ? 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-300 ring-2 ring-purple-200'
+                    : 'bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-300'
+                }`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">✨</span>
+                      <h3 className="font-bold text-lg text-gray-900">Prompt of the Day</h3>
+                    </div>
+                    {promptOfDayActive && (
+                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-500 text-white text-xs font-medium rounded-full animate-pulse">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Active
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-700 italic mb-4 leading-relaxed">
+                    &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(PROMPT_OF_THE_DAY);
+                        setCopiedPrompt(true);
+                        setTimeout(() => setCopiedPrompt(false), 2000);
+                      }}
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all hover:scale-105 ${
+                        copiedPrompt ? 'bg-green-500' : 'bg-teal-500 hover:bg-teal-600 shadow-md'
+                      }`}
+                    >
+                    {copiedPrompt ? (
                       <>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        Active - Ready to Use
+                        Copied!
                       </>
                     ) : (
                       <>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
-                        Try This Prompt
+                        Copy
                       </>
                     )}
-                  </button>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setPromptOfDayActive(!promptOfDayActive);
+                        if (!promptOfDayActive) {
+                          setInstructions(PROMPT_OF_THE_DAY);
+                        } else {
+                          setInstructions('');
+                        }
+                      }}
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all hover:scale-105 shadow-md ${
+                        promptOfDayActive ? 'bg-purple-500 hover:bg-purple-600' : 'bg-gray-500 hover:bg-gray-600'
+                      }`}
+                    >
+                      {promptOfDayActive ? (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          Active
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                          </svg>
+                          Try It
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* AI Canvas Link */}
-            <div className="text-center mt-6">
-              <Link href="/canvas" className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors group">
-                Need to generate a background?
-                <span className="inline-flex items-center gap-1 font-medium text-teal-600 group-hover:gap-2 transition-all">
-                  Try Canvas
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </Link>
+                {/* Canvas Link Card */}
+                <Link href="/canvas" className="block p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-teal-400 hover:shadow-lg transition-all group">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Need a background?</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Generate custom AI backgrounds</p>
+                    </div>
+                    <div className="flex items-center gap-2 text-teal-600 font-medium group-hover:gap-3 transition-all">
+                      <span className="text-sm">Canvas</span>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              </div>
             </div>
           </div>
         ) : (
