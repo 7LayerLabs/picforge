@@ -931,9 +931,41 @@ export default function Home() {
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-700 italic mb-4 leading-relaxed">
+                  <p className="text-sm text-gray-700 italic mb-3 leading-relaxed">
                     &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
                   </p>
+
+                  {/* Example Images */}
+                  <div className="mb-4">
+                    <p className="text-xs text-gray-600 mb-2 font-semibold">Examples:</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Elon Example */}
+                      <div className="space-y-1">
+                        <div className="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-300 bg-white shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                          <NextImage
+                            src="/examples/elon_sketch.png"
+                            alt="Ballpoint pen sketch example"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <p className="text-[10px] text-gray-500 text-center">Sketch style</p>
+                      </div>
+                      {/* Sidney Example */}
+                      <div className="space-y-1">
+                        <div className="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-300 bg-white shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                          <NextImage
+                            src="/examples/sidney_sketch.png"
+                            alt="Ballpoint pen sketch example"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <p className="text-[10px] text-gray-500 text-center">Sketch style</p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => {
