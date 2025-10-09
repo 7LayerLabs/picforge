@@ -142,7 +142,8 @@ export default function PromptsPage() {
         "Borderlands cel-shaded video game style with thick black outlines",
         "Art Nouveau style with organic flowing lines and nature motifs",
         "Glitch art with digital artifacts and corrupted pixel effects",
-        "Bauhaus minimalist design with geometric shapes and primary colors"
+        "Bauhaus minimalist design with geometric shapes and primary colors",
+        "A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look"
       ]
     },
     {
