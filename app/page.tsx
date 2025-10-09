@@ -831,9 +831,9 @@ export default function Home() {
         {!currentImage ? (
           <div className="px-4 pb-8">
             {/* Two-Column Layout: Upload + Prompt of the Day */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto items-stretch">
               {/* LEFT: Upload Section */}
-              <div className="flex flex-col justify-between h-full">
+              <div className="flex flex-col">
                 <input
                   type="file"
                   accept="image/*"
@@ -910,9 +910,9 @@ export default function Home() {
               </div>
 
               {/* RIGHT: Prompt of the Day + Canvas Link */}
-              <div className="flex flex-col space-y-4 h-full">
+              <div className="flex flex-col space-y-4">
                 {/* Prompt of the Day */}
-                <div className={`border-2 rounded-xl p-5 shadow-lg transition-all duration-300 ${
+                <div className={`flex-1 border-2 rounded-xl p-5 shadow-lg transition-all duration-300 flex flex-col ${
                   promptOfDayActive
                     ? 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-300 ring-2 ring-purple-200'
                     : 'bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-300'
