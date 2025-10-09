@@ -149,7 +149,7 @@ export default function BatchStyleGenerator({ currentImage, onBatchGenerated }: 
               <div className="mt-2">
                 <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 overflow-hidden">
                   <div
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-1.5 transition-all duration-300"
+                    className="bg-coral-500 h-1.5 transition-all duration-300"
                     style={{ width: `${progress}%` }}
                   />
                 </div>

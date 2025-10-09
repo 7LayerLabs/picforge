@@ -200,7 +200,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                     onClick={() => setShowBeforeAfter(true)}
                     className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                       showBeforeAfter
-                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                        ? 'bg-teal-600 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -295,7 +295,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                   <div className="space-y-3">
                     <button
                       onClick={copyForInstagram}
-                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                      className="w-full bg-teal-600 text-white py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
                     >
                       Copy Caption & Download Image
                     </button>

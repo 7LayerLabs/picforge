@@ -106,7 +106,7 @@ export default function ImageGallery({
           >
             {/* Image Container */}
             <div
-              className="relative w-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900"
+              className="relative w-full bg-gray-100 dark:from-gray-800 dark:to-gray-900"
               style={{ height: `${getItemHeight(index)}px` }}
             >
               <Image
@@ -119,7 +119,7 @@ export default function ImageGallery({
 
               {/* Gradient Overlay on Hover */}
               <div className={`
-                absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent
+                absolute inset-0 bg-black/60
                 transition-opacity duration-300
                 ${hoveredIndex === index ? 'opacity-100' : 'opacity-0'}
               `} />

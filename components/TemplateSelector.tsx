@@ -114,7 +114,7 @@ export default function TemplateSelector({ onSelectTemplate, currentImage }: Tem
                     <div className="flex items-center gap-1">
                       <h3 className="font-semibold text-xs text-gray-900 dark:text-white truncate">{template.name}</h3>
                       {template.badge && (
-                        <span className="px-1.5 py-0.5 bg-gradient-to-r from-teal-500 to-pink-500 text-white text-[8px] font-bold rounded">
+                        <span className="px-1.5 py-0.5 bg-teal-500 text-white text-[8px] font-bold rounded">
                           {template.badge.split(' ')[0]}
                         </span>
                       )}

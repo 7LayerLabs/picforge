@@ -318,10 +318,10 @@ export default function BeforeAfterSlider({
         </div>
 
         {/* Enhanced Labels */}
-        <div className="absolute top-4 left-4 px-4 py-2 bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
+        <div className="absolute top-4 left-4 px-4 py-2 bg-teal-600/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
           {beforeLabel}
         </div>
-        <div className="absolute top-4 right-4 px-4 py-2 bg-gradient-to-r from-teal-600/90 to-orange-700/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
+        <div className="absolute top-4 right-4 px-4 py-2 bg-coral-600/90 text-white text-sm font-bold rounded-lg backdrop-blur-md shadow-xl border border-white/20 transition-all duration-200 hover:scale-105">
           {afterLabel}
         </div>
 
@@ -337,7 +337,7 @@ export default function BeforeAfterSlider({
       <button
         onClick={exportAsImage}
         disabled={isExporting}
-        className="mt-4 w-full px-4 py-3 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 text-white font-bold rounded-xl hover:from-purple-600 hover:via-pink-500 hover:to-pink-700 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl btn-premium glow-on-hover"
+        className="mt-4 w-full px-4 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl btn-premium glow-on-hover"
       >
         {isExporting ? (
           <>
