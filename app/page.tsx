@@ -11,6 +11,7 @@ import BeforeAfterSlider from '@/components/BeforeAfterSlider'
 import TemplateSelector from '@/components/TemplateSelector'
 import ImageGallery from '@/components/ImageGallery'
 import BatchStyleGenerator from '@/components/BatchStyleGenerator'
+import VIPCodeEntry from '@/components/VIPCodeEntry'
 
 interface HistoryItem {
   prompt: string
@@ -1207,6 +1208,9 @@ export default function Home() {
         imageUrl={currentImage || ''}
         originalImageUrl={originalImage || undefined}
       />
+
+      {/* VIP Code Entry (hidden key icon in bottom left) */}
+      <VIPCodeEntry />
     </div>
   )
 }

@@ -60,9 +60,8 @@ export default function TermsPage() {
                 PicForge provides the following usage limits:
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li>Free tier: 500 images per day per IP address</li>
-                <li>Registered users: 500 images per day per account</li>
-                <li>Pro users: Unlimited processing (subject to fair use)</li>
+                <li>Free tier: 20 images per day per IP address</li>
+                <li>Pro users ($8/month): Unlimited processing (subject to fair use)</li>
                 <li>File size limit: 10MB per image</li>
                 <li>Batch processing: Up to 100 images per batch</li>
               </ul>

@@ -48,6 +48,7 @@ export default function PromptsPage() {
         "Create professional dating profile photo with natural outdoor lighting",
         "Turn into classical marble statue bust with museum lighting",
         "Professional musician/artist portrait with creative studio background",
+        "Vibrant vector comic portrait with clean lines, dramatic shadows, warm/cool contrast lighting, abstract dark background with splashes, confident expression, digital illustration style",
         "Transform to watercolor painting portrait with soft edges and artistic splashes",
         "Create professional Zoom virtual background with home office setting",
         "Turn into retro 80s portrait with neon colors and synthwave aesthetics",
