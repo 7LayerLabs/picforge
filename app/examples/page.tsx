@@ -74,7 +74,7 @@ export default function ExamplesPage() {
   }, [sampleImages])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-6">
         <Link
@@ -126,7 +126,7 @@ export default function ExamplesPage() {
                       loading="lazy"
                       quality={75}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                       <div className="text-white text-xs font-medium flex items-center gap-1">
                         <Zap className="w-3 h-3" />
                         Click to edit
@@ -148,7 +148,7 @@ export default function ExamplesPage() {
               <p className="text-gray-600 mb-4">No sample images found</p>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-pink-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-pink-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all"
               >
                 <Upload className="w-4 h-4" />
                 Upload Your Own Image
@@ -162,7 +162,7 @@ export default function ExamplesPage() {
           <div className="text-center mt-16">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-500 to-pink-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-pink-600 transition-all duration-200 hover:scale-105 shadow-xl"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all duration-200 hover:scale-105 shadow-xl"
             >
               <Upload className="w-5 h-5" />
               Upload Your Own Image

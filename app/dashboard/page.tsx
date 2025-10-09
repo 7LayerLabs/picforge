@@ -44,7 +44,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 p-6">
+    <div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -61,7 +61,7 @@ export default function DashboardPage() {
         {/* User Info */}
         <div className="bg-gray-800/50 backdrop-blur rounded-xl p-6 mb-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-coral-500 rounded-full flex items-center justify-center">
               <User className="w-8 h-8 text-white" />
             </div>
             <div>
@@ -73,7 +73,7 @@ export default function DashboardPage() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 backdrop-blur rounded-xl p-6 border border-blue-500/30">
+          <div className="bg-blue-600/20 backdrop-blur rounded-xl p-6 border border-blue-500/30">
             <div className="flex items-center justify-between mb-4">
               <Images className="w-8 h-8 text-blue-400" />
               <span className="text-3xl font-bold text-white">{stats.totalImages}</span>
@@ -82,7 +82,7 @@ export default function DashboardPage() {
             <p className="text-gray-400 text-sm">All time</p>
           </div>
 
-          <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 backdrop-blur rounded-xl p-6 border border-green-500/30">
+          <div className="bg-green-600/20 backdrop-blur rounded-xl p-6 border border-green-500/30">
             <div className="flex items-center justify-between mb-4">
               <Activity className="w-8 h-8 text-green-400" />
               <span className="text-3xl font-bold text-white">{stats.todayImages}</span>
@@ -91,7 +91,7 @@ export default function DashboardPage() {
             <p className="text-gray-400 text-sm">Last 24 hours</p>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 backdrop-blur rounded-xl p-6 border border-purple-500/30">
+          <div className="bg-purple-600/20 backdrop-blur rounded-xl p-6 border border-purple-500/30">
             <div className="flex items-center justify-between mb-4">
               <Calendar className="w-8 h-8 text-purple-400" />
               <span className="text-3xl font-bold text-white">{stats.weekImages}</span>
@@ -100,7 +100,7 @@ export default function DashboardPage() {
             <p className="text-gray-400 text-sm">Last 7 days</p>
           </div>
 
-          <div className="bg-gradient-to-br from-teal-600/20 to-orange-800/20 backdrop-blur rounded-xl p-6 border border-teal-500/30">
+          <div className="bg-teal-600/20 backdrop-blur rounded-xl p-6 border border-teal-500/30">
             <div className="flex items-center justify-between mb-4">
               <Calendar className="w-8 h-8 text-teal-400" />
               <span className="text-3xl font-bold text-white">{stats.monthImages}</span>

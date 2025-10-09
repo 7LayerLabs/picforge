@@ -3,7 +3,7 @@ import { ArrowLeft, Shield, Lock, Eye, Database, Globe, UserCheck, AlertTriangle
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
           href="/"
@@ -21,7 +21,7 @@ export default function PrivacyPage() {
           <p className="text-gray-500 mb-8">Effective Date: October 1, 2025</p>
 
           {/* Privacy Commitment Banner */}
-          <div className="bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl p-6 mb-8">
+          <div className="bg-teal-50 rounded-xl p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-2">Our Privacy Commitment</h2>
             <p className="text-gray-700">
               At PicForge, we believe your images and data belong to you. We process images locally whenever possible,
@@ -305,7 +305,7 @@ export default function PrivacyPage() {
               </div>
             </section>
 
-            <div className="mt-12 p-6 bg-gradient-to-r from-teal-50 to-purple-50 rounded-lg">
+            <div className="mt-12 p-6 bg-teal-50 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">Privacy at a Glance</h3>
               <ul className="text-sm text-gray-700 space-y-1">
                 <li>✓ We process images locally when possible</li>

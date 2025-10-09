@@ -914,8 +914,8 @@ export default function Home() {
                 {/* Prompt of the Day */}
                 <div className={`flex-1 border-2 rounded-xl p-5 shadow-lg transition-all duration-300 flex flex-col ${
                   promptOfDayActive
-                    ? 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-300 ring-2 ring-purple-200'
-                    : 'bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-300'
+                    ? 'bg-purple-50 border-purple-300 ring-2 ring-purple-200'
+                    : 'bg-teal-50 border-teal-300'
                 }`}>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -994,7 +994,7 @@ export default function Home() {
                 </div>
 
                 {/* Canvas Link Card */}
-                <Link href="/canvas" className="block p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-teal-400 hover:shadow-lg transition-all group">
+                <Link href="/canvas" className="block p-4 bg-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-teal-400 hover:shadow-lg transition-all group">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Need a background?</p>
@@ -1017,7 +1017,7 @@ export default function Home() {
               {/* Left Sidebar - Templates & Batch Generator */}
               <div className="lg:w-[320px] flex flex-col space-y-3 animate-slide-in-left">
                 <div className="bg-white dark:bg-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 shadow-lg sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
-                  <h2 className="text-lg font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  <h2 className="text-lg font-bold mb-4 bg-teal-600 bg-clip-text text-transparent">
                     🎨 Creative Studio
                   </h2>
 
@@ -1058,7 +1058,7 @@ export default function Home() {
                         onClick={() => setShowBeforeAfter(true)}
                         className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg flex items-center gap-2 ${
                           showBeforeAfter
-                            ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                            ? 'bg-teal-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                         }`}
                       >
@@ -1080,7 +1080,7 @@ export default function Home() {
                       className="w-full"
                     />
                   ) : (
-                    <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 shadow-inner transition-all duration-300 card-smooth hover-lift">
+                    <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50 dark:from-gray-900 dark:to-gray-800 shadow-inner transition-all duration-300 card-smooth hover-lift">
                       {currentImage && (
                         <>
                           <NextImage
@@ -1219,7 +1219,7 @@ export default function Home() {
                   <button
                     type="submit"
                     disabled={isSubmitting || !instructions.trim()}
-                    className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 text-sm font-semibold shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 btn-premium button-press hover-lift min-w-[200px]"
+                    className="px-8 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-xl transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 text-sm font-semibold shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 btn-premium button-press hover-lift min-w-[200px]"
                   >
                     {isSubmitting ? '⏳ Processing...' : '🚀 Apply Edit & Generate'}
                   </button>
@@ -1251,7 +1251,7 @@ export default function Home() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => setShowShareModal(true)}
-                        className="px-3 py-1.5 text-xs bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-lg hover:from-teal-600 hover:to-coral-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                        className="px-3 py-1.5 text-xs bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                         title="Share Image"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1261,7 +1261,7 @@ export default function Home() {
                       </button>
                       <button
                         onClick={downloadAllImages}
-                        className="px-3 py-1.5 text-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                        className="px-3 py-1.5 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                         title="Download All Images"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

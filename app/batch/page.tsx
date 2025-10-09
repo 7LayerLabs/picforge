@@ -418,7 +418,7 @@ export default function BatchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 relative">
+    <div className="min-h-screen bg-gray-50 relative">
       {/* Full page drag indicator */}
       {isDraggingPage && (
         <div className="fixed inset-0 z-50 bg-purple-500/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
@@ -459,7 +459,7 @@ export default function BatchPage() {
               <span className="text-sm font-medium">Batch Processing</span>
             </div>
             <h1 className="font-heading text-5xl font-bold text-gray-900 mb-4">
-              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-teal-600 bg-clip-text text-transparent">
                 Process 100+ Images at Once
               </span>
             </h1>
@@ -508,7 +508,7 @@ export default function BatchPage() {
           </div>
 
           {/* Available Effects - UPDATED with 11 NEW effects! */}
-          <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 mb-6">
+          <div className="bg-purple-50 rounded-xl p-4 mb-6">
             <h3 className="font-semibold text-purple-900 mb-2">✨ 21 Available Effects - Mix & Match!</h3>
             <div className="grid grid-cols-3 md:grid-cols-7 gap-2 text-xs">
               {/* Original Effects */}
@@ -550,7 +550,7 @@ export default function BatchPage() {
                   <button
                     onClick={surpriseMe}
                     disabled={isProcessing}
-                    className="px-4 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-sm font-medium rounded-lg hover:from-pink-600 hover:to-purple-600 transition-all disabled:opacity-50 flex items-center gap-2"
+                    className="px-4 py-1 bg-coral-500 text-white text-sm font-medium rounded-lg hover:bg-coral-600 transition-all disabled:opacity-50 flex items-center gap-2"
                   >
                     <Sparkles className="w-4 h-4" />
                     Surprise Me!
@@ -577,7 +577,7 @@ export default function BatchPage() {
                   <button
                     onClick={processImages}
                     disabled={!prompt.trim() || images.length === 0}
-                    className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all disabled:opacity-50 flex items-center gap-2"
+                    className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 transition-all disabled:opacity-50 flex items-center gap-2"
                   >
                     <Play className="w-5 h-5" />
                     Start Processing
@@ -699,7 +699,7 @@ export default function BatchPage() {
                           <div className="mt-2">
                             <div className="w-full bg-gray-200 rounded-full h-2">
                               <div
-                                className="bg-gradient-to-r from-purple-600 to-blue-600 h-2 rounded-full transition-all"
+                                className="bg-teal-600 h-2 rounded-full transition-all"
                                 style={{ width: `${image.progress}%` }}
                               />
                             </div>

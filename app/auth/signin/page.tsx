@@ -20,7 +20,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <Link
           href="/"
@@ -55,7 +55,7 @@ export default function SignInPage() {
             </button>
           </div>
 
-          <div className="mt-8 p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-xl">
+          <div className="mt-8 p-4 bg-purple-50 rounded-xl">
             <h3 className="font-semibold text-sm mb-2">Why sign in?</h3>
             <ul className="space-y-1 text-xs text-gray-600">
               <li>• Save your image history</li>

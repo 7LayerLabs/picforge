@@ -93,7 +93,7 @@ export default function TipsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-6">
         <Link
@@ -130,7 +130,7 @@ export default function TipsPage() {
               className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 border border-gray-100"
             >
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-gradient-to-br from-teal-500 to-pink-500 text-white rounded-lg">
+                <div className="p-2 bg-teal-500 text-white rounded-lg">
                   {tip.icon}
                 </div>
                 <h3 className="font-semibold text-gray-900">{tip.title}</h3>
@@ -151,7 +151,7 @@ export default function TipsPage() {
                 </div>
                 <Link
                   href="/prompts"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-pink-500 text-white rounded-xl font-medium hover:from-teal-600 hover:to-pink-600 transition-all hover:scale-105"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-medium hover:bg-teal-700 transition-all hover:scale-105"
                 >
                   Browse All 210+ Prompts
                   <ArrowRight className="w-4 h-4" />
@@ -209,7 +209,7 @@ export default function TipsPage() {
             {didYouKnow.map((item, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200"
+                className="bg-purple-50 rounded-xl p-5 border border-purple-200"
               >
                 <h3 className="font-bold text-lg text-purple-900 mb-2">{item.title}</h3>
                 <p className="text-gray-700 mb-3">{item.fact}</p>
@@ -249,7 +249,7 @@ export default function TipsPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-6">🍌 Nano Banana Best Practices (2025)</h2>
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-yellow-50 to-teal-50 p-5 rounded-lg border border-yellow-200">
+              <div className="bg-amber-50 p-5 rounded-lg border border-yellow-200">
                 <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">✍️ Use Descriptive Sentences, Not Keywords</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Describe the scene in narrative form—AI understands language deeply, so a paragraph beats a keyword list every time.
@@ -260,7 +260,7 @@ export default function TipsPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-5 rounded-lg border border-blue-200">
+              <div className="bg-blue-50 p-5 rounded-lg border border-blue-200">
                 <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">📸 For Photorealistic: Use Photography Terms</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Mention camera angles, lens types, lighting, and technical details to guide toward photorealistic results.
@@ -270,7 +270,7 @@ export default function TipsPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-green-50 to-teal-50 p-5 rounded-lg border border-green-200">
+              <div className="bg-teal-50 p-5 rounded-lg border border-green-200">
                 <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">🎨 Iterative Editing Works Best</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Make single, focused changes per iteration rather than overloading with multiple instructions.
@@ -281,7 +281,7 @@ export default function TipsPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-pink-50 to-amber-50 p-5 rounded-lg border border-pink-200">
+              <div className="bg-coral-50 p-5 rounded-lg border border-pink-200">
                 <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">🚫 Use Semantic Negatives</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Specify what you DON&apos;T want to avoid unwanted elements in your generation.
@@ -295,7 +295,7 @@ export default function TipsPage() {
         </div>
 
         {/* Pro Techniques */}
-        <div className="bg-gradient-to-r from-teal-600 to-pink-600 rounded-2xl p-8 text-white">
+        <div className="bg-teal-600 rounded-2xl p-8 text-white">
           <h2 className="text-3xl font-bold mb-6">🚀 Pro Techniques</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -329,7 +329,7 @@ export default function TipsPage() {
         <div className="text-center mt-12">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-500 to-pink-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-pink-600 transition-all duration-200 hover:scale-105 shadow-xl"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all duration-200 hover:scale-105 shadow-xl"
           >
             <Sparkles className="w-5 h-5" />
             Start Creating Now

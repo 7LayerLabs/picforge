@@ -386,7 +386,7 @@ export default function BatchProcessorNSFW() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 relative">
+    <div className="min-h-screen bg-gray-900 relative">
       {isDraggingPage && (
         <div className="fixed inset-0 z-50 bg-coral-500/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
           <div className="bg-gray-800 rounded-2xl p-12 shadow-2xl border-2 border-coral-500">
@@ -490,7 +490,7 @@ export default function BatchProcessorNSFW() {
                   <button
                     onClick={surpriseMe}
                     disabled={isProcessing}
-                    className="px-4 py-1 bg-gradient-to-r from-coral-500 to-teal-500 text-white text-sm font-medium rounded-lg hover:from-coral-600 hover:to-teal-600 transition-all disabled:opacity-50 flex items-center gap-2"
+                    className="px-4 py-1 bg-coral-500 text-white text-sm font-medium rounded-lg hover:bg-coral-700 transition-all disabled:opacity-50 flex items-center gap-2"
                   >
                     <Sparkles className="w-4 h-4" />
                     Surprise Me!
@@ -517,7 +517,7 @@ export default function BatchProcessorNSFW() {
                   <button
                     onClick={processImages}
                     disabled={!prompt.trim() || images.length === 0}
-                    className="px-8 py-3 bg-gradient-to-r from-coral-600 to-teal-600 text-white font-semibold rounded-xl hover:from-red-700 hover:to-orange-700 transition-all disabled:opacity-50 flex items-center gap-2"
+                    className="px-8 py-3 bg-coral-600 text-white font-semibold rounded-xl hover:bg-coral-700 transition-all disabled:opacity-50 flex items-center gap-2"
                   >
                     <Play className="w-5 h-5" />
                     Start Processing
@@ -635,7 +635,7 @@ export default function BatchProcessorNSFW() {
                           <div className="mt-2">
                             <div className="w-full bg-gray-700 rounded-full h-2">
                               <div
-                                className="bg-gradient-to-r from-coral-600 to-teal-600 h-2 rounded-full transition-all"
+                                className="bg-coral-600 h-2 rounded-full transition-all"
                                 style={{ width: `${image.progress}%` }}
                               />
                             </div>

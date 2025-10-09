@@ -33,7 +33,7 @@ export default function BatchNSFWPage() {
 
   if (isChecking) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="animate-pulse text-white">Loading...</div>
       </div>
     )
@@ -41,7 +41,7 @@ export default function BatchNSFWPage() {
 
   if (!isVerified) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-2xl p-8 border-2 border-coral-500">
           {/* Warning Icon */}
           <div className="flex justify-center mb-6">

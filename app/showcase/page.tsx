@@ -122,7 +122,7 @@ export default function ShowcasePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-16 z-40">
         <div className="container mx-auto px-4 py-6">
@@ -139,7 +139,7 @@ export default function ShowcasePage() {
             {session && (
               <Link
                 href="/showcase/submit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
               >
                 <Plus className="w-5 h-5" />
                 Submit Your Work
@@ -226,7 +226,7 @@ export default function ShowcasePage() {
             {session && (
               <Link
                 href="/showcase/submit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
               >
                 <Plus className="w-5 h-5" />
                 Submit Your Work
@@ -253,7 +253,7 @@ export default function ShowcasePage() {
                     alt="Original"
                     className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity group-hover:opacity-100"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                   {/* Hover text */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -286,7 +286,7 @@ export default function ShowcasePage() {
                         className="w-6 h-6 rounded-full"
                       />
                     ) : (
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-teal-500 to-coral-500 flex items-center justify-center text-white text-xs font-bold">
+                      <div className="w-6 h-6 rounded-full bg-teal-500 flex items-center justify-center text-white text-xs font-bold">
                         {showcase.user.name?.[0] || 'U'}
                       </div>
                     )}
@@ -412,7 +412,7 @@ export default function ShowcasePage() {
                   </button>
                   <button
                     onClick={(e) => tryPrompt(selectedShowcase.prompt, e)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-lg hover:from-teal-600 hover:to-coral-600 transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all"
                   >
                     Try This Prompt
                   </button>
@@ -437,7 +437,7 @@ export default function ShowcasePage() {
                       className="w-10 h-10 rounded-full"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-500 to-coral-500 flex items-center justify-center text-white font-bold">
+                    <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center text-white font-bold">
                       {selectedShowcase.user.name?.[0] || 'U'}
                     </div>
                   )}

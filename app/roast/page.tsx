@@ -223,7 +223,7 @@ export default function RoastMode() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-teal-50 to-yellow-50">
+    <div className="min-h-screen bg-amber-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-6">
@@ -316,7 +316,7 @@ export default function RoastMode() {
                 <p className="text-gray-600 mb-4">
                   (If you dare...)
                 </p>
-                <div className="inline-block px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all">
+                <div className="inline-block px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all">
                   Choose Photo to Roast
                 </div>
               </div>
@@ -340,7 +340,7 @@ export default function RoastMode() {
               <button
                 onClick={generateRoast}
                 disabled={isProcessing}
-                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-bold text-lg hover:from-teal-600 hover:to-coral-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-teal-500 text-white rounded-xl font-bold text-lg hover:bg-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isProcessing ? (
                   <>
@@ -359,7 +359,7 @@ export default function RoastMode() {
             {/* Roast Display */}
             {roastResult && (
               <div className="bg-black text-white rounded-2xl shadow-2xl p-6 mb-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-coral-500/20 animate-pulse" />
+                <div className="absolute inset-0 bg-teal-500/20 animate-pulse" />
                 <div className="relative">
                   <div className="flex items-start gap-3">
                     <Flame className="w-6 h-6 text-teal-500 mt-1 flex-shrink-0" />

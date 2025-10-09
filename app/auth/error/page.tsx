@@ -41,7 +41,7 @@ function AuthErrorContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <Link
           href="/"
@@ -69,7 +69,7 @@ function AuthErrorContent() {
             <div className="space-y-3">
               <Link
                 href="/auth/signin"
-                className="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
+                className="w-full inline-flex items-center justify-center px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
               >
                 Try Again
               </Link>
@@ -99,7 +99,7 @@ function AuthErrorContent() {
 export default function AuthErrorPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>

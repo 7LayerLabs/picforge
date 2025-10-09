@@ -42,7 +42,7 @@ export default function ShowcaseSubmitPage() {
   // Authentication temporarily disabled
   if (status === 'unauthenticated') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
           <div className="text-6xl mb-4">🔒</div>
           <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
@@ -53,7 +53,7 @@ export default function ShowcaseSubmitPage() {
           </p>
           <Link
             href="/showcase"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Showcase
@@ -116,7 +116,7 @@ export default function ShowcaseSubmitPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Link
           href="/showcase"
@@ -291,7 +291,7 @@ export default function ShowcaseSubmitPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? (
                   <>
@@ -316,7 +316,7 @@ export default function ShowcaseSubmitPage() {
           </form>
 
           {/* Tips */}
-          <div className="mt-8 p-4 bg-gradient-to-r from-teal-50 to-purple-50 rounded-xl">
+          <div className="mt-8 p-4 bg-teal-50 rounded-xl">
             <h3 className="font-semibold text-sm mb-2">Tips for a great submission:</h3>
             <ul className="space-y-1 text-xs text-gray-600">
               <li>• Use high-quality images that clearly show the transformation</li>

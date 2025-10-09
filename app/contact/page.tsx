@@ -27,7 +27,7 @@ export default function ContactPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
           <div className="text-6xl mb-4">✅</div>
           <h2 className="font-heading text-3xl font-bold text-gray-900 mb-4">
@@ -38,7 +38,7 @@ export default function ContactPage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -49,7 +49,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 pt-6 pb-20">
         <Link
           href="/"
@@ -139,7 +139,7 @@ export default function ContactPage() {
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all duration-200 hover:scale-105 shadow-lg"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all duration-200 hover:scale-105 shadow-lg"
               >
                 <Send className="w-5 h-5" />
                 Send Message

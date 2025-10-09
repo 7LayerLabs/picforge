@@ -180,7 +180,7 @@ export default function EditPanel({
           <button
             onClick={() => selectedTemplate && onApplyEdits(selectedTemplate.operations)}
             disabled={!selectedTemplate}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white
+            className="w-full py-3 bg-blue-600 text-white
                      rounded-lg font-medium hover:from-blue-700 hover:to-blue-800
                      transition-all disabled:opacity-50 disabled:cursor-not-allowed
                      flex items-center justify-center gap-2"
@@ -306,7 +306,7 @@ export default function EditPanel({
 
           <button
             onClick={applyManualEdits}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white
+            className="w-full py-3 bg-blue-600 text-white
                      rounded-lg font-medium hover:from-blue-700 hover:to-blue-800
                      transition-all flex items-center justify-center gap-2"
           >

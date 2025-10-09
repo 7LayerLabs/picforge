@@ -103,7 +103,7 @@ export default function EditorNSFW() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
       <div className="border-b border-red-900 bg-gray-900/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
@@ -168,7 +168,7 @@ export default function EditorNSFW() {
                   <p className="text-gray-400 mb-4">
                     Drop image here or click to browse
                   </p>
-                  <div className="inline-block px-6 py-3 bg-gradient-to-r from-coral-600 to-teal-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-orange-700 transition-all">
+                  <div className="inline-block px-6 py-3 bg-coral-600 text-white rounded-xl font-semibold hover:bg-coral-700 transition-all">
                     Choose Image
                   </div>
                 </div>
@@ -211,7 +211,7 @@ export default function EditorNSFW() {
                   <button
                     onClick={transformImage}
                     disabled={isProcessing || !prompt.trim()}
-                    className="flex-1 px-6 py-3 bg-gradient-to-r from-coral-600 to-teal-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-orange-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-6 py-3 bg-coral-600 text-white rounded-xl font-semibold hover:bg-coral-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isProcessing ? (
                       <>

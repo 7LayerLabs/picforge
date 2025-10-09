@@ -10,7 +10,7 @@ const EditorNSFW = dynamic(() => import('../components/EditorNSFW'), {
 
 export default function EditorNSFWPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-gray-900 flex items-center justify-center p-4 py-20 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 py-20 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-coral-500/10 rounded-full blur-3xl animate-pulse" />
@@ -23,7 +23,7 @@ export default function EditorNSFWPage() {
         <div className="absolute -top-2 -right-2 z-20 overflow-hidden" style={{ width: '120px', height: '120px' }}>
           <div className="absolute top-0 right-0">
             {/* Ribbon */}
-            <div className="bg-gradient-to-r from-coral-600 via-coral-500 to-teal-500 text-white font-bold px-8 py-2 shadow-2xl transform rotate-45 translate-x-6 translate-y-6">
+            <div className="bg-coral-600 text-white font-bold px-8 py-2 shadow-2xl transform rotate-45 translate-x-6 translate-y-6">
               <div className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 animate-pulse" />
                 <span className="text-sm tracking-wider whitespace-nowrap">COMING SOON</span>
@@ -35,13 +35,13 @@ export default function EditorNSFWPage() {
         </div>
 
         {/* Card */}
-        <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-coral-500/30 relative overflow-hidden">
+        <div className="bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-coral-500/30 relative overflow-hidden">
           {/* Glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-br from-coral-500/5 via-transparent to-teal-500/5 pointer-events-none" />
+          <div className="absolute inset-0 bg-coral-500/5 pointer-events-none" />
 
           {/* Shield Icon */}
           <div className="relative flex justify-center mb-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-coral-500/20 to-teal-500/20 rounded-full flex items-center justify-center border-2 border-coral-500/30 shadow-lg">
+            <div className="w-24 h-24 bg-coral-500/20 rounded-full flex items-center justify-center border-2 border-coral-500/30 shadow-lg">
               <Sparkles className="w-12 h-12 text-red-400 animate-pulse" />
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function EditorNSFWPage() {
           </div>
 
           {/* Description */}
-          <div className="bg-gradient-to-br from-gray-900/80 to-black/60 rounded-2xl p-6 mb-6 border border-coral-500/20 backdrop-blur-sm">
+          <div className="bg-gray-900/80 rounded-2xl p-6 mb-6 border border-coral-500/20 backdrop-blur-sm">
             <h2 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
               <span className="text-red-400">🔥</span>
               What&apos;s Coming
@@ -92,7 +92,7 @@ export default function EditorNSFWPage() {
 
           {/* Notify Me Section */}
           <div className="text-center mb-6">
-            <div className="inline-block bg-gradient-to-r from-gray-800 to-gray-900 px-6 py-3 rounded-xl border border-gray-700">
+            <div className="inline-block bg-gray-800 px-6 py-3 rounded-xl border border-gray-700">
               <p className="text-gray-400 text-xs mb-1">Want early access?</p>
               <p className="text-white font-semibold text-sm">Follow us on social media for launch updates</p>
             </div>
@@ -102,7 +102,7 @@ export default function EditorNSFWPage() {
           <div>
             <Link
               href="/"
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl transition-all shadow-lg border border-gray-600"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-xl transition-all shadow-lg border border-gray-600"
             >
               <ArrowLeft className="w-5 h-5" />
               Return to Regular Editor

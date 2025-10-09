@@ -354,7 +354,7 @@ export default function PromptsPage() {
     .filter(cat => cat.prompts.length > 0)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <div className="container mx-auto px-4 pt-6">
         <div className="flex justify-between items-center mb-8">
@@ -367,7 +367,7 @@ export default function PromptsPage() {
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-all"
           >
             <Sparkles className="w-4 h-4" />
             Try in Editor
@@ -407,7 +407,7 @@ export default function PromptsPage() {
                   onClick={() => scrollToCategory(cat.category)}
                   className={`px-5 py-4 rounded-xl font-medium transition-all flex flex-col items-center gap-2 text-sm ${
                     selectedCategory === cat.category
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl scale-105'
+                      ? 'bg-teal-600 text-white shadow-xl scale-105'
                       : 'bg-gray-50 text-gray-700 hover:bg-gray-100 hover:shadow-lg border-2 border-gray-200 hover:border-blue-300'
                   }`}
                 >
@@ -421,7 +421,7 @@ export default function PromptsPage() {
             <div className="flex items-center justify-center gap-4 pt-4 border-t border-gray-200">
               <Link
                 href="/canvas"
-                className="px-8 py-3 rounded-xl font-semibold transition-all text-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 hover:shadow-lg flex items-center gap-2"
+                className="px-8 py-3 rounded-xl font-semibold transition-all text-sm bg-coral-500 text-white hover:bg-coral-600 hover:shadow-lg flex items-center gap-2"
               >
                 <Sparkles className="w-4 h-4" />
                 Try in Canvas
@@ -445,7 +445,7 @@ export default function PromptsPage() {
               className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden scroll-mt-32"
             >
               {/* Category Header */}
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-200">
+              <div className="bg-blue-50 px-6 py-4 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{category.icon}</span>
@@ -534,7 +534,7 @@ export default function PromptsPage() {
 
         {/* Tips Section */}
         <div className="max-w-4xl mx-auto mb-12">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
+          <div className="bg-teal-600 rounded-2xl p-8 text-white">
             <h2 className="font-heading text-2xl font-bold mb-4">💡 Pro Tips for Better Results</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>

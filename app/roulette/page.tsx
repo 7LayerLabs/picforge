@@ -583,7 +583,7 @@ export default function TransformRoulette() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50">
+    <div className="min-h-screen bg-purple-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-6">
@@ -632,7 +632,7 @@ export default function TransformRoulette() {
                 <p className="text-gray-600 mb-4">
                   Then spin the wheel of transformation!
                 </p>
-                <div className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all">
+                <div className="inline-block px-6 py-3 bg-coral-500 text-white rounded-xl font-semibold hover:bg-coral-600 transition-all">
                   Choose Image
                 </div>
               </div>
@@ -778,7 +778,7 @@ export default function TransformRoulette() {
                       <button
                         onClick={spinWheel}
                         disabled={isSpinning || isProcessing}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-coral-500 text-white rounded-xl font-semibold hover:bg-coral-600 transition-all disabled:opacity-50"
                       >
                         <RefreshCw className="w-5 h-5" />
                         Spin Again
@@ -807,7 +807,7 @@ export default function TransformRoulette() {
                     <button
                       onClick={spinWheel}
                       disabled={isSpinning || isProcessing}
-                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold text-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-coral-500 text-white rounded-xl font-bold text-lg hover:bg-coral-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                     >
                       {isSpinning ? (
                         <>

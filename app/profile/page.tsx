@@ -23,7 +23,7 @@ export default function ProfilePage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Loading profile...</p>
@@ -34,7 +34,7 @@ export default function ProfilePage() {
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
           <div className="text-6xl mb-4">👤</div>
           <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
@@ -45,7 +45,7 @@ export default function ProfilePage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-coral-600 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Home
@@ -58,7 +58,7 @@ export default function ProfilePage() {
   const memberSince = session.user?.email ? new Date().toLocaleDateString() : 'Unknown'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <Link
           href="/"
@@ -80,7 +80,7 @@ export default function ProfilePage() {
                   className="w-32 h-32 rounded-full border-4 border-white shadow-xl"
                 />
               ) : (
-                <div className="w-32 h-32 rounded-full bg-gradient-to-r from-teal-500 to-coral-500 flex items-center justify-center text-white text-4xl font-bold shadow-xl">
+                <div className="w-32 h-32 rounded-full bg-teal-500 flex items-center justify-center text-white text-4xl font-bold shadow-xl">
                   {session.user?.name?.[0] || 'U'}
                 </div>
               )}
@@ -106,7 +106,7 @@ export default function ProfilePage() {
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
-                <span className="px-3 py-1 bg-gradient-to-r from-teal-100 to-red-100 text-orange-700 rounded-full text-sm font-medium">
+                <span className="px-3 py-1 bg-amber-100 text-orange-700 rounded-full text-sm font-medium">
                   Free Plan
                 </span>
                 <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
@@ -126,7 +126,7 @@ export default function ProfilePage() {
               </Link>
               <Link
                 href="/pricing"
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-lg hover:from-teal-600 hover:to-coral-600 transition-all"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all"
               >
                 <Crown className="w-4 h-4" />
                 Upgrade to Pro

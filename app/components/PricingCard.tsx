@@ -81,7 +81,7 @@ export default function PricingCard({ onSelectPlan }: { onSelectPlan?: (plan: st
             transition={{ delay: index * 0.1 }}
             className={`relative rounded-2xl p-8 ${
               tier.highlighted
-                ? 'bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-2xl scale-105'
+                ? 'bg-teal-600 text-white shadow-2xl scale-105'
                 : 'bg-white border border-gray-200 shadow-lg'
             }`}
           >

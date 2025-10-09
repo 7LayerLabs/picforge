@@ -54,7 +54,7 @@ function CanvasContent() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Back Button */}
         <Link
@@ -72,7 +72,7 @@ function CanvasContent() {
             <span className="text-sm font-medium">AI Image Generation</span>
           </div>
           <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">Dream It. Type It. Get It.</span>
+            <span className="bg-coral-500 bg-clip-text text-transparent">Dream It. Type It. Get It.</span>
           </h1>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-bold">
             No photo? No problem. Describe literally anything and watch AI conjure it into existence. Backgrounds, scenes, whatever weird stuff you&apos;re thinking.
@@ -115,7 +115,7 @@ function CanvasContent() {
           <button
             onClick={handleGenerate}
             disabled={!prompt.trim() || isGenerating}
-            className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-4 bg-coral-500 text-white font-semibold rounded-xl hover:bg-coral-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
@@ -167,7 +167,7 @@ function CanvasContent() {
               </button>
               <Link
                 href="/"
-                className="flex-1 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all text-center"
+                className="flex-1 py-3 bg-coral-500 text-white font-medium rounded-xl hover:bg-coral-600 transition-all text-center"
               >
                 Use in Editor
               </Link>
@@ -176,7 +176,7 @@ function CanvasContent() {
         )}
 
         {/* How It Works */}
-        <div className="mt-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-8 text-white">
+        <div className="mt-16 bg-teal-600 rounded-3xl p-8 text-white">
           <h2 className="font-heading text-3xl font-bold mb-6">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
@@ -204,7 +204,7 @@ function CanvasContent() {
 export default function CanvasPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading Canvas...</p>
