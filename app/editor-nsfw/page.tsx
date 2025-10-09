@@ -1,9 +1,17 @@
 'use client'
 
-import { ArrowLeft, Clock, Sparkles } from 'lucide-react'
-import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const EditorNSFW = dynamic(() => import('../components/EditorNSFW'), {
+  ssr: false
+})
 
 export default function EditorNSFWPage() {
+  return <EditorNSFW />
+}
+
+// Coming Soon version - kept for reference
+export function ComingSoonVersion() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-gray-900 flex items-center justify-center p-4 py-20 relative overflow-hidden">
       {/* Animated background elements */}
