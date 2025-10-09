@@ -22,11 +22,15 @@ interface HistoryItem {
 
 // Removed Session interface - simplified without session management
 
+// Define the prompt of the day at the top level so it can be used throughout
+const PROMPT_OF_THE_DAY = 'A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look';
+
 export default function Home() {
   const [currentImage, setCurrentImage] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [instructions, setInstructions] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [promptOfDayActive, setPromptOfDayActive] = useState(false)
   const [submitMessage, setSubmitMessage] = useState('')
   const [history, setHistory] = useState<HistoryItem[]>([])
   const [originalImage, setOriginalImage] = useState<string | null>(null)
@@ -136,6 +140,10 @@ export default function Home() {
                   isOriginal: true
                 }])
                 setSelectedFile(file)
+                // If prompt of day was active, set it in instructions
+                if (promptOfDayActive) {
+                  setInstructions(PROMPT_OF_THE_DAY)
+                }
               }
             } catch (error) {
               console.error('Error converting pasted image:', error)
@@ -319,6 +327,10 @@ export default function Home() {
           timestamp: new Date(),
           isOriginal: true
         }])
+        // If prompt of day was active, set it in instructions
+        if (promptOfDayActive) {
+          setInstructions(PROMPT_OF_THE_DAY)
+        }
       } catch (error) {
         console.error('Error converting uploaded image:', error)
         const errorMessage = error instanceof Error ? error.message : 'Failed to process image. Please try a different format.'
@@ -856,6 +868,10 @@ export default function Home() {
                         timestamp: new Date(),
                         isOriginal: true
                       }])
+                      // If prompt of day was active, set it in instructions
+                      if (promptOfDayActive) {
+                        setInstructions(PROMPT_OF_THE_DAY)
+                      }
                     } catch (error) {
                       console.error('Error converting dropped image:', error)
                       alert('Failed to process dropped image. Please try a different format.')
@@ -900,24 +916,39 @@ export default function Home() {
 
             {/* Prompt of the Day */}
             <div className="max-w-2xl mx-auto mb-6">
-              <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-orange-200 rounded-xl p-4 shadow-md">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">✨</span>
-                  <h3 className="font-bold text-lg text-gray-800">Prompt of the Day</h3>
+              <div className={`border-2 rounded-xl p-4 shadow-md transition-all duration-300 ${
+                promptOfDayActive
+                  ? 'bg-gradient-to-r from-purple-100 to-pink-100 border-purple-400 ring-2 ring-purple-300 ring-opacity-50'
+                  : 'bg-gradient-to-r from-yellow-50 to-orange-50 border-orange-200'
+              }`}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">✨</span>
+                    <h3 className="font-bold text-lg text-gray-800">Prompt of the Day</h3>
+                  </div>
+                  {promptOfDayActive && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-500 text-white text-xs font-medium rounded-full animate-pulse">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Will Apply on Upload
+                    </span>
+                  )}
                 </div>
                 <p className="text-sm text-gray-700 italic mb-3">
-                  &ldquo;A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look&rdquo;
+                  &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
                 </p>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText('A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look');
-                    setCopiedPrompt(true);
-                    setTimeout(() => setCopiedPrompt(false), 2000);
-                  }}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-colors ${
-                    copiedPrompt ? 'bg-green-500' : 'bg-orange-500 hover:bg-orange-600'
-                  }`}
-                >
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(PROMPT_OF_THE_DAY);
+                      setCopiedPrompt(true);
+                      setTimeout(() => setCopiedPrompt(false), 2000);
+                    }}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-colors ${
+                      copiedPrompt ? 'bg-green-500' : 'bg-orange-500 hover:bg-orange-600'
+                    }`}
+                  >
                   {copiedPrompt ? (
                     <>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -933,7 +964,37 @@ export default function Home() {
                       Copy Prompt
                     </>
                   )}
-                </button>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPromptOfDayActive(!promptOfDayActive);
+                      if (!promptOfDayActive) {
+                        setInstructions(PROMPT_OF_THE_DAY);
+                      } else {
+                        setInstructions('');
+                      }
+                    }}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-colors ${
+                      promptOfDayActive ? 'bg-purple-500' : 'bg-gray-500 hover:bg-gray-600'
+                    }`}
+                  >
+                    {promptOfDayActive ? (
+                      <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Active - Ready to Use
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Try This Prompt
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
