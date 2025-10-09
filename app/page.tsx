@@ -906,7 +906,7 @@ export default function Home() {
                   <h3 className="font-bold text-lg text-gray-800">Prompt of the Day</h3>
                 </div>
                 <p className="text-sm text-gray-700 italic mb-3">
-                  "A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look"
+                  &ldquo;A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look&rdquo;
                 </p>
                 <button
                   onClick={() => {

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Image as ImageIcon, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2, Shield } from 'lucide-react';
+import { Image as ImageIcon, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2 } from 'lucide-react';
 import { useState } from 'react';
 // import UserMenu from './UserMenu'; // Temporarily disabled - authentication not needed yet
 
@@ -10,8 +10,6 @@ export default function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [gamesDropdownOpen, setGamesDropdownOpen] = useState(false);
-  const [batchDropdownOpen, setBatchDropdownOpen] = useState(false);
-  const [editorDropdownOpen, setEditorDropdownOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
   const isGameActive = () => isActive('/roast') || isActive('/roulette');
