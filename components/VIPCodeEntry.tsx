@@ -64,7 +64,7 @@ export default function VIPCodeEntry() {
             />
 
             {message && (
-              <p className={`text-xs ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>
+              <p className={`text-xs ${isSuccess ? 'text-green-600' : 'text-coral-600'}`}>
                 {message}
               </p>
             )}

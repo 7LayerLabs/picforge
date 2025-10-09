@@ -100,9 +100,9 @@ export default function DashboardPage() {
             <p className="text-gray-400 text-sm">Last 7 days</p>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-600/20 to-orange-800/20 backdrop-blur rounded-xl p-6 border border-orange-500/30">
+          <div className="bg-gradient-to-br from-teal-600/20 to-orange-800/20 backdrop-blur rounded-xl p-6 border border-teal-500/30">
             <div className="flex items-center justify-between mb-4">
-              <Calendar className="w-8 h-8 text-orange-400" />
+              <Calendar className="w-8 h-8 text-teal-400" />
               <span className="text-3xl font-bold text-white">{stats.monthImages}</span>
             </div>
             <h3 className="text-orange-300 font-semibold">This Month</h3>

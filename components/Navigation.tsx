@@ -21,7 +21,17 @@ export default function Navigation() {
           {/* Logo and main nav */}
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex items-center gap-3">
+              <Link
+                href="/"
+                className="flex items-center gap-3"
+                onClick={() => {
+                  // Clear all localStorage to reset state
+                  localStorage.removeItem('imageHistory');
+                  localStorage.removeItem('currentImage');
+                  localStorage.removeItem('originalImage');
+                  localStorage.removeItem('selectedSampleImage');
+                }}
+              >
                 <div className="text-4xl">🔥</div>
                 <div className="flex flex-col">
                   <span className="font-bold text-xl bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">PicForge</span>
