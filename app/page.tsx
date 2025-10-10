@@ -12,6 +12,7 @@ import TemplateSelector from '@/components/TemplateSelector'
 import ImageGallery from '@/components/ImageGallery'
 import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 import VIPCodeEntry from '@/components/VIPCodeEntry'
+import ExportModal from '@/components/ExportModal'
 
 interface HistoryItem {
   prompt: string
@@ -58,6 +59,10 @@ export default function Home() {
 
   // Share modal state
   const [showShareModal, setShowShareModal] = useState(false)
+
+  // Export modal state
+  const [showExportModal, setShowExportModal] = useState(false)
+  const [exportImageData, setExportImageData] = useState<string>('')
 
   // Before/After slider state
   const [showBeforeAfter, setShowBeforeAfter] = useState(false)
@@ -557,15 +562,15 @@ export default function Home() {
   }
 
   const downloadSingleImage = async (item: HistoryItem, index: number) => {
-    try {
-      const response = await fetch(item.image)
-      const blob = await response.blob()
-      const filename = item.isOriginal
-        ? 'original.png'
-        : `edit_${index}_${item.prompt.replace(/[^a-z0-9]/gi, '_').substring(0, 30)}.png`
-      saveAs(blob, filename)
-    } catch (error) {
-      console.error('Failed to download image:', error)
+    // Open export modal instead of direct download
+    setExportImageData(item.image)
+    setShowExportModal(true)
+  }
+
+  const openExportModal = () => {
+    if (currentImage) {
+      setExportImageData(currentImage)
+      setShowExportModal(true)
     }
   }
 
@@ -1368,6 +1373,14 @@ export default function Home() {
         onClose={() => setShowShareModal(false)}
         imageUrl={currentImage || ''}
         originalImageUrl={originalImage || undefined}
+      />
+
+      {/* Export Modal - Cricut/Etsy Features */}
+      <ExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        imageData={exportImageData}
+        fileName="picforge-design"
       />
 
       {/* VIP Code Entry (hidden key icon in bottom left) */}
