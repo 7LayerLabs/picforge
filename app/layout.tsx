@@ -17,6 +17,21 @@ export const metadata: Metadata = {
   title: "PicForge - AI Image Transformer",
   description: "Forge your images into art. Transform and reshape pictures with AI-powered creativity.",
   metadataBase: new URL('https://pic-forge.com'),
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'PicForge',
+  },
   openGraph: {
     title: 'PicForge - AI Image Transformer',
     description: 'Forge your images into art with AI-powered creativity',
@@ -38,6 +53,11 @@ export const metadata: Metadata = {
     title: 'PicForge - AI Image Transformer',
     description: 'Forge your images into art with AI-powered creativity',
     images: ['/og-image.svg'],
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
   },
 };
 
