@@ -70,6 +70,9 @@ export default function Home() {
   // Lock composition checkbox state
   const [lockComposition, setLockComposition] = useState(false)
 
+  // Mobile options dropdown state
+  const [showMobileOptions, setShowMobileOptions] = useState(false)
+
   // Removed session management - simplified interface
 
   // Convert image to supported format (JPEG/PNG) if needed
@@ -1075,8 +1078,8 @@ export default function Home() {
         ) : (
           <>
             <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
-              {/* Left Sidebar - Templates & Batch Generator */}
-              <div className="lg:w-[320px] flex flex-col space-y-3 animate-slide-in-left">
+              {/* Left Sidebar - Templates & Batch Generator (Hidden on Mobile) */}
+              <div className="hidden lg:flex lg:w-[320px] flex-col space-y-3 animate-slide-in-left">
                 <div className="bg-white dark:bg-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 shadow-lg sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
                   <h2 className="text-lg font-bold mb-4 bg-teal-600 bg-clip-text text-transparent">
                     🎨 Creative Studio
@@ -1173,6 +1176,59 @@ export default function Home() {
 
                 {/* Input Form */}
                 <form onSubmit={handleSubmit} className="w-full space-y-2 sm:space-y-3">
+                {/* Mobile Advanced Options Dropdown (Only visible on mobile) */}
+                <div className="lg:hidden">
+                  <button
+                    type="button"
+                    onClick={() => setShowMobileOptions(!showMobileOptions)}
+                    className="w-full flex items-center justify-between p-3 bg-teal-50 dark:bg-teal-900/20 border-2 border-teal-200 dark:border-teal-800 rounded-xl hover:bg-teal-100 dark:hover:bg-teal-900/30 transition-all"
+                  >
+                    <span className="flex items-center gap-2 text-sm font-semibold text-teal-900 dark:text-teal-100">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                      </svg>
+                      Magic Templates & Advanced Options
+                    </span>
+                    <svg
+                      className={`w-5 h-5 text-teal-600 transition-transform duration-200 ${showMobileOptions ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Collapsible Content */}
+                  {showMobileOptions && (
+                    <div className="mt-3 p-4 bg-white dark:bg-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 shadow-lg space-y-4 animate-slide-down">
+                      <h3 className="text-base font-bold text-teal-600 dark:text-teal-400 mb-3">
+                        🎨 Creative Studio
+                      </h3>
+
+                      {/* Template Selector */}
+                      <TemplateSelector
+                        onSelectTemplate={(prompt, name) => {
+                          handleTemplateSelect(prompt, name)
+                          setShowMobileOptions(false) // Auto-close after selection
+                        }}
+                        currentImage={currentImage}
+                      />
+
+                      {/* Batch Style Generator */}
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <BatchStyleGenerator
+                          currentImage={currentImage}
+                          onBatchGenerated={(images) => {
+                            handleBatchGenerated(images)
+                            setShowMobileOptions(false) // Auto-close after generation
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Editing Instructions {instructions && <span className="text-teal-500">✏️ (Edit & customize below)</span>}
