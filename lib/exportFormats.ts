@@ -35,7 +35,34 @@ export const EXPORT_PRESETS: Record<string, ExportPreset> = {
 }
 
 /**
+ * Remove white/light backgrounds from image data
+ */
+function removeWhiteBackground(ctx: CanvasRenderingContext2D, width: number, height: number) {
+  const imageData = ctx.getImageData(0, 0, width, height)
+  const data = imageData.data
+
+  // Remove white/light backgrounds (works best with solid backgrounds)
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i]
+    const g = data[i + 1]
+    const b = data[i + 2]
+
+    // Detect white/very light backgrounds (threshold: RGB > 240)
+    if (r > 240 && g > 240 && b > 240) {
+      data[i + 3] = 0 // Set alpha to 0 (fully transparent)
+    }
+    // Edge softening for semi-light pixels (threshold: RGB > 200)
+    else if (r > 200 && g > 200 && b > 200) {
+      data[i + 3] = Math.floor(data[i + 3] * 0.5) // 50% transparent
+    }
+  }
+
+  ctx.putImageData(imageData, 0, 0)
+}
+
+/**
  * Download image with transparent background (for Etsy/print-on-demand)
+ * Automatically removes white/light backgrounds
  */
 export async function downloadTransparentPNG(
   imageData: string,
@@ -59,7 +86,7 @@ export async function downloadTransparentPNG(
     const canvas = document.createElement('canvas')
     canvas.width = presetConfig.width
     canvas.height = presetConfig.height
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
 
     if (!ctx) {
       throw new Error('Canvas context not available')
@@ -75,6 +102,9 @@ export async function downloadTransparentPNG(
 
     // Draw image on canvas
     ctx.drawImage(img, x, y, img.width * scale, img.height * scale)
+
+    // Apply background removal to make white areas transparent
+    removeWhiteBackground(ctx, canvas.width, canvas.height)
 
     // Convert to blob and download
     canvas.toBlob((blob) => {
@@ -199,7 +229,7 @@ export async function downloadExportPack(
       const canvas = document.createElement('canvas')
       canvas.width = presetConfig.width
       canvas.height = presetConfig.height
-      const ctx = canvas.getContext('2d')
+      const ctx = canvas.getContext('2d', { willReadFrequently: true })
 
       if (ctx) {
         const scale = Math.min(
@@ -209,6 +239,9 @@ export async function downloadExportPack(
         const x = (canvas.width - img.width * scale) / 2
         const y = (canvas.height - img.height * scale) / 2
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale)
+
+        // Apply background removal to make white areas transparent
+        removeWhiteBackground(ctx, canvas.width, canvas.height)
 
         const blob = await new Promise<Blob>((resolve) => {
           canvas.toBlob((b) => resolve(b!), 'image/png')

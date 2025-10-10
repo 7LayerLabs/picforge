@@ -215,7 +215,7 @@ export default function ExportModal({ isOpen, onClose, imageData, fileName = 'de
                 />
                 <div className="flex-1">
                   <div className="font-semibold text-gray-900 dark:text-white">PNG (Transparent Background)</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">Perfect for Etsy, print-on-demand, stickers</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">Removes white backgrounds • Perfect for Etsy, print-on-demand, stickers</div>
                 </div>
                 <span className="text-teal-600 font-semibold">✓ Recommended</span>
               </label>
