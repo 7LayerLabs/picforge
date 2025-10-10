@@ -3,13 +3,20 @@
 import { useState } from 'react'
 import { EXPORT_PRESETS, getPresetsByCategory, downloadTransparentPNG, downloadSVG, downloadPDF, downloadExportPack } from '@/lib/exportFormats'
 
+interface ExportFormats {
+  pngTransparent: boolean
+  pngWhiteBg: boolean
+  svg: boolean
+  pdf: boolean
+}
+
 interface ExportModalProps {
   isOpen: boolean
   onClose: () => void
   imageData: string
   fileName?: string
   batchMode?: boolean
-  onBatchExport?: (imageData: string, preset: string, formats: any) => Promise<void>
+  onBatchExport?: (imageData: string, preset: string, formats: ExportFormats) => Promise<void>
 }
 
 type UseCase = 'cricut' | 'etsy' | 'print' | 'social' | 'custom'
@@ -133,7 +140,7 @@ export default function ExportModal({ isOpen, onClose, imageData, fileName = 'de
           {/* Use Case Selection */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              I'm making this for:
+              I&apos;m making this for:
             </label>
             <div className="grid grid-cols-2 gap-3">
               {[
@@ -189,7 +196,7 @@ export default function ExportModal({ isOpen, onClose, imageData, fileName = 'de
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-400">Print size:</span>
                   <span className="font-semibold text-gray-900 dark:text-white">
-                    {(presetConfig.width / presetConfig.dpi).toFixed(1)}" × {(presetConfig.height / presetConfig.dpi).toFixed(1)}"
+                    {(presetConfig.width / presetConfig.dpi).toFixed(1)}&quot; × {(presetConfig.height / presetConfig.dpi).toFixed(1)}&quot;
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm mt-1">

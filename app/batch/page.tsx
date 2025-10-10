@@ -416,7 +416,14 @@ export default function BatchPage() {
     setShowExportModal(true)
   }
 
-  const handleBatchExport = async (imageData: string, preset: string, formats: any) => {
+  interface ExportFormats {
+    pngTransparent: boolean
+    pngWhiteBg: boolean
+    svg: boolean
+    pdf: boolean
+  }
+
+  const handleBatchExport = async (imageData: string, preset: string, formats: ExportFormats) => {
     try {
       const completedImages = images.filter(img => img.status === 'completed' && img.result)
 
