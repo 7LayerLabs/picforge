@@ -503,7 +503,18 @@ export default function Home() {
       }
     } catch (error) {
       console.error('Error submitting form:', error)
-      setSubmitMessage('Failed to submit. Please try again.')
+      // Show more specific error message
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch')) {
+          setSubmitMessage('❌ Connection timeout. Try smaller images or check your internet.')
+        } else if (error.message.includes('quota') || error.message.includes('memory')) {
+          setSubmitMessage('❌ Browser memory full. Try refreshing the page.')
+        } else {
+          setSubmitMessage(`❌ Error: ${error.message}`)
+        }
+      } else {
+        setSubmitMessage('❌ Failed to submit. Large images may timeout. Try again or use smaller files.')
+      }
     } finally {
       setIsSubmitting(false)
     }
