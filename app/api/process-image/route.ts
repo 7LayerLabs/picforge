@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     } else {
       console.log(`VIP user detected with code: ${vipCode} - Skipping rate limit`)
     }
-    */"
+    */
 
     // Use the app's API key
     const apiKey = process.env.GEMINI_API_KEY
