@@ -109,8 +109,8 @@ export default function ProfilePage() {
                 <span className="px-3 py-1 bg-amber-100 text-orange-700 rounded-full text-sm font-medium">
                   Free Plan
                 </span>
-                <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
-                  500 Images/Day
+                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                  Unlimited Images
                 </span>
               </div>
             </div>

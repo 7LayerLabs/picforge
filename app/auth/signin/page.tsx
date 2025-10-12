@@ -61,7 +61,7 @@ export default function SignInPage() {
               <li>• Save your image history</li>
               <li>• Create collections and favorites</li>
               <li>• Sync settings across devices</li>
-              <li>• Get 500 free images per day</li>
+              <li>• Unlimited image processing</li>
               <li>• Unlock batch processing</li>
             </ul>
           </div>

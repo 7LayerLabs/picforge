@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { checkRateLimit } from '@/lib/rateLimiter'
-import { getVIPCodeFromCookie } from '@/lib/vipCodes'
+// Rate limiting imports disabled - unlimited access for all users
+// import { checkRateLimit } from '@/lib/rateLimiter'
+// import { getVIPCodeFromCookie } from '@/lib/vipCodes'
 
 export async function POST(request: NextRequest) {
   try {
@@ -62,11 +63,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get client IP for rate limiting
+    // Rate limiting disabled - unlimited images for all users
+    // Get client IP for logging purposes only
     const ip = request.headers.get('x-forwarded-for') ||
                request.headers.get('x-real-ip') ||
                'unknown'
 
+    console.log(`Processing image for IP: ${ip} - No rate limits`)
+
+    // Rate limit check removed - all users have unlimited access
+    /* DISABLED RATE LIMITING
     // Check for VIP code first
     const cookieHeader = request.headers.get('cookie')
     const vipCode = getVIPCodeFromCookie(cookieHeader)
@@ -92,6 +98,7 @@ export async function POST(request: NextRequest) {
     } else {
       console.log(`VIP user detected with code: ${vipCode} - Skipping rate limit`)
     }
+    */"
 
     // Use the app's API key
     const apiKey = process.env.GEMINI_API_KEY
