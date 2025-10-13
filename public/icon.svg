@@ -1,0 +1,37 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flame effect -->
+  <defs>
+    <linearGradient id="flame1" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffa500;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff6347;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc143c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="flame2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffff00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffa500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6347;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Flames -->
+  <path d="M100 40 Q85 55 80 70 T75 100 Q75 115 80 125 Q70 110 65 95 T60 65 Q60 45 70 30 Q80 15 100 10 Q120 15 130 30 Q140 45 140 65 Q140 80 135 95 Q130 110 120 125 Q125 115 125 100 Q125 85 120 70 Q115 55 100 40 Z" fill="url(#flame1)" opacity="0.9"/>
+  <path d="M100 50 Q90 60 87 72 T85 95 Q85 105 88 112 Q82 102 80 92 T78 72 Q78 58 85 48 Q92 38 100 35 Q108 38 115 48 Q122 58 122 72 Q122 82 120 92 Q118 102 112 112 Q115 105 115 95 Q115 84 113 72 Q110 60 100 50 Z" fill="url(#flame2)" opacity="0.8"/>
+
+  <!-- Camera aperture/lens shape -->
+  <g transform="translate(100, 120)">
+    <circle r="35" fill="none" stroke="#333" stroke-width="3"/>
+    <circle r="32" fill="#444" opacity="0.9"/>
+
+    <!-- Aperture blades -->
+    <path d="M0,-30 L15,-15 L30,0 L15,15 L0,30 L-15,15 L-30,0 L-15,-15 Z" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.8"/>
+    <path d="M0,-20 L10,-10 L20,0 L10,10 L0,20 L-10,10 L-20,0 L-10,-10 Z" fill="#666"/>
+
+    <!-- Center highlight -->
+    <circle r="8" fill="#888"/>
+    <circle r="5" fill="#aaa"/>
+  </g>
+
+  <!-- Gradient shadow/reflection -->
+  <ellipse cx="100" cy="165" rx="40" ry="8" fill="#333" opacity="0.3"/>
+  <ellipse cx="100" cy="163" rx="35" ry="5" fill="#666" opacity="0.2"/>
+</svg>

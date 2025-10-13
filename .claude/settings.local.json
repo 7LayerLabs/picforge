@@ -21,7 +21,9 @@
       "Bash(git commit:*)",
       "WebSearch",
       "Bash(git rm:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(node:*)",
+      "Read(//Users/derek/Desktop/**)"
     ],
     "deny": [],
     "ask": []

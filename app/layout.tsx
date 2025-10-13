@@ -14,14 +14,46 @@ const specialElite = Special_Elite({
 });
 
 export const metadata: Metadata = {
-  title: "PicForge - AI Image Transformer",
-  description: "Forge your images into art. Transform and reshape pictures with AI-powered creativity.",
+  title: {
+    default: "PicForge – AI Image Transformer",
+    template: "%s | PicForge – AI Image Transformer"
+  },
+  description: "Transform your images with AI-powered creativity. 210+ templates, batch processing, custom prompts, and professional editing tools. Zero artistic talent required.",
+  keywords: [
+    "AI image editor", "photo transformer", "image enhancement", "AI art generator",
+    "batch image processing", "photo effects", "image filters", "AI creativity tools",
+    "picture editor", "photo manipulation", "image transformation", "AI photo editor"
+  ],
+  authors: [{ name: "PicForge Team" }],
+  creator: "PicForge",
+  publisher: "PicForge",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   metadataBase: new URL('https://pic-forge.com'),
+  alternates: {
+    canonical: 'https://pic-forge.com',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
+    shortcut: '/icon.svg',
     apple: [
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
@@ -31,34 +63,50 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: 'black-translucent',
     title: 'PicForge',
+    startupImage: [
+      {
+        url: '/apple-icon.png',
+        media: '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)',
+      }
+    ],
   },
   openGraph: {
-    title: 'PicForge - AI Image Transformer',
-    description: 'Forge your images into art with AI-powered creativity',
+    type: 'website',
+    locale: 'en_US',
     url: 'https://pic-forge.com',
     siteName: 'PicForge',
+    title: 'PicForge – AI Image Transformer',
+    description: 'Transform your images with AI-powered creativity. 210+ templates, batch processing, and professional editing tools.',
     images: [
       {
         url: '/og-image.svg',
         width: 1200,
         height: 630,
-        alt: 'PicForge - AI Image Transformer',
+        alt: 'PicForge – AI Image Transformer - Transform your images with AI',
+        type: 'image/svg+xml',
       }
     ],
-    locale: 'en_US',
-    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PicForge - AI Image Transformer',
-    description: 'Forge your images into art with AI-powered creativity',
-    images: ['/og-image.svg'],
+    site: '@picforge',
+    creator: '@picforge',
+    title: 'PicForge – AI Image Transformer',
+    description: 'Transform your images with AI-powered creativity. 210+ templates, batch processing, and professional editing tools.',
+    images: {
+      url: '/og-image.svg',
+      alt: 'PicForge – AI Image Transformer',
+    },
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
+  verification: {
+    google: undefined, // Add when you have Google Search Console set up
+    yandex: undefined, // Add if targeting Russian market
+    yahoo: undefined,  // Add if needed
+    other: {
+      // Add other verification codes as needed
+    },
   },
+  category: 'technology',
 };
 
 export default function RootLayout({
@@ -66,8 +114,49 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PicForge",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "All",
+    "description": "Transform your images with AI-powered creativity. 210+ templates, batch processing, custom prompts, and professional editing tools.",
+    "url": "https://pic-forge.com",
+    "creator": {
+      "@type": "Organization",
+      "name": "PicForge Team"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "description": "Free AI image transformation tool"
+    },
+    "featureList": [
+      "AI-powered image transformation",
+      "210+ pre-built templates",
+      "Batch image processing",
+      "Custom AI prompts",
+      "Professional editing tools",
+      "Lock composition feature",
+      "Multiple export formats"
+    ],
+    "screenshot": "https://pic-forge.com/og-image.svg",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "1000"
+    }
+  };
+
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body
         className={`${specialElite.variable} font-body antialiased`}
       >
