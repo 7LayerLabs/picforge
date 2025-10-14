@@ -28,6 +28,7 @@ export default function MyImages() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFavorite = async (item: any) => {
     try {
       await saveFavorite(item.prompt, 'My Creations', item.originalUrl, item.transformedUrl, item.locked);
