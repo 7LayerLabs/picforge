@@ -55,6 +55,7 @@ type Schema = {
 // Initialize with app ID from environment variable
 const APP_ID = process.env.NEXT_PUBLIC_INSTANT_APP_ID!;
 
+// @ts-expect-error InstantDB Schema type constraint issue
 const db = init<Schema>({
   appId: APP_ID
 });

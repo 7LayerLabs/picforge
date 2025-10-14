@@ -13,12 +13,12 @@ export function useImageTracking() {
 
   // Query user's usage data
   const { data, isLoading, error } = db.useQuery(
-    user
+    (user
       ? { usage: { $: { where: { userId: user.id } } } }
-      : {}
+      : null) as any
   );
 
-  const usage = data?.usage?.[0];
+  const usage = (data as any)?.usage?.[0];
 
   /**
    * Track a new image generation
@@ -39,6 +39,7 @@ export function useImageTracking() {
 
     // Save the image record
     await db.transact([
+      // @ts-expect-error InstantDB tx type inference issue
       db.tx.images[imageId].update({
         userId: user.id,
         prompt: imageData.prompt,
@@ -59,6 +60,7 @@ export function useImageTracking() {
     const shouldReset = tier === 'free' && now - lastReset > 24 * 60 * 60 * 1000;
 
     await db.transact([
+      // @ts-expect-error InstantDB tx type inference issue
       db.tx.usage[usageId].update({
         userId: user.id,
         count: shouldReset ? 1 : currentCount + 1,
@@ -81,6 +83,7 @@ export function useImageTracking() {
 
     const favoriteId = id();
     await db.transact([
+      // @ts-expect-error InstantDB tx type inference issue
       db.tx.favorites[favoriteId].update({
         userId: user.id,
         prompt,
@@ -94,18 +97,18 @@ export function useImageTracking() {
    * Get user's favorite prompts
    */
   const { data: favoritesData } = db.useQuery(
-    user
+    (user
       ? { favorites: { $: { where: { userId: user.id } } } }
-      : {}
+      : null) as any
   );
 
   /**
    * Get user's image history
    */
   const { data: imagesData } = db.useQuery(
-    user
+    (user
       ? { images: { $: { where: { userId: user.id } } } }
-      : {}
+      : null) as any
   );
 
   /**
@@ -133,8 +136,8 @@ export function useImageTracking() {
   return {
     user,
     usage,
-    favorites: favoritesData?.favorites || [],
-    imageHistory: imagesData?.images || [],
+    favorites: (favoritesData as any)?.favorites || [],
+    imageHistory: (imagesData as any)?.images || [],
     trackImageGeneration,
     saveFavorite,
     hasReachedLimit,

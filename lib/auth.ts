@@ -91,7 +91,8 @@ export async function getUserFavorites(userId: string) {
         image: true
       }
     })
-    return favorites.map(f => f.image)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return favorites.map((f: any) => f.image)
   } catch (error) {
     console.error('Error fetching favorites:', error)
     return []
