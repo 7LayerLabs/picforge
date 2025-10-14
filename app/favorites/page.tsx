@@ -44,6 +44,7 @@ export default function FavoritesPage() {
   };
 
   // Group favorites by category
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const groupedFavorites = favorites?.reduce((acc: Record<string, typeof favorites>, fav: any) => {
     const category = fav.category || 'Uncategorized';
     if (!acc[category]) {
