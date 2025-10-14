@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Image as ImageIcon, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2 } from 'lucide-react';
+import { Image as ImageIcon, Images, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2, Star } from 'lucide-react';
 import { useState } from 'react';
-// import UserMenu from './UserMenu'; // Temporarily disabled - authentication not needed yet
+import AuthButton from './AuthButton';
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -41,123 +41,147 @@ export default function Navigation() {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
+            <div className="hidden sm:ml-4 sm:flex sm:space-x-2">
               <Link
                 href="/"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/')
                     ? 'border-blue-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <ImageIcon className="w-4 h-4 mr-2" />
+                <ImageIcon className="w-3 h-3 mr-1.5" />
                 Editor
               </Link>
 
               <Link
                 href="/batch"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/batch')
                     ? 'border-purple-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Layers className="w-4 h-4 mr-2" />
+                <Layers className="w-3 h-3 mr-1.5" />
                 Batch
               </Link>
 
               <Link
                 href="/canvas"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/canvas')
                     ? 'border-purple-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Sparkles className="w-4 h-4 mr-2" />
+                <Sparkles className="w-3 h-3 mr-1.5" />
                 Canvas
               </Link>
 
               <Link
                 href="/prompt-wizard"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/prompt-wizard')
                     ? 'border-purple-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Wand2 className="w-4 h-4 mr-2" />
+                <Wand2 className="w-3 h-3 mr-1.5" />
                 Wizard
               </Link>
 
               <Link
                 href="/tips"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/tips')
                     ? 'border-blue-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Lightbulb className="w-4 h-4 mr-2" />
+                <Lightbulb className="w-3 h-3 mr-1.5" />
                 Tips
               </Link>
 
               <Link
                 href="/prompts"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/prompts')
                     ? 'border-blue-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Layers className="w-4 h-4 mr-2" />
+                <Layers className="w-3 h-3 mr-1.5" />
                 Prompts
               </Link>
 
               <Link
                 href="/examples"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/examples')
                     ? 'border-green-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <ImageIcon className="w-4 h-4 mr-2" />
+                <ImageIcon className="w-3 h-3 mr-1.5" />
                 Templates
               </Link>
 
               <Link
                 href="/showcase"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/showcase')
                     ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Trophy className="w-4 h-4 mr-2" />
+                <Trophy className="w-3 h-3 mr-1.5" />
                 Showcase
+              </Link>
+
+              <Link
+                href="/my-images"
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
+                  isActive('/my-images')
+                    ? 'border-indigo-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Images className="w-3 h-3 mr-1.5" />
+                My Images
+              </Link>
+
+              <Link
+                href="/favorites"
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
+                  isActive('/favorites')
+                    ? 'border-yellow-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Star className="w-3 h-3 mr-1.5" />
+                Favorites
               </Link>
 
               {/* Games Dropdown */}
               <div
-                className="relative"
+                className="relative z-[100]"
                 onMouseEnter={() => setGamesDropdownOpen(true)}
                 onMouseLeave={() => setGamesDropdownOpen(false)}
               >
                 <button
-                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium h-full ${
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium h-full ${
                     isGameActive()
                       ? 'border-pink-500 text-gray-900'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
-                  <Gamepad2 className="w-4 h-4 mr-2" />
+                  <Gamepad2 className="w-3 h-3 mr-1.5" />
                   Games
-                  <ChevronDown className="w-3 h-3 ml-1" />
+                  <ChevronDown className="w-2.5 h-2.5 ml-1" />
                 </button>
 
                 {gamesDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2">
+                  <div className="absolute top-full left-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-[100]">
                     <Link
                       href="/roast"
                       className={`flex items-center px-4 py-2 text-sm ${
@@ -166,7 +190,7 @@ export default function Navigation() {
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <Flame className="w-4 h-4 mr-2" />
+                      <Flame className="w-3 h-3 mr-1.5" />
                       Roast Mode
                     </Link>
                     <Link
@@ -177,7 +201,7 @@ export default function Navigation() {
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <Shuffle className="w-4 h-4 mr-2" />
+                      <Shuffle className="w-3 h-3 mr-1.5" />
                       Transform Roulette
                     </Link>
                     <div className="border-t border-gray-200 mt-2 pt-2 px-4 py-2">
@@ -190,13 +214,13 @@ export default function Navigation() {
           </div>
 
           {/* Right side - User menu for desktop */}
-          <div className="hidden sm:flex items-center">
-            {/* <UserMenu /> */} {/* Temporarily disabled - authentication not needed yet */}
+          <div className="hidden sm:flex items-center ml-auto pl-8">
+            <AuthButton />
           </div>
 
           {/* Mobile menu button and user menu */}
           <div className="flex items-center sm:hidden gap-2">
-            {/* <UserMenu /> */} {/* Temporarily disabled - authentication not needed yet */}
+            <AuthButton />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
@@ -225,7 +249,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <ImageIcon className="w-4 h-4 mr-2" />
+                <ImageIcon className="w-3 h-3 mr-1.5" />
                 Editor
               </div>
             </Link>
@@ -240,7 +264,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Layers className="w-4 h-4 mr-2" />
+                <Layers className="w-3 h-3 mr-1.5" />
                 Batch
               </div>
             </Link>
@@ -255,7 +279,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Sparkles className="w-4 h-4 mr-2" />
+                <Sparkles className="w-3 h-3 mr-1.5" />
                 Canvas
               </div>
             </Link>
@@ -270,7 +294,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Wand2 className="w-4 h-4 mr-2" />
+                <Wand2 className="w-3 h-3 mr-1.5" />
                 Wizard
               </div>
             </Link>
@@ -293,7 +317,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Flame className="w-4 h-4 mr-2" />
+                <Flame className="w-3 h-3 mr-1.5" />
                 Roast Mode
               </div>
             </Link>
@@ -308,7 +332,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Shuffle className="w-4 h-4 mr-2" />
+                <Shuffle className="w-3 h-3 mr-1.5" />
                 Transform Roulette
               </div>
             </Link>
@@ -327,7 +351,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Layers className="w-4 h-4 mr-2" />
+                <Layers className="w-3 h-3 mr-1.5" />
                 Prompts
               </div>
             </Link>
@@ -342,7 +366,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <ImageIcon className="w-4 h-4 mr-2" />
+                <ImageIcon className="w-3 h-3 mr-1.5" />
                 Templates
               </div>
             </Link>
@@ -357,7 +381,7 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Lightbulb className="w-4 h-4 mr-2" />
+                <Lightbulb className="w-3 h-3 mr-1.5" />
                 Tips
               </div>
             </Link>
@@ -372,8 +396,38 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
-                <Trophy className="w-4 h-4 mr-2" />
+                <Trophy className="w-3 h-3 mr-1.5" />
                 Showcase
+              </div>
+            </Link>
+
+            <Link
+              href="/my-images"
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                isActive('/my-images')
+                  ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
+                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex items-center">
+                <Images className="w-3 h-3 mr-1.5" />
+                My Images
+              </div>
+            </Link>
+
+            <Link
+              href="/favorites"
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                isActive('/favorites')
+                  ? 'bg-yellow-50 border-yellow-500 text-yellow-700'
+                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex items-center">
+                <Star className="w-3 h-3 mr-1.5" />
+                Favorites
               </div>
             </Link>
           </div>

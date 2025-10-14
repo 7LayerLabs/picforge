@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { db } from '@/lib/instantdb'
 import Link from 'next/link'
 import { Heart, Eye, Copy, TrendingUp, Clock, Award, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -27,7 +27,7 @@ interface ShowcaseItem {
 }
 
 export default function ShowcasePage() {
-  const { data: session } = useSession()
+  const { user } = db.useAuth()
   const router = useRouter()
   const [showcases, setShowcases] = useState<ShowcaseItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -71,12 +71,12 @@ export default function ShowcasePage() {
   const handleLike = async (showcaseId: string, e: React.MouseEvent) => {
     e.stopPropagation()
 
-    // Authentication disabled - likes not available
-    if (!session) {
+    // Require authentication for likes
+    if (!user) {
       // Show toast notification that likes require sign-in
       const toast = document.createElement('div')
-      toast.className = 'fixed bottom-4 right-4 bg-gray-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in'
-      toast.textContent = 'Sign-in feature coming soon!'
+      toast.className = 'fixed bottom-4 right-4 bg-teal-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in'
+      toast.textContent = 'Please sign in to like showcases!'
       document.body.appendChild(toast)
       setTimeout(() => toast.remove(), 2000)
       return
@@ -136,7 +136,7 @@ export default function ShowcasePage() {
               </p>
             </div>
 
-            {session && (
+            {user && (
               <Link
                 href="/showcase/submit"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
@@ -223,7 +223,7 @@ export default function ShowcasePage() {
             <div className="text-6xl mb-4">🎨</div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">No showcases yet</h2>
             <p className="text-gray-600 mb-6">Be the first to share your amazing creation!</p>
-            {session && (
+            {user && (
               <Link
                 href="/showcase/submit"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"

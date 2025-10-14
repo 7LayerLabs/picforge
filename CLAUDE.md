@@ -81,21 +81,43 @@ The app uses multiple AI providers:
 - **Together AI** (`together-ai`) - Alternative AI model provider
 - **Pollinations/HuggingFace** - Free image generation alternatives
 
+### Database & Authentication
+
+**InstantDB Integration** (`@instantdb/react`)
+- Real-time database with built-in auth
+- Handles user accounts, image history, favorites, and usage tracking
+- No backend server required - all client-side
+- Magic link authentication (passwordless)
+- Offline support with automatic sync
+
+**Key Files:**
+- `lib/instantdb.ts` - Database initialization and schema
+- `components/AuthButton.tsx` - Magic link authentication UI
+- `hooks/useImageTracking.ts` - Custom hook for tracking images, favorites, and usage limits
+
 ### Environment Variables
 
 Required in `.env.local`:
 ```
+# AI Providers
 GEMINI_API_KEY=your_gemini_key
 REPLICATE_API_TOKEN=your_replicate_token (required for NSFW editor - costs ~$0.023/image)
 OPENAI_API_KEY=your_openai_key (optional for canvas generation)
 TOGETHER_API_KEY=your_together_key (optional)
-KV_URL=your_vercel_kv_url (for analytics)
+
+# Analytics (Vercel KV)
+KV_URL=your_vercel_kv_url
 KV_REST_API_URL=your_vercel_kv_rest_url
 KV_REST_API_TOKEN=your_vercel_kv_token
 KV_REST_API_READ_ONLY_TOKEN=your_vercel_kv_read_token
+
+# InstantDB (User Auth & Database)
+NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
 ```
 
-**Note:** REPLICATE_API_TOKEN is for the NSFW editor (/editor-nsfw and /batch-nsfw). Get token at https://replicate.com/account/api-tokens. Requires paid credits (~$2 = 86 images).
+**Setup Notes:**
+- **REPLICATE_API_TOKEN**: For NSFW editor (/editor-nsfw and /batch-nsfw). Get token at https://replicate.com/account/api-tokens. Requires paid credits (~$2 = 86 images).
+- **NEXT_PUBLIC_INSTANT_APP_ID**: Create app at https://www.instantdb.com/dash and copy the App ID. Required for user authentication and data persistence.
 
 ### Key UI Components
 
@@ -113,7 +135,7 @@ KV_REST_API_READ_ONLY_TOKEN=your_vercel_kv_read_token
 ### State Management
 
 - React hooks (useState, useEffect) for component state
-- No global state management library currently
+- InstantDB for user data, auth state, and real-time database queries
 - Zustand installed but not actively used
 
 ### Deployment
@@ -163,6 +185,58 @@ KV_REST_API_READ_ONLY_TOKEN=your_vercel_kv_read_token
    - **Download All**: Bulk download all versions as ZIP file
    - **Before/After Slider**: Interactive comparison view
    - **Share Modal**: Social sharing functionality
+
+## InstantDB Usage Examples
+
+**Track Image Generation:**
+```typescript
+import { useImageTracking } from '@/hooks/useImageTracking';
+
+const { trackImageGeneration, hasReachedLimit, getRemainingImages } = useImageTracking();
+
+// When user generates an image
+await trackImageGeneration({
+  prompt: "turn into a zombie",
+  originalUrl: originalImageUrl,
+  transformedUrl: resultImageUrl,
+  locked: false
+});
+```
+
+**Check Usage Limits:**
+```typescript
+const { hasReachedLimit, getRemainingImages, user } = useImageTracking();
+
+if (hasReachedLimit()) {
+  alert('Daily limit reached! Upgrade to Pro for unlimited images.');
+  return;
+}
+
+// Show remaining: "342 images remaining today"
+```
+
+**Save Favorite Prompts:**
+```typescript
+const { saveFavorite } = useImageTracking();
+
+await saveFavorite("turn into Van Gogh painting", "Art Styles");
+```
+
+**Get User's Image History:**
+```typescript
+const { imageHistory } = useImageTracking();
+
+// imageHistory is an array of all user's generated images
+// Auto-updates in real-time!
+```
+
+**Add Auth Button to Navigation:**
+```typescript
+import AuthButton from '@/components/AuthButton';
+
+// In your Navigation component:
+<AuthButton />
+```
 
 ## Testing
 

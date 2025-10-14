@@ -2,17 +2,37 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Copy, Check, ArrowLeft, Sparkles } from 'lucide-react'
+import { Copy, Check, ArrowLeft, Sparkles, Star } from 'lucide-react'
+import { useImageTracking } from '@/hooks/useImageTracking'
 
 export default function PromptsPage() {
   const [copiedPrompt, setCopiedPrompt] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [savedPrompt, setSavedPrompt] = useState<string | null>(null)
+
+  const { user, favorites, saveFavorite } = useImageTracking()
 
   const copyPrompt = (prompt: string) => {
     navigator.clipboard.writeText(prompt)
     setCopiedPrompt(prompt)
     setTimeout(() => setCopiedPrompt(null), 2000)
+  }
+
+  const handleFavorite = async (prompt: string, category: string) => {
+    if (!user) {
+      alert('Please sign in to save favorite prompts!')
+      return
+    }
+
+    await saveFavorite(prompt, category)
+    setSavedPrompt(prompt)
+    setTimeout(() => setSavedPrompt(null), 2000)
+  }
+
+  const isFavorited = (prompt: string) => {
+    if (!favorites) return false
+    return favorites.some(fav => fav.prompt === prompt)
   }
 
   const scrollToCategory = (category: string) => {
@@ -481,7 +501,7 @@ export default function PromptsPage() {
                       className="group relative p-4 bg-gray-50 rounded-lg hover:bg-blue-50 transition-all duration-200 cursor-pointer border border-gray-200 hover:border-blue-300"
                       onClick={() => copyPrompt(prompt)}
                     >
-                      <p className="text-sm text-gray-700 pr-10 leading-relaxed">
+                      <p className="text-sm text-gray-700 pr-20 leading-relaxed">
                         {searchTerm ? (
                           // Highlight search term
                           prompt.split(new RegExp(`(${searchTerm})`, 'gi')).map((part, i) =>
@@ -495,19 +515,36 @@ export default function PromptsPage() {
                           prompt
                         )}
                       </p>
-                      <button
-                        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-200 p-1 hover:bg-white rounded"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          copyPrompt(prompt)
-                        }}
-                      >
-                        {copiedPrompt === prompt ? (
-                          <Check className="w-4 h-4 text-green-600" />
-                        ) : (
-                          <Copy className="w-4 h-4 text-gray-500 hover:text-blue-600" />
-                        )}
-                      </button>
+                      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1">
+                        <button
+                          className="p-1 hover:bg-white rounded"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleFavorite(prompt, category.category)
+                          }}
+                          title={isFavorited(prompt) ? "Remove from favorites" : "Add to favorites"}
+                        >
+                          {savedPrompt === prompt ? (
+                            <Check className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <Star className={`w-4 h-4 ${isFavorited(prompt) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-500 hover:text-yellow-500'}`} />
+                          )}
+                        </button>
+                        <button
+                          className="p-1 hover:bg-white rounded"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            copyPrompt(prompt)
+                          }}
+                          title="Copy to clipboard"
+                        >
+                          {copiedPrompt === prompt ? (
+                            <Check className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <Copy className="w-4 h-4 text-gray-500 hover:text-blue-600" />
+                          )}
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>

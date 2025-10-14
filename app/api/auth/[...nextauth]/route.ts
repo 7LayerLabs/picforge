@@ -1,5 +1,17 @@
-import NextAuth from 'next-auth'
-import { authOptions } from '@/lib/auth-options'
+import { NextResponse } from 'next/server'
 
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+// NextAuth has been replaced with InstantDB for authentication
+// This route is disabled to prevent errors
+export async function GET() {
+  return NextResponse.json(
+    { error: 'NextAuth is disabled. Using InstantDB for authentication.' },
+    { status: 404 }
+  )
+}
+
+export async function POST() {
+  return NextResponse.json(
+    { error: 'NextAuth is disabled. Using InstantDB for authentication.' },
+    { status: 404 }
+  )
+}
