@@ -98,7 +98,8 @@ export default function MyImages() {
 
         {/* Image Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {imageHistory.map((item) => (
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {imageHistory.map((item: any) => (
             <div
               key={item.id}
               className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] group"

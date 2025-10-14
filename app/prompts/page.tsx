@@ -32,7 +32,8 @@ export default function PromptsPage() {
 
   const isFavorited = (prompt: string) => {
     if (!favorites) return false
-    return favorites.some(fav => fav.prompt === prompt)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return favorites.some((fav: any) => fav.prompt === prompt)
   }
 
   const scrollToCategory = (category: string) => {

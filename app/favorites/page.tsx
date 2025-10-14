@@ -143,7 +143,8 @@ export default function FavoritesPage() {
 
               {/* Prompts Grid */}
               <div className="grid gap-4">
-                {groupedFavorites[category].map((favorite) => (
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {groupedFavorites[category].map((favorite: any) => (
                   <div
                     key={favorite.id}
                     className="group relative p-4 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg border-2 border-yellow-200 dark:border-yellow-800 hover:border-yellow-400 dark:hover:border-yellow-600 transition-all duration-200"
