@@ -32,6 +32,7 @@ export default function FavoritesPage() {
     setDeletingId(favoriteId);
     try {
       await db.transact([
+        // @ts-expect-error InstantDB tx type inference issue
         db.tx.favorites[favoriteId].delete()
       ]);
     } catch (error) {
@@ -43,7 +44,7 @@ export default function FavoritesPage() {
   };
 
   // Group favorites by category
-  const groupedFavorites = favorites?.reduce((acc, fav) => {
+  const groupedFavorites = favorites?.reduce((acc: Record<string, typeof favorites>, fav: any) => {
     const category = fav.category || 'Uncategorized';
     if (!acc[category]) {
       acc[category] = [];

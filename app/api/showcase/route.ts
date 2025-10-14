@@ -63,9 +63,11 @@ export async function GET(request: NextRequest) {
     const userId = session?.user?.id
 
     // Format response
-    const formattedShowcases = showcases.map(showcase => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formattedShowcases = showcases.map((showcase: any) => ({
       ...showcase,
-      isLiked: userId ? showcase.likedBy.some(like => like.userId === userId) : false,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      isLiked: userId ? showcase.likedBy.some((like: any) => like.userId === userId) : false,
       likedBy: undefined // Remove raw likedBy data from response
     }))
 
