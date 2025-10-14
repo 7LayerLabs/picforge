@@ -73,9 +73,15 @@ export function useImageTracking() {
   };
 
   /**
-   * Save a favorite prompt
+   * Save a favorite prompt or image
    */
-  const saveFavorite = async (prompt: string, category?: string) => {
+  const saveFavorite = async (
+    prompt: string,
+    category?: string,
+    originalUrl?: string,
+    transformedUrl?: string,
+    locked?: boolean
+  ) => {
     if (!user) {
       alert('Please sign in to save favorites');
       return;
@@ -88,6 +94,9 @@ export function useImageTracking() {
         userId: user.id,
         prompt,
         category,
+        originalUrl,
+        transformedUrl,
+        locked,
         timestamp: Date.now(),
       })
     ]);

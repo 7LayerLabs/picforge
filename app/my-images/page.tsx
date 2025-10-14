@@ -4,10 +4,10 @@ import { useState } from 'react';
 import NextImage from 'next/image';
 import Link from 'next/link';
 import { useImageTracking } from '@/hooks/useImageTracking';
-import { Clock, Download, Eye, Lock } from 'lucide-react';
+import { Clock, Download, Eye, Lock, Star } from 'lucide-react';
 
 export default function MyImages() {
-  const { user, imageHistory, isLoading } = useImageTracking();
+  const { user, imageHistory, isLoading, saveFavorite, favorites } = useImageTracking();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const downloadImage = async (imageUrl: string, prompt: string) => {
@@ -26,6 +26,22 @@ export default function MyImages() {
       console.error('Failed to download image:', error);
       alert('Failed to download image. Please try again.');
     }
+  };
+
+  const handleFavorite = async (item: any) => {
+    try {
+      await saveFavorite(item.prompt, 'My Creations', item.originalUrl, item.transformedUrl, item.locked);
+      alert('Added to favorites!');
+    } catch (error) {
+      console.error('Failed to save favorite:', error);
+      alert('Failed to save favorite. Please try again.');
+    }
+  };
+
+  const isFavorited = (prompt: string) => {
+    if (!favorites) return false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return favorites.some((fav: any) => fav.prompt === prompt);
   };
 
   if (!user) {
@@ -129,6 +145,21 @@ export default function MyImages() {
                     title="View full size"
                   >
                     <Eye className="w-5 h-5 text-gray-900" />
+                  </button>
+                  <button
+                    onClick={() => handleFavorite(item)}
+                    className={`p-3 rounded-full transition-colors ${
+                      isFavorited(item.prompt)
+                        ? 'bg-yellow-400 hover:bg-yellow-500'
+                        : 'bg-white hover:bg-gray-100'
+                    }`}
+                    title={isFavorited(item.prompt) ? 'Already favorited' : 'Add to favorites'}
+                  >
+                    <Star
+                      className={`w-5 h-5 ${
+                        isFavorited(item.prompt) ? 'text-white fill-white' : 'text-gray-900'
+                      }`}
+                    />
                   </button>
                   <button
                     onClick={() => downloadImage(item.transformedUrl!, item.prompt)}

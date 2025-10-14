@@ -23,6 +23,9 @@ type Schema = {
     userId: string;
     prompt: string;
     category?: string;
+    originalUrl?: string;
+    transformedUrl?: string;
+    locked?: boolean;
     timestamp: number;
   };
   usage: {

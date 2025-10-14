@@ -20,17 +20,13 @@ export default function AuthButton() {
 
   if (user) {
     return (
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-gray-300">
-          {user.email}
-        </span>
-        <button
-          onClick={() => db.auth.signOut()}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-        >
-          Sign Out
-        </button>
-      </div>
+      <button
+        onClick={() => db.auth.signOut()}
+        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm whitespace-nowrap"
+        title={`Signed in as ${user.email}`}
+      >
+        Sign Out
+      </button>
     );
   }
 
