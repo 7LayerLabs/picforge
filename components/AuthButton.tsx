@@ -8,6 +8,7 @@ export default function AuthButton() {
   const [email, setEmail] = useState('');
   const [sentEmail, setSentEmail] = useState('');
   const [showLoginForm, setShowLoginForm] = useState(false);
+  const [code, setCode] = useState('');
 
   if (isLoading) {
     return (
@@ -35,16 +36,46 @@ export default function AuthButton() {
 
   if (sentEmail) {
     return (
-      <div className="bg-green-900/50 border border-green-600 rounded-lg p-4 max-w-md">
-        <p className="text-green-200 text-sm">
-          Check your email! We sent a magic link to <strong>{sentEmail}</strong>
+      <div className="bg-white dark:bg-gray-800 border-2 border-teal-500 rounded-lg p-4 shadow-lg max-w-md">
+        <p className="text-gray-900 dark:text-white text-sm font-medium mb-3">
+          Check your email! We sent a code to <strong className="text-teal-600">{sentEmail}</strong>
         </p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!code) return;
+            db.auth.signInWithMagicCode({ email: sentEmail, code }).catch((err) => {
+              alert('Invalid code. Please try again.');
+              console.error(err);
+            });
+          }}
+          className="flex flex-col gap-3"
+        >
+          <input
+            type="text"
+            placeholder="Enter 6-digit code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-teal-500 text-center text-lg tracking-wider font-mono"
+            maxLength={6}
+            autoFocus
+            required
+          />
+          <button
+            type="submit"
+            disabled={code.length !== 6}
+            className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Verify Code
+          </button>
+        </form>
         <button
           onClick={() => {
             setSentEmail('');
             setEmail('');
+            setCode('');
           }}
-          className="mt-2 text-xs text-green-400 hover:text-green-300"
+          className="mt-3 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
         >
           Try a different email
         </button>
