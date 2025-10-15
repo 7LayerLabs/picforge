@@ -493,13 +493,19 @@ export default function Home() {
         setHistory(prev => [...prev, historyItem])
 
         // Track image generation with InstantDB (if user is logged in)
+        // Don't let tracking failures block image generation
         if (user) {
-          await trackImageGeneration({
-            prompt: instructions,
-            originalUrl: originalImage || undefined,
-            transformedUrl: data.generatedImage,
-            locked: lockComposition
-          });
+          try {
+            await trackImageGeneration({
+              prompt: instructions,
+              originalUrl: originalImage || undefined,
+              transformedUrl: data.generatedImage,
+              locked: lockComposition
+            });
+          } catch (trackingError) {
+            console.error('Failed to track image generation (non-critical):', trackingError);
+            // Continue anyway - tracking is non-critical
+          }
         }
 
         // Replace the current image with generated one
