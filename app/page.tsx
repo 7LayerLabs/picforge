@@ -522,7 +522,9 @@ export default function Home() {
         // Rate limit exceeded
         setSubmitMessage(data.error || 'Daily limit reached. Please try again tomorrow!')
       } else {
-        setSubmitMessage(`Error: ${data.error}`)
+        const errorMsg = data.error || data.message || JSON.stringify(data) || 'Unknown error occurred'
+        setSubmitMessage(`Error: ${errorMsg}`)
+        console.error('API Error Response:', data)
       }
     } catch (error) {
       console.error('Error submitting form:', error)
