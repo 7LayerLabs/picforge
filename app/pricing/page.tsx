@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Check, X, Zap, Crown, Sparkles, Clock, Shield, AlertCircle } from 'lucide-react'
 import { useImageTracking } from '@/hooks/useImageTracking'
-import { loadStripe } from '@stripe/stripe-js'
 
 export default function PricingPage() {
   const { user, getRemainingImages } = useImageTracking()
@@ -55,19 +54,11 @@ export default function PricingPage() {
         throw new Error(data.error || 'Failed to create checkout session');
       }
 
-      // Redirect to Stripe Checkout
-      const stripeJs = await loadStripe('pk_live_51RyEptDlxrM8ZIxcKdGRW5100AE1W9WUId2uOT8TxmKiCFbqvT2Zupt3Ac9cnqvmMS4HFFmf2j9Uyq4TYa3J2uW3006Z1VMGec');
-      if (!stripeJs) {
-        throw new Error('Failed to load Stripe');
-      }
-
-      const { error } = await stripeJs.redirectToCheckout({
-        sessionId: data.sessionId,
-      });
-
-      if (error) {
-        console.error('Stripe redirect error:', error);
-        alert('Failed to redirect to checkout. Please try again.');
+      // Redirect to Stripe Checkout URL
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL received');
       }
     } catch (error) {
       console.error('Checkout error:', error);
