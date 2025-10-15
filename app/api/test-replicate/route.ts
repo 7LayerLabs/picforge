@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const hasToken = !!process.env.REPLICATE_API_TOKEN
   const tokenPrefix = process.env.REPLICATE_API_TOKEN?.substring(0, 10)
 

@@ -33,8 +33,10 @@ export default function PricingPage() {
     try {
       // Get the appropriate price ID based on billing period
       const priceId = billingPeriod === 'monthly'
-        ? process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID
-        : process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID;
+        ? 'price_1SIcgtDlxrM8ZIxcgNwPSV1Y' // Monthly price ID
+        : 'price_1SIchxDlxrM8ZIxcRxrH56WL'; // Yearly price ID
+
+      console.log('Creating checkout with:', { priceId, userId: user.id, userEmail: user.email });
 
       // Create checkout session
       const response = await fetch('/api/create-checkout-session', {
@@ -54,7 +56,7 @@ export default function PricingPage() {
       }
 
       // Redirect to Stripe Checkout
-      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+      const stripe = await loadStripe('pk_live_51RyEptDlxrM8ZIxcKdGRW5100AE1W9WUId2uOT8TxmKiCFbqvT2Zupt3Ac9cnqvmMS4HFFmf2j9Uyq4TYa3J2uW3006Z1VMGec');
       if (!stripe) {
         throw new Error('Failed to load Stripe');
       }

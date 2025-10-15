@@ -10,6 +10,7 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 async function upgradeUserToPro(userId: string, subscriptionId: string) {
   try {
     // Find the user's usage record
+    // @ts-expect-error InstantDB query type inference issue
     const { data } = await db.useQuery({
       usage: {
         $: {
@@ -18,9 +19,10 @@ async function upgradeUserToPro(userId: string, subscriptionId: string) {
           }
         }
       }
-    } as any);
+    });
 
-    const usage = (data as any)?.usage?.[0];
+    // @ts-expect-error InstantDB data type inference issue
+    const usage = data?.usage?.[0];
     const usageId = usage?.id || generateId();
 
     // Update user to Pro tier with unlimited images
@@ -46,6 +48,7 @@ async function upgradeUserToPro(userId: string, subscriptionId: string) {
 async function downgradeUserToFree(userId: string) {
   try {
     // Find the user's usage record
+    // @ts-expect-error InstantDB query type inference issue
     const { data } = await db.useQuery({
       usage: {
         $: {
@@ -54,9 +57,10 @@ async function downgradeUserToFree(userId: string) {
           }
         }
       }
-    } as any);
+    });
 
-    const usage = (data as any)?.usage?.[0];
+    // @ts-expect-error InstantDB data type inference issue
+    const usage = data?.usage?.[0];
     if (!usage) {
       console.log(`No usage record found for user ${userId}`);
       return;
