@@ -248,26 +248,22 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Pre-Generated Codes */}
+        {/* Usage Instructions */}
         <div className="mt-8 bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Pre-Generated Codes</h2>
-          <p className="text-gray-600 mb-6">
-            These codes are already in the database. Users can redeem them in their Profile page.
-          </p>
-          <div className="grid md:grid-cols-2 gap-3">
-            {[
-              'DEREK-FOUNDER-2025',
-              'BOBOLA-FAM-01',
-              'BOBOLA-FAM-02',
-              'BOBOLA-FAM-03',
-              'BETA-VIP-001',
-              'BETA-VIP-002',
-              'BETA-VIP-003',
-            ].map((code) => (
-              <div key={code} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                <code className="font-mono text-sm text-gray-900">{code}</code>
-              </div>
-            ))}
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">How to Use</h2>
+          <div className="space-y-4 text-gray-600">
+            <p>
+              <strong className="text-gray-900">Step 1:</strong> Generate a code using either the random generator or create a custom code above.
+            </p>
+            <p>
+              <strong className="text-gray-900">Step 2:</strong> Copy the generated code and share it securely with the user.
+            </p>
+            <p>
+              <strong className="text-gray-900">Step 3:</strong> Users can redeem codes on their Profile page.
+            </p>
+            <p className="text-sm text-amber-600 border-l-4 border-amber-400 pl-4">
+              ⚠️ <strong>Security Note:</strong> Never commit promo codes to the codebase or share them publicly. Each code can only be used once.
+            </p>
           </div>
         </div>
 
