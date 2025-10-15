@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { checkRateLimit } from '@/lib/rateLimiter'
 
 export async function POST(request: NextRequest) {
   try {
@@ -61,29 +60,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get client IP for rate limiting
-    const ip = request.headers.get('x-forwarded-for') ||
-               request.headers.get('x-real-ip') ||
-               'unknown'
-
-    console.log(`Processing image for IP: ${ip}`)
-
-    // Check rate limit - 20 images per day per IP
-    const rateLimitResult = await checkRateLimit(ip)
-
-    if (!rateLimitResult.success) {
-      const hoursUntilReset = Math.ceil((rateLimitResult.reset.getTime() - Date.now()) / (1000 * 60 * 60))
-      return NextResponse.json(
-        {
-          error: `Daily limit reached! You've used your 20 free images today. Sign in and upgrade to Pro or redeem a promo code for unlimited images. Reset in ${hoursUntilReset} hours.`,
-          remaining: 0,
-          resetTime: rateLimitResult.reset.toISOString()
-        },
-        { status: 429 }
-      )
-    }
-
-    console.log(`Rate limit check - IP: ${ip}, Remaining: ${rateLimitResult.remaining}`)
+    // Note: Rate limiting is now handled in the frontend via InstantDB user tiers
+    // No server-side IP-based rate limiting - users manage their own limits through sign-in
 
     // Use the app's API key
     const apiKey = process.env.GEMINI_API_KEY
