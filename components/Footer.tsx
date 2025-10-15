@@ -5,7 +5,7 @@ import { Bug, Upload, Lightbulb, Shield, FileText } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white mt-20">
+    <footer className="bg-black text-white mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
@@ -16,7 +16,7 @@ export default function Footer() {
                 <span className="bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">PicForge</span>
               </h3>
             </div>
-            <p className="text-gray-500 text-xs">
+            <p className="text-gray-400 text-xs">
               © 2025 PicForge. All rights reserved.
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-6 pt-4 border-t border-gray-800 text-center text-gray-500 text-xs">
+        <div className="mt-6 pt-4 border-t border-gray-800 text-center text-gray-400 text-xs">
           <p>Made with 🔥 for creators who break reality</p>
         </div>
       </div>
