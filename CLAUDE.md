@@ -56,6 +56,7 @@ npm run lint
 1. **Image Processing Pipeline**
    - `lib/imageProcessor.ts` - Client-side Canvas API operations (resize, crop, filters, watermark)
    - `lib/geminiProcessor.ts` - AI features using Gemini API (background removal, enhancement)
+   - `lib/watermark.ts` - Adds "PicForge.com" watermark to free tier images
    - Hybrid approach: 80% operations run client-side (FREE), AI operations use Gemini API
 
 2. **API Routes** (`app/api/`)
@@ -67,9 +68,12 @@ npm run lint
    - `track-visitor/`, `track-share/`, `track-template/` - Analytics endpoints using Vercel KV
    - `test-replicate/` - Test endpoint to verify Replicate API token configuration
 
-3. **Rate Limiting**
-   - `app/api/process-image/rate-limit.ts` - In-memory rate limiting per IP
-   - 500 images per day per IP address
+3. **Rate Limiting & User Management**
+   - `hooks/useImageTracking.ts` - Tracks user image generation, favorites, and usage limits
+   - `hooks/usePromoCode.ts` - Handles promo code redemption for unlimited access
+   - `lib/promoCodes.ts` - Promo code generation and validation logic
+   - Free tier: 20 images per day (down from 500)
+   - Pro/Unlimited tiers: No daily limits
    - Resets every 24 hours
 
 ### AI Integrations
@@ -85,15 +89,18 @@ The app uses multiple AI providers:
 
 **InstantDB Integration** (`@instantdb/react`)
 - Real-time database with built-in auth
-- Handles user accounts, image history, favorites, and usage tracking
+- Handles user accounts, image history, favorites, usage tracking, and promo codes
 - No backend server required - all client-side
 - Magic link authentication (passwordless)
 - Offline support with automatic sync
 
 **Key Files:**
-- `lib/instantdb.ts` - Database initialization and schema
+- `lib/instantdb.ts` - Database initialization and schema (includes promoCodes entity)
 - `components/AuthButton.tsx` - Magic link authentication UI
 - `hooks/useImageTracking.ts` - Custom hook for tracking images, favorites, and usage limits
+- `hooks/usePromoCode.ts` - Custom hook for promo code redemption
+- `app/profile/page.tsx` - User profile with promo code redemption
+- `app/admin/page.tsx` - Admin panel for generating promo codes (derek.bobola@gmail.com only)
 
 ### Environment Variables
 
@@ -121,15 +128,16 @@ NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
 
 ### Key UI Components
 
-- `components/Navigation.tsx` - Site-wide navigation with Editor/Batch/Games dropdowns
+- `components/Navigation.tsx` - Site-wide navigation with Editor/Batch/Games/Resources/Profile dropdowns
 - `components/BeforeAfterSlider.tsx` - Interactive comparison slider
 - `components/ShareModal.tsx` - Social sharing functionality
 - `components/TemplateSelector.tsx` - Pre-built prompt templates
+- `components/AuthButton.tsx` - Magic link authentication button
 - `app/components/BatchUploader.tsx` - Drag-and-drop for multiple images
 - `app/components/BatchProcessorNSFW.tsx` - NSFW batch processor (dark theme)
 - `app/components/EditorNSFW.tsx` - NSFW single-image editor (dark theme)
 - `app/components/EditPanel.tsx` - Batch editing controls
-- `app/components/PricingCard.tsx` - Tiered pricing display
+- `app/components/PricingCard.tsx` - Tiered pricing display with promo code info
 - `lib/imageEffects.ts` - 21 client-side image effects (sharpen, vignette, glitch, etc.)
 
 ### State Management
@@ -150,7 +158,11 @@ NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
 
 2. **Client Components**: Most components use `'use client'` directive for interactivity
 
-3. **Rate Limiting**: The app enforces 500 free images per day per IP to control costs
+3. **User Tiers & Limits**:
+   - **Free Tier**: 20 images per day, includes watermark
+   - **Pro Tier**: Unlimited images, no watermark
+   - **Unlimited Tier**: Unlimited images (via promo codes), no watermark
+   - Admin access: derek.bobola@gmail.com only
 
 4. **Image Processing Flow**:
    - Client uploads image → Base64 conversion
@@ -185,6 +197,9 @@ NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
    - **Download All**: Bulk download all versions as ZIP file
    - **Before/After Slider**: Interactive comparison view
    - **Share Modal**: Social sharing functionality
+   - **Promo Codes**: One-time redemption codes for unlimited access
+   - **User Profile**: View usage, redeem codes, manage account
+   - **Admin Panel**: Generate promo codes (derek.bobola@gmail.com only)
 
 ## InstantDB Usage Examples
 
@@ -205,14 +220,15 @@ await trackImageGeneration({
 
 **Check Usage Limits:**
 ```typescript
-const { hasReachedLimit, getRemainingImages, user } = useImageTracking();
+const { hasReachedLimit, getRemainingImages, user, usage } = useImageTracking();
 
 if (hasReachedLimit()) {
-  alert('Daily limit reached! Upgrade to Pro for unlimited images.');
+  alert('Daily limit reached! Upgrade to Pro or redeem a promo code for unlimited images.');
   return;
 }
 
-// Show remaining: "342 images remaining today"
+// Show remaining: "18 images remaining today" (Free tier: 20/day)
+// Or "Unlimited" for Pro/Unlimited tiers
 ```
 
 **Save Favorite Prompts:**
@@ -237,6 +253,21 @@ import AuthButton from '@/components/AuthButton';
 // In your Navigation component:
 <AuthButton />
 ```
+
+**Redeem Promo Code:**
+```typescript
+import { usePromoCode } from '@/hooks/usePromoCode';
+
+const { redeemCode, isRedeeming, error, success } = usePromoCode();
+
+// Redeem a code
+await redeemCode('DEREK-FOUNDER-2025');
+```
+
+**Pre-Generated Promo Codes:**
+- DEREK-FOUNDER-2025 (Unlimited tier)
+- BOBOLA-FAM-01, BOBOLA-FAM-02, BOBOLA-FAM-03 (Unlimited tier)
+- BETA-VIP-001, BETA-VIP-002, BETA-VIP-003 (Unlimited tier)
 
 ## Testing
 
