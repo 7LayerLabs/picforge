@@ -26,18 +26,20 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('Starting inpainting with Replicate...');
+    console.log('Prompt:', prompt);
 
-    // Use Stable Diffusion XL Inpainting model
+    // Use Kandinsky 2.2 Inpainting model (better quality and mask handling)
     const output = await replicate.run(
-      "stability-ai/stable-diffusion-inpainting:95b7223104132402a9ae91cc677285bc5eb997834bd2349fa486f53910fd68b3",
+      "ai-forever/kandinsky-2.2:ad9d7879fbffa2874e1d909d1d37d9bc682889cc65b31f7bb00d2362619f194a",
       {
         input: {
           image: image,
           mask: mask,
           prompt: prompt,
           num_outputs: 1,
-          num_inference_steps: 50,
-          guidance_scale: 7.5,
+          num_inference_steps: 75,
+          guidance_scale: 9,
+          scheduler: "p_sampler",
         },
       }
     ) as string[];
