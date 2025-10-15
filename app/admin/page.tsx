@@ -14,37 +14,15 @@ export default function AdminPage() {
   const [createdCode, setCreatedCode] = useState('');
   const [error, setError] = useState('');
 
-  // Only allow Derek's email
-  const isAdmin = user?.email === 'derek.bobola@gmail.com';
-
+  // Allow anyone who is signed in
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="bg-white rounded-2xl shadow-2xl p-12 max-w-md text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-6" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Sign In Required</h1>
           <p className="text-gray-600 mb-8">
             Please sign in to access the admin panel.
-          </p>
-          <Link
-            href="/"
-            className="inline-block px-8 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
-          >
-            Go to Homepage
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-900 to-gray-900">
-        <div className="bg-white rounded-2xl shadow-2xl p-12 max-w-md text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-6" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600 mb-8">
-            You don&apos;t have permission to access this page.
           </p>
           <Link
             href="/"
