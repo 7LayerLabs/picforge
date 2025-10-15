@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-// Rate limiting imports disabled - unlimited access for all users
-// import { checkRateLimit } from '@/lib/rateLimiter'
-// import { getVIPCodeFromCookie } from '@/lib/vipCodes'
+import { checkRateLimit } from '@/lib/rateLimiter'
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,42 +61,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Rate limiting disabled - unlimited images for all users
-    // Get client IP for logging purposes only
+    // Get client IP for rate limiting
     const ip = request.headers.get('x-forwarded-for') ||
                request.headers.get('x-real-ip') ||
                'unknown'
 
-    console.log(`Processing image for IP: ${ip} - No rate limits`)
+    console.log(`Processing image for IP: ${ip}`)
 
-    // Rate limit check removed - all users have unlimited access
-    /* DISABLED RATE LIMITING
-    // Check for VIP code first
-    const cookieHeader = request.headers.get('cookie')
-    const vipCode = getVIPCodeFromCookie(cookieHeader)
+    // Check rate limit - 20 images per day per IP
+    const rateLimitResult = await checkRateLimit(ip)
 
-    // Skip rate limit for VIP users
-    if (!vipCode) {
-      // Check rate limit - 20 images per day per IP
-      const rateLimitResult = await checkRateLimit(ip)
-
-      if (!rateLimitResult.success) {
+    if (!rateLimitResult.success) {
       const hoursUntilReset = Math.ceil((rateLimitResult.reset.getTime() - Date.now()) / (1000 * 60 * 60))
       return NextResponse.json(
         {
-          error: `You've reached today's limit of 20 free images. Try again in ${hoursUntilReset} hours! (Pro version coming soon - unlimited for $8/month)`,
+          error: `Daily limit reached! You've used your 20 free images today. Sign in and upgrade to Pro or redeem a promo code for unlimited images. Reset in ${hoursUntilReset} hours.`,
           remaining: 0,
           resetTime: rateLimitResult.reset.toISOString()
         },
         { status: 429 }
       )
-      }
-
-      console.log(`Rate limit check - IP: ${ip}, Remaining: ${rateLimitResult.remaining}`)
-    } else {
-      console.log(`VIP user detected with code: ${vipCode} - Skipping rate limit`)
     }
-    */
+
+    console.log(`Rate limit check - IP: ${ip}, Remaining: ${rateLimitResult.remaining}`)
 
     // Use the app's API key
     const apiKey = process.env.GEMINI_API_KEY
