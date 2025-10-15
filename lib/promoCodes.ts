@@ -50,7 +50,6 @@ export async function validatePromoCode(code: string): Promise<{
   const upperCode = code.toUpperCase().trim();
 
   // Query for the code
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await db.useQuery({
     promoCodes: {
       $: {
@@ -59,7 +58,7 @@ export async function validatePromoCode(code: string): Promise<{
         }
       }
     }
-  } as any);
+  } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const codes = (data as any)?.promoCodes || [];
@@ -91,7 +90,6 @@ export async function redeemPromoCode(
   const upperCode = code.toUpperCase().trim();
 
   // First, find the code
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await db.useQuery({
     promoCodes: {
       $: {
@@ -100,7 +98,7 @@ export async function redeemPromoCode(
         }
       }
     }
-  } as any);
+  } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const codes = (data as any)?.promoCodes || [];
