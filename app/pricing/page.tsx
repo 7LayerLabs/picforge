@@ -191,7 +191,7 @@ export default function PricingPage() {
               </div>
               {billingPeriod === 'yearly' && (
                 <p className="text-teal-100 text-sm">
-                  That's just <strong>$8.25/month</strong> - Save $69/year!
+                  That&apos;s just <strong>$8.25/month</strong> - Save $69/year!
                 </p>
               )}
             </div>
@@ -394,7 +394,7 @@ export default function PricingPage() {
                   <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                 ))}
               </div>
-              <p className="text-gray-700 mb-6 italic">"{testimonial.quote}"</p>
+              <p className="text-gray-700 mb-6 italic">&quot;{testimonial.quote}&quot;</p>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-coral-400 rounded-full flex items-center justify-center text-white font-bold">
                   {testimonial.image}

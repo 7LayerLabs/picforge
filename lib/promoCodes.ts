@@ -44,11 +44,13 @@ export async function createPromoCode(
 export async function validatePromoCode(code: string): Promise<{
   valid: boolean;
   message: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   codeData?: any;
 }> {
   const upperCode = code.toUpperCase().trim();
 
   // Query for the code
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await db.useQuery({
     promoCodes: {
       $: {
@@ -59,6 +61,7 @@ export async function validatePromoCode(code: string): Promise<{
     }
   } as any);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const codes = (data as any)?.promoCodes || [];
 
   if (codes.length === 0) {
@@ -88,6 +91,7 @@ export async function redeemPromoCode(
   const upperCode = code.toUpperCase().trim();
 
   // First, find the code
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await db.useQuery({
     promoCodes: {
       $: {
@@ -98,6 +102,7 @@ export async function redeemPromoCode(
     }
   } as any);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const codes = (data as any)?.promoCodes || [];
 
   if (codes.length === 0) {

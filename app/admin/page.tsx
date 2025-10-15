@@ -44,7 +44,7 @@ export default function AdminPage() {
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-6" />
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Access Denied</h1>
           <p className="text-gray-600 mb-8">
-            You don't have permission to access this page.
+            You don&apos;t have permission to access this page.
           </p>
           <Link
             href="/"
