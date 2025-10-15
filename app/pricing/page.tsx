@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Check, X, Zap, Crown, Sparkles, TrendingUp, Users, Shield, Clock, Download, Star, Rocket, Gift, AlertCircle } from 'lucide-react'
+import { Check, X, Zap, Crown, Sparkles, TrendingUp, Users, Shield, Clock, Download, Star, Gift, AlertCircle } from 'lucide-react'
 import { useImageTracking } from '@/hooks/useImageTracking'
 
 export default function PricingPage() {
@@ -123,10 +123,6 @@ export default function PricingPage() {
                 <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
                 <span className="text-gray-400">Remove PicForge watermark</span>
               </li>
-              <li className="flex items-start gap-3">
-                <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-400">API access</span>
-              </li>
             </ul>
 
             <Link
@@ -195,12 +191,6 @@ export default function PricingPage() {
                   <Download className="w-3 h-3 text-teal-500" />
                 </div>
                 <span className="text-white"><strong>Bulk downloads</strong> with one click</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Rocket className="w-3 h-3 text-teal-500" />
-                </div>
-                <span className="text-white"><strong>API access</strong> for integrations</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -306,11 +296,6 @@ export default function PricingPage() {
               </tr>
               <tr className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm text-gray-900">Bulk export/download</td>
-                <td className="px-6 py-4 text-center"><X className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                <td className="px-6 py-4 text-center bg-teal-50"><Check className="w-5 h-5 text-teal-500 mx-auto" /></td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">API access</td>
                 <td className="px-6 py-4 text-center"><X className="w-5 h-5 text-gray-300 mx-auto" /></td>
                 <td className="px-6 py-4 text-center bg-teal-50"><Check className="w-5 h-5 text-teal-500 mx-auto" /></td>
               </tr>
