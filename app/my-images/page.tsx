@@ -4,10 +4,10 @@ import { useState } from 'react';
 import NextImage from 'next/image';
 import Link from 'next/link';
 import { useImageTracking } from '@/hooks/useImageTracking';
-import { Clock, Download, Eye, Lock, Star } from 'lucide-react';
+import { Clock, Download, Eye, Lock, Star, Trash2 } from 'lucide-react';
 
 export default function MyImages() {
-  const { user, imageHistory, isLoading, saveFavorite, favorites } = useImageTracking();
+  const { user, imageHistory, isLoading, saveFavorite, favorites, deleteImage } = useImageTracking();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const downloadImage = async (imageUrl: string, prompt: string) => {
@@ -43,6 +43,20 @@ export default function MyImages() {
     if (!favorites) return false;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return favorites.some((fav: any) => fav.prompt === prompt);
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDelete = async (item: any) => {
+    if (!confirm('Are you sure you want to delete this image? This cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await deleteImage(item.id);
+    } catch (error) {
+      console.error('Failed to delete image:', error);
+      alert('Failed to delete image. Please try again.');
+    }
   };
 
   if (!user) {
@@ -168,6 +182,13 @@ export default function MyImages() {
                     title="Download"
                   >
                     <Download className="w-5 h-5 text-gray-900" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item)}
+                    className="p-3 bg-red-500 rounded-full hover:bg-red-600 transition-colors"
+                    title="Delete"
+                  >
+                    <Trash2 className="w-5 h-5 text-white" />
                   </button>
                 </div>
               </div>

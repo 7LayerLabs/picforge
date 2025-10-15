@@ -142,6 +142,21 @@ export function useImageTracking() {
     return remaining;
   };
 
+  /**
+   * Delete an image from history
+   */
+  const deleteImage = async (imageId: string) => {
+    if (!user) {
+      alert('Please sign in to delete images');
+      return;
+    }
+
+    await db.transact([
+      // @ts-expect-error InstantDB tx type inference issue
+      db.tx.images[imageId].delete()
+    ]);
+  };
+
   return {
     user,
     usage,
@@ -149,6 +164,7 @@ export function useImageTracking() {
     imageHistory: (imagesData as any)?.images || [],
     trackImageGeneration,
     saveFavorite,
+    deleteImage,
     hasReachedLimit,
     getRemainingImages,
     isLoading,
