@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Check, X, Zap, Crown, Sparkles, TrendingUp, Users, Shield, Clock, Download, Star, Gift, AlertCircle } from 'lucide-react'
+import { Check, X, Zap, Crown, Sparkles, Clock, Shield, AlertCircle } from 'lucide-react'
 import { useImageTracking } from '@/hooks/useImageTracking'
 
 export default function PricingPage() {
@@ -117,11 +117,7 @@ export default function PricingPage() {
               </li>
               <li className="flex items-start gap-3">
                 <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-400">Priority processing queue</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-400">Remove PicForge watermark</span>
+                <span className="text-gray-400">Watermark on downloads</span>
               </li>
             </ul>
 
@@ -176,39 +172,33 @@ export default function PricingPage() {
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Zap className="w-3 h-3 text-yellow-500" />
-                </div>
-                <span className="text-white"><strong>Priority processing</strong> - 3x faster generations</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <Check className="w-3 h-3 text-teal-500" />
                 </div>
                 <span className="text-white"><strong>No watermarks</strong> on exported images</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Download className="w-3 h-3 text-teal-500" />
+                  <Check className="w-3 h-3 text-teal-500" />
                 </div>
-                <span className="text-white"><strong>Bulk downloads</strong> with one click</span>
+                <span className="text-white">Access to all 210+ AI templates</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Gift className="w-3 h-3 text-teal-500" />
+                  <Check className="w-3 h-3 text-teal-500" />
                 </div>
-                <span className="text-white"><strong>Early access</strong> to new features</span>
+                <span className="text-white">Batch processing up to 100 images</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Shield className="w-3 h-3 text-teal-500" />
+                  <Check className="w-3 h-3 text-teal-500" />
                 </div>
-                <span className="text-white"><strong>Priority support</strong> - Response in 24h</span>
+                <span className="text-white">Canvas AI image generation</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Star className="w-3 h-3 text-yellow-500" />
+                  <Check className="w-3 h-3 text-teal-500" />
                 </div>
-                <span className="text-white"><strong>Pro badge</strong> on showcase submissions</span>
+                <span className="text-white">Lock Composition feature</span>
               </li>
             </ul>
 
@@ -285,29 +275,9 @@ export default function PricingPage() {
                 <td className="px-6 py-4 text-center bg-teal-50"><Check className="w-5 h-5 text-teal-500 mx-auto" /></td>
               </tr>
               <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">Processing speed</td>
-                <td className="px-6 py-4 text-center text-sm text-gray-600">Standard</td>
-                <td className="px-6 py-4 text-center text-sm font-semibold text-teal-600 bg-teal-50">3x Faster</td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">Watermark removal</td>
-                <td className="px-6 py-4 text-center"><X className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                <td className="px-6 py-4 text-center bg-teal-50"><Check className="w-5 h-5 text-teal-500 mx-auto" /></td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">Bulk export/download</td>
-                <td className="px-6 py-4 text-center"><X className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                <td className="px-6 py-4 text-center bg-teal-50"><Check className="w-5 h-5 text-teal-500 mx-auto" /></td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">Early feature access</td>
-                <td className="px-6 py-4 text-center"><X className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                <td className="px-6 py-4 text-center bg-teal-50"><Check className="w-5 h-5 text-teal-500 mx-auto" /></td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">Priority support</td>
-                <td className="px-6 py-4 text-center text-sm text-gray-600">Community</td>
-                <td className="px-6 py-4 text-center text-sm font-semibold text-teal-600 bg-teal-50">24h response</td>
+                <td className="px-6 py-4 text-sm text-gray-900">Watermark on downloads</td>
+                <td className="px-6 py-4 text-center text-sm text-gray-600">Yes</td>
+                <td className="px-6 py-4 text-center text-sm font-semibold text-teal-600 bg-teal-50">No watermarks</td>
               </tr>
             </tbody>
           </table>
@@ -329,15 +299,11 @@ export default function PricingPage() {
             },
             {
               q: "What happens to my images if I downgrade?",
-              a: "All your created images remain accessible forever. You'll just be limited to 500 transformations per day instead of unlimited. Your existing images are never deleted."
+              a: "All your created images remain accessible forever. You'll just be limited to 20 transformations per day instead of unlimited. Your existing images are never deleted."
             },
             {
               q: "Do you offer refunds?",
               a: "Yes! We offer a 30-day money-back guarantee. If you're not satisfied with Pro, contact us within 30 days for a full refund."
-            },
-            {
-              q: "How much faster is priority processing?",
-              a: "Pro users get dedicated server resources, resulting in 3x faster generation times on average. During peak hours, the difference is even more noticeable."
             },
             {
               q: "Can I upgrade from monthly to yearly anytime?",
@@ -369,7 +335,7 @@ export default function PricingPage() {
             Ready to Go Pro?
           </h2>
           <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
-            Get unlimited images, no watermarks, and priority processing.
+            Get unlimited images and no watermarks. Create as much as you want!
           </p>
           <button
             onClick={() => handleUpgrade('pro')}
