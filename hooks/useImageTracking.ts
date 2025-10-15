@@ -125,10 +125,10 @@ export function useImageTracking() {
    */
   const hasReachedLimit = () => {
     if (!user || !usage) return false;
-    if (usage.tier === 'pro') return false; // Pro users have unlimited
+    if (usage.tier === 'pro' || usage.tier === 'unlimited') return false; // Pro and code users have unlimited
 
-    // Free tier: 500 images per day
-    return usage.count >= 500;
+    // Free tier: 20 images per day
+    return usage.count >= 20;
   };
 
   /**
@@ -136,9 +136,9 @@ export function useImageTracking() {
    */
   const getRemainingImages = () => {
     if (!user || !usage) return null;
-    if (usage.tier === 'pro') return 'Unlimited';
+    if (usage.tier === 'pro' || usage.tier === 'unlimited') return 'Unlimited';
 
-    const remaining = Math.max(0, 500 - usage.count);
+    const remaining = Math.max(0, 20 - usage.count);
     return remaining;
   };
 

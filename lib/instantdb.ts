@@ -33,7 +33,17 @@ type Schema = {
     userId: string;
     count: number;
     lastReset: number;
-    tier: 'free' | 'pro';
+    tier: 'free' | 'pro' | 'unlimited';
+  };
+  promoCodes: {
+    id: string;
+    code: string;
+    tier: string;
+    isRedeemed: boolean;
+    redeemedBy?: string;
+    redeemedAt?: number;
+    createdAt: number;
+    createdBy?: string;
   };
   showcaseSubmissions: {
     id: string;

@@ -39,7 +39,7 @@ export default function PricingPage() {
           </h1>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Start free with 500 images/day. Upgrade to Pro for unlimited transformations, priority processing, and exclusive features.
+            Start free with 20 images/day. Upgrade to Pro for unlimited transformations, priority processing, and exclusive features.
           </p>
 
           {/* Social Proof */}
@@ -118,7 +118,7 @@ export default function PricingPage() {
             <ul className="space-y-4 mb-8">
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700"><strong>500 images/day</strong> - Resets every 24 hours</span>
+                <span className="text-gray-700"><strong>20 images/day</strong> - Resets every 24 hours</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
@@ -305,7 +305,7 @@ export default function PricingPage() {
             <tbody className="divide-y divide-gray-200">
               <tr className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm text-gray-900">Daily image transformations</td>
-                <td className="px-6 py-4 text-center text-sm text-gray-600">500/day</td>
+                <td className="px-6 py-4 text-center text-sm text-gray-600">20/day</td>
                 <td className="px-6 py-4 text-center text-sm font-semibold text-teal-600 bg-teal-50">Unlimited</td>
               </tr>
               <tr className="hover:bg-gray-50">

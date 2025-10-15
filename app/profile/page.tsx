@@ -1,223 +1,244 @@
-'use client'
+'use client';
 
-import { useSession } from 'next-auth/react'
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { Mail, Calendar, Crown, Settings, Heart, History, ArrowLeft } from 'lucide-react'
+import { useState } from 'react';
+import { useImageTracking } from '@/hooks/useImageTracking';
+import { usePromoCode } from '@/hooks/usePromoCode';
+import { Check, X, Crown, Zap, Sparkles, AlertCircle, Gift, Key } from 'lucide-react';
+import Link from 'next/link';
 
 export default function ProfilePage() {
-  const { data: session, status } = useSession()
-  const [stats] = useState({
-    totalImages: 0,
-    totalFavorites: 0,
-    creditsUsed: 0,
-    creditsRemaining: 500
-  })
+  const { user, usage, imageHistory, getRemainingImages } = useImageTracking();
+  const { redeemCode, isRedeeming, error, success, clearMessages, hasUnlimitedAccess } = usePromoCode();
 
-  useEffect(() => {
-    // Authentication temporarily disabled
-    if (status === 'unauthenticated') {
-      // Don't redirect, will show coming soon message below
-    }
-  }, [status])
+  const [promoCode, setPromoCode] = useState('');
 
-  if (status === 'loading') {
+  if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading profile...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!session) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="text-6xl mb-4">👤</div>
-          <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
-            Profile Coming Soon!
-          </h1>
-          <p className="text-gray-600 mb-6">
-            User profiles will be available once sign-in is enabled.
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+        <div className="bg-white rounded-2xl shadow-2xl p-12 max-w-md text-center">
+          <AlertCircle className="w-16 h-16 text-coral-500 mx-auto mb-6" />
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Sign In Required</h1>
+          <p className="text-gray-600 mb-8">
+            Please sign in to view your profile and manage your account.
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
+            className="inline-block px-8 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
           >
-            <ArrowLeft className="w-5 h-5" />
-            Back to Home
+            Go to Homepage
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
-  const memberSince = session.user?.email ? new Date().toLocaleDateString() : 'Unknown'
+  const tier = usage?.tier || 'free';
+  const imagesGenerated = imageHistory?.length || 0;
+  const remainingImages = getRemainingImages();
+
+  const handleRedeem = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!promoCode.trim()) return;
+
+    const result = await redeemCode(promoCode);
+    if (result) {
+      setPromoCode('');
+      // Clear success message after 5 seconds
+      setTimeout(clearMessages, 5000);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 mb-6 text-gray-600 hover:text-teal-600 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
-
-        {/* Profile Header */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-            {/* Profile Image */}
-            <div className="relative">
-              {session.user?.image ? (
-                <img
-                  src={session.user.image}
-                  alt={session.user.name || 'User'}
-                  className="w-32 h-32 rounded-full border-4 border-white shadow-xl"
-                />
-              ) : (
-                <div className="w-32 h-32 rounded-full bg-teal-500 flex items-center justify-center text-white text-4xl font-bold shadow-xl">
-                  {session.user?.name?.[0] || 'U'}
-                </div>
-              )}
-              <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-2">
-                <Crown className="w-4 h-4 text-white" />
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-teal-50 to-coral-50 py-12 px-4">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-teal-500 to-coral-500 rounded-2xl shadow-2xl p-8 mb-8 text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">Your Profile</h1>
+              <p className="text-teal-100">{user.email}</p>
             </div>
-
-            {/* Profile Info */}
-            <div className="flex-1 text-center md:text-left">
-              <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">
-                {session.user?.name || 'Anonymous User'}
-              </h1>
-              <div className="flex flex-col md:flex-row gap-4 text-gray-600">
-                <div className="flex items-center justify-center md:justify-start gap-2">
-                  <Mail className="w-4 h-4" />
-                  <span>{session.user?.email}</span>
-                </div>
-                <div className="flex items-center justify-center md:justify-start gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>Member since {memberSince}</span>
-                </div>
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
-                <span className="px-3 py-1 bg-amber-100 text-orange-700 rounded-full text-sm font-medium">
-                  Free Plan
-                </span>
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                  Unlimited Images
-                </span>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/profile/settings"
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all"
-              >
-                <Settings className="w-4 h-4" />
-                Settings
-              </Link>
-              <Link
-                href="/pricing"
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all"
-              >
-                <Crown className="w-4 h-4" />
-                Upgrade to Pro
-              </Link>
-            </div>
+            {tier === 'unlimited' || tier === 'pro' ? (
+              <Crown className="w-16 h-16 text-yellow-300" />
+            ) : (
+              <Sparkles className="w-16 h-16 text-teal-100" />
+            )}
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-500 text-sm">Total Images</span>
-              <History className="w-5 h-5 text-blue-500" />
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Account Info */}
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <Zap className="w-6 h-6 text-teal-500" />
+              Account Status
+            </h2>
+
+            <div className="space-y-4">
+              {/* Tier */}
+              <div className="flex items-center justify-between p-4 bg-gradient-to-r from-teal-50 to-coral-50 rounded-xl">
+                <span className="text-gray-700 font-medium">Current Plan</span>
+                <div className="flex items-center gap-2">
+                  {tier === 'unlimited' || tier === 'pro' ? (
+                    <Crown className="w-5 h-5 text-yellow-500" />
+                  ) : null}
+                  <span className="font-bold text-teal-600 uppercase">{tier}</span>
+                </div>
+              </div>
+
+              {/* Images Remaining */}
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                <span className="text-gray-700 font-medium">Daily Limit</span>
+                <span className="font-bold text-gray-900">
+                  {hasUnlimitedAccess ? (
+                    <span className="text-teal-600">Unlimited ✨</span>
+                  ) : (
+                    `${remainingImages} / 20 remaining`
+                  )}
+                </span>
+              </div>
+
+              {/* Total Images */}
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                <span className="text-gray-700 font-medium">Total Images Generated</span>
+                <span className="font-bold text-gray-900">{imagesGenerated.toLocaleString()}</span>
+              </div>
+
+              {/* Upgrade CTA (only for free tier) */}
+              {tier === 'free' && (
+                <div className="mt-6 p-6 bg-gradient-to-r from-teal-500 to-coral-500 rounded-xl text-white">
+                  <Crown className="w-8 h-8 mb-3" />
+                  <h3 className="font-bold text-lg mb-2">Upgrade to Pro</h3>
+                  <p className="text-teal-100 text-sm mb-4">
+                    Get unlimited images, priority processing, and no watermarks!
+                  </p>
+                  <Link
+                    href="/pricing"
+                    className="inline-block w-full text-center px-6 py-3 bg-white text-teal-600 rounded-lg font-semibold hover:bg-gray-50 transition-all"
+                  >
+                    View Pricing →
+                  </Link>
+                </div>
+              )}
             </div>
-            <p className="text-3xl font-bold text-gray-900">{stats.totalImages}</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-500 text-sm">Favorites</span>
-              <Heart className="w-5 h-5 text-coral-500" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{stats.totalFavorites}</p>
-          </div>
+          {/* Promo Code Redemption */}
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <Gift className="w-6 h-6 text-coral-500" />
+              Redeem Promo Code
+            </h2>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-500 text-sm">Credits Used</span>
-              <div className="w-5 h-5 rounded-full bg-teal-500" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{stats.creditsUsed}</p>
-          </div>
+            {hasUnlimitedAccess ? (
+              <div className="p-6 bg-gradient-to-r from-green-50 to-teal-50 rounded-xl border-2 border-green-200">
+                <div className="flex items-center gap-3 mb-3">
+                  <Check className="w-8 h-8 text-green-600" />
+                  <h3 className="font-bold text-green-900 text-lg">Unlimited Access Active!</h3>
+                </div>
+                <p className="text-green-700">
+                  You have unlimited image generation. Enjoy creating without limits!
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleRedeem} className="space-y-4">
+                <div>
+                  <label htmlFor="promoCode" className="block text-sm font-medium text-gray-700 mb-2">
+                    Enter your promo code
+                  </label>
+                  <div className="relative">
+                    <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      id="promoCode"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                      placeholder="DEREK-FOUNDER-2025"
+                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none font-mono text-lg uppercase"
+                      disabled={isRedeeming}
+                    />
+                  </div>
+                </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-500 text-sm">Credits Left</span>
-              <div className="w-5 h-5 rounded-full bg-green-500" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{stats.creditsRemaining}</p>
+                {error && (
+                  <div className="p-4 bg-red-50 border-2 border-red-200 rounded-xl flex items-start gap-3">
+                    <X className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-red-700 text-sm">{error}</p>
+                  </div>
+                )}
+
+                {success && (
+                  <div className="p-4 bg-green-50 border-2 border-green-200 rounded-xl flex items-start gap-3 animate-bounce">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-green-700 text-sm font-semibold">{success}</p>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isRedeeming || !promoCode.trim()}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isRedeeming ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Redeeming...
+                    </>
+                  ) : (
+                    <>
+                      <Gift className="w-5 h-5" />
+                      Redeem Code
+                    </>
+                  )}
+                </button>
+
+                <div className="mt-6 p-4 bg-gray-50 rounded-xl">
+                  <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-teal-500" />
+                    How it works
+                  </h4>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    <li>• Enter your unique promo code above</li>
+                    <li>• Get instant unlimited access</li>
+                    <li>• Each code works for one account only</li>
+                    <li>• No expiration date</li>
+                  </ul>
+                </div>
+              </form>
+            )}
           </div>
         </div>
 
         {/* Quick Links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="mt-8 grid md:grid-cols-3 gap-6">
           <Link
-            href="/profile/history"
+            href="/my-images"
             className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                <History className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Image History</h3>
-                <p className="text-sm text-gray-500">View all your creations</p>
-              </div>
-            </div>
+            <Sparkles className="w-8 h-8 text-teal-500 mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold text-gray-900 mb-2">My Images</h3>
+            <p className="text-gray-600 text-sm">View all your created images</p>
           </Link>
 
           <Link
-            href="/profile/favorites"
+            href="/favorites"
             className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                <Heart className="w-6 h-6 text-coral-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Favorites</h3>
-                <p className="text-sm text-gray-500">Your saved images</p>
-              </div>
-            </div>
+            <Crown className="w-8 h-8 text-coral-500 mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold text-gray-900 mb-2">Favorites</h3>
+            <p className="text-gray-600 text-sm">Your saved prompts and styles</p>
           </Link>
 
           <Link
-            href="/profile/settings"
-            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group"
+            href="/pricing"
+            className="bg-gradient-to-r from-teal-500 to-coral-500 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group text-white"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                <Settings className="w-6 h-6 text-gray-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Settings</h3>
-                <p className="text-sm text-gray-500">Manage your account</p>
-              </div>
-            </div>
+            <Zap className="w-8 h-8 text-yellow-300 mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold mb-2">Upgrade</h3>
+            <p className="text-teal-100 text-sm">Get unlimited access today</p>
           </Link>
         </div>
       </div>
     </div>
-  )
+  );
 }
