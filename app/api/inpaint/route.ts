@@ -1,0 +1,70 @@
+import { NextRequest, NextResponse } from 'next/server';
+import Replicate from 'replicate';
+
+// Initialize Replicate client
+const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_TOKEN || '',
+});
+
+export async function POST(request: NextRequest) {
+  try {
+    const { image, mask, prompt } = await request.json();
+
+    if (!image || !mask || !prompt) {
+      return NextResponse.json(
+        { error: 'Missing required parameters: image, mask, or prompt' },
+        { status: 400 }
+      );
+    }
+
+    // Check if Replicate API token is configured
+    if (!process.env.REPLICATE_API_TOKEN) {
+      return NextResponse.json(
+        { error: 'Replicate API token not configured' },
+        { status: 500 }
+      );
+    }
+
+    console.log('Starting inpainting with Replicate...');
+
+    // Use Stable Diffusion XL Inpainting model
+    const output = await replicate.run(
+      "stability-ai/stable-diffusion-inpainting:95b7223104132402a9ae91cc677285bc5eb997834bd2349fa486f53910fd68b3",
+      {
+        input: {
+          image: image,
+          mask: mask,
+          prompt: prompt,
+          num_outputs: 1,
+          num_inference_steps: 50,
+          guidance_scale: 7.5,
+        },
+      }
+    ) as string[];
+
+    if (!output || output.length === 0) {
+      throw new Error('No output from Replicate');
+    }
+
+    const resultUrl = Array.isArray(output) ? output[0] : output;
+
+    console.log('Inpainting successful!');
+
+    return NextResponse.json({
+      success: true,
+      resultUrl: resultUrl,
+    });
+  } catch (error: unknown) {
+    console.error('Inpainting error:', error);
+
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+
+    return NextResponse.json(
+      {
+        error: 'Failed to process inpainting',
+        details: errorMessage,
+      },
+      { status: 500 }
+    );
+  }
+}
