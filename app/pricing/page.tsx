@@ -56,12 +56,12 @@ export default function PricingPage() {
       }
 
       // Redirect to Stripe Checkout
-      const stripe = await loadStripe('pk_live_51RyEptDlxrM8ZIxcKdGRW5100AE1W9WUId2uOT8TxmKiCFbqvT2Zupt3Ac9cnqvmMS4HFFmf2j9Uyq4TYa3J2uW3006Z1VMGec');
-      if (!stripe) {
+      const stripeJs = await loadStripe('pk_live_51RyEptDlxrM8ZIxcKdGRW5100AE1W9WUId2uOT8TxmKiCFbqvT2Zupt3Ac9cnqvmMS4HFFmf2j9Uyq4TYa3J2uW3006Z1VMGec');
+      if (!stripeJs) {
         throw new Error('Failed to load Stripe');
       }
 
-      const { error } = await stripe.redirectToCheckout({
+      const { error } = await stripeJs.redirectToCheckout({
         sessionId: data.sessionId,
       });
 
