@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Upload, Sparkles, AlertCircle, Check, Download } from 'lucide-react';
 import SelectiveEditor from '@/components/SelectiveEditor';
 import { useImageTracking } from '@/hooks/useImageTracking';
@@ -32,6 +32,36 @@ export default function SelectiveEditPage() {
     };
     reader.readAsDataURL(file);
   };
+
+  // Handle paste from clipboard
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      // Only handle paste if no image is selected yet
+      if (selectedImage) return;
+
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const blob = items[i].getAsFile();
+          if (blob) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              setSelectedImage(event.target?.result as string);
+              setProcessedResults([]);
+              setError(null);
+            };
+            reader.readAsDataURL(blob);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, [selectedImage]);
 
   const handleApplySelections = async (areas: SelectionArea[]) => {
     if (!selectedImage) return;
@@ -117,6 +147,9 @@ export default function SelectiveEditPage() {
             Select specific areas of your image and transform them individually.
             Change the background on the left differently than the right, or edit multiple spots with unique prompts!
           </p>
+          <p className="text-sm text-teal-600 font-medium mt-2">
+            💡 Tip: You can paste an image directly with Ctrl+V (or Cmd+V on Mac)
+          </p>
         </div>
 
         {/* Upload Section */}
@@ -129,7 +162,7 @@ export default function SelectiveEditPage() {
                   Upload Your Image
                 </p>
                 <p className="text-gray-500">
-                  Click to browse or drag and drop
+                  Click to browse, drag and drop, or paste with Ctrl+V
                 </p>
                 <input
                   type="file"
