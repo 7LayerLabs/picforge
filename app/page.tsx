@@ -11,7 +11,6 @@ import BeforeAfterSlider from '@/components/BeforeAfterSlider'
 import TemplateSelector from '@/components/TemplateSelector'
 import ImageGallery from '@/components/ImageGallery'
 import BatchStyleGenerator from '@/components/BatchStyleGenerator'
-import VIPCodeEntry from '@/components/VIPCodeEntry'
 import ExportModal from '@/components/ExportModal'
 import { useImageTracking } from '@/hooks/useImageTracking'
 
@@ -1472,8 +1471,6 @@ export default function Home() {
         fileName="picforge-design"
       />
 
-      {/* VIP Code Entry (hidden key icon in bottom left) */}
-      <VIPCodeEntry />
     </div>
   )
 }
