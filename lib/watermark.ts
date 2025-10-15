@@ -1,8 +1,9 @@
 /**
  * PicForge Watermark System
  *
- * Adds "PicForge.com" watermark to images for Free tier users.
+ * Adds "Pic-Forge.com" dual watermarks (top-right and bottom-left) to images for Free tier users.
  * Uses HTML5 Canvas API for client-side watermarking.
+ * Dual placement prevents easy cropping.
  *
  * @module watermark
  */
@@ -10,7 +11,7 @@
 export interface WatermarkOptions {
   /**
    * Text to display as watermark
-   * @default "PicForge.com"
+   * @default "Pic-Forge.com"
    */
   text?: string;
 
@@ -67,7 +68,7 @@ export interface WatermarkOptions {
  * Default watermark options
  */
 const DEFAULT_OPTIONS: Required<WatermarkOptions> = {
-  text: 'PicForge.com',
+  text: 'Pic-Forge.com',
   opacity: 0.4,
   position: 'bottom-right',
   fontSize: 0.05,
@@ -226,17 +227,26 @@ export async function addWatermark(
     const textMetrics = ctx.measureText(config.text);
     const textWidth = textMetrics.width;
 
-    // Calculate position
-    const { x, y } = calculatePosition(
+    // Add dual watermarks to prevent easy cropping
+    // Top-right watermark
+    const topRight = calculatePosition(
       canvas,
       textWidth,
       fontSize,
       config.padding,
-      config.position
+      'top-right'
     );
+    ctx.fillText(config.text, topRight.x, topRight.y);
 
-    // Draw the watermark text
-    ctx.fillText(config.text, x, y);
+    // Bottom-left watermark
+    const bottomLeft = calculatePosition(
+      canvas,
+      textWidth,
+      fontSize,
+      config.padding,
+      'bottom-left'
+    );
+    ctx.fillText(config.text, bottomLeft.x, bottomLeft.y);
 
     // Convert canvas to data URL
     return canvas.toDataURL('image/png', 1.0);
