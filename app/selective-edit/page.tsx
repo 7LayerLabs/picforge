@@ -254,28 +254,34 @@ export default function SelectiveEditPage() {
                 {/* Original */}
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Original</h3>
-                  <img
-                    src={selectedImage}
-                    alt="Original"
-                    className="w-full rounded-lg border-2 border-gray-200"
-                  />
+                  {selectedImage && (
+                    <img
+                      src={selectedImage}
+                      alt="Original"
+                      className="w-full rounded-lg border-2 border-gray-200"
+                    />
+                  )}
                 </div>
 
                 {/* Final Result */}
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Final Result</h3>
-                  <img
-                    src={processedResults[processedResults.length - 1]}
-                    alt="Final result"
-                    className="w-full rounded-lg border-2 border-teal-500"
-                  />
-                  <button
-                    onClick={() => downloadResult(processedResults[processedResults.length - 1], processedResults.length - 1)}
-                    className="mt-3 w-full px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold hover:bg-teal-600 transition-all flex items-center justify-center gap-2"
-                  >
-                    <Download className="w-4 h-4" />
-                    Download Final
-                  </button>
+                  {processedResults.length > 0 && (
+                    <>
+                      <img
+                        src={processedResults[processedResults.length - 1]}
+                        alt="Final result"
+                        className="w-full rounded-lg border-2 border-teal-500"
+                      />
+                      <button
+                        onClick={() => downloadResult(processedResults[processedResults.length - 1], processedResults.length - 1)}
+                        className="mt-3 w-full px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold hover:bg-teal-600 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download Final
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
 
