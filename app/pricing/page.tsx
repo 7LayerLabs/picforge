@@ -15,7 +15,7 @@ export default function PricingPage() {
   // Pricing configuration
   const pricing = {
     monthly: 14,
-    yearly: 99, // $8.25/month when billed yearly - 41% savings
+    yearly: 119, // $9.92/month when billed yearly - 29% savings
   }
 
   const handleUpgrade = (tier: 'pro') => {
@@ -59,7 +59,7 @@ export default function PricingPage() {
             >
               Yearly
               <span className="absolute -top-2 -right-2 bg-coral-500 text-white text-xs px-2 py-0.5 rounded-full">
-                Save 41%
+                Save 29%
               </span>
             </button>
           </div>
@@ -166,7 +166,7 @@ export default function PricingPage() {
               </div>
               {billingPeriod === 'yearly' && (
                 <p className="text-teal-100 text-sm">
-                  That&apos;s just <strong>$8.25/month</strong> - Save $69/year!
+                  That&apos;s just <strong>$9.92/month</strong> - Save $49/year!
                 </p>
               )}
             </div>
@@ -356,7 +356,7 @@ export default function PricingPage() {
             },
             {
               q: "Can I upgrade from monthly to yearly anytime?",
-              a: "Yes! You can switch to yearly billing anytime and we'll prorate the difference. The 41% savings makes yearly a no-brainer for regular users."
+              a: "Yes! You can switch to yearly billing anytime and we'll prorate the difference. The 29% savings makes yearly a no-brainer for regular users."
             },
             {
               q: "Is my payment information secure?",
