@@ -49,10 +49,10 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-teal-50 to-coral-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-500 to-coral-500 rounded-2xl shadow-2xl p-8 mb-8 text-white">
+        <div className="bg-teal-600 rounded-2xl shadow-xl p-8 mb-8 text-white">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold mb-2">Your Profile</h1>
@@ -76,7 +76,7 @@ export default function ProfilePage() {
 
             <div className="space-y-4">
               {/* Tier */}
-              <div className="flex items-center justify-between p-4 bg-gradient-to-r from-teal-50 to-coral-50 rounded-xl">
+              <div className="flex items-center justify-between p-4 bg-teal-50 rounded-xl">
                 <span className="text-gray-700 font-medium">Current Plan</span>
                 <div className="flex items-center gap-2">
                   {tier === 'unlimited' || tier === 'pro' ? (
@@ -106,7 +106,7 @@ export default function ProfilePage() {
 
               {/* Upgrade CTA (only for free tier) */}
               {tier === 'free' && (
-                <div className="mt-6 p-6 bg-gradient-to-r from-teal-500 to-coral-500 rounded-xl text-white">
+                <div className="mt-6 p-6 bg-teal-600 rounded-xl text-white">
                   <Crown className="w-8 h-8 mb-3" />
                   <h3 className="font-bold text-lg mb-2">Upgrade to Pro</h3>
                   <p className="text-teal-100 text-sm mb-4">
@@ -131,7 +131,7 @@ export default function ProfilePage() {
             </h2>
 
             {hasUnlimitedAccess ? (
-              <div className="p-6 bg-gradient-to-r from-green-50 to-teal-50 rounded-xl border-2 border-green-200">
+              <div className="p-6 bg-green-50 rounded-xl border-2 border-green-200">
                 <div className="flex items-center gap-3 mb-3">
                   <Check className="w-8 h-8 text-green-600" />
                   <h3 className="font-bold text-green-900 text-lg">Unlimited Access Active!</h3>
@@ -177,7 +177,7 @@ export default function ProfilePage() {
                 <button
                   type="submit"
                   disabled={isRedeeming || !promoCode.trim()}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isRedeeming ? (
                     <>
@@ -231,7 +231,7 @@ export default function ProfilePage() {
 
           <Link
             href="/pricing"
-            className="bg-gradient-to-r from-teal-500 to-coral-500 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group text-white"
+            className="bg-teal-600 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group text-white"
           >
             <Zap className="w-8 h-8 text-yellow-300 mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="font-bold mb-2">Upgrade</h3>

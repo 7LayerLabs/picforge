@@ -46,7 +46,7 @@ export default function Navigation() {
                 href="/"
                 className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/')
-                    ? 'border-blue-500 text-gray-900'
+                    ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -58,7 +58,7 @@ export default function Navigation() {
                 href="/batch"
                 className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/batch')
-                    ? 'border-purple-500 text-gray-900'
+                    ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -70,72 +70,12 @@ export default function Navigation() {
                 href="/canvas"
                 className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
                   isActive('/canvas')
-                    ? 'border-purple-500 text-gray-900'
+                    ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
                 <Sparkles className="w-3 h-3 mr-1.5" />
                 Canvas
-              </Link>
-
-              <Link
-                href="/prompt-wizard"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
-                  isActive('/prompt-wizard')
-                    ? 'border-purple-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Wand2 className="w-3 h-3 mr-1.5" />
-                Wizard
-              </Link>
-
-              <Link
-                href="/tips"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
-                  isActive('/tips')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Lightbulb className="w-3 h-3 mr-1.5" />
-                Tips
-              </Link>
-
-              <Link
-                href="/prompts"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
-                  isActive('/prompts')
-                    ? 'border-blue-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Layers className="w-3 h-3 mr-1.5" />
-                Prompts
-              </Link>
-
-              <Link
-                href="/examples"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
-                  isActive('/examples')
-                    ? 'border-green-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <ImageIcon className="w-3 h-3 mr-1.5" />
-                Templates
-              </Link>
-
-              <Link
-                href="/showcase"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
-                  isActive('/showcase')
-                    ? 'border-teal-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Trophy className="w-3 h-3 mr-1.5" />
-                Showcase
               </Link>
 
               {/* Games Dropdown */}
@@ -187,29 +127,6 @@ export default function Navigation() {
                 )}
               </div>
 
-              <Link
-                href="/my-images"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
-                  isActive('/my-images')
-                    ? 'border-indigo-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Images className="w-3 h-3 mr-1.5" />
-                My Images
-              </Link>
-
-              <Link
-                href="/favorites"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
-                  isActive('/favorites')
-                    ? 'border-yellow-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Star className="w-3 h-3 mr-1.5" />
-                Favorites
-              </Link>
 
               <Link
                 href="/pricing"

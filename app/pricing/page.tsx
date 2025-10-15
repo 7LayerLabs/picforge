@@ -25,42 +25,17 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-teal-50 to-coral-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-100 rounded-full text-teal-700 text-sm font-medium mb-6 animate-bounce">
-            <Sparkles className="w-4 h-4" />
-            Join 10,000+ creators transforming images daily
-          </div>
-
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Transform <span className="bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">Unlimited</span> Images
+          <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Choose Your Plan
           </h1>
 
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Start free with 20 images/day. Upgrade to Pro for unlimited transformations, priority processing, and exclusive features.
+          <p className="font-body text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Start free with 20 images/day. Upgrade to Pro for unlimited transformations and no watermarks.
           </p>
-
-          {/* Social Proof */}
-          <div className="flex flex-wrap justify-center gap-6 mb-12 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-coral-400 border-2 border-white" />
-                ))}
-              </div>
-              <span><strong>10,000+</strong> happy users</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-              <span><strong>4.9/5</strong> average rating</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-green-500" />
-              <span><strong>2M+</strong> images created</span>
-            </div>
-          </div>
 
           {/* Billing Toggle */}
           <div className="flex items-center justify-center gap-4 mb-12">
@@ -163,7 +138,7 @@ export default function PricingPage() {
           </div>
 
           {/* Pro Tier */}
-          <div className="bg-gradient-to-br from-teal-500 to-coral-500 rounded-2xl shadow-2xl p-8 relative transform hover:scale-105 transition-all">
+          <div className="bg-teal-600 rounded-2xl shadow-2xl p-8 relative transform hover:scale-105 transition-all">
             {/* Popular Badge */}
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
               <div className="bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-bold flex items-center gap-1 shadow-lg">
@@ -274,15 +249,11 @@ export default function PricingPage() {
         <div className="mt-16 flex flex-wrap justify-center items-center gap-8 text-sm text-gray-500">
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-teal-500" />
-            <span>Secure payments via Stripe</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-teal-500" />
-            <span>10,000+ satisfied customers</span>
+            <span>Secure payments</span>
           </div>
           <div className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-teal-500" />
-            <span>Cancel anytime, no questions</span>
+            <span>Cancel anytime</span>
           </div>
         </div>
       </div>
@@ -358,56 +329,6 @@ export default function PricingPage() {
         </div>
       </div>
 
-      {/* Testimonials */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-          What Our Pro Users Say
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              name: "Sarah Chen",
-              role: "Social Media Manager",
-              image: "SC",
-              quote: "Pro plan paid for itself in the first week. The unlimited transformations mean I can create content for all my clients without worrying about limits.",
-              rating: 5
-            },
-            {
-              name: "Marcus Rodriguez",
-              role: "Graphic Designer",
-              image: "MR",
-              quote: "Priority processing is a game-changer. I can iterate on designs 3x faster and deliver to clients ahead of schedule. Worth every penny!",
-              rating: 5
-            },
-            {
-              name: "Emma Thompson",
-              role: "Content Creator",
-              image: "ET",
-              quote: "The watermark removal alone is worth the upgrade. My Instagram posts look so much more professional now. Love the Pro badge too!",
-              rating: 5
-            }
-          ].map((testimonial, i) => (
-            <div key={i} className="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-100 hover:border-teal-200 transition-all">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-6 italic">&quot;{testimonial.quote}&quot;</p>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-coral-400 rounded-full flex items-center justify-center text-white font-bold">
-                  {testimonial.image}
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                  <p className="text-sm text-gray-600">{testimonial.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* FAQ Section */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -457,13 +378,13 @@ export default function PricingPage() {
 
       {/* Final CTA */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-gradient-to-br from-teal-500 to-coral-500 rounded-2xl shadow-2xl p-12 text-center">
+        <div className="bg-teal-600 rounded-2xl shadow-2xl p-12 text-center">
           <Crown className="w-16 h-16 text-yellow-300 mx-auto mb-6" />
           <h2 className="text-4xl font-bold text-white mb-4">
-            Ready to Transform Unlimited Images?
+            Ready to Go Pro?
           </h2>
           <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of creators, designers, and businesses using PicForge Pro to transform their visual content at scale.
+            Get unlimited images, no watermarks, and priority processing.
           </p>
           <button
             onClick={() => handleUpgrade('pro')}

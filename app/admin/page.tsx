@@ -102,10 +102,10 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-teal-50 to-coral-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl shadow-2xl p-8 mb-8 text-white">
+        <div className="bg-gray-900 rounded-2xl shadow-xl p-8 mb-8 text-white">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold mb-2">Admin Panel</h1>
@@ -142,7 +142,7 @@ export default function AdminPage() {
               <button
                 onClick={handleGenerateRandom}
                 disabled={isCreating}
-                className="w-full px-6 py-3 bg-gradient-to-r from-teal-500 to-coral-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isCreating ? (
                   <>
@@ -199,7 +199,7 @@ export default function AdminPage() {
               <button
                 onClick={handleCreateCustom}
                 disabled={isCreating || !customCode.trim()}
-                className="w-full px-6 py-3 bg-gradient-to-r from-coral-500 to-teal-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isCreating ? (
                   <>
@@ -293,7 +293,7 @@ export default function AdminPage() {
 
           <Link
             href="/"
-            className="bg-gradient-to-r from-teal-500 to-coral-500 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group text-white"
+            className="bg-teal-600 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group text-white"
           >
             <Sparkles className="w-8 h-8 text-yellow-300 mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="font-bold mb-2">Editor</h3>
