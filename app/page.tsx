@@ -427,6 +427,18 @@ export default function Home() {
       return
     }
 
+    // Require sign-in to generate images
+    if (!user) {
+      setSubmitMessage('Please sign in to generate images')
+      return
+    }
+
+    // Check usage limits
+    if (hasReachedLimit()) {
+      setSubmitMessage('Daily limit reached! Upgrade to Pro or redeem a promo code for unlimited images.')
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitMessage('')
 
