@@ -59,6 +59,17 @@ export async function POST(request: NextRequest) {
 
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
 
+    // Check if it's a payment/credit issue
+    if (errorMessage.includes('402') || errorMessage.includes('Insufficient credit')) {
+      return NextResponse.json(
+        {
+          error: 'Replicate API credits depleted',
+          details: 'The selective editor requires Replicate API credits. Please contact support or try again later.',
+        },
+        { status: 402 }
+      );
+    }
+
     return NextResponse.json(
       {
         error: 'Failed to process inpainting',
