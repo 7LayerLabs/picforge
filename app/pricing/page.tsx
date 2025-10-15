@@ -4,11 +4,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Check, X, Zap, Crown, Sparkles, Clock, Shield, AlertCircle } from 'lucide-react'
 import { useImageTracking } from '@/hooks/useImageTracking'
+import { loadStripe } from '@stripe/stripe-js'
 
 export default function PricingPage() {
   const { user, getRemainingImages } = useImageTracking()
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly')
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
 
   const remainingImages = user ? getRemainingImages() : 500
 
@@ -18,10 +20,59 @@ export default function PricingPage() {
     yearly: 119, // $9.92/month when billed yearly - 29% savings
   }
 
-  const handleUpgrade = (tier: 'pro') => {
-    // TODO: Integrate with Stripe or payment processor
-    setShowSuccessMessage(true)
-    setTimeout(() => setShowSuccessMessage(false), 5000)
+  const handleUpgrade = async (tier: 'pro') => {
+    // Require user to be signed in
+    if (!user) {
+      alert('Please sign in to upgrade to Pro');
+      window.location.href = '/';
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Get the appropriate price ID based on billing period
+      const priceId = billingPeriod === 'monthly'
+        ? process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID
+        : process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID;
+
+      // Create checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          priceId,
+          userId: user.id,
+          userEmail: user.email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      // Redirect to Stripe Checkout
+      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+      if (!stripe) {
+        throw new Error('Failed to load Stripe');
+      }
+
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: data.sessionId,
+      });
+
+      if (error) {
+        console.error('Stripe redirect error:', error);
+        alert('Failed to redirect to checkout. Please try again.');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Failed to start checkout. Please try again or contact support.');
+    } finally {
+      setIsProcessing(false);
+    }
   }
 
   return (
@@ -204,9 +255,10 @@ export default function PricingPage() {
 
             <button
               onClick={() => handleUpgrade('pro')}
-              className="w-full px-6 py-4 bg-white text-teal-600 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105"
+              disabled={isProcessing}
+              className="w-full px-6 py-4 bg-white text-teal-600 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Upgrade to Pro Now →
+              {isProcessing ? 'Processing...' : 'Upgrade to Pro Now →'}
             </button>
 
             {billingPeriod === 'yearly' && (
@@ -339,9 +391,10 @@ export default function PricingPage() {
           </p>
           <button
             onClick={() => handleUpgrade('pro')}
-            className="px-8 py-4 bg-white text-teal-600 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105"
+            disabled={isProcessing}
+            className="px-8 py-4 bg-white text-teal-600 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Start Pro Now - ${billingPeriod === 'monthly' ? pricing.monthly : pricing.yearly}/{billingPeriod === 'monthly' ? 'mo' : 'yr'} →
+            {isProcessing ? 'Processing...' : `Start Pro Now - $${billingPeriod === 'monthly' ? pricing.monthly : pricing.yearly}/${billingPeriod === 'monthly' ? 'mo' : 'yr'} →`}
           </button>
           <p className="text-teal-100 text-sm mt-4">
             30-day money-back guarantee • Cancel anytime • No questions asked

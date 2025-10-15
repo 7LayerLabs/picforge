@@ -34,6 +34,7 @@ type Schema = {
     count: number;
     lastReset: number;
     tier: 'free' | 'pro' | 'unlimited';
+    subscriptionId?: string;
   };
   promoCodes: {
     id: string;
