@@ -58,7 +58,7 @@ export default function PromptSubmitModal({ categories, onClose }: PromptSubmitM
             <div className="text-5xl mb-4">✨</div>
             <h3 className="text-2xl font-bold text-black mb-2">Thank You!</h3>
             <p className="text-gray-600 mb-4">Your prompt has been submitted and will be reviewed for potential inclusion in our library.</p>
-            <p className="text-gray-500 text-sm">We may feature amazing community prompts as "Prompt of the Day"!</p>
+            <p className="text-gray-500 text-sm">We may feature amazing community prompts as &quot;Prompt of the Day&quot;!</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-6">

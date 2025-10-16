@@ -841,7 +841,7 @@ export default function Home() {
                 <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900 dark:text-white">Imagine<span className="text-4xl md:text-5xl lg:text-6xl">.</span> Everything<span className="text-4xl md:text-5xl lg:text-6xl">.</span></span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
-                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">210+ templates</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
+                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">325+ prompts and endless ideas</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
               </p>
 
               {/* Feature Highlights - Compact Inline Badges */}
@@ -852,7 +852,7 @@ export default function Home() {
                 </div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
                   <span className="text-xl">🎨</span>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">210+ Templates</span>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">325+ Prompts</span>
                 </div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
                   <span className="text-xl">🔒</span>
