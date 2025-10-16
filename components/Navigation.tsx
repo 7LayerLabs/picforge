@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Image as ImageIcon, Images, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2, Crown, User, Star, Target } from 'lucide-react';
 import { useState } from 'react';
-import AuthButton from './AuthButton';
+// import AuthButton from './AuthButton';
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -303,12 +303,18 @@ export default function Navigation() {
 
           {/* Right side - User menu for desktop */}
           <div className="hidden sm:flex items-center ml-auto pl-8">
-            <AuthButton />
+            {/* <AuthButton /> */}
+            <button className="px-4 py-2 text-gray-600 hover:text-gray-900">
+              Sign In
+            </button>
           </div>
 
           {/* Mobile menu button and user menu */}
           <div className="flex items-center sm:hidden gap-2">
-            <AuthButton />
+            {/* <AuthButton /> */}
+            <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">
+              Sign In
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"

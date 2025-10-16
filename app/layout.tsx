@@ -4,7 +4,7 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/react";
-import AuthSessionProvider from "@/components/providers/SessionProvider";
+// import AuthSessionProvider from "@/components/providers/SessionProvider";
 
 const specialElite = Special_Elite({
   variable: "--font-heading",
@@ -174,12 +174,12 @@ export default function RootLayout({
       <body
         className={`${specialElite.variable} font-body antialiased`}
       >
-        <AuthSessionProvider>
+        {/* <AuthSessionProvider> */}
           <Navigation />
           {children}
           <Footer />
           <Analytics />
-        </AuthSessionProvider>
+        {/* </AuthSessionProvider> */}
       </body>
     </html>
   );

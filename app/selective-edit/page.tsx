@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Upload, Sparkles, AlertCircle, Check, Download } from 'lucide-react';
 import SelectiveEditor from '@/components/SelectiveEditor';
-import { useImageTracking } from '@/hooks/useImageTracking';
+// import { useImageTracking } from '@/hooks/useImageTracking';
 
 interface SelectionArea {
   id: string;
@@ -18,7 +18,7 @@ export default function SelectiveEditPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedResults, setProcessedResults] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const { user, hasReachedLimit, trackImageGeneration } = useImageTracking();
+  // const { user, hasReachedLimit, trackImageGeneration } = useImageTracking();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,16 +66,16 @@ export default function SelectiveEditPage() {
   const handleApplySelections = async (areas: SelectionArea[]) => {
     if (!selectedImage) return;
 
-    // Check usage limits
-    if (!user) {
-      setError('Please sign in to use selective editing');
-      return;
-    }
+    // Check usage limits - temporarily disabled for testing
+    // if (!user) {
+    //   setError('Please sign in to use selective editing');
+    //   return;
+    // }
 
-    if (hasReachedLimit()) {
-      setError('Daily limit reached! Upgrade to Pro or redeem a promo code for unlimited images.');
-      return;
-    }
+    // if (hasReachedLimit()) {
+    //   setError('Daily limit reached! Upgrade to Pro or redeem a promo code for unlimited images.');
+    //   return;
+    // }
 
     setIsProcessing(true);
     setError(null);
@@ -109,13 +109,13 @@ export default function SelectiveEditPage() {
         currentImage = data.resultUrl;
         results.push(data.resultUrl);
 
-        // Track image generation
-        await trackImageGeneration({
-          prompt: `Selective edit: ${area.name} - ${area.prompt}`,
-          originalUrl: selectedImage,
-          transformedUrl: data.resultUrl,
-          locked: false,
-        });
+        // Track image generation - temporarily disabled for testing
+        // await trackImageGeneration({
+        //   prompt: `Selective edit: ${area.prompt}`,
+        //   originalUrl: selectedImage,
+        //   transformedUrl: data.resultUrl,
+        //   locked: false,
+        // });
       }
 
       setProcessedResults(results);
@@ -144,8 +144,8 @@ export default function SelectiveEditPage() {
             <h1 className="text-4xl font-bold text-gray-900">Selective Area Editor</h1>
           </div>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Select specific areas of your image and transform them individually.
-            Change the background on the left differently than the right, or edit multiple spots with unique prompts!
+            Paint over any area in your image and describe what you want to see there.
+            Just like Photoshop's AI inpainting - simple and powerful!
           </p>
           <p className="text-sm text-teal-600 font-medium mt-2">
             💡 Tip: You can paste an image directly with Ctrl+V (or Cmd+V on Mac)
@@ -193,10 +193,9 @@ export default function SelectiveEditPage() {
                     2
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Select Areas</h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">Select Area</h3>
                     <p className="text-gray-600 text-sm">
-                      Use brush, rectangle, or circle tools to paint over the areas you want to change.
-                      Choose different colors for different areas.
+                      Use brush, rectangle, or circle tools to paint over the area you want to change.
                     </p>
                   </div>
                 </div>
@@ -205,9 +204,9 @@ export default function SelectiveEditPage() {
                     3
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Describe Changes</h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">Describe What You Want</h3>
                     <p className="text-gray-600 text-sm">
-                      For each colored area, write what you want to see there
+                      Write what you want to see in the selected area
                       (e.g., &quot;sunset sky&quot;, &quot;tropical beach&quot;, &quot;city skyline&quot;)
                     </p>
                   </div>
@@ -217,9 +216,9 @@ export default function SelectiveEditPage() {
                     4
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Apply & Download</h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">Transform & Download</h3>
                     <p className="text-gray-600 text-sm">
-                      Hit Apply All Selections and watch the magic happen. Download your results!
+                      Hit Transform Selection and watch the AI magic happen. Download your result!
                     </p>
                   </div>
                 </div>

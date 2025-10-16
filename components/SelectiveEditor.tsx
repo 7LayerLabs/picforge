@@ -7,8 +7,6 @@ interface SelectionArea {
   id: string;
   mask: string; // Base64 mask image
   prompt: string;
-  color: string;
-  name: string;
 }
 
 interface SelectiveEditorProps {
@@ -22,21 +20,12 @@ export default function SelectiveEditor({ imageUrl, onApply }: SelectiveEditorPr
   const [isDrawing, setIsDrawing] = useState(false);
   const [tool, setTool] = useState<'brush' | 'eraser' | 'rect' | 'circle'>('brush');
   const [brushSize, setBrushSize] = useState(20);
-  const [currentColor, setCurrentColor] = useState('#FF0000');
-  const [areas, setAreas] = useState<SelectionArea[]>([]);
   const [currentPrompt, setCurrentPrompt] = useState('');
   const [history, setHistory] = useState<ImageData[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
 
-  const colors = [
-    { name: 'Area 1', color: '#FF0000' },
-    { name: 'Area 2', color: '#00FF00' },
-    { name: 'Area 3', color: '#0000FF' },
-    { name: 'Area 4', color: '#FFFF00' },
-    { name: 'Area 5', color: '#FF00FF' },
-    { name: 'Area 6', color: '#00FFFF' },
-  ];
+  const selectionColor = '#FF0000'; // Fixed red color for selections
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -157,7 +146,7 @@ export default function SelectiveEditor({ imageUrl, onApply }: SelectiveEditorPr
 
     if (tool === 'brush') {
       maskCtx.globalCompositeOperation = 'source-over';
-      maskCtx.strokeStyle = currentColor;
+      maskCtx.strokeStyle = selectionColor;
       maskCtx.globalAlpha = 0.5;
     } else if (tool === 'eraser') {
       maskCtx.globalCompositeOperation = 'destination-out';
@@ -186,7 +175,7 @@ export default function SelectiveEditor({ imageUrl, onApply }: SelectiveEditorPr
 
     if (tool === 'rect') {
       maskCtx.globalCompositeOperation = 'source-over';
-      maskCtx.fillStyle = currentColor;
+      maskCtx.fillStyle = selectionColor;
       maskCtx.globalAlpha = 0.5;
       maskCtx.fillRect(
         Math.min(startPos.x, pos.x),
@@ -199,7 +188,7 @@ export default function SelectiveEditor({ imageUrl, onApply }: SelectiveEditorPr
         Math.pow(pos.x - startPos.x, 2) + Math.pow(pos.y - startPos.y, 2)
       );
       maskCtx.globalCompositeOperation = 'source-over';
-      maskCtx.fillStyle = currentColor;
+      maskCtx.fillStyle = selectionColor;
       maskCtx.globalAlpha = 0.5;
       maskCtx.beginPath();
       maskCtx.arc(startPos.x, startPos.y, radius, 0, 2 * Math.PI);
@@ -209,37 +198,33 @@ export default function SelectiveEditor({ imageUrl, onApply }: SelectiveEditorPr
     saveToHistory();
   };
 
-  const saveCurrentArea = () => {
+  const applySelection = () => {
     const maskCanvas = maskCanvasRef.current;
     if (!maskCanvas || !currentPrompt.trim()) {
-      alert('Please enter a prompt for this area');
+      alert('Please enter a prompt and make a selection');
+      return;
+    }
+
+    // Check if there's actually a selection (non-empty mask)
+    const maskCtx = maskCanvas.getContext('2d');
+    if (!maskCtx) return;
+
+    const imageData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height);
+    const hasSelection = imageData.data.some(pixel => pixel > 0);
+
+    if (!hasSelection) {
+      alert('Please make a selection on the image first');
       return;
     }
 
     const maskDataUrl = maskCanvas.toDataURL();
-    const newArea: SelectionArea = {
+    const selectionArea: SelectionArea = {
       id: Date.now().toString(),
       mask: maskDataUrl,
       prompt: currentPrompt,
-      color: currentColor,
-      name: colors.find(c => c.color === currentColor)?.name || 'Custom Area',
     };
 
-    setAreas([...areas, newArea]);
-    setCurrentPrompt('');
-    clearMask();
-  };
-
-  const removeArea = (id: string) => {
-    setAreas(areas.filter(a => a.id !== id));
-  };
-
-  const applySelections = () => {
-    if (areas.length === 0) {
-      alert('Please create at least one selection area');
-      return;
-    }
-    onApply(areas);
+    onApply([selectionArea]);
   };
 
   return (
@@ -345,89 +330,40 @@ export default function SelectiveEditor({ imageUrl, onApply }: SelectiveEditorPr
 
       {/* Control Panel */}
       <div className="space-y-4">
-        {/* Color/Area Selection */}
+        {/* Selection Info */}
         <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
-          <h3 className="font-bold text-gray-900 mb-3">Select Area</h3>
-          <div className="grid grid-cols-3 gap-2">
-            {colors.map((c) => (
-              <button
-                key={c.color}
-                onClick={() => setCurrentColor(c.color)}
-                className={`p-3 rounded-lg border-2 transition-all ${
-                  currentColor === c.color
-                    ? 'border-teal-500 ring-2 ring-teal-200'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div
-                  className="w-full h-8 rounded"
-                  style={{ backgroundColor: c.color, opacity: 0.5 }}
-                />
-                <p className="text-xs text-center mt-1 font-medium">{c.name}</p>
-              </button>
-            ))}
+          <h3 className="font-bold text-gray-900 mb-3">Selection Tool</h3>
+          <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
+            <div
+              className="w-6 h-6 rounded"
+              style={{ backgroundColor: selectionColor, opacity: 0.7 }}
+            />
+            <span className="text-sm font-medium text-gray-700">
+              Paint over the area you want to change
+            </span>
           </div>
         </div>
 
-        {/* Prompt for Current Selection */}
+        {/* Prompt for Selection */}
         <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
-          <h3 className="font-bold text-gray-900 mb-3">Edit This Area</h3>
+          <h3 className="font-bold text-gray-900 mb-3">What do you want here?</h3>
           <textarea
             value={currentPrompt}
             onChange={(e) => setCurrentPrompt(e.target.value)}
-            placeholder="Describe what you want in this area (e.g., 'sunset sky', 'tropical beach', 'city skyline')"
+            placeholder="Describe what you want in the selected area (e.g., 'sunset sky', 'tropical beach', 'city skyline')"
             className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-teal-500 focus:outline-none resize-none"
-            rows={3}
+            rows={4}
           />
-          <button
-            onClick={saveCurrentArea}
-            className="w-full mt-3 px-4 py-2 bg-teal-500 text-white rounded-lg font-semibold hover:bg-teal-600 transition-all flex items-center justify-center gap-2"
-          >
-            <Download className="w-4 h-4" />
-            Save Area
-          </button>
         </div>
 
-        {/* Saved Areas */}
-        {areas.length > 0 && (
-          <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
-            <h3 className="font-bold text-gray-900 mb-3">Saved Areas ({areas.length})</h3>
-            <div className="space-y-2 max-h-60 overflow-y-auto">
-              {areas.map((area) => (
-                <div
-                  key={area.id}
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-4 h-4 rounded"
-                        style={{ backgroundColor: area.color, opacity: 0.7 }}
-                      />
-                      <span className="font-medium text-sm">{area.name}</span>
-                    </div>
-                    <button
-                      onClick={() => removeArea(area.id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-600 line-clamp-2">{area.prompt}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Apply Button */}
         <button
-          onClick={applySelections}
-          disabled={areas.length === 0}
-          className="w-full px-6 py-4 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-bold text-lg hover:from-teal-600 hover:to-teal-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
+          onClick={applySelection}
+          className="w-full px-6 py-4 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-bold text-lg hover:from-teal-600 hover:to-teal-700 transition-all flex items-center justify-center gap-2 shadow-lg"
         >
           <Zap className="w-5 h-5" />
-          Apply All Selections
+          Transform Selection
         </button>
       </div>
     </div>
