@@ -40,3 +40,6 @@ VERCEL_ENV_PRODUCTION.md
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# separate projects
+/picforge-ui
