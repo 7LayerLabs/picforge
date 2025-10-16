@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, User, Images, Calendar, Activity } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default function DashboardPage() {
   const { data: session, status } = useSession()
   const [stats, setStats] = useState({
