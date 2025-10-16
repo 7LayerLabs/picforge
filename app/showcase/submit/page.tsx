@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Upload, Send } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default function ShowcaseSubmitPage() {
   const { status } = useSession()
   const router = useRouter()
