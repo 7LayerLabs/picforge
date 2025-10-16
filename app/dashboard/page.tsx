@@ -9,6 +9,7 @@ import { ArrowLeft, User, Images, Calendar, Activity } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
 export default function DashboardPage() {
+  const [mounted, setMounted] = useState(false)
   const { data: session, status } = useSession()
   const [stats, setStats] = useState({
     totalImages: 0,
@@ -16,6 +17,10 @@ export default function DashboardPage() {
     weekImages: 0,
     monthImages: 0,
   })
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -33,7 +38,7 @@ export default function DashboardPage() {
     }
   }, [session])
 
-  if (status === 'loading') {
+  if (!mounted || status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>

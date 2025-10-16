@@ -9,6 +9,7 @@ import { ArrowLeft, Upload, Send } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
 export default function ShowcaseSubmitPage() {
+  const [mounted, setMounted] = useState(false)
   const { status } = useSession()
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
@@ -20,6 +21,10 @@ export default function ShowcaseSubmitPage() {
   })
   const [originalImage, setOriginalImage] = useState<string>('')
   const [resultImage, setResultImage] = useState<string>('')
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Get images from sessionStorage if coming from editor
   useEffect(() => {
@@ -40,6 +45,14 @@ export default function ShowcaseSubmitPage() {
       sessionStorage.removeItem('showcasePrompt')
     }
   }, [])
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+      </div>
+    )
+  }
 
   // Authentication temporarily disabled
   if (status === 'unauthenticated') {
