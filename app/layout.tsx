@@ -15,8 +15,8 @@ const specialElite = Special_Elite({
 
 export const metadata: Metadata = {
   title: {
-    default: "PicForge – AI Image Transformer",
-    template: "%s | PicForge – AI Image Transformer"
+    default: "Pic-Forge: (re)imagine everything",
+    template: "%s | Pic-Forge: (re)imagine everything"
   },
   description: "Transform your images with AI-powered creativity. 210+ templates, batch processing, custom prompts, and professional editing tools. Zero artistic talent required.",
   keywords: [
@@ -83,14 +83,14 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://pic-forge.com',
     siteName: 'PicForge',
-    title: 'PicForge – AI Image Transformer',
+    title: 'Pic-Forge: (re)imagine everything',
     description: 'Transform your images with AI-powered creativity. 210+ templates, batch processing, and professional editing tools.',
     images: [
       {
         url: '/og-image.svg',
         width: 1200,
         height: 630,
-        alt: 'PicForge – AI Image Transformer - Transform your images with AI',
+        alt: 'Pic-Forge: (re)imagine everything - Transform your images with AI',
         type: 'image/svg+xml',
       }
     ],
@@ -99,11 +99,11 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@picforge',
     creator: '@picforge',
-    title: 'PicForge – AI Image Transformer',
+    title: 'Pic-Forge: (re)imagine everything',
     description: 'Transform your images with AI-powered creativity. 210+ templates, batch processing, and professional editing tools.',
     images: {
       url: '/og-image.svg',
-      alt: 'PicForge – AI Image Transformer',
+      alt: 'Pic-Forge: (re)imagine everything',
     },
   },
   verification: {

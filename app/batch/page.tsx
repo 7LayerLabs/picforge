@@ -423,7 +423,7 @@ export default function BatchPage() {
     pdf: boolean
   }
 
-  const handleBatchExport = async (imageData: string, preset: string, formats: ExportFormats) => {
+  const handleBatchExport = async (imageData: string, format: string) => {
     try {
       const completedImages = images.filter(img => img.status === 'completed' && img.result)
 
@@ -432,7 +432,7 @@ export default function BatchPage() {
         return
       }
 
-      // Create a master ZIP with all images in selected formats
+      // Create a master ZIP with all images in selected format
       const zip = new JSZip()
 
       for (let i = 0; i < completedImages.length; i++) {
@@ -441,26 +441,8 @@ export default function BatchPage() {
 
         const originalName = img.file.name.split('.')[0]
 
-        // Create a folder for each image if multiple formats selected
-        const hasMultipleFormats = Object.values(formats).filter(Boolean).length > 1
-        const folder = hasMultipleFormats ? zip.folder(originalName) : zip
-
-        if (!folder) continue
-
-        // Process each format
-        if (formats.pngTransparent) {
-          await addImageToZip(folder, img.result, preset, `${originalName}-transparent.png`, 'png')
-        }
-        if (formats.pngWhiteBg) {
-          await addImageToZip(folder, img.result, preset, `${originalName}-white-bg.png`, 'png', true)
-        }
-        if (formats.svg) {
-          await addSVGToZip(folder, img.result, preset, `${originalName}.svg`)
-        }
-        if (formats.pdf) {
-          // For now, export as high-res PNG (PDF conversion coming in Pro tier)
-          await addImageToZip(folder, img.result, preset, `${originalName}.png`, 'png')
-        }
+        // Export in selected format
+        await addImageToZip(zip, img.result, format, `${originalName}.${format === 'jpg' ? 'jpg' : 'png'}`, format === 'jpg' ? 'jpeg' : 'png')
       }
 
       // Add README
@@ -469,9 +451,7 @@ export default function BatchPage() {
 
 Total Images: ${completedImages.length}
 Export Date: ${new Date().toLocaleDateString()}
-
-Files Included:
-${formats.pngTransparent ? '✓ PNG (Transparent Background)\n' : ''}${formats.pngWhiteBg ? '✓ PNG (White Background)\n' : ''}${formats.svg ? '✓ SVG (Cricut Ready)\n' : ''}${formats.pdf ? '✓ PDF (Print Ready)\n' : ''}
+Format: ${format.toUpperCase()}
 
 Commercial Use:
 - Free tier: Personal use only
