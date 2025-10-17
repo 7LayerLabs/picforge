@@ -30,6 +30,13 @@ PicForge is an AI-powered image transformation platform built with Next.js 15. I
 - "Zero artistic talent required"
 - Examples: "Dream It. Type It. Get It." / "Something Broke?" / "Show Off Your Work"
 
+## Interaction Guidance
+
+- Always ask clarifying questions if an instruction is ambiguous or open-ended.
+- List potential alternative approaches before choosing one for implementation.
+- If context or requirements are missing, ask for further details.
+- After completing a task, ask "Is there anything that needs improvement or refinement?"
+
 ## Development Commands
 
 ```bash
