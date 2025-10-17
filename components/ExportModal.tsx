@@ -37,7 +37,17 @@ export default function ExportModal({ isOpen, onClose, imageData, fileName = 'de
       // Download in selected format
       const fileExtension = fileFormat === 'jpg' ? '.jpg' : '.png'
       const fullFileName = `${fileName}${fileExtension}`
-      await downloadTransparentPNG(imageData, 'tshirt', fullFileName, fileFormat)
+
+      if (fileFormat === 'jpg') {
+        // For JPG, download directly
+        const link = document.createElement('a')
+        link.href = imageData
+        link.download = fullFileName
+        link.click()
+      } else {
+        // For PNG, use the transparent PNG download function
+        await downloadTransparentPNG(imageData, 'tshirt', fullFileName)
+      }
 
       // Close modal after successful download
       setTimeout(() => {
