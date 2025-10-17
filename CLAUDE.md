@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 PicForge is an AI-powered image transformation platform built with Next.js 15. It provides multiple modes:
-- **Single Image Editor** (/) - AI-powered image editing with 210+ templates, custom prompts, and Lock Composition feature
+- **Single Image Editor** (/) - AI-powered image editing with 325+ prompts, custom prompts, and Lock Composition feature
 - **18+ Editor** (/editor-nsfw) - COMING SOON page with ribbon design (Q1 2026 launch)
 - **Batch Processor** (/batch) - Process 100+ images simultaneously with bulk operations and 21 effects
 - **18+ Batch** (/batch-nsfw) - Unrestricted batch processing for adult content (access restricted)
@@ -14,7 +14,8 @@ PicForge is an AI-powered image transformation platform built with Next.js 15. I
 - **Roast Mode** (/roast) - AI roasts your photos with 3 intensity levels
 - **Prompt Wizard** (/prompt-wizard) - 5-step guided prompt builder
 - **Templates Gallery** (/examples) - 110+ sample images to try before uploading
-- **Prompts Library** (/prompts) - 211 categorized prompts (includes Banksy street art)
+- **Prompts Library** (/prompts) - 325+ categorized prompts across 13 categories with filtering, search, and favorites
+- **Favorites Page** (/prompts/favorites) - User's saved favorite prompts with export functionality
 - **Tips & Tricks** (/tips) - Best practices and Nano Banana techniques
 - **Showcase** (/showcase) - User-submitted transformations gallery
 
@@ -140,6 +141,32 @@ NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
 - `app/components/PricingCard.tsx` - Tiered pricing display with promo code info
 - `lib/imageEffects.ts` - 21 client-side image effects (sharpen, vignette, glitch, etc.)
 
+### Prompt Library Components
+
+- `components/PromptCard.tsx` - Individual prompt display with copy button and favorite toggle
+- `components/FilterSidebar.tsx` - Category and tag filtering interface
+- `components/SearchBar.tsx` - Search input with clear button
+- `components/PromptSubmitModal.tsx` - User prompt submission form
+- `lib/prompts.ts` - 325+ prompt definitions across 13 categories
+- `app/prompts/page.tsx` - Main prompt library page with filtering and search
+- `app/prompts/favorites/page.tsx` - Favorites page with export and statistics
+
+**Prompt Library Features:**
+- **325+ Prompts** across 13 categories (Art Styles, Nature, People, Sports, Politics, Wellness, Events, Pro Photography, Fantasy, Abstract, Film, and more)
+- **Category Filtering** - Single-select filter for browsing by category
+- **Tag Filtering** - Multi-select tag system for refined searches
+- **Search** - Full-text search across titles, descriptions, and tags
+- **Favorites System** - LocalStorage-based favorites with persistence (no backend yet)
+- **Prompt of the Day** - Featured daily prompt (currently static, not rotating)
+- **Copy Functionality** - One-click copy to clipboard for each prompt
+- **Submit Modal** - User submission form (logs to console, no backend)
+- **Design System** - Black/white/teal matching PicForge brand, Courier New monospace headings
+
+**Important Notes:**
+- Favorites stored in localStorage (no cross-device sync yet)
+- Navigation component is in root layout - DO NOT include in individual pages to avoid duplication
+- Prompt submissions currently log to console only (backend integration needed)
+
 ### State Management
 
 - React hooks (useState, useEffect) for component state
@@ -154,29 +181,42 @@ NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
 
 ## Important Implementation Notes
 
-1. **Import Paths**: Components in `/app/batch/` must use `../components/` for imports, not `./components/`
+1. **Next.js 15 SSR Patterns**:
+   - Route segment config exports (`export const dynamic`, `export const revalidate`) ONLY work in Server Components, NOT Client Components
+   - For authenticated pages using `useSession()`: Create separate Client/Server components
+   - **Pattern**:
+     - `page.tsx` = Server Component with route config exports
+     - `PageClient.tsx` = Client Component with all hooks and logic
+     - Example: `app/dashboard/page.tsx` imports `DashboardClient.tsx`
+   - This prevents SSR prerendering errors with hooks like `useSession()`
 
-2. **Client Components**: Most components use `'use client'` directive for interactivity
+2. **Import Paths**: Components in `/app/batch/` must use `../components/` for imports, not `./components/`
 
-3. **User Tiers & Limits**:
+3. **Client Components**: Most components use `'use client'` directive for interactivity
+
+4. **ESLint Requirements**:
+   - Escape special characters in JSX: use `&apos;` for apostrophes, `&quot;` for quotes
+   - Example: `"Prompt of the Day"` → `&quot;Prompt of the Day&quot;`
+
+5. **User Tiers & Limits**:
    - **Free Tier**: 20 images per day, includes watermark
    - **Pro Tier**: Unlimited images, no watermark
    - **Unlimited Tier**: Unlimited images (via promo codes), no watermark
    - Admin access: derek.bobola@gmail.com only
 
-4. **Image Processing Flow**:
+6. **Image Processing Flow**:
    - Client uploads image → Base64 conversion
    - Basic edits use Canvas API (client-side)
    - AI features send to Gemini API
    - Results displayed with download option
 
-5. **Batch Processing**:
+7. **Batch Processing**:
    - Regular batch: 21 client-side effects (sharpen, vignette, saturation, warm, cool, grain, glitch/vhs, sketch, resize, enhance, etc.)
    - NSFW batch: Uses Replicate API for unrestricted transformations
    - Processes images sequentially with priority queue support
    - Export presets: Web Optimized, Social Media, High Quality, Thumbnail
 
-6. **NSFW Content Handling**:
+8. **NSFW Content Handling**:
    - **18+ Editor**: Currently showing "Coming Soon" page with ribbon design (Q1 2026 expected launch)
    - **18+ Batch**: Active but access restricted from editor-nsfw page
    - Separate routes: /editor-nsfw (coming soon page) and /batch-nsfw (active)
@@ -186,12 +226,12 @@ NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
    - No content storage - ephemeral processing only
    - User responsibility clearly stated in Terms of Service
 
-7. **Gamification Features**:
+9. **Gamification Features**:
    - **Transform Roulette**: Spin-the-wheel with 8 categories (Art Styles, Movie Magic, Time Travel, Nature, Fantasy, Sci-Fi, Artistic, Abstract) - 320 total prompts including Banksy art
    - **Roast Mode**: AI photo roasting with 3 intensity levels (mild, spicy, nuclear)
    - **Prompt Wizard**: 5-step guided prompt builder
 
-8. **User Experience Features**:
+10. **User Experience Features**:
    - **Lock Composition**: Checkbox on main editor to preserve composition during iterative edits (auto-appends "don't change anything else" to prompts)
    - **Creative Journey**: Image gallery with masonry layout showing edit history
    - **Download All**: Bulk download all versions as ZIP file
