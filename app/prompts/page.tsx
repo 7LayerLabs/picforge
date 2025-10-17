@@ -6,7 +6,6 @@ import PromptCard from '@/components/PromptCard';
 import FilterSidebar from '@/components/FilterSidebar';
 import SearchBar from '@/components/SearchBar';
 import PromptSubmitModal from '@/components/PromptSubmitModal';
-import Navigation from '@/components/Navigation';
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -63,9 +62,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Navigation Header */}
-      <Navigation />
-
       {/* Page Header */}
       <div className="bg-white border-b border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
