@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Image as ImageIcon, Images, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2, Crown, User, Star, Target } from 'lucide-react';
 import { useState } from 'react';
@@ -43,7 +44,13 @@ export default function Navigation() {
                   window.location.href = '/';
                 }}
               >
-                <div className="text-4xl">🔥</div>
+                <Image
+                  src="/polaroid-logo.svg"
+                  alt="PicForge Logo"
+                  width={40}
+                  height={40}
+                  className="w-10 h-10"
+                />
                 <div className="flex flex-col">
                   <span className="font-bold text-xl bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">PicForge</span>
                   <span className="text-xs text-gray-600">Forge your images into art</span>
