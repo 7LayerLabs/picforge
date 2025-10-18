@@ -160,10 +160,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico?v=2" sizes="16x16 32x32 48x48" />
-        <link rel="icon" href="/icon.svg?v=2" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-icon.png?v=2" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg?v=2" color="#ff6347" />
+        <link rel="icon" href="/favicon.ico?v=3" sizes="16x16 32x32 48x48" />
+        <link rel="icon" href="/icon.svg?v=3" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-icon.png?v=3" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#D2691E" />
         <meta name="msapplication-TileColor" content="#ff6347" />
         <meta name="theme-color" content="#ff6347" />
         <script
