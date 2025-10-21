@@ -28,7 +28,7 @@ const PROMPT_OF_THE_DAY = 'A detailed ballpoint pen sketch drawn on checkered no
 
 export default function Home() {
   // InstantDB tracking
-  const { user, trackImageGeneration, hasReachedLimit, getRemainingImages } = useImageTracking()
+  const { user, trackImageGeneration, hasReachedLimit, getRemainingImages, saveFavorite, favorites } = useImageTracking()
 
   const [currentImage, setCurrentImage] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -46,6 +46,7 @@ export default function Home() {
   const [zoomLevel, setZoomLevel] = useState(1)
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
   const [copiedPrompt, setCopiedPrompt] = useState(false)
+  const [isPromptFavorited, setIsPromptFavorited] = useState(false)
 
   // AI Canvas states
   // const [showAICanvas, setShowAICanvas] = useState(false) // Reserved for future use
@@ -322,6 +323,14 @@ export default function Home() {
       }
     }
   }, [currentImage, originalImage])
+
+  // Check if Prompt of the Day is already favorited
+  useEffect(() => {
+    if (favorites && favorites.length > 0) {
+      const isFavorited = favorites.some((fav: any) => fav.prompt === PROMPT_OF_THE_DAY)
+      setIsPromptFavorited(isFavorited)
+    }
+  }, [favorites])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -1066,6 +1075,27 @@ export default function Home() {
                         Copy
                       </>
                     )}
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if (isPromptFavorited) {
+                          // Already favorited, show message
+                          alert('This prompt is already in your favorites!');
+                        } else {
+                          // Save to favorites
+                          await saveFavorite(PROMPT_OF_THE_DAY, 'Prompt of the Day');
+                          setIsPromptFavorited(true);
+                        }
+                      }}
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all hover:scale-105 shadow-md ${
+                        isPromptFavorited ? 'bg-pink-500 hover:bg-pink-600' : 'bg-gray-500 hover:bg-gray-600'
+                      }`}
+                      title={isPromptFavorited ? 'Already in favorites' : 'Add to favorites'}
+                    >
+                      <svg className="w-4 h-4" fill={isPromptFavorited ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      {isPromptFavorited ? 'Favorited' : 'Favorite'}
                     </button>
                     <button
                       onClick={() => {
