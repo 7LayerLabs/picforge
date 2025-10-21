@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: "Pic-Forge: (re)imagine everything",
     template: "%s | Pic-Forge: (re)imagine everything"
   },
-  description: "Make them weird. Make them epic. Make them yours. 210+ AI templates, batch processing, and custom prompts. Zero artistic talent required. Nothing is real anymore.",
+  description: "Make them weird. Make them epic. Make them yours. 272+ AI templates, batch processing, and custom prompts. Zero artistic talent required. Nothing is real anymore.",
   keywords: [
     "AI image editor", "photo transformer", "image enhancement", "AI art generator",
     "batch image processing", "photo effects", "image filters", "AI creativity tools",
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     url: 'https://pic-forge.com',
     siteName: 'PicForge',
     title: 'Pic-Forge: (re)imagine everything',
-    description: 'Make them weird. Make them epic. Make them yours. 210+ AI templates. Zero artistic talent required. Nothing is real anymore.',
+    description: 'Make them weird. Make them epic. Make them yours. 272+ AI templates. Zero artistic talent required. Nothing is real anymore.',
     images: [
       {
         url: '/og-image.svg',
@@ -100,7 +100,7 @@ export const metadata: Metadata = {
     site: '@picforge',
     creator: '@picforge',
     title: 'Pic-Forge: (re)imagine everything',
-    description: 'Make them weird. Make them epic. Make them yours. 210+ AI templates. Zero artistic talent required. Nothing is real anymore.',
+    description: 'Make them weird. Make them epic. Make them yours. 272+ AI templates. Zero artistic talent required. Nothing is real anymore.',
     images: {
       url: '/og-image.svg',
       alt: 'Pic-Forge: (re)imagine everything',
@@ -128,7 +128,7 @@ export default function RootLayout({
     "name": "PicForge",
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "All",
-    "description": "Make them weird. Make them epic. Make them yours. 210+ AI templates, batch processing, and custom prompts. Zero artistic talent required.",
+    "description": "Make them weird. Make them epic. Make them yours. 272+ AI templates, batch processing, and custom prompts. Zero artistic talent required.",
     "url": "https://pic-forge.com",
     "creator": {
       "@type": "Organization",
@@ -142,19 +142,14 @@ export default function RootLayout({
     },
     "featureList": [
       "AI-powered image transformation",
-      "210+ pre-built templates",
+      "272+ pre-built templates",
       "Batch image processing",
       "Custom AI prompts",
       "Professional editing tools",
       "Lock composition feature",
       "Multiple export formats"
     ],
-    "screenshot": "https://pic-forge.com/og-image.svg",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "1000"
-    }
+    "screenshot": "https://pic-forge.com/og-image.svg"
   };
 
   return (

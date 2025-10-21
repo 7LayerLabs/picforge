@@ -13,6 +13,7 @@ import ImageGallery from '@/components/ImageGallery'
 import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 import ExportModal from '@/components/ExportModal'
 import { useImageTracking } from '@/hooks/useImageTracking'
+import { getPromptOfTheDay } from '@/lib/prompts'
 
 interface HistoryItem {
   prompt: string
@@ -23,10 +24,10 @@ interface HistoryItem {
 
 // Removed Session interface - simplified without session management
 
-// Define the prompt of the day at the top level so it can be used throughout
-const PROMPT_OF_THE_DAY = 'A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look';
-
 export default function Home() {
+  // Get rotating Prompt of the Day (changes daily based on date hash)
+  const promptOfTheDay = getPromptOfTheDay();
+  const PROMPT_OF_THE_DAY = promptOfTheDay.description;
   // InstantDB tracking
   const { user, trackImageGeneration, hasReachedLimit, getRemainingImages, saveFavorite, favorites } = useImageTracking()
 
@@ -331,7 +332,7 @@ export default function Home() {
       const isFavorited = favorites.some((fav: any) => fav.prompt === PROMPT_OF_THE_DAY)
       setIsPromptFavorited(isFavorited)
     }
-  }, [favorites])
+  }, [favorites, PROMPT_OF_THE_DAY])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -851,7 +852,7 @@ export default function Home() {
                 <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900 dark:text-white">Imagine<span className="text-4xl md:text-5xl lg:text-6xl">.</span> Everything<span className="text-4xl md:text-5xl lg:text-6xl">.</span></span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
-                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">325+ prompts and endless ideas</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
+                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">272+ prompts and endless ideas</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
               </p>
 
               {/* Feature Highlights - Compact Inline Badges */}
@@ -862,7 +863,7 @@ export default function Home() {
                 </div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
                   <span className="text-xl">🎨</span>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">325+ Prompts</span>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">272+ Prompts</span>
                 </div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
                   <span className="text-xl">🔒</span>
@@ -1083,8 +1084,8 @@ export default function Home() {
                           // Already favorited, show message
                           alert('This prompt is already in your favorites!');
                         } else {
-                          // Save to favorites
-                          await saveFavorite(PROMPT_OF_THE_DAY, 'Creative Styles');
+                          // Save to favorites with the rotating prompt's category
+                          await saveFavorite(PROMPT_OF_THE_DAY, promptOfTheDay.category);
                           setIsPromptFavorited(true);
                         }
                       }}
