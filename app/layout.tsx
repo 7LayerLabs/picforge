@@ -3,6 +3,7 @@ import { Special_Elite } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 import { Analytics } from "@vercel/analytics/react";
 // import AuthSessionProvider from "@/components/providers/SessionProvider";
 

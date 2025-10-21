@@ -12,6 +12,9 @@ import TemplateSelector from '@/components/TemplateSelector'
 import ImageGallery from '@/components/ImageGallery'
 import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 import ExportModal from '@/components/ExportModal'
+import BeforeAfterGallery from '@/components/BeforeAfterGallery'
+import FeaturedShowcase from '@/components/FeaturedShowcase'
+import WatermarkPreviewNotice from '@/components/WatermarkPreviewNotice'
 import { useImageTracking } from '@/hooks/useImageTracking'
 import { getPromptOfTheDay } from '@/lib/prompts'
 
@@ -871,6 +874,16 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* Before/After Gallery */}
+            <div className="px-4 pb-8 mb-8">
+              <BeforeAfterGallery />
+            </div>
+
+            {/* Featured Showcase */}
+            <div className="px-4 pb-8 mb-8">
+              <FeaturedShowcase variant="compact" />
+            </div>
           </>
         )}
 
@@ -1247,6 +1260,14 @@ export default function Home() {
                     </div>
                   )}
                 </div>
+
+                {/* Watermark Preview Notice (Free Tier Only) */}
+                {user && (
+                  <WatermarkPreviewNotice
+                    tier={getRemainingImages() === 'Unlimited' ? 'unlimited' : 'free'}
+                    currentImage={currentImage}
+                  />
+                )}
 
                 {/* Input Form */}
                 <form onSubmit={handleSubmit} className="w-full space-y-2 sm:space-y-3">

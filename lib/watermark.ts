@@ -414,3 +414,42 @@ export function dataUrlToBlob(dataUrl: string): Blob {
 
   return new Blob([u8arr], { type: mime });
 }
+
+/**
+ * Creates a preview of how the watermark will look on the image
+ * Shows semi-transparent overlay to demonstrate watermark placement
+ *
+ * @param imageDataUrl - Data URL or image URL of the source image
+ * @param options - Watermark options (optional)
+ * @returns Promise that resolves with preview data URL showing watermark
+ *
+ * @example
+ * ```typescript
+ * const preview = await generateWatermarkPreview(imageDataUrl);
+ * setPreviewImage(preview); // Show user what watermark will look like
+ * ```
+ */
+export async function generateWatermarkPreview(
+  imageDataUrl: string,
+  options: WatermarkOptions = {}
+): Promise<string> {
+  // Create watermark with slightly higher opacity for preview visibility
+  const previewOptions: WatermarkOptions = {
+    ...options,
+    opacity: Math.min((options.opacity || 0.4) + 0.2, 0.8), // Increase opacity for preview
+  };
+
+  return addWatermark(imageDataUrl, previewOptions);
+}
+
+/**
+ * Checks if user needs watermark based on tier
+ *
+ * @param tier - User's subscription tier
+ * @returns Boolean indicating if watermark should be applied
+ */
+export function shouldApplyWatermark(
+  tier: 'free' | 'pro' | 'unlimited' | undefined
+): boolean {
+  return tier === 'free';
+}

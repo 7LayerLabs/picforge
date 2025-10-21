@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { prompts, categories, allTags, getPromptOfTheDay } from '@/lib/prompts';
 import PromptCard from '@/components/PromptCard';
 import FilterSidebar from '@/components/FilterSidebar';
 import SearchBar from '@/components/SearchBar';
 import PromptSubmitModal from '@/components/PromptSubmitModal';
-import { useImageTracking } from '@/hooks/useImageTracking';
+import Navigation from '@/components/Navigation';
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -14,14 +14,6 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const promptOfTheDay = getPromptOfTheDay();
-  const { user, migrateFavoritesFromLocalStorage } = useImageTracking();
-
-  // Migrate localStorage favorites to InstantDB when user logs in
-  useEffect(() => {
-    if (user) {
-      migrateFavoritesFromLocalStorage();
-    }
-  }, [user, migrateFavoritesFromLocalStorage]);
 
   // Filter prompts based on selections
   const filteredPrompts = useMemo(() => {
@@ -71,6 +63,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-white">
+      {/* Navigation Header */}
+      <Navigation />
+
       {/* Page Header */}
       <div className="bg-white border-b border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
@@ -95,11 +90,7 @@ export default function Home() {
         </div>
 
         {/* Search Bar */}
-        <SearchBar
-          value={searchQuery}
-          onChange={setSearchQuery}
-          resultCount={searchQuery ? filteredPrompts.length : undefined}
-        />
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar Filters */}

@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Upload, Shuffle, Share2, Download, RefreshCw, Sparkles, Maximize2, X } from 'lucide-react'
+import { Upload, Shuffle, Share2, Download, RefreshCw, Sparkles, Maximize2, X, Trophy, Flame, Target } from 'lucide-react'
 import { applyClientTransform } from '@/lib/clientTransforms'
 import styles from './roulette.module.css'
+import { useRouletteProgress } from '@/hooks/useRouletteProgress'
+import AchievementToast from '@/components/AchievementToast'
 
 // Wild transformation prompts organized by 8 categories
 const PROMPT_CATEGORIES = {
@@ -407,6 +409,8 @@ export default function TransformRoulette() {
   const [result, setResult] = useState<RouletteResult | null>(null)
   const [dragActive, setDragActive] = useState(false)
   const [lightboxImage, setLightboxImage] = useState<string | null>(null)
+  const { stats, recordSpin, newAchievements, getAchievementDetails, getProgress, allAchievements } = useRouletteProgress()
+  const [showAchievement, setShowAchievement] = useState<string | null>(null)
 
   const handleImageUpload = (file: File) => {
     const reader = new FileReader()
@@ -472,6 +476,12 @@ export default function TransformRoulette() {
       setSelectedCategory(categoryName)
       setSelectedPrompt(randomPrompt)
       setIsSpinning(false)
+
+      // Record spin and check for achievements
+      const newAchievements = recordSpin(categoryName)
+      if (newAchievements.length > 0) {
+        setShowAchievement(newAchievements[0])
+      }
 
       // Play selection sound
       const dingAudio = new Audio('/sounds/ding.mp3')
@@ -556,7 +566,7 @@ export default function TransformRoulette() {
   const shareResult = async () => {
     if (!result) return
 
-    const shareText = `🎲 Transform Roulette landed on ${result.category}!\n\n"${result.prompt}"\n\nTry your luck at pic-forge.com/roulette`
+    const shareText = `🎲 Transform Roulette landed on ${result.category}!\n\n"${result.prompt}"\n\n🔥 ${stats.totalSpins} total spins | ${stats.streak} spin streak!\n\nTry your luck at pic-forge.com/roulette`
 
     if (navigator.share) {
       try {
@@ -584,10 +594,18 @@ export default function TransformRoulette() {
 
   return (
     <div className="min-h-screen bg-purple-50">
+      {/* Achievement Toast */}
+      {showAchievement && getAchievementDetails(showAchievement) && (
+        <AchievementToast
+          achievement={getAchievementDetails(showAchievement)!}
+          onClose={() => setShowAchievement(null)}
+        />
+      )}
+
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <h1 className="font-heading text-3xl font-bold text-gray-900 flex items-center gap-3">
                 <Shuffle className="w-8 h-8 text-purple-500" />
@@ -597,7 +615,41 @@ export default function TransformRoulette() {
                 Spin the wheel of transformation chaos. Let fate decide your image&apos;s destiny!
               </p>
             </div>
+
+            {/* User Stats */}
+            <div className="flex items-center gap-3">
+              <div className="bg-purple-100 px-4 py-2 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <Target className="w-4 h-4 text-purple-600" />
+                  <span className="text-sm font-semibold text-purple-900">{stats.totalSpins} spins</span>
+                </div>
+              </div>
+              {stats.streak > 0 && (
+                <div className="bg-orange-100 px-4 py-2 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Flame className="w-4 h-4 text-orange-600" />
+                    <span className="text-sm font-semibold text-orange-900">{stats.streak} streak</span>
+                  </div>
+                </div>
+              )}
+              <div className="bg-yellow-100 px-4 py-2 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-4 h-4 text-yellow-600" />
+                  <span className="text-sm font-semibold text-yellow-900">{stats.achievements.length}/{allAchievements.length}</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          {/* Streak Message */}
+          {stats.streak >= 3 && (
+            <div className="mt-4 bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-500 rounded-lg p-3">
+              <p className="text-orange-900 font-semibold flex items-center gap-2">
+                <Flame className="w-5 h-5 text-orange-600 animate-pulse" />
+                {stats.streak} spins in a row! You&apos;re on fire! Keep spinning!
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -839,26 +891,73 @@ export default function TransformRoulette() {
               </div>
             </div>
 
-            {/* Fun Stats */}
-            {result && (
-              <div className="mt-8 grid grid-cols-3 gap-4 max-w-2xl mx-auto">
-                <div className="bg-white rounded-xl shadow-lg p-4 text-center">
-                  <div className="text-2xl mb-1">🎲</div>
-                  <div className="text-sm text-gray-600">Randomness</div>
-                  <div className="font-bold text-purple-600">100%</div>
+            {/* Achievements & Progress */}
+            <div className="mt-8 max-w-4xl mx-auto space-y-6">
+              {/* Progress Bar */}
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-bold text-gray-900">Next Milestone</h3>
+                  <span className="text-sm text-gray-600">{getProgress().current}/{getProgress().next} spins</span>
                 </div>
-                <div className="bg-white rounded-xl shadow-lg p-4 text-center">
-                  <div className="text-2xl mb-1">🔥</div>
-                  <div className="text-sm text-gray-600">Chaos Level</div>
-                  <div className="font-bold text-teal-600">Maximum</div>
-                </div>
-                <div className="bg-white rounded-xl shadow-lg p-4 text-center">
-                  <div className="text-2xl mb-1">✨</div>
-                  <div className="text-sm text-gray-600">Fun Factor</div>
-                  <div className="font-bold text-pink-600">Off the Charts</div>
+                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-4 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(getProgress().percentage, 100)}%` }}
+                  />
                 </div>
               </div>
-            )}
+
+              {/* Achievements Grid */}
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-yellow-600" />
+                  Achievements ({stats.achievements.length}/{allAchievements.length})
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {allAchievements.map((achievement) => {
+                    const isUnlocked = stats.achievements.includes(achievement.id);
+                    return (
+                      <div
+                        key={achievement.id}
+                        className={`p-4 rounded-lg border-2 text-center transition-all ${
+                          isUnlocked
+                            ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-300'
+                            : 'bg-gray-50 border-gray-200 opacity-50'
+                        }`}
+                      >
+                        <div className="text-3xl mb-2">{achievement.icon}</div>
+                        <div className="font-semibold text-sm text-gray-900">{achievement.name}</div>
+                        <div className="text-xs text-gray-600 mt-1">{achievement.description}</div>
+                        {!isUnlocked && (
+                          <div className="text-xs text-gray-500 mt-1">🔒 Locked</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Fun Stats */}
+              {result && (
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-white rounded-xl shadow-lg p-4 text-center">
+                    <div className="text-2xl mb-1">🎲</div>
+                    <div className="text-sm text-gray-600">Randomness</div>
+                    <div className="font-bold text-purple-600">100%</div>
+                  </div>
+                  <div className="bg-white rounded-xl shadow-lg p-4 text-center">
+                    <div className="text-2xl mb-1">🔥</div>
+                    <div className="text-sm text-gray-600">Your Streak</div>
+                    <div className="font-bold text-orange-600">{stats.streak}</div>
+                  </div>
+                  <div className="bg-white rounded-xl shadow-lg p-4 text-center">
+                    <div className="text-2xl mb-1">🌍</div>
+                    <div className="text-sm text-gray-600">Categories Tried</div>
+                    <div className="font-bold text-teal-600">{stats.categoriesUnlocked.size}/8</div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

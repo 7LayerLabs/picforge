@@ -1,73 +1,121 @@
+/**
+ * MIGRATION NOTE: Updated to use InstantDB directly instead of Prisma API routes (Issue #12)
+ * Migration completed: 2025-10-21
+ */
+
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { db } from '@/lib/instantdb'
+import { id } from '@instantdb/react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Heart, Eye, Copy, TrendingUp, Clock, Award, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface ShowcaseItem {
   id: string
   title: string
-  description: string | null
+  description?: string
   prompt: string
-  originalImage: string
-  resultImage: string
-  style: string | null
+  originalImageUrl: string
+  transformedImageUrl: string
+  style?: string
   likes: number
   views: number
   featured: boolean
-  createdAt: string
-  isLiked: boolean
-  user: {
-    id: string
-    name: string | null
-    image: string | null
-  }
+  approved: boolean
+  timestamp: number
+  userId: string
 }
 
 export default function ShowcasePage() {
   const { user } = db.useAuth()
   const router = useRouter()
-  const [showcases, setShowcases] = useState<ShowcaseItem[]>([])
-  const [loading, setLoading] = useState(true)
   const [sort, setSort] = useState<'recent' | 'popular' | 'featured'>('popular')
   const [style, setStyle] = useState('all')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
   const [selectedShowcase, setSelectedShowcase] = useState<ShowcaseItem | null>(null)
 
-  // Fetch showcases
-  const fetchShowcases = async () => {
-    setLoading(true)
-    try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: '12',
-        sort,
-        style
-      })
-
-      const res = await fetch(`/api/showcase?${params}`)
-      const data = await res.json()
-
-      if (data.showcases) {
-        setShowcases(data.showcases)
-        setTotalPages(data.pagination.totalPages)
+  // Query showcases from InstantDB
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, isLoading } = db.useQuery({
+    showcaseSubmissions: {
+      $: {
+        where: {
+          approved: true,
+          ...(style !== 'all' && { style })
+        }
       }
-    } catch (error) {
-      console.error('Error fetching showcases:', error)
-    } finally {
-      setLoading(false)
+    },
+    showcaseLikes: {},
+    users: {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const typedData = data as any
+
+  // Process and sort showcases
+  const showcases = useMemo(() => {
+    if (!typedData?.showcaseSubmissions) return []
+
+    let items = [...typedData.showcaseSubmissions]
+
+    // Filter by featured if needed
+    if (sort === 'featured') {
+      items = items.filter(item => item.featured)
     }
-  }
 
+    // Sort
+    if (sort === 'popular') {
+      items.sort((a, b) => b.likes - a.likes)
+    } else {
+      items.sort((a, b) => b.timestamp - a.timestamp)
+    }
+
+    return items
+  }, [typedData, sort])
+
+  // Pagination
+  const limit = 12
+  const totalPages = Math.ceil(showcases.length / limit)
+  const paginatedShowcases = showcases.slice((page - 1) * limit, page * limit)
+
+  // Check if user has liked each showcase and add user data
+  const showcasesWithLikes = useMemo(() => {
+    if (!paginatedShowcases.length) return []
+
+    return paginatedShowcases.map(showcase => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const showcaseUser = typedData?.users?.find((u: any) => u.id === showcase.userId)
+      return {
+        ...showcase,
+        isLiked: user && typedData?.showcaseLikes
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ? typedData.showcaseLikes.some(
+              (like: any) => like.showcaseId === showcase.id && like.userId === user.id
+            )
+          : false,
+        user: showcaseUser ? {
+          id: showcaseUser.id,
+          name: showcaseUser.name || null,
+          image: null // InstantDB users don't have image field yet
+        } : {
+          id: showcase.userId,
+          name: null,
+          image: null
+        }
+      }
+    })
+  }, [paginatedShowcases, typedData?.showcaseLikes, typedData?.users, user])
+
+  // Reset to page 1 when filters change
   useEffect(() => {
-    fetchShowcases()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, style, page])
+    setPage(1)
+  }, [sort, style])
 
-  // Handle like/unlike
+  // Handle like/unlike with InstantDB
   const handleLike = async (showcaseId: string, e: React.MouseEvent) => {
     e.stopPropagation()
 
@@ -83,20 +131,42 @@ export default function ShowcasePage() {
     }
 
     try {
-      const res = await fetch(`/api/showcase/${showcaseId}/like`, {
-        method: 'POST'
-      })
+      // Check if already liked
+      const existingLike = typedData?.showcaseLikes.find(
+        like => like.showcaseId === showcaseId && like.userId === user.id
+      )
 
-      if (res.ok) {
-        const data = await res.json()
-        setShowcases(prev => prev.map(item =>
-          item.id === showcaseId
-            ? { ...item, isLiked: data.liked, likes: item.likes + (data.liked ? 1 : -1) }
-            : item
-        ))
+      if (existingLike) {
+        // Unlike - remove like and decrement counter
+        await db.transact([
+          db.tx.showcaseLikes[existingLike.id].delete(),
+          db.tx.showcaseSubmissions[showcaseId].update({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            likes: typedData?.showcaseSubmissions.find((s: any) => s.id === showcaseId)!.likes - 1
+          })
+        ])
+      } else {
+        // Like - add like and increment counter
+        await db.transact([
+          db.tx.showcaseLikes[id()].update({
+            userId: user.id,
+            showcaseId,
+            timestamp: Date.now()
+          }),
+          db.tx.showcaseSubmissions[showcaseId].update({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            likes: (typedData?.showcaseSubmissions.find((s: any) => s.id === showcaseId)?.likes || 0) + 1
+          })
+        ])
       }
     } catch (error) {
       console.error('Error toggling like:', error)
+      // Show error toast
+      const toast = document.createElement('div')
+      toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in'
+      toast.textContent = 'Failed to update like. Please try again.'
+      document.body.appendChild(toast)
+      setTimeout(() => toast.remove(), 2000)
     }
   }
 
@@ -206,7 +276,7 @@ export default function ShowcasePage() {
 
       {/* Gallery Grid */}
       <div className="container mx-auto px-4 py-8">
-        {loading ? (
+        {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(12)].map((_, i) => (
               <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
@@ -218,7 +288,7 @@ export default function ShowcasePage() {
               </div>
             ))}
           </div>
-        ) : showcases.length === 0 ? (
+        ) : showcasesWithLikes.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🎨</div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">No showcases yet</h2>
@@ -235,7 +305,7 @@ export default function ShowcasePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {showcases.map((showcase) => (
+            {showcasesWithLikes.map((showcase) => (
               <div
                 key={showcase.id}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
@@ -243,15 +313,23 @@ export default function ShowcasePage() {
               >
                 {/* Image with before/after hover effect */}
                 <div className="relative aspect-square overflow-hidden bg-gray-100">
-                  <img
-                    src={showcase.resultImage}
+                  <Image
+                    src={showcase.transformedImageUrl}
                     alt={showcase.title}
+                    width={400}
+                    height={400}
                     className="w-full h-full object-cover transition-opacity group-hover:opacity-0"
+                    loading="lazy"
+                    quality={80}
                   />
-                  <img
-                    src={showcase.originalImage}
+                  <Image
+                    src={showcase.originalImageUrl}
                     alt="Original"
+                    width={400}
+                    height={400}
                     className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity group-hover:opacity-100"
+                    loading="lazy"
+                    quality={80}
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -383,7 +461,7 @@ export default function ShowcasePage() {
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-2">Original</p>
                   <img
-                    src={selectedShowcase.originalImage}
+                    src={selectedShowcase.originalImageUrl}
                     alt="Original"
                     className="w-full rounded-lg"
                   />
@@ -391,7 +469,7 @@ export default function ShowcasePage() {
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-2">Transformed</p>
                   <img
-                    src={selectedShowcase.resultImage}
+                    src={selectedShowcase.transformedImageUrl}
                     alt="Result"
                     className="w-full rounded-lg"
                   />
@@ -444,7 +522,7 @@ export default function ShowcasePage() {
                   <div>
                     <p className="font-medium text-gray-900">{selectedShowcase.user.name || 'Anonymous'}</p>
                     <p className="text-sm text-gray-600">
-                      {new Date(selectedShowcase.createdAt).toLocaleDateString()}
+                      {new Date(selectedShowcase.timestamp).toLocaleDateString()}
                     </p>
                   </div>
                 </div>

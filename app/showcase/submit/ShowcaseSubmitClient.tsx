@@ -1,14 +1,19 @@
+/**
+ * MIGRATION NOTE: Updated to use InstantDB directly instead of Prisma API routes (Issue #12)
+ * Migration completed: 2025-10-21
+ */
+
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { db } from '@/lib/instantdb'
+import { id } from '@instantdb/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Upload, Send } from 'lucide-react'
 
 export default function ShowcaseSubmitClient() {
-  const [mounted, setMounted] = useState(false)
-  const { status } = useSession()
+  const { user } = db.useAuth()
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [formData, setFormData] = useState({
@@ -19,10 +24,6 @@ export default function ShowcaseSubmitClient() {
   })
   const [originalImage, setOriginalImage] = useState<string>('')
   const [resultImage, setResultImage] = useState<string>('')
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // Get images from sessionStorage if coming from editor
   useEffect(() => {
@@ -44,25 +45,17 @@ export default function ShowcaseSubmitClient() {
     }
   }, [])
 
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
-      </div>
-    )
-  }
-
-  // Authentication temporarily disabled
-  if (status === 'unauthenticated') {
+  // Require authentication
+  if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
           <div className="text-6xl mb-4">🔒</div>
           <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
-            Coming Soon!
+            Sign In Required
           </h1>
           <p className="text-gray-600 mb-6">
-            Showcase submissions will be available once sign-in is enabled.
+            You must be signed in to submit to the showcase.
           </p>
           <Link
             href="/showcase"
@@ -90,7 +83,7 @@ export default function ShowcaseSubmitClient() {
     reader.readAsDataURL(file)
   }
 
-  // Handle form submission
+  // Handle form submission with InstantDB
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -99,27 +92,34 @@ export default function ShowcaseSubmitClient() {
       return
     }
 
+    if (!user) {
+      alert('You must be signed in to submit')
+      return
+    }
+
     setSubmitting(true)
 
     try {
-      const res = await fetch('/api/showcase', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...formData,
-          originalImage,
-          resultImage
+      // Create showcase entry in InstantDB
+      await db.transact(
+        db.tx.showcaseSubmissions[id()].update({
+          userId: user.id,
+          title: formData.title,
+          description: formData.description || null,
+          prompt: formData.prompt,
+          originalImageUrl: originalImage,
+          transformedImageUrl: resultImage,
+          style: formData.style,
+          likes: 0,
+          views: 0,
+          featured: false,
+          approved: true, // Auto-approve for now
+          timestamp: Date.now()
         })
-      })
+      )
 
-      if (res.ok) {
-        router.push('/showcase')
-      } else {
-        const error = await res.json()
-        alert(error.error || 'Failed to submit')
-      }
+      // Success! Redirect to showcase
+      router.push('/showcase')
     } catch (error) {
       console.error('Error submitting:', error)
       alert('Failed to submit. Please try again.')

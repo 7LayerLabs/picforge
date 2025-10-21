@@ -36,13 +36,6 @@ export default function Navigation() {
               <Link
                 href="/"
                 className="flex items-center gap-3"
-                onClick={(e) => {
-                  e.preventDefault();
-                  // Clear all localStorage to reset state
-                  localStorage.clear();
-                  // Force full page reload to reset all state
-                  window.location.href = '/';
-                }}
               >
                 <Image
                   src="/polaroid-logo.svg"

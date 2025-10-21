@@ -157,6 +157,34 @@ export function useImageTracking() {
     ]);
   };
 
+  /**
+   * Migrate localStorage favorites to InstantDB (one-time migration)
+   */
+  const migrateFavoritesFromLocalStorage = async () => {
+    if (!user) return;
+
+    const localFavorites = localStorage.getItem('favoritePrompts');
+    if (!localFavorites) return;
+
+    try {
+      const parsedFavorites = JSON.parse(localFavorites);
+      if (!Array.isArray(parsedFavorites) || parsedFavorites.length === 0) return;
+
+      console.log(`Migrating ${parsedFavorites.length} favorites from localStorage to InstantDB...`);
+
+      // Migrate each favorite
+      for (const fav of parsedFavorites) {
+        await saveFavorite(fav.description, fav.category);
+      }
+
+      // Clear localStorage after successful migration
+      localStorage.removeItem('favoritePrompts');
+      console.log('Migration complete! localStorage favorites cleared.');
+    } catch (error) {
+      console.error('Failed to migrate favorites:', error);
+    }
+  };
+
   return {
     user,
     usage,
@@ -167,6 +195,7 @@ export function useImageTracking() {
     deleteImage,
     hasReachedLimit,
     getRemainingImages,
+    migrateFavoritesFromLocalStorage,
     isLoading,
     error,
   };

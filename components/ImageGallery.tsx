@@ -113,8 +113,11 @@ export default function ImageGallery({
                 src={item.image}
                 alt={`Version ${index}`}
                 fill
-                className="object-cover"
+                className="object-cover transition-opacity duration-300"
                 sizes="(max-width: 768px) 150px, 200px"
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y1ZjVmNSIvPjwvc3ZnPg=="
               />
 
               {/* Gradient Overlay on Hover */}

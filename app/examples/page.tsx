@@ -14,6 +14,7 @@ export default function ExamplesPage() {
   const router = useRouter()
   const [sampleImages, setSampleImages] = useState<SampleImages>({})
   const [loading, setLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
 
   useEffect(() => {
     // Fetch sample images from API
@@ -62,7 +63,7 @@ export default function ExamplesPage() {
 
   // Memoize display images to avoid recalculation on every render
   const displayImages = useMemo(() => {
-    return Object.entries(sampleImages)
+    const allImages = Object.entries(sampleImages)
       .flatMap(([category, images]) =>
         images.map(img => ({ path: img, category }))
       )
@@ -71,6 +72,17 @@ export default function ExamplesPage() {
         const bName = b.path.split('/').pop() || ''
         return aName.localeCompare(bName)
       })
+
+    // Apply category filter
+    if (selectedCategory === 'all') {
+      return allImages
+    }
+    return allImages.filter(img => img.category === selectedCategory)
+  }, [sampleImages, selectedCategory])
+
+  // Get unique categories
+  const categories = useMemo(() => {
+    return ['all', ...Object.keys(sampleImages).sort()]
   }, [sampleImages])
 
   return (
@@ -101,12 +113,52 @@ export default function ExamplesPage() {
           </p>
         </div>
 
+        {/* Category Filter */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex flex-wrap gap-2 bg-white rounded-xl p-2 shadow-lg border border-gray-200">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  selectedCategory === category
+                    ? 'bg-teal-500 text-white shadow-md'
+                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <span className="mr-2">{categoryIcons[category] || '📁'}</span>
+                {getCategoryName(category)}
+                {category !== 'all' && sampleImages[category] && (
+                  <span className="ml-2 text-xs opacity-75">
+                    ({sampleImages[category].length})
+                  </span>
+                )}
+                {category === 'all' && (
+                  <span className="ml-2 text-xs opacity-75">
+                    ({Object.values(sampleImages).flat().length})
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Image Grid */}
         <div className="max-w-7xl mx-auto">
           {loading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading sample images...</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {[...Array(20)].map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl overflow-hidden shadow-md animate-pulse"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <div className="aspect-square bg-gray-200"></div>
+                  <div className="p-2">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : displayImages.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

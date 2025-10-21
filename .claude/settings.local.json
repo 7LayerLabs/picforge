@@ -23,7 +23,10 @@
       "Bash(git rm:*)",
       "Bash(git log:*)",
       "Bash(node:*)",
-      "Read(//Users/derek/Desktop/**)"
+      "Read(//Users/derek/Desktop/**)",
+      "Bash(git mv:*)",
+      "WebFetch(domain:pic-forge.com)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

@@ -55,7 +55,10 @@ type Schema = {
     originalImageUrl: string;
     transformedImageUrl: string;
     style?: string;
+    likes: number;
+    views: number;
     featured: boolean;
+    approved: boolean;
     timestamp: number;
   };
   showcaseLikes: {
