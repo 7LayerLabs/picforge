@@ -1084,7 +1084,7 @@ export default function Home() {
                           alert('This prompt is already in your favorites!');
                         } else {
                           // Save to favorites
-                          await saveFavorite(PROMPT_OF_THE_DAY, 'Prompt of the Day');
+                          await saveFavorite(PROMPT_OF_THE_DAY, 'Creative Styles');
                           setIsPromptFavorited(true);
                         }
                       }}
