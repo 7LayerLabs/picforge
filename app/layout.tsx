@@ -87,11 +87,11 @@ export const metadata: Metadata = {
     description: 'Make them weird. Make them epic. Make them yours. 272+ AI templates. Zero artistic talent required. Nothing is real anymore.',
     images: [
       {
-        url: '/og-image.svg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Pic-Forge: (re)imagine everything - Transform your images with AI',
-        type: 'image/svg+xml',
+        type: 'image/png',
       }
     ],
   },
@@ -102,7 +102,7 @@ export const metadata: Metadata = {
     title: 'Pic-Forge: (re)imagine everything',
     description: 'Make them weird. Make them epic. Make them yours. 272+ AI templates. Zero artistic talent required. Nothing is real anymore.',
     images: {
-      url: '/og-image.svg',
+      url: '/og-image.png',
       alt: 'Pic-Forge: (re)imagine everything',
     },
   },
@@ -149,7 +149,7 @@ export default function RootLayout({
       "Lock composition feature",
       "Multiple export formats"
     ],
-    "screenshot": "https://pic-forge.com/og-image.svg"
+    "screenshot": "https://pic-forge.com/og-image.png"
   };
 
   return (
@@ -173,6 +173,7 @@ export default function RootLayout({
           <Navigation />
           {children}
           <Footer />
+          <KeyboardShortcutsHelp />
           <Analytics />
         {/* </AuthSessionProvider> */}
       </body>
