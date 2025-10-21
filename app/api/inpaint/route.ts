@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Replicate from 'replicate';
+import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv';
 
 // Initialize Replicate client
 const replicate = new Replicate({
@@ -8,6 +9,30 @@ const replicate = new Replicate({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 25 requests per day per IP (Replicate costs ~$0.023/image!)
+    const identifier = getClientIdentifier(request);
+    const rateLimit = await checkRateLimitKv(identifier, 25, 24 * 60 * 60 * 1000);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'Inpainting limit exceeded. Please try again later.',
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining,
+          resetTime: rateLimit.resetTime
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimit.limit.toString(),
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString()
+          }
+        }
+      );
+    }
+
     const { image, mask, prompt } = await request.json();
 
     if (!image || !mask || !prompt) {

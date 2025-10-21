@@ -1,9 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 
 const TOGETHER_API_KEY = process.env.TOGETHER_API_KEY || ''
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 50 requests per day per IP (Together AI costs money!)
+    const identifier = getClientIdentifier(request)
+    const rateLimit = await checkRateLimitKv(identifier, 50, 24 * 60 * 60 * 1000)
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'Free canvas generation limit exceeded. Please try again later.',
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining,
+          resetTime: rateLimit.resetTime
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimit.limit.toString(),
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString()
+          }
+        }
+      )
+    }
+
     const { prompt, size = '1024x1024', model = 'black-forest-labs/FLUX.1-schnell' } = await request.json()
 
     console.log('Generating free canvas with:', { prompt, size, model })

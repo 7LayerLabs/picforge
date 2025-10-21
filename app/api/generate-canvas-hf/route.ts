@@ -1,10 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 
 // Hugging Face API token (set in .env.local)
 const HF_API_TOKEN = process.env.HF_API_TOKEN || ''
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 100 requests per day per IP (HuggingFace has quotas)
+    const identifier = getClientIdentifier(request)
+    const rateLimit = await checkRateLimitKv(identifier, 100, 24 * 60 * 60 * 1000)
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'HuggingFace generation limit exceeded. Please try again later.',
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining,
+          resetTime: rateLimit.resetTime
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimit.limit.toString(),
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString()
+          }
+        }
+      )
+    }
+
     const { prompt, size = '1024x1024' } = await request.json()
 
     console.log('Generating image with Hugging Face:', { prompt, size })

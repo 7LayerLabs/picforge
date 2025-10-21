@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 // import { GoogleGenerativeAI } from '@google/generative-ai' // Reserved for future AI processing
 
 // Simplified version that handles JSON properly
@@ -6,6 +7,30 @@ export async function POST(request: NextRequest) {
   console.log('=== Process Image V2 API Called ===')
 
   try {
+    // Rate limiting: 200 requests per day per IP
+    const identifier = getClientIdentifier(request)
+    const rateLimit = await checkRateLimitKv(identifier, 200, 24 * 60 * 60 * 1000)
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'Image processing limit exceeded. Please try again later.',
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining,
+          resetTime: rateLimit.resetTime
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimit.limit.toString(),
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString()
+          }
+        }
+      )
+    }
+
     const contentType = request.headers.get('content-type') || ''
     console.log('Content-Type received:', contentType)
 

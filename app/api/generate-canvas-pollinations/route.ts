@@ -1,7 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 150 requests per day per IP (free but prevent abuse)
+    const identifier = getClientIdentifier(request)
+    const rateLimit = await checkRateLimitKv(identifier, 150, 24 * 60 * 60 * 1000)
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'Pollinations generation limit exceeded. Please try again later.',
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining,
+          resetTime: rateLimit.resetTime
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimit.limit.toString(),
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString()
+          }
+        }
+      )
+    }
+
     const { prompt } = await request.json()
 
     console.log('Generating image with Pollinations.ai:', { prompt })
