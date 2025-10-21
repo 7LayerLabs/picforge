@@ -327,6 +327,7 @@ export default function Home() {
   // Check if Prompt of the Day is already favorited
   useEffect(() => {
     if (favorites && favorites.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const isFavorited = favorites.some((fav: any) => fav.prompt === PROMPT_OF_THE_DAY)
       setIsPromptFavorited(isFavorited)
     }
