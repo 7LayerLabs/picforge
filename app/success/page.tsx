@@ -81,7 +81,7 @@ function SuccessContent() {
             </li>
             <li className="flex items-center gap-3">
               <Check className="w-5 h-5 text-teal-600 flex-shrink-0" />
-              <span className="text-gray-700">Access to all 210+ AI templates</span>
+              <span className="text-gray-700">Access to all 272+ AI templates</span>
             </li>
             <li className="flex items-center gap-3">
               <Check className="w-5 h-5 text-teal-600 flex-shrink-0" />

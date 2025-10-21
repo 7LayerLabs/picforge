@@ -11,7 +11,7 @@ Transform your images with 320+ AI effects across 8 categories. From zombie apoc
 ## 🎨 Features
 
 ### Main Editors
-- **Single Image Editor** - AI-powered transformations with 210+ templates and Lock Composition feature
+- **Single Image Editor** - AI-powered transformations with 272+ templates and Lock Composition feature
 - **18+ Editor** 🔞 - COMING SOON (Q1 2026) - Dramatic ribbon design page
 - **Batch Processor** - Process 100+ images with 21 effects (sharpen, vignette, glitch/vhs, sketch, etc.)
 - **18+ Batch** 🔞 - Unrestricted batch processing for adult content (access restricted)
@@ -24,7 +24,7 @@ Transform your images with 320+ AI effects across 8 categories. From zombie apoc
 
 ### Resources
 - **Templates Gallery** - 110+ sample transformations
-- **Prompts Library** - 211 categorized prompts (includes Banksy street art)
+- **Prompts Library** - 272 categorized prompts (includes Banksy street art)
 - **Tips & Tricks** - Master the art of AI image editing
 - **Showcase** - User-submitted transformations gallery
 

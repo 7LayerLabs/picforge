@@ -153,7 +153,7 @@ export default function TipsPage() {
                   href="/prompts"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-medium hover:bg-teal-700 transition-all hover:scale-105"
                 >
-                  Browse All 210+ Prompts
+                  Browse All 272+ Prompts
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 PicForge is an AI-powered image transformation platform built with Next.js 15. It provides multiple modes:
-- **Single Image Editor** (/) - AI-powered image editing with 325+ prompts, custom prompts, and Lock Composition feature
+- **Single Image Editor** (/) - AI-powered image editing with 272+ prompts, custom prompts, and Lock Composition feature
 - **18+ Editor** (/editor-nsfw) - COMING SOON page with ribbon design (Q1 2026 launch)
 - **Batch Processor** (/batch) - Process 100+ images simultaneously with bulk operations and 21 effects
 - **18+ Batch** (/batch-nsfw) - Unrestricted batch processing for adult content (access restricted)
@@ -159,7 +159,7 @@ NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
 - `app/prompts/favorites/page.tsx` - Favorites page with export and statistics
 
 **Prompt Library Features:**
-- **325+ Prompts** across 13 categories (Art Styles, Nature, People, Sports, Politics, Wellness, Events, Pro Photography, Fantasy, Abstract, Film, and more)
+- **272+ Prompts** across 13 categories (Art Styles, Nature, People, Sports, Politics, Wellness, Events, Pro Photography, Fantasy, Abstract, Film, and more)
 - **Category Filtering** - Single-select filter for browsing by category
 - **Tag Filtering** - Multi-select tag system for refined searches
 - **Search** - Full-text search across titles, descriptions, and tags

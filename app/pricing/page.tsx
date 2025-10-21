@@ -141,7 +141,7 @@ export default function PricingPage() {
               </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700"><strong>210+ AI templates</strong> ready to use</span>
+                <span className="text-gray-700"><strong>272+ AI templates</strong> ready to use</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
@@ -224,7 +224,7 @@ export default function PricingPage() {
                 <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <Check className="w-3 h-3 text-teal-500" />
                 </div>
-                <span className="text-white">Access to all 210+ AI templates</span>
+                <span className="text-white">Access to all 272+ AI templates</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
