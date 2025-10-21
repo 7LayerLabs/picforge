@@ -79,54 +79,59 @@ export default function AuthButton() {
     );
   }
 
-  if (!showLoginForm) {
-    return (
+  return (
+    <div className="relative">
       <button
-        onClick={() => setShowLoginForm(true)}
+        onClick={() => setShowLoginForm(!showLoginForm)}
         className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition-colors whitespace-nowrap"
       >
         Sign In
       </button>
-    );
-  }
 
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!email) return;
+      {showLoginForm && (
+        <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-4 z-[200] min-w-[300px]">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!email) return;
 
-        db.auth.sendMagicCode({ email }).catch((err) => {
-          alert('Error sending magic code: ' + err.message);
-        });
-        setSentEmail(email);
-      }}
-      className="flex gap-2 items-center"
-    >
-      <input
-        type="email"
-        placeholder="Enter your email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-teal-500"
-        required
-      />
-      <button
-        type="submit"
-        className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition-colors whitespace-nowrap"
-      >
-        Send Magic Link
-      </button>
-      <button
-        type="button"
-        onClick={() => setShowLoginForm(false)}
-        className="px-3 py-2 text-gray-400 hover:text-white"
-      >
-        Cancel
-      </button>
-      {error && (
-        <p className="text-red-400 text-sm">{error.message}</p>
+              db.auth.sendMagicCode({ email }).catch((err) => {
+                alert('Error sending magic code: ' + err.message);
+              });
+              setSentEmail(email);
+            }}
+            className="flex flex-col gap-3"
+          >
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-teal-500"
+              required
+              autoFocus
+            />
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="flex-1 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition-colors whitespace-nowrap"
+              >
+                Send Magic Link
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowLoginForm(false)}
+                className="px-4 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+              >
+                Cancel
+              </button>
+            </div>
+            {error && (
+              <p className="text-red-400 text-sm">{error.message}</p>
+            )}
+          </form>
+        </div>
       )}
-    </form>
+    </div>
   );
 }
