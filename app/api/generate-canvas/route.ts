@@ -2,9 +2,34 @@ import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { requireEnvVar } from '@/lib/validateEnv'
 import { Errors, handleApiError } from '@/lib/apiErrors'
+import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 100 requests per day per IP (strict for expensive DALL-E API)
+    const identifier = getClientIdentifier(request)
+    const rateLimit = await checkRateLimitKv(identifier, 100, 24 * 60 * 60 * 1000)
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'Canvas generation limit exceeded. Please try again later.',
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining,
+          resetTime: rateLimit.resetTime
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimit.limit.toString(),
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString()
+          }
+        }
+      )
+    }
+
     // Validate required environment variables
     const apiKey = requireEnvVar('OPENAI_API_KEY', 'OpenAI DALL-E')
 

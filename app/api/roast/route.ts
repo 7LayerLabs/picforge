@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getRandomRoast, detectImageType } from '@/lib/roastLibrary'
 import { requireEnvVar } from '@/lib/validateEnv'
 import { Errors, handleApiError } from '@/lib/apiErrors'
+import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 
 // Roast templates for different photo types
 const roastTemplates = {
@@ -40,6 +41,30 @@ const roastTemplates = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 300 requests per day per IP
+    const identifier = getClientIdentifier(request)
+    const rateLimit = await checkRateLimitKv(identifier, 300, 24 * 60 * 60 * 1000)
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'Roast limit exceeded. Please try again later.',
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining,
+          resetTime: rateLimit.resetTime
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimit.limit.toString(),
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString()
+          }
+        }
+      )
+    }
+
     // Validate required environment variables
     const apiKey = requireEnvVar('GEMINI_API_KEY', 'Gemini Vision API')
 

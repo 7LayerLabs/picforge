@@ -1,8 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 500 requests per day per IP
+    const identifier = getClientIdentifier(request)
+    const rateLimit = await checkRateLimitKv(identifier, 500, 24 * 60 * 60 * 1000)
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: 'You have exceeded the maximum number of requests. Please try again later.',
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining,
+          resetTime: rateLimit.resetTime
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimit.limit.toString(),
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString()
+          }
+        }
+      )
+    }
+
     // Check content type to handle both JSON and FormData
     const contentType = request.headers.get('content-type') || ''
     console.log('Received request with content-type:', contentType)

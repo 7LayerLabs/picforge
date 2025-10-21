@@ -92,8 +92,8 @@ export default function ShowcasePage() {
       return {
         ...showcase,
         isLiked: user && typedData?.showcaseLikes
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ? typedData.showcaseLikes.some(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (like: any) => like.showcaseId === showcase.id && like.userId === user.id
             )
           : false,
@@ -132,8 +132,9 @@ export default function ShowcasePage() {
 
     try {
       // Check if already liked
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const existingLike = typedData?.showcaseLikes.find(
-        like => like.showcaseId === showcaseId && like.userId === user.id
+        (like: any) => like.showcaseId === showcaseId && like.userId === user.id
       )
 
       if (existingLike) {
