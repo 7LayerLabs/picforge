@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getRandomRoast, detectImageType } from '@/lib/roastLibrary'
-
-// Initialize Gemini API
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+import { requireEnvVar } from '@/lib/validateEnv'
+import { Errors, handleApiError } from '@/lib/apiErrors'
 
 // Roast templates for different photo types
 const roastTemplates = {
@@ -42,13 +40,17 @@ const roastTemplates = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate required environment variables
+    const apiKey = requireEnvVar('GEMINI_API_KEY', 'Gemini Vision API')
+
+    // Initialize Gemini API
+    const genAI = new GoogleGenerativeAI(apiKey)
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+
     const { image, intensity, prompt } = await request.json()
 
     if (!image) {
-      return NextResponse.json(
-        { error: 'No image provided' },
-        { status: 400 }
-      )
+      throw Errors.missingParameter('image')
     }
 
     // Remove data:image prefix if present
@@ -143,10 +145,6 @@ CATEGORY: [category]`
     }
 
   } catch (error) {
-    console.error('Roast API error:', error)
-    return NextResponse.json(
-      { error: 'Failed to generate roast' },
-      { status: 500 }
-    )
+    return handleApiError(error)
   }
 }

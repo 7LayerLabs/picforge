@@ -1,5 +1,13 @@
+/**
+ * @deprecated Use lib/rateLimitKv.ts instead
+ *
+ * This in-memory rate limiter resets on serverless function restarts,
+ * making it ineffective on Vercel. Use Vercel KV-based rate limiting
+ * from lib/rateLimitKv.ts for persistent rate limiting.
+ */
+
 // Simple in-memory rate limiter
-// In production, use Redis or Vercel KV for persistent storage
+// DEPRECATED: Use lib/rateLimitKv.ts for persistent rate limiting
 
 interface RateLimitEntry {
   count: number

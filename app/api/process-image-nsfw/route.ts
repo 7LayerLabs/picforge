@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { requireEnvVar } from '@/lib/validateEnv'
+import { Errors, handleApiError } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate required environment variables
+    const replicateToken = requireEnvVar('REPLICATE_API_TOKEN', 'Replicate NSFW processing')
+
     const { image, prompt } = await request.json()
 
     if (!image || !prompt) {
-      return NextResponse.json(
-        { error: 'Image and prompt are required' },
-        { status: 400 }
-      )
+      throw Errors.missingParameter('image and prompt')
     }
 
     console.log('Processing NSFW image with Replicate SDXL...')
@@ -20,7 +22,7 @@ export async function POST(request: NextRequest) {
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
-        'Authorization': `Token ${process.env.REPLICATE_API_TOKEN}`,
+        'Authorization': `Token ${replicateToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -40,11 +42,7 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const error = await response.text()
       console.error('Replicate API error:', error)
-      console.error('Full response:', response)
-      return NextResponse.json(
-        { error: `Replicate API failed: ${response.status} - ${error}` },
-        { status: 500 }
-      )
+      throw Errors.externalServiceError('Replicate', `${response.status} - ${error}`)
     }
 
     const prediction = await response.json()
@@ -62,7 +60,7 @@ export async function POST(request: NextRequest) {
         `https://api.replicate.com/v1/predictions/${result.id}`,
         {
           headers: {
-            'Authorization': `Token ${process.env.REPLICATE_API_TOKEN}`,
+            'Authorization': `Token ${replicateToken}`,
           }
         }
       )
@@ -80,18 +78,12 @@ export async function POST(request: NextRequest) {
 
     if (result.status === 'failed') {
       console.error('Transformation failed. Error:', result.error)
-      return NextResponse.json(
-        { error: `Transformation failed: ${result.error || 'Unknown error'}` },
-        { status: 500 }
-      )
+      throw Errors.imageProcessingFailed(result.error || 'Replicate processing failed')
     }
 
     if (!result.output || !result.output[0]) {
       console.error('No output. Full result:', result)
-      return NextResponse.json(
-        { error: 'No output image from transformation' },
-        { status: 500 }
-      )
+      throw Errors.imageProcessingFailed('No output image from transformation')
     }
 
     // Fetch the result image and convert to base64
@@ -106,13 +98,6 @@ export async function POST(request: NextRequest) {
       success: true,
     })
   } catch (error) {
-    console.error('NSFW processing error:', error)
-    return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : 'Processing failed',
-        success: false,
-      },
-      { status: 500 }
-    )
+    return handleApiError(error)
   }
 }

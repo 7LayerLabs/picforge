@@ -1,32 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { requireEnvVar } from '@/lib/validateEnv'
+import { Errors, handleApiError } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
-  // Initialize OpenAI client only when needed
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || '',
-  })
   try {
+    // Validate required environment variables
+    const apiKey = requireEnvVar('OPENAI_API_KEY', 'OpenAI DALL-E')
+
+    // Initialize OpenAI client
+    const openai = new OpenAI({ apiKey })
+
     const { prompt, size = '1024x1024', quality = 'standard' } = await request.json()
 
     console.log('Generating canvas with:', { prompt, size, quality })
 
     if (!prompt) {
-      return NextResponse.json(
-        { error: 'Prompt is required' },
-        { status: 400 }
-      )
+      throw Errors.missingParameter('prompt')
     }
 
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'your_openai_api_key_here') {
-      console.error('OpenAI API key not configured')
-      return NextResponse.json(
-        { error: 'OpenAI API key is not configured. Please add your API key to .env.local' },
-        { status: 500 }
-      )
-    }
-
-    console.log('Using OpenAI API key:', process.env.OPENAI_API_KEY?.substring(0, 10) + '...')
+    console.log('Using OpenAI API key:', apiKey.substring(0, 10) + '...')
 
     // Generate image using DALL-E 3
     const response = await openai.images.generate({
@@ -52,44 +45,27 @@ export async function POST(request: NextRequest) {
         revisedPrompt: response.data[0].revised_prompt,
       })
     } else {
-      throw new Error('No image URL in response')
+      throw Errors.generationFailed('No image URL in OpenAI response')
     }
   } catch (error) {
     console.error('Error generating image:', error)
 
-    const err = error as { error?: { type?: string; code?: string; message?: string }; message?: string }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const err = error as any
 
     // Handle specific OpenAI errors
     if (err?.error?.type === 'insufficient_quota' || err?.error?.code === 'billing_hard_limit_reached') {
-      return NextResponse.json(
-        {
-          error: 'OpenAI billing limit reached. To fix this:\n1. Add credits at platform.openai.com\n2. Or increase your spending limit\n3. Or wait for your monthly limit to reset',
-          billingIssue: true
-        },
-        { status: 429 }
-      )
+      throw Errors.quotaExceeded('OpenAI')
     }
 
     if (err?.message?.includes('billing') || err?.message?.includes('limit')) {
-      return NextResponse.json(
-        {
-          error: 'OpenAI billing limit reached. Please add credits to your OpenAI account at platform.openai.com',
-          billingIssue: true
-        },
-        { status: 429 }
-      )
+      throw Errors.quotaExceeded('OpenAI')
     }
 
     if (err?.error?.message) {
-      return NextResponse.json(
-        { error: err.error.message },
-        { status: 500 }
-      )
+      throw Errors.externalServiceError('OpenAI', err.error.message)
     }
 
-    return NextResponse.json(
-      { error: 'Failed to generate image. Please try again.' },
-      { status: 500 }
-    )
+    return handleApiError(error)
   }
 }
