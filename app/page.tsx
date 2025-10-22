@@ -12,10 +12,6 @@ import TemplateSelector from '@/components/TemplateSelector'
 import ImageGallery from '@/components/ImageGallery'
 import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 import ExportModal from '@/components/ExportModal'
-import BeforeAfterGallery from '@/components/BeforeAfterGallery'
-import TrendingShowcase from '@/components/TrendingShowcase'
-import FeaturedTransformations from '@/components/FeaturedTransformations'
-import SocialProofCounter from '@/components/SocialProofCounter'
 import WatermarkPreviewNotice from '@/components/WatermarkPreviewNotice'
 import ReferralCTA from '@/components/ReferralCTA'
 import { useImageTracking } from '@/hooks/useImageTracking'
@@ -897,50 +893,14 @@ export default function Home() {
         {!currentImage && (
           <>
             {/* Hero Section */}
-            <div className="text-center mb-8 px-4 pt-8">
-              <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-3 leading-tight">
+            <div className="text-center mb-12 px-4 pt-8">
+              <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">
                 <span className="inline-block text-3xl md:text-4xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900">Imagine<span className="text-4xl md:text-5xl">.</span> Everything<span className="text-4xl md:text-5xl">.</span></span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
-                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">272+ prompts and endless ideas</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
+              <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed">
+                Upload your image. Pick a prompt. Watch reality bend.
               </p>
-
-              {/* Feature Highlights - Compact Inline Badges */}
-              <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
-                  <span className="text-xl">⚡</span>
-                  <span className="text-sm font-semibold text-gray-900">Instant Results</span>
-                </div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
-                  <span className="text-xl">🎨</span>
-                  <span className="text-sm font-semibold text-gray-900">272+ Prompts</span>
-                </div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
-                  <span className="text-xl">🔒</span>
-                  <span className="text-sm font-semibold text-gray-900">Private & Secure</span>
-                </div>
-              </div>
             </div>
-
-            {/* Social Proof Counter */}
-            <div className="px-4 pb-8 mb-8">
-              <SocialProofCounter variant="inline" showTransformations showUsers className="justify-center" />
-            </div>
-
-            {/* Before/After Gallery */}
-            <div className="px-4 pb-8 mb-8">
-              <BeforeAfterGallery onStartEditing={scrollToUpload} />
-            </div>
-
-            {/* Featured Transformations */}
-            <div className="px-4 pb-12 mb-8">
-              <FeaturedTransformations limit={6} variant="grid" showHeader />
-            </div>
-
-            {/* Trending Showcase - Replaced by Featured Transformations above but keeping for backward compatibility */}
-            {/* <div className="px-4 pb-8 mb-8">
-              <TrendingShowcase />
-            </div> */}
           </>
         )}
 
@@ -961,231 +921,230 @@ export default function Home() {
 
         {!currentImage ? (
           <div ref={uploadSectionRef} className="px-4 pb-8">
-            {/* Two-Column Layout: Upload + Prompt of the Day */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto items-stretch">
-              {/* LEFT: Upload Section */}
-              <div className="flex flex-col">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  style={{ display: 'none' }}
-                  id="image-upload-input"
-                />
-                <div
-                  onClick={() => document.getElementById('image-upload-input')?.click()}
-                  onDragOver={(e) => {
-                    e.preventDefault()
-                    setIsDraggingMain(true)
-                  }}
-                  onDragLeave={(e) => {
-                    e.preventDefault()
-                    setIsDraggingMain(false)
-                  }}
-                  onDrop={async (e) => {
-                    e.preventDefault()
-                    setIsDraggingMain(false)
-                    const files = e.dataTransfer.files
-                    if (files && files[0] && files[0].type.startsWith('image/')) {
-                      const file = files[0]
-                      setSelectedFile(file)
-                      try {
-                        const imageData = await convertImageToSupported(file)
-                        setCurrentImage(imageData)
-                        setOriginalImage(imageData)
-                        setHistory([{
-                          prompt: 'Original Image',
-                          image: imageData,
-                          timestamp: new Date(),
-                          isOriginal: true
-                        }])
-                        // If prompt of day was active, set it in instructions
-                        if (promptOfDayActive) {
-                          setInstructions(PROMPT_OF_THE_DAY)
-                        }
-                      } catch (error) {
-                        console.error('Error converting dropped image:', error)
-                        alert('Failed to process dropped image. Please try a different format.')
+            {/* Main Upload Section - Hero CTA */}
+            <div className="max-w-3xl mx-auto mb-12">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: 'none' }}
+                id="image-upload-input"
+              />
+              <div
+                onClick={() => document.getElementById('image-upload-input')?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  setIsDraggingMain(true)
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault()
+                  setIsDraggingMain(false)
+                }}
+                onDrop={async (e) => {
+                  e.preventDefault()
+                  setIsDraggingMain(false)
+                  const files = e.dataTransfer.files
+                  if (files && files[0] && files[0].type.startsWith('image/')) {
+                    const file = files[0]
+                    setSelectedFile(file)
+                    try {
+                      const imageData = await convertImageToSupported(file)
+                      setCurrentImage(imageData)
+                      setOriginalImage(imageData)
+                      setHistory([{
+                        prompt: 'Original Image',
+                        image: imageData,
+                        timestamp: new Date(),
+                        isOriginal: true
+                      }])
+                      if (promptOfDayActive) {
+                        setInstructions(PROMPT_OF_THE_DAY)
                       }
+                    } catch (error) {
+                      console.error('Error converting dropped image:', error)
+                      alert('Failed to process dropped image. Please try a different format.')
                     }
-                  }}
-                  className={`flex-1 flex flex-col items-center justify-center px-8 py-20 rounded-xl cursor-pointer transition-all duration-200 border-2 min-h-[400px] ${
-                    isDraggingMain
-                      ? 'bg-teal-50 border-teal-500 scale-[1.01]'
-                      : 'bg-white hover:bg-gray-50 border-gray-300'
-                  }`}
-                >
-                  <div className="flex flex-col items-center gap-6">
-                    <svg className={`w-20 h-20 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                    <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-gray-900'}`}>
-                      <div className="text-2xl font-semibold mb-3">
-                        {isDraggingMain ? 'Drop to upload' : 'Upload your image'}
-                      </div>
-                      <div className="text-base opacity-75">
-                        {isDraggingMain ? 'Release to start' : 'Drag & drop, click, or paste (Ctrl+V)'}
-                      </div>
+                  }
+                }}
+                className={`flex flex-col items-center justify-center px-8 py-24 rounded-2xl cursor-pointer transition-all duration-200 border-2 shadow-xl hover:shadow-2xl ${
+                  isDraggingMain
+                    ? 'bg-teal-50 border-teal-500 scale-[1.02]'
+                    : 'bg-white hover:bg-gray-50 border-gray-300'
+                }`}
+              >
+                <div className="flex flex-col items-center gap-6">
+                  <svg className={`w-24 h-24 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-gray-900'}`}>
+                    <div className="text-3xl font-bold mb-2">
+                      {isDraggingMain ? 'Drop to Upload' : 'Upload Your Image'}
+                    </div>
+                    <div className="text-lg opacity-75">
+                      {isDraggingMain ? 'Release to start creating' : 'Drag & drop, click, or paste (Ctrl+V)'}
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-500 text-xs flex items-center gap-2 justify-center mt-3">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 rounded-full border border-gray-200">
-                    <svg className="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 7zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.061l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.061l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.061 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z"/>
-                    </svg>
-                    <span className="font-semibold text-xs">Pro Tip:</span>
-                  </span>
-                  <span className="text-xs">Paste images with Ctrl+V</span>
-                </p>
               </div>
+            </div>
 
-              {/* RIGHT: Prompt of the Day + Canvas Link */}
-              <div className="flex flex-col space-y-4">
-                {/* Prompt of the Day */}
-                <div className={`flex-1 border-2 rounded-xl p-5 shadow-lg transition-all duration-300 flex flex-col ${
-                  promptOfDayActive
-                    ? 'bg-purple-50 border-purple-300 ring-2 ring-purple-200'
-                    : 'bg-teal-50 border-teal-300'
-                }`}>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">✨</span>
-                      <h3 className="font-bold text-lg text-gray-900">Prompt of the Day</h3>
-                    </div>
-                    {promptOfDayActive && (
-                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-500 text-white text-xs font-medium rounded-full animate-pulse">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Active
-                      </span>
-                    )}
+            {/* Prompt of the Day - Prominent Feature */}
+            <div className="max-w-3xl mx-auto mb-12">
+              <div className={`border-2 rounded-xl p-6 shadow-lg transition-all duration-300 ${
+                promptOfDayActive
+                  ? 'bg-purple-50 border-purple-300 ring-2 ring-purple-200'
+                  : 'bg-teal-50 border-teal-300'
+              }`}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">✨</span>
+                    <h2 className="font-bold text-2xl text-gray-900">Prompt of the Day</h2>
                   </div>
-                  <div className="mb-2">
-                    <h4 className="text-base font-bold text-gray-900 mb-1">{dailyPrompt.title}</h4>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-teal-300 rounded-full text-[10px] font-medium text-teal-700">
-                      {dailyPrompt.category}
+                  {promptOfDayActive && (
+                    <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-500 text-white text-sm font-medium rounded-full animate-pulse">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Active
                     </span>
-                  </div>
-                  <p className="text-sm text-gray-700 italic mb-4 leading-relaxed">
-                    &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
-                  </p>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{dailyPrompt.title}</h3>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-white border border-teal-300 rounded-full text-xs font-medium text-teal-700">
+                    {dailyPrompt.category}
+                  </span>
+                </div>
+                <p className="text-base text-gray-700 italic mb-6 leading-relaxed">
+                  &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
+                </p>
 
-                  {/* Prompt metadata */}
-                  <div className="mb-4 p-3 bg-white rounded-lg border border-gray-200">
-                    <div className="flex flex-wrap gap-2 text-xs">
-                      <div className="flex items-center gap-1">
-                        <span className="font-semibold text-gray-600">Mood:</span>
-                        <span className="text-gray-800">{dailyPrompt.mood}</span>
-                      </div>
-                      {dailyPrompt.tags && dailyPrompt.tags.length > 0 && (
-                        <div className="flex items-center gap-1 flex-wrap">
-                          <span className="font-semibold text-gray-600">Tags:</span>
-                          {dailyPrompt.tags.slice(0, 3).map((tag, i) => (
-                            <span key={i} className="px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full text-[10px]">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(PROMPT_OF_THE_DAY);
-                        setCopiedPrompt(true);
-                        setTimeout(() => setCopiedPrompt(false), 2000);
-                      }}
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all hover:scale-105 ${
-                        copiedPrompt ? 'bg-teal-600' : 'bg-teal-500 hover:bg-teal-600 shadow-md'
-                      }`}
-                    >
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(PROMPT_OF_THE_DAY);
+                      setCopiedPrompt(true);
+                      setTimeout(() => setCopiedPrompt(false), 2000);
+                    }}
+                    className={`inline-flex items-center gap-2 px-5 py-3 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 ${
+                      copiedPrompt ? 'bg-teal-600' : 'bg-teal-500 hover:bg-teal-600 shadow-md'
+                    }`}
+                  >
                     {copiedPrompt ? (
                       <>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                         Copied!
                       </>
                     ) : (
                       <>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
-                        Copy
+                        Copy Prompt
                       </>
                     )}
-                    </button>
-                    <button
-                      onClick={async () => {
-                        if (isPromptFavorited) {
-                          // Already favorited, show message
-                          alert('This prompt is already in your favorites!');
-                        } else {
-                          // Save to favorites with the daily prompt's category
-                          await saveFavorite(PROMPT_OF_THE_DAY, dailyPrompt.category);
-                          setIsPromptFavorited(true);
-                        }
-                      }}
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all hover:scale-105 shadow-md ${
-                        isPromptFavorited ? 'bg-purple-600 hover:bg-purple-700' : 'bg-teal-500 hover:bg-teal-600'
-                      }`}
-                      title={isPromptFavorited ? 'Already in favorites' : 'Add to favorites'}
-                    >
-                      <svg className="w-4 h-4" fill={isPromptFavorited ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
-                      {isPromptFavorited ? 'Favorited' : 'Favorite'}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPromptOfDayActive(!promptOfDayActive);
-                        if (!promptOfDayActive) {
-                          setInstructions(PROMPT_OF_THE_DAY);
-                        } else {
-                          setInstructions('');
-                        }
-                      }}
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all hover:scale-105 shadow-md ${
-                        promptOfDayActive ? 'bg-purple-500 hover:bg-purple-600' : 'bg-gray-500 hover:bg-gray-600'
-                      }`}
-                    >
-                      {promptOfDayActive ? (
-                        <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                          Active
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                          </svg>
-                          Try It
-                        </>
-                      )}
-                    </button>
+                  </button>
+                  <button
+                    onClick={async () => {
+                      if (isPromptFavorited) {
+                        alert('This prompt is already in your favorites!');
+                      } else {
+                        await saveFavorite(PROMPT_OF_THE_DAY, dailyPrompt.category);
+                        setIsPromptFavorited(true);
+                      }
+                    }}
+                    className={`inline-flex items-center gap-2 px-5 py-3 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 shadow-md ${
+                      isPromptFavorited ? 'bg-purple-600 hover:bg-purple-700' : 'bg-teal-500 hover:bg-teal-600'
+                    }`}
+                    title={isPromptFavorited ? 'Already in favorites' : 'Add to favorites'}
+                  >
+                    <svg className="w-5 h-5" fill={isPromptFavorited ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    {isPromptFavorited ? 'Favorited' : 'Favorite'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPromptOfDayActive(!promptOfDayActive);
+                      if (!promptOfDayActive) {
+                        setInstructions(PROMPT_OF_THE_DAY);
+                      } else {
+                        setInstructions('');
+                      }
+                    }}
+                    className={`inline-flex items-center gap-2 px-5 py-3 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 shadow-md ${
+                      promptOfDayActive ? 'bg-purple-500 hover:bg-purple-600' : 'bg-gray-600 hover:bg-gray-700'
+                    }`}
+                  >
+                    {promptOfDayActive ? (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Active
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Try This Prompt
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Need a Background? CTA */}
+            <div className="max-w-3xl mx-auto mb-12">
+              <Link href="/canvas" className="block p-6 bg-gradient-to-br from-teal-50 to-purple-50 rounded-xl border-2 border-teal-300 hover:border-teal-400 hover:shadow-xl transition-all group">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                      <span>🎨</span> Need a Background?
+                    </h3>
+                    <p className="text-base text-gray-700">Generate custom AI backgrounds from scratch with Canvas</p>
+                  </div>
+                  <div className="flex items-center gap-2 text-teal-600 font-semibold group-hover:gap-4 transition-all text-lg">
+                    <span>Try Canvas</span>
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </div>
                 </div>
+              </Link>
+            </div>
 
-                {/* Canvas Link Card */}
-                <Link href="/canvas" className="block p-4 bg-gray-50 rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-1">Need a background?</p>
-                      <p className="text-xs text-gray-600">Generate custom AI backgrounds</p>
-                    </div>
-                    <div className="flex items-center gap-2 text-teal-600 font-medium group-hover:gap-3 transition-all">
-                      <span className="text-sm">Canvas</span>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </div>
-                  </div>
+            {/* What&apos;s Possible Section */}
+            <div className="max-w-4xl mx-auto mb-12 text-center">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">(re)Imagine Everything</h2>
+              <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                Your photos deserve better. Make them weird. Make them epic. Make them yours.
+                <span className="font-bold text-teal-600"> 272+ prompts and endless ideas</span> to break reality.
+                <span className="font-bold text-purple-600"> Zero artistic talent required.</span>
+              </p>
+
+              {/* Quick Links Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Link href="/prompts" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
+                  <div className="text-4xl mb-3">📚</div>
+                  <h3 className="font-bold text-lg text-gray-900 mb-2">Prompts Library</h3>
+                  <p className="text-sm text-gray-600">Browse 272+ creative prompts</p>
+                </Link>
+
+                <Link href="/showcase" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-purple-400 hover:shadow-lg transition-all group">
+                  <div className="text-4xl mb-3">🎭</div>
+                  <h3 className="font-bold text-lg text-gray-900 mb-2">Showcase</h3>
+                  <p className="text-sm text-gray-600">See what others have created</p>
+                </Link>
+
+                <Link href="/examples" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
+                  <div className="text-4xl mb-3">✨</div>
+                  <h3 className="font-bold text-lg text-gray-900 mb-2">Examples</h3>
+                  <p className="text-sm text-gray-600">110+ samples to try first</p>
                 </Link>
               </div>
             </div>
