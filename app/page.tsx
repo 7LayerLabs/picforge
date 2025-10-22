@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import BeforeAfterGallery from '@/components/BeforeAfterGallery'
 import FeaturedTransformations from '@/components/FeaturedTransformations'
 import { prompts } from '@/lib/prompts'
 
@@ -47,23 +46,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Main CTA Button */}
-            <div className="mb-12">
-              <Link
-                href="/editor"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white text-xl font-bold rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Start Editing Now
-              </Link>
-            </div>
-          </div>
-
-          {/* Before/After Gallery */}
-          <div className="px-4 pb-8 mb-8">
-            <BeforeAfterGallery onStartEditing={() => {}} />
           </div>
 
           {/* Featured Transformations */}
@@ -101,15 +83,15 @@ export default function Home() {
 
           {/* Need a Background? CTA */}
           <div className="max-w-3xl mx-auto mb-12 px-4">
-            <Link href="/canvas" className="block p-6 bg-gradient-to-br from-teal-50 to-purple-50 rounded-xl border-2 border-teal-300 hover:border-teal-400 hover:shadow-xl transition-all group">
+            <Link href="/canvas" className="block p-6 bg-purple-600 rounded-xl border-2 border-purple-700 hover:border-purple-800 hover:shadow-xl transition-all group">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
                     <span>🎨</span> Need a Background?
                   </h3>
-                  <p className="text-base text-gray-700">Generate custom AI backgrounds from scratch with Canvas</p>
+                  <p className="text-base text-purple-100">Generate custom AI backgrounds from scratch with Canvas</p>
                 </div>
-                <div className="flex items-center gap-2 text-teal-600 font-semibold group-hover:gap-4 transition-all text-lg">
+                <div className="flex items-center gap-2 text-white font-semibold group-hover:gap-4 transition-all text-lg">
                   <span>Try Canvas</span>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -121,13 +103,6 @@ export default function Home() {
 
           {/* Quick Links Grid */}
           <div className="max-w-4xl mx-auto mb-12 px-4">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">(re)Imagine Everything</h2>
-            <p className="text-lg text-gray-700 mb-8 leading-relaxed text-center">
-              Your photos deserve better. Make them weird. Make them epic. Make them yours.
-              <span className="font-bold text-teal-600"> 272+ prompts and endless ideas</span> to break reality.
-              <span className="font-bold text-purple-600"> Zero artistic talent required.</span>
-            </p>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Link href="/prompts" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
                 <div className="text-4xl mb-3">📚</div>
