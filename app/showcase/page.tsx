@@ -27,6 +27,10 @@ interface ShowcaseItem {
   approved: boolean
   timestamp: number
   userId: string
+  user?: {
+    name?: string
+    image?: string
+  }
 }
 
 export default function ShowcasePage() {
@@ -132,15 +136,17 @@ export default function ShowcasePage() {
 
     try {
       // Check if already liked
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const existingLike = typedData?.showcaseLikes.find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (like: any) => like.showcaseId === showcaseId && like.userId === user.id
       )
 
       if (existingLike) {
         // Unlike - remove like and decrement counter
         await db.transact([
+          // @ts-expect-error InstantDB transaction type issue
           db.tx.showcaseLikes[existingLike.id].delete(),
+          // @ts-expect-error InstantDB transaction type issue
           db.tx.showcaseSubmissions[showcaseId].update({
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             likes: typedData?.showcaseSubmissions.find((s: any) => s.id === showcaseId)!.likes - 1
@@ -149,11 +155,13 @@ export default function ShowcasePage() {
       } else {
         // Like - add like and increment counter
         await db.transact([
+          // @ts-expect-error InstantDB transaction type issue
           db.tx.showcaseLikes[id()].update({
             userId: user.id,
             showcaseId,
             timestamp: Date.now()
           }),
+          // @ts-expect-error InstantDB transaction type issue
           db.tx.showcaseSubmissions[showcaseId].update({
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             likes: (typedData?.showcaseSubmissions.find((s: any) => s.id === showcaseId)?.likes || 0) + 1
@@ -509,19 +517,19 @@ export default function ShowcasePage() {
               {/* Footer */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  {selectedShowcase.user.image ? (
+                  {selectedShowcase.user?.image ? (
                     <img
                       src={selectedShowcase.user.image}
-                      alt={selectedShowcase.user.name || 'User'}
+                      alt={selectedShowcase.user?.name || 'User'}
                       className="w-10 h-10 rounded-full"
                     />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center text-white font-bold">
-                      {selectedShowcase.user.name?.[0] || 'U'}
+                      {selectedShowcase.user?.name?.[0] || 'U'}
                     </div>
                   )}
                   <div>
-                    <p className="font-medium text-gray-900">{selectedShowcase.user.name || 'Anonymous'}</p>
+                    <p className="font-medium text-gray-900">{selectedShowcase.user?.name || 'Anonymous'}</p>
                     <p className="text-sm text-gray-600">
                       {new Date(selectedShowcase.timestamp).toLocaleDateString()}
                     </p>

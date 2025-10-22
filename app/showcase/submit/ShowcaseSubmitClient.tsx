@@ -102,6 +102,7 @@ export default function ShowcaseSubmitClient() {
     try {
       // Create showcase entry in InstantDB
       await db.transact(
+        // @ts-ignore - InstantDB transaction type issue
         db.tx.showcaseSubmissions[id()].update({
           userId: user.id,
           title: formData.title,
