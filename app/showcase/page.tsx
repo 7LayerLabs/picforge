@@ -171,7 +171,7 @@ export default function ShowcasePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-teal-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-16 z-40 shadow-sm">
         <div className="container mx-auto px-4 py-6">
@@ -191,7 +191,7 @@ export default function ShowcasePage() {
             {user && (
               <Link
                 href="/showcase/submit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-purple-600 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-purple-700 transition-all mt-4 shadow-lg hover:shadow-xl hover:scale-105"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-all mt-4 shadow-lg hover:shadow-xl hover:scale-105"
               >
                 <Plus className="w-5 h-5" />
                 Submit Your Work
@@ -229,7 +229,7 @@ export default function ShowcasePage() {
                 onClick={() => setSort('trending')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'trending'
-                    ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
+                    ? 'bg-purple-600 text-white shadow-lg scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -240,7 +240,7 @@ export default function ShowcasePage() {
                 onClick={() => setSort('most-liked')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'most-liked'
-                    ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
+                    ? 'bg-purple-600 text-white shadow-lg scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -251,7 +251,7 @@ export default function ShowcasePage() {
                 onClick={() => setSort('recent')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'recent'
-                    ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
+                    ? 'bg-purple-600 text-white shadow-lg scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -262,7 +262,7 @@ export default function ShowcasePage() {
                 onClick={() => setSort('featured')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'featured'
-                    ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow-lg scale-105'
+                    ? 'bg-yellow-500 text-white shadow-lg scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -395,7 +395,7 @@ export default function ShowcasePage() {
                     onClick={() => setPage(pageNum)}
                     className={`w-10 h-10 rounded-lg font-medium transition-all ${
                       page === pageNum
-                        ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg'
+                        ? 'bg-purple-600 text-white shadow-lg'
                         : 'bg-white shadow-lg hover:bg-gray-50'
                     }`}
                   >
@@ -458,7 +458,7 @@ export default function ShowcasePage() {
               </div>
 
               {/* Prompt */}
-              <div className="bg-gradient-to-br from-teal-50 to-purple-50 rounded-lg p-4 mb-6 border border-teal-200">
+              <div className="bg-purple-50 rounded-lg p-4 mb-6 border border-purple-200">
                 <p className="text-sm font-medium text-gray-600 mb-2">Prompt Used:</p>
                 <p className="text-gray-900 mb-3">{selectedShowcase.prompt}</p>
                 <div className="flex gap-2">
@@ -482,7 +482,7 @@ export default function ShowcasePage() {
                     onClick={() => {
                       sessionStorage.setItem('tryPrompt', selectedShowcase.prompt);
                     }}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500 to-purple-600 text-white rounded-lg hover:from-teal-600 hover:to-purple-700 transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all"
                   >
                     Try This Prompt
                   </Link>
@@ -500,7 +500,7 @@ export default function ShowcasePage() {
               {/* User info */}
               <div className="flex items-center justify-between pt-4 border-t">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-purple-500 flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
                     {selectedShowcase.user?.name?.[0]?.toUpperCase() || 'U'}
                   </div>
                   <div>

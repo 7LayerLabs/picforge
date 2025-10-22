@@ -66,10 +66,12 @@ export default function FavoritesPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const imageFavorites = favorites?.filter((fav: any) => fav.transformedUrl) || [];
 
-  // ALL favorites shown in prompts section (including those with images)
-  // Group ALL favorites by category for the prompts section
+  // Show ONLY prompts without images in the prompts section (to avoid duplication)
+  // Group prompt-only favorites by category
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const groupedPrompts = favorites?.reduce((acc: Record<string, typeof favorites>, fav: any) => {
+  const promptOnlyFavorites = favorites?.filter((fav: any) => !fav.transformedUrl) || [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const groupedPrompts = promptOnlyFavorites.reduce((acc: Record<string, typeof favorites>, fav: any) => {
     const category = fav.category || 'Uncategorized';
     if (!acc[category]) {
       acc[category] = [];
@@ -249,8 +251,8 @@ export default function FavoritesPage() {
           </div>
         )}
 
-        {/* Favorite Prompts */}
-        {favorites.length > 0 && (
+        {/* Favorite Prompts (prompts without images only) */}
+        {categories.length > 0 && (
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               Favorite Prompts
@@ -281,19 +283,9 @@ export default function FavoritesPage() {
                           <Star className="w-5 h-5 text-teal-500 fill-teal-500" />
                         </div>
 
-                        {/* Prompt Text */}
-                        <div className="flex items-start gap-3 pl-8 pr-32">
-                          {favorite.transformedUrl && (
-                            <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border-2 border-teal-300">
-                              <NextImage
-                                src={favorite.transformedUrl}
-                                alt="thumbnail"
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                          )}
-                          <p className="text-sm text-gray-700 leading-relaxed flex-1">
+                        {/* Prompt Text (no image thumbnail since these are prompt-only) */}
+                        <div className="pl-8 pr-32">
+                          <p className="text-sm text-gray-700 leading-relaxed">
                             {favorite.prompt}
                           </p>
                         </div>
@@ -332,7 +324,7 @@ export default function FavoritesPage() {
                         </div>
 
                         {/* Saved timestamp */}
-                        <p className={`text-xs text-gray-500 mt-3 ${favorite.transformedUrl ? 'pl-20' : 'pl-8'}`}>
+                        <p className="text-xs text-gray-500 mt-3 pl-8">
                           Saved {new Date(favorite.timestamp).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
