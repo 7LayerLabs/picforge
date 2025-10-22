@@ -53,8 +53,8 @@ export default function FilterSidebar({
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-black mb-3">Tags</h3>
 
-        {/* Mobile: Horizontal scrollable tags */}
-        <div className="flex lg:flex-wrap gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 -mx-2 px-2 lg:mx-0 lg:px-0 scrollbar-thin">
+        {/* Mobile: Horizontal scrollable, Desktop: Vertical scrollable with flex-wrap */}
+        <div className="flex lg:flex-wrap gap-2 overflow-x-auto lg:overflow-y-auto lg:max-h-96 pb-2 lg:pb-0 -mx-2 px-2 lg:mx-0 lg:px-0 scrollbar-thin">
           {allTags.map(tag => (
             <button
               key={tag}

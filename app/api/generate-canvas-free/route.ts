@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
-
-const TOGETHER_API_KEY = process.env.TOGETHER_API_KEY || ''
+import { requireEnvVar } from '@/lib/validateEnv'
+import { handleApiError } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,6 +28,9 @@ export async function POST(request: NextRequest) {
         }
       )
     }
+
+    // Validate required environment variables
+    const TOGETHER_API_KEY = requireEnvVar('TOGETHER_API_KEY', 'Together AI image generation')
 
     const { prompt, size = '1024x1024', model = 'black-forest-labs/FLUX.1-schnell' } = await request.json()
 
@@ -102,21 +105,6 @@ export async function POST(request: NextRequest) {
       throw new Error('No image data in response')
     }
   } catch (error) {
-    console.error('Error generating image:', error)
-
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-
-    // Handle rate limiting
-    if (errorMessage.includes('429') || errorMessage.includes('rate')) {
-      return NextResponse.json(
-        { error: 'Rate limit reached. Please wait a moment and try again.' },
-        { status: 429 }
-      )
-    }
-
-    return NextResponse.json(
-      { error: 'Failed to generate image. Please try again.' },
-      { status: 500 }
-    )
+    return handleApiError(error)
   }
 }

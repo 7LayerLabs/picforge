@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { kv } from '@vercel/kv'
+import { handleApiError } from '@/lib/apiErrors'
 
 // Simple in-memory storage for development
 const visitorData: { count: number; ips: Set<string> } = {
@@ -44,11 +45,7 @@ export async function GET() {
       })
     }
   } catch (error) {
-    console.error('Error tracking visitor:', error)
-    return NextResponse.json(
-      { error: 'Failed to track visitor' },
-      { status: 500 }
-    )
+    return handleApiError(error)
   }
 }
 

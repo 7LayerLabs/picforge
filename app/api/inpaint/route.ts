@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Replicate from 'replicate';
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv';
-
-// Initialize Replicate client
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN || '',
-});
+import { requireEnvVar } from '@/lib/validateEnv';
+import { Errors, handleApiError } from '@/lib/apiErrors';
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,21 +30,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate required environment variables
+    const replicateToken = requireEnvVar('REPLICATE_API_TOKEN', 'Replicate inpainting');
+
+    // Initialize Replicate client with validated token
+    const replicate = new Replicate({
+      auth: replicateToken,
+    });
+
     const { image, mask, prompt } = await request.json();
 
     if (!image || !mask || !prompt) {
-      return NextResponse.json(
-        { error: 'Missing required parameters: image, mask, or prompt' },
-        { status: 400 }
-      );
-    }
-
-    // Check if Replicate API token is configured
-    if (!process.env.REPLICATE_API_TOKEN) {
-      return NextResponse.json(
-        { error: 'Replicate API token not configured' },
-        { status: 500 }
-      );
+      throw Errors.missingParameter('image, mask, or prompt');
     }
 
     console.log('Starting inpainting with Replicate...');

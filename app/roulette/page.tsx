@@ -509,7 +509,6 @@ export default function TransformRoulette() {
       })
 
       const data = await response.json()
-      console.log('Transform response:', data)
 
       const transformedImage = data.generatedImage || data.processedImage
 
@@ -522,7 +521,6 @@ export default function TransformRoulette() {
         })
       } else {
         // Fallback to client-side transformation
-        console.log('Using client-side transformation as fallback')
         const clientTransformed = await applyClientTransform(uploadedImage, prompt)
 
         setResult({
@@ -575,7 +573,7 @@ export default function TransformRoulette() {
           text: shareText
         })
       } catch (err) {
-        console.log('Share cancelled')
+        // Share cancelled by user
       }
     } else {
       navigator.clipboard.writeText(shareText)

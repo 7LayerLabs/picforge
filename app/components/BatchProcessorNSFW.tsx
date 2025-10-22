@@ -96,7 +96,6 @@ export default function BatchProcessorNSFW() {
   const surpriseMe = () => {
     const randomEffect = surpriseEffects[Math.floor(Math.random() * surpriseEffects.length)]
     setPrompt(randomEffect)
-    console.log('Surprise effect:', randomEffect)
   }
 
   useEffect(() => {
@@ -171,7 +170,6 @@ export default function BatchProcessorNSFW() {
             priority: 'normal'
           }
           setImages(prev => [...prev, newImage])
-          console.log('Pasted image from clipboard')
         }
       }
     }
@@ -192,7 +190,7 @@ export default function BatchProcessorNSFW() {
       }
     },
     onPaste: () => {
-      console.log('Paste shortcut triggered')
+      // Paste is handled by the paste event listener
     },
     onEscape: () => {
       if (isProcessing) {
@@ -277,8 +275,6 @@ export default function BatchProcessorNSFW() {
           img.id === image.id ? { ...img, progress: 30 } : img
         ))
 
-        console.log('Processing NSFW image with prompt:', prompt)
-
         // Call NSFW-specific API endpoint
         const response = await fetch('/api/process-image-nsfw', {
           method: 'POST',
@@ -308,8 +304,6 @@ export default function BatchProcessorNSFW() {
             : img
         ))
         setProcessedCount(prev => prev + 1)
-
-        console.log('Image processed successfully!')
       } catch (error) {
         setImages(prev => prev.map(img =>
           img.id === image.id
@@ -326,8 +320,6 @@ export default function BatchProcessorNSFW() {
     try {
       const zip = new JSZip()
       const completedImages = images.filter(img => img.status === 'completed' && img.result)
-
-      console.log(`Starting ZIP download for ${completedImages.length} images`)
 
       for (let i = 0; i < completedImages.length; i++) {
         const img = completedImages[i]
@@ -349,13 +341,11 @@ export default function BatchProcessorNSFW() {
           const fileName = `${selectedPreset.prefix || ''}${originalName}_${i + 1}${selectedPreset.suffix || ''}.${selectedPreset.format}`
 
           zip.file(fileName, blob)
-          console.log(`Added ${fileName} to ZIP`)
         }
       }
 
       const content = await zip.generateAsync({ type: 'blob' })
       saveAs(content, `batch_nsfw_export_${new Date().toISOString().split('T')[0]}.zip`)
-      console.log('ZIP download started successfully')
     } catch (error) {
       console.error('ZIP download failed:', error)
       alert('Failed to create ZIP file. Please try downloading images individually.')

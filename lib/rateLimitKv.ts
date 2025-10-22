@@ -33,12 +33,6 @@ export async function checkRateLimitKv(
   maxRequests: number = 500,
   windowMs: number = 24 * 60 * 60 * 1000 // 24 hours
 ): Promise<RateLimitResult> {
-  // TODO: Vercel KV not configured yet
-  // User needs to set up Vercel KV and add environment variables:
-  //   1. Create KV database at: https://vercel.com/dashboard/stores
-  //   2. Add KV_* environment variables to .env.local or Vercel project settings
-  //   3. Remove this check once configured
-
   // Check if KV is configured
   if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
     console.warn(

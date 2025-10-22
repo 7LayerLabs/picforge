@@ -146,7 +146,7 @@ export default function RoastMode() {
           text: shareText
         })
       } catch (err) {
-        console.log('Share cancelled')
+        // Share cancelled by user
       }
     } else {
       // Fallback to copying to clipboard

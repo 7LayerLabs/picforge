@@ -1,212 +1,191 @@
 /**
- * MIGRATION NOTE: Updated to use InstantDB directly instead of Prisma API routes (Issue #12)
- * Migration completed: 2025-10-21
+ * Enhanced Showcase Gallery with Upvoting System
+ * Features trending algorithm, filters, and real-time voting
  */
 
-'use client'
+'use client';
 
-import { useState, useEffect, useMemo } from 'react'
-import { db } from '@/lib/instantdb'
-import { id } from '@instantdb/react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Heart, Eye, Copy, TrendingUp, Clock, Award, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useMemo } from 'react';
+import { db } from '@/lib/instantdb';
+import Link from 'next/link';
+import {
+  TrendingUp,
+  Clock,
+  Award,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  Filter,
+  X,
+  Copy,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import ShowcaseCard from '@/components/ShowcaseCard';
 
 interface ShowcaseItem {
-  id: string
-  title: string
-  description?: string
-  prompt: string
-  originalImageUrl: string
-  transformedImageUrl: string
-  style?: string
-  likes: number
-  views: number
-  featured: boolean
-  approved: boolean
-  timestamp: number
-  userId: string
+  id: string;
+  title: string;
+  description?: string | null;
+  prompt: string;
+  originalImageUrl: string;
+  transformedImageUrl: string;
+  style?: string;
+  likes: number;
+  views: number;
+  featured: boolean;
+  approved: boolean;
+  timestamp: number;
+  userId: string;
+  trendingScore?: number;
   user?: {
-    name?: string
-    image?: string
-  }
+    id?: string;
+    name?: string | null;
+    image?: string | null;
+  };
 }
 
 export default function ShowcasePage() {
-  const { user } = db.useAuth()
-  const router = useRouter()
-  const [sort, setSort] = useState<'recent' | 'popular' | 'featured'>('popular')
-  const [style, setStyle] = useState('all')
-  const [page, setPage] = useState(1)
-  const [selectedShowcase, setSelectedShowcase] = useState<ShowcaseItem | null>(null)
+  const { user } = db.useAuth();
+  const router = useRouter();
+  const [sort, setSort] = useState<'trending' | 'popular' | 'recent' | 'featured'>('trending');
+  const [style, setStyle] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [selectedShowcase, setSelectedShowcase] = useState<ShowcaseItem | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Query showcases from InstantDB
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, isLoading } = db.useQuery({
     showcaseSubmissions: {
       $: {
         where: {
           approved: true,
-          ...(style !== 'all' && { style })
-        }
-      }
+          ...(style !== 'all' && { style }),
+        },
+      },
     },
     showcaseLikes: {},
-    users: {}
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any)
+    users: {},
+  } as any);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const typedData = data as any
+  const typedData = data as any;
 
-  // Process and sort showcases
-  const showcases = useMemo(() => {
-    if (!typedData?.showcaseSubmissions) return []
+  // Process showcases with trending algorithm
+  const processedShowcases = useMemo(() => {
+    if (!typedData?.showcaseSubmissions) return [];
 
-    let items = [...typedData.showcaseSubmissions]
+    const allShowcases = typedData.showcaseSubmissions as ShowcaseItem[];
+    const allLikes = (typedData.showcaseLikes || []) as any[];
+    const allUsers = (typedData.users || []) as any[];
 
-    // Filter by featured if needed
+    // Calculate trending scores
+    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const recentLikes = allLikes.filter((like: any) => like.timestamp > sevenDaysAgo);
+    const likeCounts = recentLikes.reduce((acc: Record<string, number>, like: any) => {
+      acc[like.showcaseId] = (acc[like.showcaseId] || 0) + 1;
+      return acc;
+    }, {});
+
+    return allShowcases.map((showcase) => {
+      const recentLikeCount = likeCounts[showcase.id] || 0;
+      const ageInDays = (Date.now() - showcase.timestamp) / (24 * 60 * 60 * 1000);
+      const recencyScore = Math.max(0, 7 - ageInDays) / 7;
+
+      // Trending score: (recent likes * 0.7) + (recency * total likes * 0.3)
+      const trendingScore = recentLikeCount * 0.7 + recencyScore * showcase.likes * 0.3;
+
+      // Add user data
+      const showcaseUser = allUsers.find((u: any) => u.id === showcase.userId);
+
+      return {
+        ...showcase,
+        trendingScore,
+        user: showcaseUser
+          ? {
+              id: showcaseUser.id,
+              name: showcaseUser.name || null,
+              image: null,
+            }
+          : {
+              id: showcase.userId,
+              name: null,
+              image: null,
+            },
+      };
+    });
+  }, [typedData]);
+
+  // Filter and sort showcases
+  const filteredShowcases = useMemo(() => {
+    let items = [...processedShowcases];
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      items = items.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query) ||
+          item.description?.toLowerCase().includes(query) ||
+          item.prompt.toLowerCase().includes(query)
+      );
+    }
+
+    // Featured filter
     if (sort === 'featured') {
-      items = items.filter(item => item.featured)
+      items = items.filter((item) => item.featured);
     }
 
     // Sort
-    if (sort === 'popular') {
-      items.sort((a, b) => b.likes - a.likes)
-    } else {
-      items.sort((a, b) => b.timestamp - a.timestamp)
+    switch (sort) {
+      case 'trending':
+        items.sort((a, b) => (b.trendingScore || 0) - (a.trendingScore || 0));
+        break;
+      case 'popular':
+        items.sort((a, b) => b.likes - a.likes);
+        break;
+      case 'recent':
+        items.sort((a, b) => b.timestamp - a.timestamp);
+        break;
+      default:
+        items.sort((a, b) => b.timestamp - a.timestamp);
     }
 
-    return items
-  }, [typedData, sort])
+    return items;
+  }, [processedShowcases, sort, searchQuery]);
 
   // Pagination
-  const limit = 12
-  const totalPages = Math.ceil(showcases.length / limit)
-  const paginatedShowcases = showcases.slice((page - 1) * limit, page * limit)
+  const limit = 12;
+  const totalPages = Math.ceil(filteredShowcases.length / limit);
+  const paginatedShowcases = filteredShowcases.slice((page - 1) * limit, page * limit);
 
-  // Check if user has liked each showcase and add user data
-  const showcasesWithLikes = useMemo(() => {
-    if (!paginatedShowcases.length) return []
-
-    return paginatedShowcases.map(showcase => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const showcaseUser = typedData?.users?.find((u: any) => u.id === showcase.userId)
-      return {
-        ...showcase,
-        isLiked: user && typedData?.showcaseLikes
-          ? typedData.showcaseLikes.some(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (like: any) => like.showcaseId === showcase.id && like.userId === user.id
-            )
-          : false,
-        user: showcaseUser ? {
-          id: showcaseUser.id,
-          name: showcaseUser.name || null,
-          image: null // InstantDB users don't have image field yet
-        } : {
-          id: showcase.userId,
-          name: null,
-          image: null
-        }
-      }
-    })
-  }, [paginatedShowcases, typedData?.showcaseLikes, typedData?.users, user])
+  // Get user's liked showcases
+  const userLikes = useMemo(() => {
+    if (!user || !typedData?.showcaseLikes) return new Set();
+    return new Set(
+      typedData.showcaseLikes
+        .filter((like: any) => like.userId === user.id)
+        .map((like: any) => like.showcaseId)
+    );
+  }, [user, typedData?.showcaseLikes]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
-    setPage(1)
-  }, [sort, style])
+    setPage(1);
+  }, [sort, style, searchQuery]);
 
-  // Handle like/unlike with InstantDB
-  const handleLike = async (showcaseId: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-
-    // Require authentication for likes
-    if (!user) {
-      // Show toast notification that likes require sign-in
-      const toast = document.createElement('div')
-      toast.className = 'fixed bottom-4 right-4 bg-teal-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in'
-      toast.textContent = 'Please sign in to like showcases!'
-      document.body.appendChild(toast)
-      setTimeout(() => toast.remove(), 2000)
-      return
-    }
-
-    try {
-      // Check if already liked
-      const existingLike = typedData?.showcaseLikes.find(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (like: any) => like.showcaseId === showcaseId && like.userId === user.id
-      )
-
-      if (existingLike) {
-        // Unlike - remove like and decrement counter
-        await db.transact([
-          // @ts-expect-error InstantDB transaction type issue
-          db.tx.showcaseLikes[existingLike.id].delete(),
-          // @ts-expect-error InstantDB transaction type issue
-          db.tx.showcaseSubmissions[showcaseId].update({
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            likes: typedData?.showcaseSubmissions.find((s: any) => s.id === showcaseId)!.likes - 1
-          })
-        ])
-      } else {
-        // Like - add like and increment counter
-        await db.transact([
-          // @ts-expect-error InstantDB transaction type issue
-          db.tx.showcaseLikes[id()].update({
-            userId: user.id,
-            showcaseId,
-            timestamp: Date.now()
-          }),
-          // @ts-expect-error InstantDB transaction type issue
-          db.tx.showcaseSubmissions[showcaseId].update({
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            likes: (typedData?.showcaseSubmissions.find((s: any) => s.id === showcaseId)?.likes || 0) + 1
-          })
-        ])
-      }
-    } catch (error) {
-      console.error('Error toggling like:', error)
-      // Show error toast
-      const toast = document.createElement('div')
-      toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in'
-      toast.textContent = 'Failed to update like. Please try again.'
-      document.body.appendChild(toast)
-      setTimeout(() => toast.remove(), 2000)
-    }
-  }
-
-  // Copy prompt to clipboard
-  const copyPrompt = (prompt: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    navigator.clipboard.writeText(prompt)
-
-    // Show toast notification
-    const toast = document.createElement('div')
-    toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in'
-    toast.textContent = 'Prompt copied!'
-    document.body.appendChild(toast)
-    setTimeout(() => toast.remove(), 2000)
-  }
-
-  // Try this prompt - redirect to editor with prompt
-  const tryPrompt = (prompt: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    // Store prompt in sessionStorage
-    sessionStorage.setItem('tryPrompt', prompt)
-    router.push('/')
-  }
+  // Handle modal view detail
+  const handleViewDetail = (showcase: ShowcaseItem) => {
+    setSelectedShowcase(showcase);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-teal-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-16 z-40">
+      <div className="bg-white border-b border-gray-200 sticky top-16 z-40 shadow-sm">
         <div className="container mx-auto px-4 py-6">
-          <div className="text-center mb-4">
-            <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-2">
+          <div className="text-center mb-6">
+            <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-3">
               Community Showcase
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -215,7 +194,7 @@ export default function ShowcasePage() {
             {user && (
               <Link
                 href="/showcase/submit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all mt-4"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-purple-600 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-purple-700 transition-all mt-4 shadow-lg hover:shadow-xl hover:scale-105"
               >
                 <Plus className="w-5 h-5" />
                 Submit Your Work
@@ -223,26 +202,59 @@ export default function ShowcasePage() {
             )}
           </div>
 
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto mb-6">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search showcases..."
+                className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:outline-none transition-all shadow-sm"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Filters */}
-          <div className="flex flex-wrap items-center gap-4 mt-6">
+          <div className="flex flex-wrap items-center gap-4 justify-between">
             {/* Sort buttons */}
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setSort('popular')}
+                onClick={() => setSort('trending')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-                  sort === 'popular'
-                    ? 'bg-teal-500 text-white'
+                  sort === 'trending'
+                    ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 <TrendingUp className="w-4 h-4" />
+                Trending
+              </button>
+              <button
+                onClick={() => setSort('popular')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                  sort === 'popular'
+                    ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <Award className="w-4 h-4" />
                 Popular
               </button>
               <button
                 onClick={() => setSort('recent')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'recent'
-                    ? 'bg-teal-500 text-white'
+                    ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -253,7 +265,7 @@ export default function ShowcasePage() {
                 onClick={() => setSort('featured')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   sort === 'featured'
-                    ? 'bg-teal-500 text-white'
+                    ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow-lg scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -263,20 +275,51 @@ export default function ShowcasePage() {
             </div>
 
             {/* Style filter */}
-            <select
-              value={style}
-              onChange={(e) => setStyle(e.target.value)}
-              className="px-4 py-2 bg-white border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-teal-500"
-            >
-              <option value="all">All Styles</option>
-              <option value="anime">Anime</option>
-              <option value="realistic">Realistic</option>
-              <option value="artistic">Artistic</option>
-              <option value="cartoon">Cartoon</option>
-              <option value="3d">3D Render</option>
-              <option value="abstract">Abstract</option>
-            </select>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="md:hidden flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <Filter className="w-4 h-4" />
+                Filters
+              </button>
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className="hidden md:block px-4 py-2 bg-white border-2 border-gray-200 rounded-lg font-medium focus:outline-none focus:border-teal-500 transition-all shadow-sm"
+              >
+                <option value="all">All Styles</option>
+                <option value="general">General</option>
+                <option value="anime">Anime</option>
+                <option value="realistic">Realistic</option>
+                <option value="artistic">Artistic</option>
+                <option value="cartoon">Cartoon</option>
+                <option value="3d">3D Render</option>
+                <option value="abstract">Abstract</option>
+              </select>
+            </div>
           </div>
+
+          {/* Mobile filters */}
+          {showFilters && (
+            <div className="md:hidden mt-4 p-4 bg-gray-50 rounded-xl">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Style:</label>
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className="w-full px-4 py-2 bg-white border-2 border-gray-200 rounded-lg font-medium focus:outline-none focus:border-teal-500"
+              >
+                <option value="all">All Styles</option>
+                <option value="general">General</option>
+                <option value="anime">Anime</option>
+                <option value="realistic">Realistic</option>
+                <option value="artistic">Artistic</option>
+                <option value="cartoon">Cartoon</option>
+                <option value="3d">3D Render</option>
+                <option value="abstract">Abstract</option>
+              </select>
+            </div>
+          )}
         </div>
       </div>
 
@@ -294,15 +337,21 @@ export default function ShowcasePage() {
               </div>
             ))}
           </div>
-        ) : showcasesWithLikes.length === 0 ? (
+        ) : paginatedShowcases.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🎨</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">No showcases yet</h2>
-            <p className="text-gray-600 mb-6">Be the first to share your amazing creation!</p>
-            {user && (
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              {searchQuery ? 'No showcases found' : 'No showcases yet'}
+            </h2>
+            <p className="text-gray-600 mb-6">
+              {searchQuery
+                ? 'Try adjusting your search or filters'
+                : 'Be the first to share your amazing creation!'}
+            </p>
+            {user && !searchQuery && (
               <Link
                 href="/showcase/submit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all shadow-lg hover:shadow-xl hover:scale-105"
               >
                 <Plus className="w-5 h-5" />
                 Submit Your Work
@@ -311,102 +360,16 @@ export default function ShowcasePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {showcasesWithLikes.map((showcase) => (
-              <div
+            {paginatedShowcases.map((showcase, index) => (
+              <ShowcaseCard
                 key={showcase.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
-                onClick={() => setSelectedShowcase(showcase)}
-              >
-                {/* Image with before/after hover effect */}
-                <div className="relative aspect-square overflow-hidden bg-gray-100">
-                  <Image
-                    src={showcase.transformedImageUrl}
-                    alt={showcase.title}
-                    width={400}
-                    height={400}
-                    className="w-full h-full object-cover transition-opacity group-hover:opacity-0"
-                    loading="lazy"
-                    quality={80}
-                  />
-                  <Image
-                    src={showcase.originalImageUrl}
-                    alt="Original"
-                    width={400}
-                    height={400}
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity group-hover:opacity-100"
-                    loading="lazy"
-                    quality={80}
-                  />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                  {/* Hover text */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-white font-semibold text-sm bg-black/50 px-3 py-1 rounded-full">
-                      Hover to see original
-                    </span>
-                  </div>
-
-                  {/* Featured badge */}
-                  {showcase.featured && (
-                    <div className="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs font-semibold flex items-center gap-1">
-                      <Award className="w-3 h-3" />
-                      Featured
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1">
-                    {showcase.title}
-                  </h3>
-
-                  {/* User info */}
-                  <div className="flex items-center gap-2 mb-3">
-                    {showcase.user.image ? (
-                      <img
-                        src={showcase.user.image}
-                        alt={showcase.user.name || 'User'}
-                        className="w-6 h-6 rounded-full"
-                      />
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-teal-500 flex items-center justify-center text-white text-xs font-bold">
-                        {showcase.user.name?.[0] || 'U'}
-                      </div>
-                    )}
-                    <span className="text-sm text-gray-600 line-clamp-1">
-                      {showcase.user.name || 'Anonymous'}
-                    </span>
-                  </div>
-
-                  {/* Stats and actions */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={(e) => handleLike(showcase.id, e)}
-                        className={`flex items-center gap-1 transition-colors ${
-                          showcase.isLiked ? 'text-coral-500' : 'text-gray-500 hover:text-coral-500'
-                        }`}
-                      >
-                        <Heart className={`w-4 h-4 ${showcase.isLiked ? 'fill-current' : ''}`} />
-                        <span className="text-sm">{showcase.likes}</span>
-                      </button>
-                      <div className="flex items-center gap-1 text-gray-500">
-                        <Eye className="w-4 h-4" />
-                        <span className="text-sm">{showcase.views}</span>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={(e) => copyPrompt(showcase.prompt, e)}
-                      className="p-2 text-gray-500 hover:text-teal-500 transition-colors"
-                      title="Copy prompt"
-                    >
-                      <Copy className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+                showcase={showcase}
+                isLiked={userLikes.has(showcase.id)}
+                rank={
+                  sort === 'trending' && page === 1 && index < 3 ? index + 1 : undefined
+                }
+                onClick={() => handleViewDetail(showcase)}
+              />
             ))}
           </div>
         )}
@@ -415,7 +378,7 @@ export default function ShowcasePage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-8">
             <button
-              onClick={() => setPage(p => Math.max(1, p - 1))}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
               className="p-2 rounded-lg bg-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-all"
             >
@@ -423,23 +386,30 @@ export default function ShowcasePage() {
             </button>
 
             <div className="flex gap-1">
-              {[...Array(totalPages)].map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setPage(i + 1)}
-                  className={`w-10 h-10 rounded-lg font-medium transition-all ${
-                    page === i + 1
-                      ? 'bg-teal-500 text-white'
-                      : 'bg-white shadow-lg hover:bg-gray-50'
-                  }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
+              {[...Array(Math.min(totalPages, 5))].map((_, i) => {
+                let pageNum = i + 1;
+                if (totalPages > 5 && page > 3) {
+                  pageNum = page - 2 + i;
+                  if (pageNum > totalPages) pageNum = totalPages - (4 - i);
+                }
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setPage(pageNum)}
+                    className={`w-10 h-10 rounded-lg font-medium transition-all ${
+                      page === pageNum
+                        ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg'
+                        : 'bg-white shadow-lg hover:bg-gray-50'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
             </div>
 
             <button
-              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
               className="p-2 rounded-lg bg-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-all"
             >
@@ -452,7 +422,7 @@ export default function ShowcasePage() {
       {/* Detail Modal */}
       {selectedShowcase && (
         <div
-          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedShowcase(null)}
         >
           <div
@@ -460,7 +430,15 @@ export default function ShowcasePage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6">
-              <h2 className="font-heading text-2xl font-bold mb-4">{selectedShowcase.title}</h2>
+              <div className="flex items-start justify-between mb-4">
+                <h2 className="font-heading text-2xl font-bold">{selectedShowcase.title}</h2>
+                <button
+                  onClick={() => setSelectedShowcase(null)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
 
               {/* Images comparison */}
               <div className="grid md:grid-cols-2 gap-4 mb-6">
@@ -469,7 +447,7 @@ export default function ShowcasePage() {
                   <img
                     src={selectedShowcase.originalImageUrl}
                     alt="Original"
-                    className="w-full rounded-lg"
+                    className="w-full rounded-lg shadow-lg"
                   />
                 </div>
                 <div>
@@ -477,29 +455,40 @@ export default function ShowcasePage() {
                   <img
                     src={selectedShowcase.transformedImageUrl}
                     alt="Result"
-                    className="w-full rounded-lg"
+                    className="w-full rounded-lg shadow-lg"
                   />
                 </div>
               </div>
 
               {/* Prompt */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+              <div className="bg-gradient-to-br from-teal-50 to-purple-50 rounded-lg p-4 mb-6 border border-teal-200">
                 <p className="text-sm font-medium text-gray-600 mb-2">Prompt Used:</p>
                 <p className="text-gray-900 mb-3">{selectedShowcase.prompt}</p>
                 <div className="flex gap-2">
                   <button
-                    onClick={(e) => copyPrompt(selectedShowcase.prompt, e)}
+                    onClick={() => {
+                      navigator.clipboard.writeText(selectedShowcase.prompt);
+                      const toast = document.createElement('div');
+                      toast.className =
+                        'fixed bottom-4 right-4 bg-teal-500 text-white px-4 py-3 rounded-lg shadow-xl z-50 animate-fade-in';
+                      toast.textContent = 'Prompt copied!';
+                      document.body.appendChild(toast);
+                      setTimeout(() => toast.remove(), 2000);
+                    }}
                     className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
                   >
                     <Copy className="w-4 h-4" />
                     Copy Prompt
                   </button>
-                  <button
-                    onClick={(e) => tryPrompt(selectedShowcase.prompt, e)}
-                    className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all"
+                  <Link
+                    href="/"
+                    onClick={() => {
+                      sessionStorage.setItem('tryPrompt', selectedShowcase.prompt);
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500 to-purple-600 text-white rounded-lg hover:from-teal-600 hover:to-purple-700 transition-all"
                   >
                     Try This Prompt
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -511,39 +500,37 @@ export default function ShowcasePage() {
                 </div>
               )}
 
-              {/* Footer */}
-              <div className="flex items-center justify-between">
+              {/* User info */}
+              <div className="flex items-center justify-between pt-4 border-t">
                 <div className="flex items-center gap-3">
-                  {selectedShowcase.user?.image ? (
-                    <img
-                      src={selectedShowcase.user.image}
-                      alt={selectedShowcase.user?.name || 'User'}
-                      className="w-10 h-10 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center text-white font-bold">
-                      {selectedShowcase.user?.name?.[0] || 'U'}
-                    </div>
-                  )}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-purple-500 flex items-center justify-center text-white font-bold">
+                    {selectedShowcase.user?.name?.[0]?.toUpperCase() || 'U'}
+                  </div>
                   <div>
-                    <p className="font-medium text-gray-900">{selectedShowcase.user?.name || 'Anonymous'}</p>
+                    <p className="font-medium text-gray-900">
+                      {selectedShowcase.user?.name || 'Anonymous'}
+                    </p>
                     <p className="text-sm text-gray-600">
                       {new Date(selectedShowcase.timestamp).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => setSelectedShowcase(null)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900 font-medium"
-                >
-                  Close
-                </button>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5 text-coral-500">
+                    <Award className="w-5 h-5 fill-current" />
+                    <span className="font-medium">{selectedShowcase.likes}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-gray-500">
+                    <Clock className="w-5 h-5" />
+                    <span className="font-medium">{selectedShowcase.views}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

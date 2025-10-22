@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { prompts, categories, allTags, getPromptOfTheDay } from '@/lib/prompts';
 import PromptCard from '@/components/PromptCard';
 import FilterSidebar from '@/components/FilterSidebar';
@@ -12,16 +12,106 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [migrationStatus, setMigrationStatus] = useState<{
+    show: boolean;
+    migrating: boolean;
+    migrated: number;
+    error?: string;
+  }>({ show: false, migrating: false, migrated: 0 });
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const promptOfTheDay = getPromptOfTheDay();
   const { user, migrateFavoritesFromLocalStorage } = useImageTracking();
+
+  // Debounce search query for performance (300ms delay)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Migrate localStorage favorites to InstantDB when user logs in
   useEffect(() => {
     if (user) {
-      migrateFavoritesFromLocalStorage();
+      const doMigration = async () => {
+        // Check if there are localStorage favorites to migrate
+        const localFavorites = localStorage.getItem('favoritePrompts');
+        if (localFavorites) {
+          try {
+            const parsed = JSON.parse(localFavorites);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setMigrationStatus({ show: true, migrating: true, migrated: 0 });
+
+              const result = await migrateFavoritesFromLocalStorage();
+
+              if (result.success && result.migrated > 0) {
+                setMigrationStatus({
+                  show: true,
+                  migrating: false,
+                  migrated: result.migrated,
+                });
+                // Auto-dismiss after 5 seconds
+                setTimeout(() => {
+                  setMigrationStatus({ show: false, migrating: false, migrated: 0 });
+                }, 5000);
+              } else {
+                setMigrationStatus({ show: false, migrating: false, migrated: 0 });
+              }
+            }
+          } catch (e) {
+            console.error('Migration check error:', e);
+          }
+        }
+      };
+
+      doMigration();
     }
   }, [user, migrateFavoritesFromLocalStorage]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input/textarea
+      const target = e.target as HTMLElement;
+      const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
+
+      // Ctrl/Cmd + K or "/" - Focus search bar
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k' && !isTyping) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      } else if (e.key === '/' && !isTyping) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+
+      // Escape - Clear filters or close modal
+      if (e.key === 'Escape') {
+        if (showSubmitModal) {
+          setShowSubmitModal(false);
+        } else if (selectedCategory || selectedTags.size > 0 || searchQuery) {
+          setSelectedCategory(null);
+          setSelectedTags(new Set());
+          setSearchQuery('');
+          searchInputRef.current?.blur();
+        }
+      }
+
+      // Ctrl/Cmd + Shift + C - Clear all filters
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C' && !isTyping) {
+        e.preventDefault();
+        setSelectedCategory(null);
+        setSelectedTags(new Set());
+        setSearchQuery('');
+        searchInputRef.current?.blur();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showSubmitModal, selectedCategory, selectedTags, searchQuery]);
 
   // Filter prompts based on selections
   const filteredPrompts = useMemo(() => {
@@ -37,9 +127,9 @@ export default function Home() {
         if (!hasMatchingTag) return false;
       }
 
-      // Search filter
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
+      // Search filter (using debounced query)
+      if (debouncedSearchQuery.trim()) {
+        const query = debouncedSearchQuery.toLowerCase();
         const matchesTitle = prompt.title.toLowerCase().includes(query);
         const matchesDescription = prompt.description.toLowerCase().includes(query);
         const matchesTags = prompt.tags.some(tag => tag.toLowerCase().includes(query));
@@ -51,7 +141,7 @@ export default function Home() {
 
       return true;
     });
-  }, [selectedCategory, selectedTags, searchQuery]);
+  }, [selectedCategory, selectedTags, debouncedSearchQuery]);
 
   const toggleTag = (tag: string) => {
     const newTags = new Set(selectedTags);
@@ -67,6 +157,7 @@ export default function Home() {
     setSelectedCategory(null);
     setSelectedTags(new Set());
     setSearchQuery('');
+    searchInputRef.current?.blur(); // Remove focus from search
   };
 
   return (
@@ -84,6 +175,47 @@ export default function Home() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Migration Status Banner */}
+        {migrationStatus.show && (
+          <div
+            className={`mb-6 rounded-lg p-4 border-l-4 ${
+              migrationStatus.migrating
+                ? 'bg-blue-50 border-blue-500'
+                : 'bg-green-50 border-green-500'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">
+                {migrationStatus.migrating ? '⏳' : '✅'}
+              </span>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900">
+                  {migrationStatus.migrating
+                    ? 'Migrating your favorites...'
+                    : `Successfully migrated ${migrationStatus.migrated} favorite${
+                        migrationStatus.migrated !== 1 ? 's' : ''
+                      }!`}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {migrationStatus.migrating
+                    ? 'Syncing your favorites to the cloud for cross-device access'
+                    : 'Your favorites are now synced across all your devices'}
+                </p>
+              </div>
+              {!migrationStatus.migrating && (
+                <button
+                  onClick={() =>
+                    setMigrationStatus({ show: false, migrating: false, migrated: 0 })
+                  }
+                  className="text-gray-400 hover:text-gray-600 text-xl"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Prompt of the Day Banner */}
         <div className="mb-8 bg-cyan-50 rounded-lg p-6 border-l-4 border-teal-600">
           <p className="text-teal-700 text-sm font-semibold mb-2">✨ Prompt of the Day</p>
@@ -96,9 +228,10 @@ export default function Home() {
 
         {/* Search Bar */}
         <SearchBar
+          ref={searchInputRef}
           value={searchQuery}
           onChange={setSearchQuery}
-          resultCount={searchQuery ? filteredPrompts.length : undefined}
+          resultCount={debouncedSearchQuery ? filteredPrompts.length : undefined}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

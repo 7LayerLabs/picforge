@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
+import { requireEnvVar } from '@/lib/validateEnv'
+import { Errors, handleApiError } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,11 +53,11 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      if (!base64ImageData || !prompt) {
-        return NextResponse.json(
-          { error: 'Missing image or prompt' },
-          { status: 400 }
-        )
+      if (!base64ImageData) {
+        throw Errors.missingParameter('image')
+      }
+      if (!prompt) {
+        throw Errors.missingParameter('prompt')
       }
     } else if (contentType.includes('multipart/form-data') || contentType.includes('application/x-www-form-urlencoded')) {
       // Handle FormData request (from regular upload)
@@ -65,38 +67,22 @@ export async function POST(request: NextRequest) {
       prompt = formData.get('prompt') as string
     } else {
       // Unsupported content type
-      return NextResponse.json(
-        { error: `Unsupported content type: ${contentType}. Use application/json or multipart/form-data.` },
-        { status: 400 }
-      )
+      throw Errors.invalidInput(`Unsupported content type: ${contentType}. Use application/json or multipart/form-data.`)
     }
 
     if (!imageFile && !base64ImageData) {
-      return NextResponse.json(
-        { error: 'Missing image data' },
-        { status: 400 }
-      )
+      throw Errors.missingParameter('image')
     }
 
     if (!prompt) {
-      return NextResponse.json(
-        { error: 'Missing prompt' },
-        { status: 400 }
-      )
+      throw Errors.missingParameter('prompt')
     }
 
     // Note: Rate limiting is now handled in the frontend via InstantDB user tiers
     // No server-side IP-based rate limiting - users manage their own limits through sign-in
 
-    // Use the app's API key
-    const apiKey = process.env.GEMINI_API_KEY
-    if (!apiKey || apiKey === 'your_api_key_here') {
-      console.error('GEMINI_API_KEY not configured in .env.local')
-      return NextResponse.json(
-        { error: 'API key not configured. Please add GEMINI_API_KEY to .env.local' },
-        { status: 500 }
-      )
-    }
+    // Validate required environment variables
+    const apiKey = requireEnvVar('GEMINI_API_KEY', 'Gemini image processing')
 
     // Get image size in bytes
     let imageSize = 0
@@ -337,27 +323,11 @@ Provide:
         })
       }
 
-      // For other errors, provide detailed information
-      return NextResponse.json({
-        success: false,
-        error: error.message || 'Unknown error occurred',
-        errorType: error.name || 'UnknownError',
-        imageSize: imageSize,
-        prompt: prompt,
-        modelUsed: 'gemini-2.5-flash-image-preview',
-        debugInfo: {
-          errorDetails: error.toString(),
-          apiKeyPresent: !!apiKey,
-          imageReceived: !!imageFile
-        }
-      }, { status: 500 })
+      // For other errors, throw as image processing failure
+      throw Errors.imageProcessingFailed(error.message || 'Gemini model error')
     }
 
   } catch (error) {
-    console.error('Error processing request:', error)
-    return NextResponse.json(
-      { error: `Failed to process request: ${error instanceof Error ? error.message : 'Unknown error'}` },
-      { status: 500 }
-    )
+    return handleApiError(error)
   }
 }

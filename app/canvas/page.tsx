@@ -4,12 +4,14 @@ import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Wand2, Palette, ArrowLeft } from 'lucide-react'
+import ReferralCTA from '@/components/ReferralCTA'
 
 function CanvasContent() {
   const searchParams = useSearchParams()
   const [prompt, setPrompt] = useState('')
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [showReferralModal, setShowReferralModal] = useState(false)
 
   useEffect(() => {
     const urlPrompt = searchParams.get('prompt')
@@ -17,6 +19,16 @@ function CanvasContent() {
       setPrompt(urlPrompt)
     }
   }, [searchParams])
+
+  // Show referral modal 2 seconds after successful generation
+  useEffect(() => {
+    if (generatedImage) {
+      const timer = setTimeout(() => {
+        setShowReferralModal(true)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [generatedImage])
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return
@@ -197,6 +209,21 @@ function CanvasContent() {
           </div>
         </div>
       </div>
+
+      {/* Referral Modal - Shows 2 seconds after generation */}
+      {showReferralModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="max-w-2xl w-full">
+            <ReferralCTA variant="modal" showStats={true} />
+            <button
+              onClick={() => setShowReferralModal(false)}
+              className="mt-4 w-full px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all"
+            >
+              Maybe Later
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

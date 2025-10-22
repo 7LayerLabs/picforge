@@ -2947,9 +2947,8 @@ export const allTags = Array.from(
 ).sort();
 
 export const getPromptOfTheDay = (): Prompt => {
-  const today = new Date();
-  const seed = today.toISOString().split('T')[0];
-  const hash = seed.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  const index = hash % prompts.length;
+  // Use date-based index for daily rotation (resets at midnight UTC)
+  const daysSinceEpoch = Math.floor(Date.now() / 86400000);
+  const index = daysSinceEpoch % prompts.length;
   return prompts[index];
 };

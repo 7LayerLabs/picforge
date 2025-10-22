@@ -1,6 +1,7 @@
 'use client';
 
 import { Search } from 'lucide-react';
+import { forwardRef } from 'react';
 
 interface SearchBarProps {
   value: string;
@@ -8,18 +9,20 @@ interface SearchBarProps {
   resultCount?: number;
 }
 
-export default function SearchBar({ value, onChange, resultCount }: SearchBarProps) {
-  return (
-    <div className="mb-8">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search prompts by title, description, or tags..."
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          className="w-full pl-11 pr-12 py-3 bg-white text-black placeholder-gray-400 rounded-lg border border-gray-300 focus:border-teal-600 focus:ring-2 focus:ring-teal-200 focus:outline-none transition-all"
-        />
+const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
+  function SearchBar({ value, onChange, resultCount }, ref) {
+    return (
+      <div className="mb-8">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            ref={ref}
+            type="text"
+            placeholder="Search prompts by title, description, or tags..."
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            className="w-full pl-11 pr-12 py-3 bg-white text-black placeholder-gray-400 rounded-lg border border-gray-300 focus:border-teal-600 focus:ring-2 focus:ring-teal-200 focus:outline-none transition-all"
+          />
         {value && (
           <button
             onClick={() => onChange('')}
@@ -52,4 +55,6 @@ export default function SearchBar({ value, onChange, resultCount }: SearchBarPro
       `}</style>
     </div>
   );
-}
+});
+
+export default SearchBar;

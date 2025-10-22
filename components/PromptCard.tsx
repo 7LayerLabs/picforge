@@ -11,19 +11,28 @@ interface PromptCardProps {
 export default function PromptCard({ prompt }: PromptCardProps) {
   const [copied, setCopied] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
-  const { user, favorites, saveFavorite } = useImageTracking();
+  const [favoriteId, setFavoriteId] = useState<string | null>(null);
+  const { user, favorites, saveFavorite, removeFavorite } = useImageTracking();
 
   // Check if prompt is favorited (checks both InstantDB and localStorage for migration)
   useEffect(() => {
     // Check InstantDB favorites first (if user is logged in)
     if (user && favorites && favorites.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const isInDB = favorites.some((fav: any) => fav.prompt === prompt.description);
-      setIsFavorited(isInDB);
+      const dbFavorite = favorites.find((fav: any) => fav.prompt === prompt.description);
+      if (dbFavorite) {
+        setIsFavorited(true);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setFavoriteId((dbFavorite as any).id);
+      } else {
+        setIsFavorited(false);
+        setFavoriteId(null);
+      }
     } else {
       // Fallback to localStorage for non-authenticated users
       const localFavorites = JSON.parse(localStorage.getItem('favoritePrompts') || '[]');
       setIsFavorited(localFavorites.some((fav: Prompt) => fav.id === prompt.id));
+      setFavoriteId(null);
     }
   }, [prompt.id, prompt.description, user, favorites]);
 
@@ -38,29 +47,37 @@ export default function PromptCard({ prompt }: PromptCardProps) {
   const handleFavorite = async () => {
     if (user) {
       // User is logged in - use InstantDB
-      if (isFavorited) {
-        // Remove from favorites - show message for now (delete not implemented in hook)
-        alert('To remove favorites, visit your Favorites page');
+      if (isFavorited && favoriteId) {
+        // Remove from favorites
+        const result = await removeFavorite(favoriteId);
+        if (result.success) {
+          setIsFavorited(false);
+          setFavoriteId(null);
+        }
       } else {
         // Add to InstantDB favorites
-        await saveFavorite(prompt.description, prompt.category);
-        setIsFavorited(true);
+        const result = await saveFavorite(prompt.description, prompt.category);
+        if (result.success) {
+          setIsFavorited(true);
+        } else if (result.error && result.error !== 'Already in favorites') {
+          alert(result.error);
+        }
       }
     } else {
-      // Not logged in - use localStorage
+      // Not logged in - use localStorage (will be migrated on sign-in)
       const localFavorites = JSON.parse(localStorage.getItem('favoritePrompts') || '[]');
 
       if (isFavorited) {
         // Remove from localStorage favorites
         const updated = localFavorites.filter((fav: Prompt) => fav.id !== prompt.id);
         localStorage.setItem('favoritePrompts', JSON.stringify(updated));
+        setIsFavorited(false);
       } else {
         // Add to localStorage favorites
         localFavorites.push(prompt);
         localStorage.setItem('favoritePrompts', JSON.stringify(localFavorites));
+        setIsFavorited(true);
       }
-
-      setIsFavorited(!isFavorited);
     }
   };
 
@@ -86,14 +103,25 @@ export default function PromptCard({ prompt }: PromptCardProps) {
         <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
           <button
             onClick={handleFavorite}
-            title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
-            className={`min-w-[44px] min-h-[44px] px-3 py-2 rounded font-medium transition touch-manipulation ${
+            title={
+              user
+                ? isFavorited
+                  ? 'Remove from favorites'
+                  : 'Add to favorites (synced across devices)'
+                : 'Add to favorites (sign in to sync)'
+            }
+            className={`min-w-[44px] min-h-[44px] px-3 py-2 rounded font-medium transition touch-manipulation relative ${
               isFavorited
                 ? 'bg-teal-600 text-white hover:bg-teal-700 active:bg-teal-800'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-400'
             }`}
           >
             {isFavorited ? '❤️' : '🤍'}
+            {user && isFavorited && (
+              <span className="absolute -top-1 -right-1 text-xs" title="Synced to cloud">
+                ☁️
+              </span>
+            )}
           </button>
           <button
             onClick={handleCopy}

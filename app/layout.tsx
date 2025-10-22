@@ -5,6 +5,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 import { Analytics } from "@vercel/analytics/react";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 // import AuthSessionProvider from "@/components/providers/SessionProvider";
 
 const specialElite = Special_Elite({
@@ -108,7 +109,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: undefined, // Add when you have Google Search Console set up
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION, // Will be added to .env.local
     yandex: undefined, // Add if targeting Russian market
     yahoo: undefined,  // Add if needed
     other: {
@@ -170,6 +171,9 @@ export default function RootLayout({
       <body
         className={`${specialElite.variable} font-body antialiased`}
       >
+        {/* Google Analytics */}
+        <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
+
         {/* <AuthSessionProvider> */}
           <Navigation />
           {children}

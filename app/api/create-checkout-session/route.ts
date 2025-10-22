@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { requireEnvVar } from '@/lib/validateEnv';
+import { Errors, handleApiError } from '@/lib/apiErrors';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+// Initialize Stripe
+const stripe = new Stripe(requireEnvVar('STRIPE_SECRET_KEY', 'Stripe payments'), {
   apiVersion: '2025-09-30.clover',
 });
 
@@ -9,11 +12,14 @@ export async function POST(req: NextRequest) {
   try {
     const { priceId, userId, userEmail } = await req.json();
 
-    if (!priceId || !userId || !userEmail) {
-      return NextResponse.json(
-        { error: 'Missing required fields: priceId, userId, or userEmail' },
-        { status: 400 }
-      );
+    if (!priceId) {
+      throw Errors.missingParameter('priceId');
+    }
+    if (!userId) {
+      throw Errors.missingParameter('userId');
+    }
+    if (!userEmail) {
+      throw Errors.missingParameter('userEmail');
     }
 
     // Create Stripe checkout session
@@ -37,10 +43,12 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
   } catch (error) {
-    console.error('Stripe checkout error:', error);
-    return NextResponse.json(
-      { error: 'Failed to create checkout session' },
-      { status: 500 }
-    );
+    // Handle Stripe-specific errors
+    if (error instanceof Stripe.errors.StripeError) {
+      console.error('Stripe error:', error.message);
+      throw Errors.externalServiceError('Stripe', error.message);
+    }
+
+    return handleApiError(error);
   }
 }

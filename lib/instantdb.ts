@@ -67,6 +67,62 @@ type Schema = {
     showcaseId: string;
     timestamp: number;
   };
+  referrals: {
+    id: string;
+    referrerId: string; // User who created the referral code
+    referralCode: string; // Unique code (e.g., "DEREK-ABC123")
+    referredUserId?: string; // User who used the code
+    status: 'pending' | 'completed'; // pending = code created, completed = someone used it
+    bonusImagesReferrer: number; // Images earned by referrer (10)
+    bonusImagesReferred: number; // Images earned by referred user (10)
+    createdAt: number;
+    redeemedAt?: number;
+  };
+  emailPreferences: {
+    id: string;
+    userId: string;
+    welcomeEmails: boolean;
+    limitWarnings: boolean;
+    weeklyDigests: boolean;
+    marketingEmails: boolean;
+    updatedAt: number;
+  };
+  rouletteStreaks: {
+    id: string;
+    userId: string;
+    currentStreak: number;
+    longestStreak: number;
+    lastSpinDate: string;
+    totalSpins: number;
+    categoriesUnlocked: string[]; // Array of category names
+    createdAt: number;
+    updatedAt: number;
+  };
+  rouletteAchievements: {
+    id: string;
+    userId: string;
+    achievementId: string;
+    unlockedAt: number;
+  };
+  rouletteSpins: {
+    id: string;
+    userId: string;
+    category: string;
+    prompt: string;
+    originalImageUrl?: string;
+    transformedImageUrl?: string;
+    isRare: boolean;
+    timestamp: number;
+    shareCount: number;
+    voteCount: number;
+  };
+  rouletteVotes: {
+    id: string;
+    spinId: string;
+    userId: string;
+    voteType: 'creative' | 'funny' | 'chaotic';
+    timestamp: number;
+  };
 };
 
 // Initialize with app ID from environment variable

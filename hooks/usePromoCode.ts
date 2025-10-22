@@ -3,6 +3,7 @@
 import { db } from '@/lib/instantdb';
 import { id } from '@instantdb/react';
 import { useState } from 'react';
+import { trackPromoCodeRedemption } from '@/lib/analytics';
 
 /**
  * Hook to handle promo code redemption
@@ -89,6 +90,32 @@ export function usePromoCode() {
       ]);
 
       setSuccess(`Success! You now have ${codeMatch.tier} access with unlimited images!`);
+
+      // Track in Google Analytics
+      trackPromoCodeRedemption({
+        code_tier: codeMatch.tier,
+        code_type: upperCode.includes('FOUNDER') ? 'founder' : upperCode.includes('FAM') ? 'family' : 'beta',
+      });
+
+      // Send promo code redeemed email notification
+      if (user.email) {
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: user.email,
+            type: 'promo-redeemed',
+            data: {
+              userName: user.email.split('@')[0],
+              promoCode: upperCode,
+              tier: codeMatch.tier,
+            },
+          }),
+        }).catch((error) => {
+          console.error('Failed to send promo redeemed email:', error);
+        });
+      }
+
       setIsRedeeming(false);
       return true;
     } catch (error) {

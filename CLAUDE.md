@@ -95,20 +95,26 @@ The app uses multiple AI providers:
 
 ### Database & Authentication
 
-**InstantDB Integration** (`@instantdb/react`)
-- Real-time database with built-in auth
-- Handles user accounts, image history, favorites, usage tracking, and promo codes
+**InstantDB - Single Source of Truth** (`@instantdb/react`)
+- Real-time database with built-in auth (October 2025: migrated from Prisma)
+- Handles ALL data: users, images, favorites, usage tracking, promo codes, referrals, showcase, email preferences, roulette game
 - No backend server required - all client-side
 - Magic link authentication (passwordless)
 - Offline support with automatic sync
+- Real-time data queries and mutations
 
 **Key Files:**
-- `lib/instantdb.ts` - Database initialization and schema (includes promoCodes entity)
+- `lib/instantdb.ts` - Complete schema definition with 11 entities (users, images, favorites, usage, promoCodes, showcaseSubmissions, showcaseLikes, referrals, emailPreferences, rouletteStreaks, rouletteAchievements, rouletteSpins, rouletteVotes)
 - `components/AuthButton.tsx` - Magic link authentication UI
-- `hooks/useImageTracking.ts` - Custom hook for tracking images, favorites, and usage limits
-- `hooks/usePromoCode.ts` - Custom hook for promo code redemption
-- `app/profile/page.tsx` - User profile with promo code redemption
-- `app/admin/page.tsx` - Admin panel for generating promo codes (derek.bobola@gmail.com only)
+- `hooks/useImageTracking.ts` - Image generation, favorites, and usage limits
+- `hooks/usePromoCode.ts` - Promo code redemption
+- `hooks/useReferral.ts` - Referral tracking and bonuses
+- `hooks/useShowcaseVotes.ts` - Showcase voting system
+- `hooks/useRouletteGame.ts` - Roulette game state management
+- `hooks/useEmailPreferences.ts` - Email notification settings
+- `app/profile/page.tsx` - User profile with stats and redemption
+- `app/admin/page.tsx` - Admin panel for promo code generation (derek.bobola@gmail.com only)
+- `app/showcase/page.tsx` - Showcase gallery with real-time voting
 
 ### Environment Variables
 
@@ -132,7 +138,7 @@ NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
 
 **Setup Notes:**
 - **REPLICATE_API_TOKEN**: For NSFW editor (/editor-nsfw and /batch-nsfw). Get token at https://replicate.com/account/api-tokens. Requires paid credits (~$2 = 86 images).
-- **NEXT_PUBLIC_INSTANT_APP_ID**: Create app at https://www.instantdb.com/dash and copy the App ID. Required for user authentication and data persistence.
+- **NEXT_PUBLIC_INSTANT_APP_ID**: Create app at https://www.instantdb.com/dash and copy the App ID. Required for all user authentication and data persistence. **This is the ONLY database** - Prisma was removed in October 2025.
 
 ### Key UI Components
 

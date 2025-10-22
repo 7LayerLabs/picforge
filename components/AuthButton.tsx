@@ -1,7 +1,7 @@
 'use client';
 
 import { db } from '@/lib/instantdb';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function AuthButton() {
   const { isLoading, user, error } = db.useAuth();
@@ -9,6 +9,37 @@ export default function AuthButton() {
   const [sentEmail, setSentEmail] = useState('');
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [code, setCode] = useState('');
+  const hasWelcomedUser = useRef(false);
+
+  // Send welcome email for new users
+  useEffect(() => {
+    if (user && !hasWelcomedUser.current) {
+      hasWelcomedUser.current = true;
+
+      // Check if this is a new user (createdAt may not exist on InstantDB user type)
+      const now = Date.now();
+      const userCreatedAt = (user as any).createdAt || now;
+      const isNewUser = now - userCreatedAt < 60000;
+
+      if (isNewUser && user.email) {
+        // Send welcome email
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: user.email,
+            type: 'welcome',
+            data: {
+              userName: user.email.split('@')[0],
+              userEmail: user.email,
+            },
+          }),
+        }).catch((error) => {
+          console.error('Failed to send welcome email:', error);
+        });
+      }
+    }
+  }, [user]);
 
   if (isLoading) {
     return (

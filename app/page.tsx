@@ -13,9 +13,11 @@ import ImageGallery from '@/components/ImageGallery'
 import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 import ExportModal from '@/components/ExportModal'
 import BeforeAfterGallery from '@/components/BeforeAfterGallery'
-import FeaturedShowcase from '@/components/FeaturedShowcase'
+import TrendingShowcase from '@/components/TrendingShowcase'
 import WatermarkPreviewNotice from '@/components/WatermarkPreviewNotice'
+import ReferralCTA from '@/components/ReferralCTA'
 import { useImageTracking } from '@/hooks/useImageTracking'
+import { prompts } from '@/lib/prompts'
 
 interface HistoryItem {
   prompt: string
@@ -26,9 +28,17 @@ interface HistoryItem {
 
 // Removed Session interface - simplified without session management
 
+// Get daily rotating prompt - changes every 24 hours, same for all users
+const getPromptOfTheDay = () => {
+  const daysSinceEpoch = Math.floor(Date.now() / (24 * 60 * 60 * 1000))
+  const promptIndex = daysSinceEpoch % prompts.length
+  return prompts[promptIndex]
+}
+
 export default function Home() {
-  // Fixed Prompt of the Day (matches the ballpoint sketch examples)
-  const PROMPT_OF_THE_DAY = "A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look";
+  // Dynamic Prompt of the Day - rotates daily based on system time
+  const dailyPrompt = getPromptOfTheDay()
+  const PROMPT_OF_THE_DAY = dailyPrompt.description
 
   // Ref for scrolling to upload section
   const uploadSectionRef = useRef<HTMLDivElement>(null);
@@ -82,6 +92,10 @@ export default function Home() {
 
   // Mobile options dropdown state
   const [showMobileOptions, setShowMobileOptions] = useState(false)
+
+  // Referral CTA state
+  const [showReferralCTA, setShowReferralCTA] = useState(false)
+  const [referralCTADismissed, setReferralCTADismissed] = useState(false)
 
   // Removed session management - simplified interface
 
@@ -219,20 +233,13 @@ export default function Home() {
   useEffect(() => {
     const trackVisitor = async () => {
       try {
-        console.log('Tracking visitor...')
         const response = await fetch('/api/track-visitor', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ page: '/' })
         })
-        console.log('Track response status:', response.status)
         if (response.ok) {
           const data = await response.json()
-          console.log('Visitor data:', data)
-          // setVisitorStats({
-          //   totalVisits: data.totalVisits || 0,
-          //   uniqueVisitors: data.uniqueVisitors || 0
-          // })
         } else {
           // Show counter with zero values if API fails
           console.error('Track API failed:', response.status)
@@ -295,6 +302,17 @@ export default function Home() {
     if (savedOriginalImage) {
       setOriginalImage(savedOriginalImage)
     }
+
+    // Check if user wants to try a prompt from showcase
+    const tryPrompt = sessionStorage.getItem('tryPrompt')
+    if (tryPrompt) {
+      setInstructions(tryPrompt)
+      sessionStorage.removeItem('tryPrompt')
+      // Scroll to upload section
+      setTimeout(() => {
+        uploadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 100)
+    }
   }, [])
 
   // Save history to localStorage whenever it changes (with quota handling)
@@ -346,6 +364,23 @@ export default function Home() {
       setIsPromptFavorited(isFavorited)
     }
   }, [favorites, PROMPT_OF_THE_DAY])
+
+  // Check localStorage for referral CTA dismissal on mount
+  useEffect(() => {
+    const dismissed = localStorage.getItem('referralCTADismissed') === 'true'
+    setReferralCTADismissed(dismissed)
+  }, [])
+
+  // Show referral CTA after 2+ transformations (if not dismissed)
+  useEffect(() => {
+    if (user && history.length >= 2 && !referralCTADismissed) {
+      // Wait 2 seconds after transformation to show CTA
+      const timer = setTimeout(() => {
+        setShowReferralCTA(true)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [history.length, referralCTADismissed, user])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -476,12 +511,9 @@ export default function Home() {
         setIsSubmitting(false)
         return
       }
-      console.log('Image data URL prefix:', imageToSend.substring(0, 50))
       const imageResponse = await fetch(imageToSend)
       const blob = await imageResponse.blob()
-      console.log('Blob type from fetch:', blob.type)
       const file = new File([blob], 'image.png', { type: 'image/png' })
-      console.log('File type after creation:', file.type, 'File size:', file.size)
       formData.append('image', file)
 
       // Add the additional image if one is selected (use converted preview)
@@ -756,6 +788,12 @@ export default function Home() {
     setTimeout(() => setSubmitMessage(''), 5000)
   }
 
+  const dismissReferralCTA = () => {
+    localStorage.setItem('referralCTADismissed', 'true')
+    setReferralCTADismissed(true)
+    setShowReferralCTA(false)
+  }
+
   return (
     <div className="min-h-screen">
       {/* Main content */}
@@ -890,9 +928,9 @@ export default function Home() {
               <BeforeAfterGallery onStartEditing={scrollToUpload} />
             </div>
 
-            {/* Featured Showcase */}
+            {/* Trending Showcase */}
             <div className="px-4 pb-8 mb-8">
-              <FeaturedShowcase variant="compact" />
+              <TrendingShowcase />
             </div>
           </>
         )}
@@ -1015,62 +1053,33 @@ export default function Home() {
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-700 italic mb-3 leading-relaxed">
+                  <div className="mb-2">
+                    <h4 className="text-base font-bold text-gray-900 mb-1">{dailyPrompt.title}</h4>
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-teal-300 rounded-full text-[10px] font-medium text-teal-700">
+                      {dailyPrompt.category}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-700 italic mb-4 leading-relaxed">
                     &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
                   </p>
 
-                  {/* Example Images */}
-                  <div className="mb-4">
-                    <p className="text-xs text-gray-600 mb-2 font-semibold">Examples:</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      {/* Elon Example */}
-                      <div className="space-y-1">
-                        <div
-                          className="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-300 bg-white shadow-md hover:shadow-lg transition-all cursor-pointer group"
-                          onClick={() => openZoom('/examples/elon_sketch.png')}
-                        >
-                          <NextImage
-                            src="/examples/elon_sketch.png"
-                            alt="Ballpoint pen sketch example"
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          {/* Original image in corner */}
-                          <div className="absolute top-2 right-2 w-12 h-12 rounded border-2 border-white shadow-lg overflow-hidden bg-gray-100">
-                            <NextImage
-                              src="/examples/elon.jpg"
-                              alt="Original"
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        </div>
-                        <p className="text-[10px] text-gray-500 text-center">Click to zoom</p>
+                  {/* Prompt metadata */}
+                  <div className="mb-4 p-3 bg-white rounded-lg border border-gray-200">
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <div className="flex items-center gap-1">
+                        <span className="font-semibold text-gray-600">Mood:</span>
+                        <span className="text-gray-800">{dailyPrompt.mood}</span>
                       </div>
-                      {/* Sidney Example */}
-                      <div className="space-y-1">
-                        <div
-                          className="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-300 bg-white shadow-md hover:shadow-lg transition-all cursor-pointer group"
-                          onClick={() => openZoom('/examples/sidney_sketch.png')}
-                        >
-                          <NextImage
-                            src="/examples/sidney_sketch.png"
-                            alt="Ballpoint pen sketch example"
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          {/* Original image in corner */}
-                          <div className="absolute top-2 right-2 w-12 h-12 rounded border-2 border-white shadow-lg overflow-hidden bg-gray-100">
-                            <NextImage
-                              src="/examples/sidney.webp"
-                              alt="Original"
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
+                      {dailyPrompt.tags && dailyPrompt.tags.length > 0 && (
+                        <div className="flex items-center gap-1 flex-wrap">
+                          <span className="font-semibold text-gray-600">Tags:</span>
+                          {dailyPrompt.tags.slice(0, 3).map((tag, i) => (
+                            <span key={i} className="px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full text-[10px]">
+                              {tag}
+                            </span>
+                          ))}
                         </div>
-                        <p className="text-[10px] text-gray-500 text-center">Click to zoom</p>
-                      </div>
+                      )}
                     </div>
                   </div>
 
@@ -1107,8 +1116,8 @@ export default function Home() {
                           // Already favorited, show message
                           alert('This prompt is already in your favorites!');
                         } else {
-                          // Save to favorites with Art Styles category (ballpoint sketch)
-                          await saveFavorite(PROMPT_OF_THE_DAY, "Art Styles");
+                          // Save to favorites with the daily prompt's category
+                          await saveFavorite(PROMPT_OF_THE_DAY, dailyPrompt.category);
                           setIsPromptFavorited(true);
                         }
                       }}
@@ -1474,6 +1483,24 @@ export default function Home() {
                   </div>
                 )}
               </form>
+
+              {/* Referral CTA - Shows after 2+ transformations */}
+              {showReferralCTA && user && (
+                <div className="mt-6 animate-fade-in-up">
+                  <div className="relative">
+                    <ReferralCTA variant="banner" showStats={true} />
+                    <button
+                      onClick={dismissReferralCTA}
+                      className="absolute top-2 right-2 text-black hover:text-gray-800 transition-colors bg-white bg-opacity-20 rounded-full p-1 hover:bg-opacity-30"
+                      title="Dismiss"
+                    >
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
               </div>
 
               {/* Right side - Enhanced Image Gallery */}
