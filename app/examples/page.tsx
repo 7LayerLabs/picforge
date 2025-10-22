@@ -105,7 +105,7 @@ export default function ExamplesPage() {
             <Zap className="w-4 h-4" />
             <span className="text-sm font-medium">Try Before You Upload</span>
           </div>
-          <h1 className="font-heading text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-6">
             Templates to Try
           </h1>
           <p className="font-body text-xl text-gray-700 max-w-3xl mx-auto font-bold">

@@ -861,8 +861,8 @@ export default function Home() {
           <>
             {/* Hero Section */}
             <div className="text-center mb-8 px-4 pt-8">
-              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-3 leading-tight">
-                <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900">Imagine<span className="text-4xl md:text-5xl lg:text-6xl">.</span> Everything<span className="text-4xl md:text-5xl lg:text-6xl">.</span></span>
+              <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-3 leading-tight">
+                <span className="inline-block text-3xl md:text-4xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900">Imagine<span className="text-4xl md:text-5xl">.</span> Everything<span className="text-4xl md:text-5xl">.</span></span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
                 Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">272+ prompts and endless ideas</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>

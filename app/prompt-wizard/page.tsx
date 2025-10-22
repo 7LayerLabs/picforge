@@ -166,7 +166,7 @@ export default function PromptWizard() {
     <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto px-4 py-12 max-w-6xl">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-heading font-bold mb-4 text-gray-900">
+          <h1 className="text-5xl md:text-6xl font-heading font-bold mb-4 text-gray-900">
             Prompt Wizard
           </h1>
           <p className="text-lg font-heading text-gray-600">

@@ -228,7 +228,7 @@ export default function RoastMode() {
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-6">
           <div className="text-center relative">
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
+            <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
               <Flame className="w-8 h-8 text-teal-500" />
               AI Roast Mode
             </h1>

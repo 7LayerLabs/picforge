@@ -74,7 +74,7 @@ export default function Home() {
       {/* Page Header */}
       <div className="bg-white border-b border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold mb-3 text-black" style={{ fontFamily: 'Courier New, monospace' }}>
+          <h1 className="text-5xl md:text-6xl font-bold mb-3 text-black" style={{ fontFamily: 'Courier New, monospace' }}>
             Prompt Library
           </h1>
           <p className="text-lg text-gray-700 font-medium">

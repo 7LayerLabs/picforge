@@ -206,7 +206,7 @@ export default function ShowcasePage() {
       <div className="bg-white border-b border-gray-200 sticky top-16 z-40">
         <div className="container mx-auto px-4 py-6">
           <div className="text-center mb-4">
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-2">
               Community Showcase
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
