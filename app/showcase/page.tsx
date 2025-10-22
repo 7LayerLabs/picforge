@@ -205,20 +205,17 @@ export default function ShowcasePage() {
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-16 z-40">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            <div>
-              <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">
-                Community Showcase
-              </h1>
-              <p className="text-gray-600">
-                Discover amazing transformations created by our community
-              </p>
-            </div>
-
+          <div className="text-center mb-4">
+            <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              Community Showcase
+            </h1>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Discover amazing transformations created by our community
+            </p>
             {user && (
               <Link
                 href="/showcase/submit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all mt-4"
               >
                 <Plus className="w-5 h-5" />
                 Submit Your Work

@@ -84,11 +84,11 @@ export default function FavoritesPage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center max-w-md">
-          <Star className="w-16 h-16 mx-auto mb-4 text-yellow-500" />
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+          <Star className="w-16 h-16 mx-auto mb-4 text-teal-500" />
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">
             Sign In Required
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-gray-600 mb-6">
             Sign in to view and manage your favorites.
           </p>
           <Link
@@ -107,7 +107,7 @@ export default function FavoritesPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading your favorites...</p>
+          <p className="text-gray-600">Loading your favorites...</p>
         </div>
       </div>
     );
@@ -118,22 +118,22 @@ export default function FavoritesPage() {
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <Star className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">
             No Favorites Yet
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-gray-600 mb-6">
             Star images from My Images or prompts from the Prompts library!
           </p>
           <div className="flex gap-3 justify-center">
             <Link
-              href="/my-images"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium transition-all hover:scale-105"
+              href="/"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium transition-all hover:scale-105"
             >
-              My Images
+              Upload Image
             </Link>
             <Link
               href="/prompts"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-all hover:scale-105"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all hover:scale-105"
             >
               Browse Prompts
             </Link>
@@ -144,25 +144,28 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="min-h-screen p-4 sm:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Star className="w-8 h-8 text-yellow-500 fill-yellow-500" />
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4 py-6">
+          <div className="text-center">
+            <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
+              <Star className="w-8 h-8 text-teal-500 fill-teal-500" />
               Favorites
             </h1>
+            <p className="text-gray-600 text-lg">
+              {favorites.length} {favorites.length === 1 ? 'favorite' : 'favorites'} saved
+            </p>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">
-            {favorites.length} {favorites.length === 1 ? 'favorite' : 'favorites'} saved
-          </p>
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto p-4 sm:p-8">
 
         {/* Favorite Images Gallery */}
         {imageFavorites.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
               Favorite Images
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -170,10 +173,10 @@ export default function FavoritesPage() {
               {imageFavorites.map((item: any) => (
                 <div
                   key={item.id}
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] group"
+                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] group"
                 >
                   {/* Image */}
-                  <div className="relative aspect-square bg-gray-100 dark:bg-gray-900">
+                  <div className="relative aspect-square bg-gray-100">
                     {item.transformedUrl && (
                       <NextImage
                         src={item.transformedUrl}
@@ -190,7 +193,7 @@ export default function FavoritesPage() {
                       </div>
                     )}
                     {/* Star badge */}
-                    <div className="absolute top-2 left-2 bg-yellow-400 text-white p-1.5 rounded-lg shadow-lg">
+                    <div className="absolute top-2 left-2 bg-teal-500 text-white p-1.5 rounded-lg shadow-lg">
                       <Star className="w-4 h-4 fill-white" />
                     </div>
                     {/* Hover overlay */}
@@ -229,10 +232,10 @@ export default function FavoritesPage() {
 
                   {/* Info */}
                   <div className="p-4">
-                    <p className="text-sm text-gray-900 dark:text-white font-medium mb-2 line-clamp-2">
+                    <p className="text-sm text-gray-900 font-medium mb-2 line-clamp-2">
                       {item.prompt}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-500">
                       Saved {new Date(item.timestamp).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -249,18 +252,18 @@ export default function FavoritesPage() {
         {/* Favorite Prompts */}
         {favorites.length > 0 && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
               Favorite Prompts
             </h2>
             <div className="space-y-8">
               {categories.map((category) => (
-                <div key={category} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div key={category} className="bg-white rounded-xl shadow-lg p-6">
                   {/* Category Header */}
-                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+                    <h3 className="text-xl font-bold text-gray-900">
                       {category}
                     </h3>
-                    <span className="text-sm text-gray-500 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
+                    <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
                       {groupedPrompts[category].length} {groupedPrompts[category].length === 1 ? 'prompt' : 'prompts'}
                     </span>
                   </div>
@@ -271,17 +274,17 @@ export default function FavoritesPage() {
                     {groupedPrompts[category].map((favorite: any) => (
                       <div
                         key={favorite.id}
-                        className="group relative p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-200 dark:border-yellow-800 hover:border-yellow-400 dark:hover:border-yellow-600 transition-all duration-200"
+                        className="group relative p-4 bg-teal-50 rounded-lg border-2 border-teal-200 hover:border-teal-400 transition-all duration-200"
                       >
                         {/* Star Badge */}
                         <div className="absolute top-3 left-3">
-                          <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                          <Star className="w-5 h-5 text-teal-500 fill-teal-500" />
                         </div>
 
                         {/* Prompt Text */}
                         <div className="flex items-start gap-3 pl-8 pr-32">
                           {favorite.transformedUrl && (
-                            <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border-2 border-yellow-300">
+                            <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border-2 border-teal-300">
                               <NextImage
                                 src={favorite.transformedUrl}
                                 alt="thumbnail"
@@ -290,7 +293,7 @@ export default function FavoritesPage() {
                               />
                             </div>
                           )}
-                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1">
+                          <p className="text-sm text-gray-700 leading-relaxed flex-1">
                             {favorite.prompt}
                           </p>
                         </div>
@@ -299,13 +302,13 @@ export default function FavoritesPage() {
                         <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-2">
                           <button
                             onClick={() => copyPrompt(favorite.prompt)}
-                            className="p-2 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors shadow-lg"
+                            className="p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
                             title="Copy to clipboard"
                           >
                             {copiedPrompt === favorite.prompt ? (
-                              <Check className="w-4 h-4 text-green-600" />
+                              <Check className="w-4 h-4 text-teal-600" />
                             ) : (
-                              <Copy className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                              <Copy className="w-4 h-4 text-gray-600" />
                             )}
                           </button>
 
@@ -321,7 +324,7 @@ export default function FavoritesPage() {
                           <button
                             onClick={() => deleteFavorite(favorite.id)}
                             disabled={deletingId === favorite.id}
-                            className="p-2 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg transition-colors shadow-lg disabled:opacity-50"
+                            className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shadow-lg disabled:opacity-50"
                             title="Remove from favorites"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -329,7 +332,7 @@ export default function FavoritesPage() {
                         </div>
 
                         {/* Saved timestamp */}
-                        <p className={`text-xs text-gray-500 dark:text-gray-400 mt-3 ${favorite.transformedUrl ? 'pl-20' : 'pl-8'}`}>
+                        <p className={`text-xs text-gray-500 mt-3 ${favorite.transformedUrl ? 'pl-20' : 'pl-8'}`}>
                           Saved {new Date(favorite.timestamp).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',

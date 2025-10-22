@@ -605,19 +605,17 @@ export default function TransformRoulette() {
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div>
-              <h1 className="font-heading text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <Shuffle className="w-8 h-8 text-purple-500" />
-                Transform Roulette
-              </h1>
-              <p className="text-gray-600 mt-2">
-                Spin the wheel of transformation chaos. Let fate decide your image&apos;s destiny!
-              </p>
-            </div>
+          <div className="text-center">
+            <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
+              <Shuffle className="w-8 h-8 text-purple-500" />
+              Transform Roulette
+            </h1>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-4">
+              Spin the wheel of transformation chaos. Let fate decide your image&apos;s destiny!
+            </p>
 
             {/* User Stats */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-center flex-wrap">
               <div className="bg-purple-100 px-4 py-2 rounded-lg">
                 <div className="flex items-center gap-2">
                   <Target className="w-4 h-4 text-purple-600" />
@@ -625,10 +623,10 @@ export default function TransformRoulette() {
                 </div>
               </div>
               {stats.streak > 0 && (
-                <div className="bg-orange-100 px-4 py-2 rounded-lg">
+                <div className="bg-purple-100 px-4 py-2 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Flame className="w-4 h-4 text-orange-600" />
-                    <span className="text-sm font-semibold text-orange-900">{stats.streak} streak</span>
+                    <Flame className="w-4 h-4 text-purple-600" />
+                    <span className="text-sm font-semibold text-purple-900">{stats.streak} streak</span>
                   </div>
                 </div>
               )}
@@ -643,9 +641,9 @@ export default function TransformRoulette() {
 
           {/* Streak Message */}
           {stats.streak >= 3 && (
-            <div className="mt-4 bg-orange-50 border-l-4 border-orange-500 rounded-lg p-3">
-              <p className="text-orange-900 font-semibold flex items-center gap-2">
-                <Flame className="w-5 h-5 text-orange-600 animate-pulse" />
+            <div className="mt-4 bg-purple-50 border-l-4 border-orange-500 rounded-lg p-3">
+              <p className="text-purple-900 font-semibold flex items-center gap-2">
+                <Flame className="w-5 h-5 text-purple-600 animate-pulse" />
                 {stats.streak} spins in a row! You&apos;re on fire! Keep spinning!
               </p>
             </div>
@@ -948,7 +946,7 @@ export default function TransformRoulette() {
                   <div className="bg-white rounded-xl shadow-lg p-4 text-center">
                     <div className="text-2xl mb-1">🔥</div>
                     <div className="text-sm text-gray-600">Your Streak</div>
-                    <div className="font-bold text-orange-600">{stats.streak}</div>
+                    <div className="font-bold text-purple-600">{stats.streak}</div>
                   </div>
                   <div className="bg-white rounded-xl shadow-lg p-4 text-center">
                     <div className="text-2xl mb-1">🌍</div>

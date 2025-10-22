@@ -227,19 +227,17 @@ export default function RoastMode() {
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-heading text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <Flame className="w-8 h-8 text-teal-500" />
-                AI Roast Mode
-              </h1>
-              <p className="text-gray-600 mt-2">
-                Upload a photo. Get roasted. Laugh (or cry). Share the burns.
-              </p>
-            </div>
+          <div className="text-center relative">
+            <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
+              <Flame className="w-8 h-8 text-teal-500" />
+              AI Roast Mode
+            </h1>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Upload a photo. Get roasted. Laugh (or cry). Share the burns.
+            </p>
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
-              className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+              className="absolute top-0 right-0 p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
               title={soundEnabled ? "Mute sounds" : "Enable sounds"}
             >
               {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
@@ -247,8 +245,8 @@ export default function RoastMode() {
           </div>
 
           {/* Intensity Selector */}
-          <div className="mt-6 flex items-center gap-4">
-            <span className="font-medium text-gray-700">Roast Level:</span>
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <span className="font-medium text-gray-700 text-sm">Roast Level:</span>
             <div className="flex gap-2">
               <button
                 onClick={() => setRoastIntensity('mild')}
