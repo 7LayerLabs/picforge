@@ -15,6 +15,7 @@ import WatermarkPreviewNotice from '@/components/WatermarkPreviewNotice'
 import ReferralCTA from '@/components/ReferralCTA'
 import { useImageTracking } from '@/hooks/useImageTracking'
 import { prompts } from '@/lib/prompts'
+import { addWatermarkIfFree, blobToDataUrl, dataUrlToBlob } from '@/lib/watermark'
 
 interface HistoryItem {
   prompt: string
@@ -39,7 +40,7 @@ export default function EditorPage() {
   const uploadSectionRef = useRef<HTMLDivElement>(null);
 
   // InstantDB tracking
-  const { user, trackImageGeneration, hasReachedLimit, getRemainingImages, saveFavorite, favorites } = useImageTracking()
+  const { user, usage, trackImageGeneration, hasReachedLimit, getRemainingImages, saveFavorite, favorites } = useImageTracking()
 
   const [currentImage, setCurrentImage] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -592,12 +593,21 @@ export default function EditorPage() {
         const response = await fetch(item.image)
         const blob = await response.blob()
 
+        // Convert blob to data URL
+        const dataUrl = await blobToDataUrl(blob)
+
+        // Apply watermark if user is on free tier
+        const watermarkedDataUrl = await addWatermarkIfFree(dataUrl, usage?.tier)
+
+        // Convert back to blob for ZIP
+        const finalBlob = dataUrlToBlob(watermarkedDataUrl)
+
         // Create filename based on whether it's original or edited
         const filename = item.isOriginal
           ? '00_original.png'
           : `${String(i).padStart(2, '0')}_${item.prompt.replace(/[^a-z0-9]/gi, '_').substring(0, 30)}.png`
 
-        zip.file(filename, blob)
+        zip.file(filename, finalBlob)
       } catch (error) {
         console.error(`Failed to add image ${i} to zip:`, error)
       }

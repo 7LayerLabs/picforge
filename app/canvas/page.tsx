@@ -5,9 +5,12 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Wand2, Palette, ArrowLeft } from 'lucide-react'
 import ReferralCTA from '@/components/ReferralCTA'
+import { useImageTracking } from '@/hooks/useImageTracking'
+import { addWatermarkIfFree } from '@/lib/watermark'
 
 function CanvasContent() {
   const searchParams = useSearchParams()
+  const { usage } = useImageTracking()
   const [prompt, setPrompt] = useState('')
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -193,14 +196,19 @@ function CanvasContent() {
             </div>
             <div className="mt-6 flex gap-4">
               <button
-                onClick={() => {
+                onClick={async () => {
+                  if (!generatedImage) return;
+
                   // Track download
                   import('@/lib/analytics').then(({ trackDownload }) => {
                     trackDownload('canvas');
                   });
 
+                  // Apply watermark if user is on free tier
+                  const finalImageData = await addWatermarkIfFree(generatedImage, usage?.tier);
+
                   const link = document.createElement('a')
-                  link.href = generatedImage
+                  link.href = finalImageData
                   link.download = `ai-generated-${Date.now()}.png`
                   link.click()
                 }}

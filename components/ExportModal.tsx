@@ -14,6 +14,8 @@ import {
   PDFOptions,
   SVGOptions
 } from '@/lib/exportFormats'
+import { addWatermarkIfFree, shouldApplyWatermark } from '@/lib/watermark'
+import { useImageTracking } from '@/hooks/useImageTracking'
 
 interface ExportModalProps {
   isOpen: boolean
@@ -35,6 +37,7 @@ export default function ExportModal({
   batchMode = false,
   onBatchExport
 }: ExportModalProps) {
+  const { usage } = useImageTracking()
   const [fileFormat, setFileFormat] = useState<FileFormat>('png')
   const [useCase, setUseCase] = useState<UseCase>('etsy')
   const [isDownloading, setIsDownloading] = useState(false)
@@ -73,24 +76,27 @@ export default function ExportModal({
         return
       }
 
+      // Apply watermark if user is on free tier
+      const finalImageData = await addWatermarkIfFree(imageData, usage?.tier)
+
       const preset = 'tshirt' // Default preset for now
       const fullFileName = `${fileName}.${fileFormat}`
 
       // Download based on selected format
       switch (fileFormat) {
         case 'png':
-          await downloadTransparentPNG(imageData, preset, `${fileName}.png`)
+          await downloadTransparentPNG(finalImageData, preset, `${fileName}.png`)
           break
 
         case 'jpg':
           const link = document.createElement('a')
-          link.href = imageData
+          link.href = finalImageData
           link.download = `${fileName}.jpg`
           link.click()
           break
 
         case 'webp':
-          await downloadWebP(imageData, preset, `${fileName}.webp`, quality / 100)
+          await downloadWebP(finalImageData, preset, `${fileName}.webp`, quality / 100)
           break
 
         case 'svg':
@@ -99,7 +105,7 @@ export default function ExportModal({
             precision: 2,
             simplify: true
           }
-          await downloadSVG(imageData, preset, `${fileName}.svg`, svgOptions)
+          await downloadSVG(finalImageData, preset, `${fileName}.svg`, svgOptions)
           break
 
         case 'pdf':
@@ -108,16 +114,16 @@ export default function ExportModal({
             orientation: pdfOrientation,
             includeMetadata: true
           }
-          await downloadPDF(imageData, preset, `${fileName}.pdf`, pdfOptions)
+          await downloadPDF(finalImageData, preset, `${fileName}.pdf`, pdfOptions)
           break
 
         case 'ico':
-          await downloadICO(imageData, `${fileName}.ico`, [16, 32, 48, 64, 128])
+          await downloadICO(finalImageData, `${fileName}.ico`, [16, 32, 48, 64, 128])
           break
 
         case 'pack':
           await downloadExportPack(
-            imageData,
+            finalImageData,
             preset,
             packFormats,
             `${fileName}-pack`

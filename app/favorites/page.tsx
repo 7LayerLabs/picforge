@@ -7,9 +7,10 @@ import { useRouter } from 'next/navigation';
 import { useImageTracking } from '@/hooks/useImageTracking';
 import { Star, Copy, Sparkles, Trash2, Check, Eye, Download, Lock } from 'lucide-react';
 import { db } from '@/lib/instantdb';
+import { addWatermarkIfFree, blobToDataUrl } from '@/lib/watermark';
 
 export default function FavoritesPage() {
-  const { user, favorites, isLoading } = useImageTracking();
+  const { user, favorites, isLoading, usage } = useImageTracking();
   const router = useRouter();
   const [copiedPrompt, setCopiedPrompt] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -48,13 +49,19 @@ export default function FavoritesPage() {
     try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+
+      // Convert blob to data URL
+      const dataUrl = await blobToDataUrl(blob);
+
+      // Apply watermark if user is on free tier
+      const finalImageData = await addWatermarkIfFree(dataUrl, usage?.tier);
+
+      // Download the watermarked image
       const a = document.createElement('a');
-      a.href = url;
+      a.href = finalImageData;
       a.download = `picforge-${prompt.replace(/[^a-z0-9]/gi, '_').substring(0, 30)}.png`;
       document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
       console.error('Failed to download image:', error);
