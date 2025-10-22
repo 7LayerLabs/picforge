@@ -28,7 +28,7 @@ interface HistoryItem {
 
 export default function Home() {
   // Fixed Prompt of the Day (matches the ballpoint sketch examples)
-  const PROMPT_OF_THE_DAY = "Blue ballpoint pen sketch on notebook paper";
+  const PROMPT_OF_THE_DAY = "A detailed ballpoint pen sketch drawn on checkered notebook paper, 1080x1080. The drawing style is expressive and textured, showing fine pen strokes and cross-hatching. Depicted with slightly exaggerated proportions — big expressive eyes and distinctive features — in a humorous but artistic caricature style. The background is simple checkered paper with no logos or text, giving it a clean hand-drawn notebook look";
 
   // Ref for scrolling to upload section
   const uploadSectionRef = useRef<HTMLDivElement>(null);
