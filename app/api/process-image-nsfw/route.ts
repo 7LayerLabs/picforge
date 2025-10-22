@@ -38,8 +38,8 @@ export async function POST(request: NextRequest) {
         version: '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc', // SDXL img2img
         input: {
           image: image,
-          prompt: `${prompt}, photorealistic, detailed, high quality, professional photography`,
-          strength: 0.75, // How much to transform (0.0 = original, 1.0 = completely new)
+          prompt: `Transform the person/subject in the image to: ${prompt}, keep the same person's face and features, photorealistic, detailed, high quality, professional photography`,
+          strength: 0.7, // Reduced from 0.75 to better preserve original subject (0.0 = original, 1.0 = completely new)
           num_inference_steps: 40,
           guidance_scale: 7.5,
         }

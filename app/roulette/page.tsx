@@ -410,6 +410,7 @@ export default function TransformRoulette() {
   const [uploadedImage, setUploadedImage] = useState<string>('')
   const [isSpinning, setIsSpinning] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [processingStatus, setProcessingStatus] = useState<string>('')
   const [selectedPrompt, setSelectedPrompt] = useState<string>('')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [wheelRotation, setWheelRotation] = useState(0)
@@ -524,9 +525,12 @@ export default function TransformRoulette() {
 
   const transformImage = async (category: string, prompt: string, isRare: boolean) => {
     setIsProcessing(true)
+    setProcessingStatus('Analyzing your image...')
 
     try {
       // Try Gemini image transformation first (best quality)
+      setProcessingStatus('Preparing transformation...')
+
       const response = await fetch('/api/process-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -537,11 +541,14 @@ export default function TransformRoulette() {
         })
       })
 
+      setProcessingStatus('Applying AI transformation...')
       const data = await response.json()
 
       const transformedImage = data.generatedImage || data.processedImage
 
       if (transformedImage) {
+        setProcessingStatus('Saving your transformation...')
+
         // Record spin in InstantDB and check for achievements
         const spinResult = await recordSpin(category, prompt, uploadedImage, transformedImage)
 
@@ -560,6 +567,7 @@ export default function TransformRoulette() {
         })
       } else {
         // Fallback to client-side transformation
+        setProcessingStatus('Applying effects...')
         const clientTransformed = await applyClientTransform(uploadedImage, prompt)
 
         const spinResult = await recordSpin(category, prompt, uploadedImage, clientTransformed)
@@ -576,6 +584,8 @@ export default function TransformRoulette() {
           spinId: spinResult.spinId
         })
       }
+
+      setProcessingStatus('Complete!')
 
       // Play success sound
       const successAudio = new Audio('/sounds/success.mp3')
@@ -587,6 +597,7 @@ export default function TransformRoulette() {
 
       // Use client-side transformation as fallback
       try {
+        setProcessingStatus('Using fallback processor...')
         const clientTransformed = await applyClientTransform(uploadedImage, prompt)
 
         const spinResult = await recordSpin(category, prompt, uploadedImage, clientTransformed)
@@ -602,11 +613,16 @@ export default function TransformRoulette() {
           isRare: isRare,
           spinId: spinResult.spinId
         })
+
+        setProcessingStatus('Complete!')
       } catch (clientError) {
         console.error('Client transform also failed:', clientError)
+        setProcessingStatus('Transform failed - please try again')
       }
     } finally {
       setIsProcessing(false)
+      // Clear status after a short delay
+      setTimeout(() => setProcessingStatus(''), 2000)
     }
   }
 
@@ -849,10 +865,11 @@ export default function TransformRoulette() {
                 {/* Status */}
                 {isProcessing && (
                   <div className="mt-4 text-center">
-                    <div className="inline-flex items-center gap-2 text-purple-600">
+                    <div className="inline-flex items-center gap-2 text-purple-600 mb-2">
                       <div className="w-5 h-5 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
-                      <span>Applying transformation magic...</span>
+                      <span className="font-semibold">{processingStatus || 'Processing...'}</span>
                     </div>
+                    <p className="text-xs text-gray-500">This may take 10-20 seconds</p>
                   </div>
                 )}
               </div>

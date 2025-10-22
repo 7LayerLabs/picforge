@@ -183,16 +183,21 @@ Requirements:
         contentParts.push(imageGenPrompt, imagePart, additionalImagePart)
         console.log('Requesting image generation with TWO images and prompt:', prompt)
       } else {
-        const imageGenPrompt = `Generate an image based on this input image with the following modifications: ${prompt}
+        const imageGenPrompt = `IMPORTANT: Transform the EXACT person/subject shown in this image according to these instructions: ${prompt}
 
-Requirements:
-- Create a new image that transforms the original
-- Apply the requested changes: ${prompt}
-- Maintain the subject but change the background/environment as requested
-- High quality output`
+Critical Requirements:
+- Keep the SAME person/subject from the original image - DO NOT create a different person or generic placeholder
+- The transformation must be applied TO the actual subject in the photo
+- Transform their appearance, clothing, surroundings, or style as requested
+- The result should be clearly recognizable as a transformation of THIS specific person/subject
+- Incorporate the subject fully into the new style/theme
+- Apply the transformation: ${prompt}
+- High quality, detailed output
+
+Example: If the subject is a person and prompt says "turn into a zombie", transform THAT person into a zombie - same face, same person, but zombified. NOT a generic zombie drawing.`
 
         contentParts.push(imageGenPrompt, imagePart)
-        console.log('Requesting image generation with prompt:', prompt)
+        console.log('Requesting image generation with enhanced subject-preservation prompt:', prompt)
       }
 
       // Make the API call with the correct format
