@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Special_Elite } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -272,8 +273,10 @@ export default function RootLayout({
       <body
         className={`${specialElite.variable} font-body antialiased`}
       >
-        {/* Google Analytics */}
-        <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
+        {/* Google Analytics - Wrapped in Suspense for Next.js 16 compatibility */}
+        <Suspense fallback={null}>
+          <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
+        </Suspense>
 
         {/* <AuthSessionProvider> */}
           <Navigation />
