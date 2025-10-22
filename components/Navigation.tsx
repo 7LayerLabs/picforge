@@ -23,7 +23,6 @@ export default function Navigation() {
     isActive('/examples');
   const isProfileActive = () =>
     isActive('/profile') ||
-    isActive('/my-images') ||
     isActive('/favorites');
 
   return (
@@ -260,17 +259,6 @@ export default function Navigation() {
                     >
                       <User className="w-3 h-3 mr-1.5" />
                       My Account
-                    </Link>
-                    <Link
-                      href="/my-images"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/my-images')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Images className="w-3 h-3 mr-1.5" />
-                      My Images
                     </Link>
                     <Link
                       href="/favorites"
@@ -521,21 +509,6 @@ export default function Navigation() {
               <div className="flex items-center">
                 <User className="w-3 h-3 mr-1.5" />
                 My Account
-              </div>
-            </Link>
-
-            <Link
-              href="/my-images"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
-                isActive('/my-images')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <div className="flex items-center">
-                <Images className="w-3 h-3 mr-1.5" />
-                My Images
               </div>
             </Link>
 

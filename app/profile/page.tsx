@@ -76,27 +76,27 @@ export default function ProfilePage() {
         </div>
 
         {/* Referral Section - Full Width Banner */}
-        <div className="bg-gradient-to-r from-teal-500 to-purple-600 rounded-2xl p-8 mb-8">
+        <div className="bg-purple-600 rounded-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
-              <h2 className="font-heading text-3xl font-bold text-black mb-2 flex items-center gap-2 justify-center md:justify-start">
-                <Users className="w-8 h-8 text-black" />
+              <h2 className="font-heading text-3xl font-semibold text-white mb-2 flex items-center gap-2 justify-center md:justify-start">
+                <Users className="w-8 h-8 text-white" />
                 Invite Friends, Earn Free Images
               </h2>
-              <p className="font-body text-black text-lg">
-                Give your friends <span className="font-bold">10 bonus images</span>, get <span className="font-bold">10 for yourself</span>!
+              <p className="font-body text-white text-lg">
+                Give your friends <span className="font-semibold">10 bonus images</span>, get <span className="font-semibold">10 for yourself</span>!
               </p>
             </div>
-            <div className="bg-black bg-opacity-20 rounded-xl p-6 text-center">
+            <div className="bg-white bg-opacity-20 rounded-xl p-6 text-center">
               <div className="flex items-center gap-6">
                 <div>
-                  <p className="font-body text-black text-sm mb-1">Friends Joined</p>
-                  <p className="font-heading text-4xl font-bold text-black">{completedReferralsCount}</p>
+                  <p className="font-body text-white text-sm mb-1">Friends Joined</p>
+                  <p className="font-heading text-4xl font-semibold text-white">{completedReferralsCount}</p>
                 </div>
-                <div className="w-px h-12 bg-black bg-opacity-30"></div>
+                <div className="w-px h-12 bg-white bg-opacity-30"></div>
                 <div>
-                  <p className="font-body text-black text-sm mb-1">Bonus Images</p>
-                  <p className="font-heading text-4xl font-bold text-black">{totalBonusImages}</p>
+                  <p className="font-body text-white text-sm mb-1">Bonus Images</p>
+                  <p className="font-heading text-4xl font-semibold text-white">{totalBonusImages}</p>
                 </div>
               </div>
             </div>
@@ -312,16 +312,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Quick Links */}
-        <div className="mt-8 grid md:grid-cols-3 gap-6">
-          <Link
-            href="/my-images"
-            className="bg-black rounded-xl p-6 hover:ring-2 hover:ring-teal-500 transition-all group"
-          >
-            <Sparkles className="w-8 h-8 text-teal-500 mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="font-heading font-bold text-teal-500 mb-2">My Images</h3>
-            <p className="font-body text-white text-sm">View all your created images</p>
-          </Link>
-
+        <div className="mt-8 grid md:grid-cols-2 gap-6">
           <Link
             href="/favorites"
             className="bg-black rounded-xl p-6 hover:ring-2 hover:ring-teal-500 transition-all group"

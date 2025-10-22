@@ -387,43 +387,43 @@ export default function PricingPage() {
         </div>
 
         {/* Referral Alternative Section */}
-        <div className="mt-16 bg-gradient-to-r from-teal-500 to-purple-600 rounded-3xl p-8 md:p-12 text-center shadow-2xl">
+        <div className="mt-16 bg-purple-600 rounded-3xl p-8 md:p-12 text-center shadow-2xl">
           <div className="max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-3 px-4 py-2 bg-black bg-opacity-20 rounded-full mb-6">
-              <Users className="w-5 h-5 text-black" />
-              <span className="font-bold text-black text-sm">SMART ALTERNATIVE</span>
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-white bg-opacity-20 rounded-full mb-6">
+              <Users className="w-5 h-5 text-white" />
+              <span className="font-bold text-white text-sm">SMART ALTERNATIVE</span>
             </div>
 
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-black mb-4">
-              Or Get Free Images Forever
+            <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">
+              Or Earn Bonus Images
             </h2>
 
-            <p className="text-xl text-black mb-2 font-medium">
+            <p className="text-xl text-white mb-2 font-medium">
               Invite 10 friends = 100 bonus images
             </p>
-            <p className="text-lg text-black mb-8 opacity-90">
-              That&apos;s 5 months of free images! (Worth $70)
+            <p className="text-lg text-white mb-8 opacity-90">
+              That&apos;s 5 months worth of daily images! (Worth $70)
             </p>
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-black bg-opacity-20 rounded-2xl p-6">
-                <Gift className="w-12 h-12 text-black mx-auto mb-3" />
-                <h3 className="font-heading text-2xl font-bold text-black mb-2">You Get</h3>
-                <p className="text-black text-lg font-medium">10 bonus images per friend</p>
+              <div className="bg-white bg-opacity-20 rounded-2xl p-6">
+                <Gift className="w-12 h-12 text-white mx-auto mb-3" />
+                <h3 className="font-heading text-2xl font-bold text-white mb-2">You Get</h3>
+                <p className="text-white text-lg font-medium">10 bonus images per friend</p>
               </div>
-              <div className="bg-black bg-opacity-20 rounded-2xl p-6">
-                <Sparkles className="w-12 h-12 text-black mx-auto mb-3" />
-                <h3 className="font-heading text-2xl font-bold text-black mb-2">They Get</h3>
-                <p className="text-black text-lg font-medium">10 bonus images to start</p>
+              <div className="bg-white bg-opacity-20 rounded-2xl p-6">
+                <Sparkles className="w-12 h-12 text-white mx-auto mb-3" />
+                <h3 className="font-heading text-2xl font-bold text-white mb-2">They Get</h3>
+                <p className="text-white text-lg font-medium">10 bonus images to start</p>
               </div>
             </div>
 
             {completedReferralsCount > 0 ? (
-              <div className="bg-black bg-opacity-20 rounded-2xl p-6 mb-6">
-                <p className="text-black text-lg font-bold mb-2">
+              <div className="bg-white bg-opacity-20 rounded-2xl p-6 mb-6">
+                <p className="text-white text-lg font-bold mb-2">
                   🎉 You&apos;ve already invited {completedReferralsCount} {completedReferralsCount === 1 ? 'friend' : 'friends'}!
                 </p>
-                <p className="text-black">
+                <p className="text-white">
                   That&apos;s {completedReferralsCount * 10} bonus images earned. Keep sharing!
                 </p>
               </div>
