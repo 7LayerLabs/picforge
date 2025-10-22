@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import NextImage from 'next/image'
 import Link from 'next/link'
 import { Sparkles } from 'lucide-react'
@@ -16,7 +16,6 @@ import BeforeAfterGallery from '@/components/BeforeAfterGallery'
 import FeaturedShowcase from '@/components/FeaturedShowcase'
 import WatermarkPreviewNotice from '@/components/WatermarkPreviewNotice'
 import { useImageTracking } from '@/hooks/useImageTracking'
-import { getPromptOfTheDay } from '@/lib/prompts'
 
 interface HistoryItem {
   prompt: string
@@ -28,9 +27,12 @@ interface HistoryItem {
 // Removed Session interface - simplified without session management
 
 export default function Home() {
-  // Get rotating Prompt of the Day (changes daily based on date hash)
-  const promptOfTheDay = getPromptOfTheDay();
-  const PROMPT_OF_THE_DAY = promptOfTheDay.description;
+  // Fixed Prompt of the Day (matches the ballpoint sketch examples)
+  const PROMPT_OF_THE_DAY = "Blue ballpoint pen sketch on notebook paper";
+
+  // Ref for scrolling to upload section
+  const uploadSectionRef = useRef<HTMLDivElement>(null);
+
   // InstantDB tracking
   const { user, trackImageGeneration, hasReachedLimit, getRemainingImages, saveFavorite, favorites } = useImageTracking()
 
@@ -82,6 +84,14 @@ export default function Home() {
   const [showMobileOptions, setShowMobileOptions] = useState(false)
 
   // Removed session management - simplified interface
+
+  // Scroll to upload section
+  const scrollToUpload = () => {
+    uploadSectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
 
   // Convert image to supported format (JPEG/PNG) if needed
   const convertImageToSupported = async (file: File): Promise<string> => {
@@ -877,7 +887,7 @@ export default function Home() {
 
             {/* Before/After Gallery */}
             <div className="px-4 pb-8 mb-8">
-              <BeforeAfterGallery />
+              <BeforeAfterGallery onStartEditing={scrollToUpload} />
             </div>
 
             {/* Featured Showcase */}
@@ -903,7 +913,7 @@ export default function Home() {
         )}
 
         {!currentImage ? (
-          <div className="px-4 pb-8">
+          <div ref={uploadSectionRef} className="px-4 pb-8">
             {/* Two-Column Layout: Upload + Prompt of the Day */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto items-stretch">
               {/* LEFT: Upload Section */}
@@ -1097,8 +1107,8 @@ export default function Home() {
                           // Already favorited, show message
                           alert('This prompt is already in your favorites!');
                         } else {
-                          // Save to favorites with the rotating prompt's category
-                          await saveFavorite(PROMPT_OF_THE_DAY, promptOfTheDay.category);
+                          // Save to favorites with Art Styles category (ballpoint sketch)
+                          await saveFavorite(PROMPT_OF_THE_DAY, "Art Styles");
                           setIsPromptFavorited(true);
                         }
                       }}

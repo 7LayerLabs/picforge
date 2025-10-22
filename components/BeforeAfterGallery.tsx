@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, Zap } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Zap, ArrowDown } from 'lucide-react';
 import BeforeAfterSlider from './BeforeAfterSlider';
 
 interface GalleryItem {
@@ -12,6 +12,10 @@ interface GalleryItem {
   prompt: string;
   category: string;
   title: string;
+}
+
+interface BeforeAfterGalleryProps {
+  onStartEditing?: () => void;
 }
 
 // Curated showcase transformations
@@ -82,7 +86,7 @@ const SHOWCASE_TRANSFORMATIONS: GalleryItem[] = [
   }
 ];
 
-export default function BeforeAfterGallery() {
+export default function BeforeAfterGallery({ onStartEditing }: BeforeAfterGalleryProps = {}) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [viewMode, setViewMode] = useState<'grid' | 'slider'>('grid');
   const selected = SHOWCASE_TRANSFORMATIONS[selectedIndex];
@@ -174,7 +178,7 @@ export default function BeforeAfterGallery() {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-6">
             <button
               onClick={handlePrevious}
               className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all"
@@ -193,6 +197,22 @@ export default function BeforeAfterGallery() {
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
+
+          {/* CTA Button to Start Editing */}
+          {onStartEditing && (
+            <div className="text-center">
+              <button
+                onClick={onStartEditing}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-500 to-blue-500 text-white text-lg font-bold rounded-xl hover:from-teal-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              >
+                Start Editing Your Images
+                <ArrowDown className="w-5 h-5 animate-bounce" />
+              </button>
+              <p className="text-sm text-gray-500 mt-3">
+                Upload your own photo and try any transformation
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         // Grid View
@@ -247,10 +267,26 @@ export default function BeforeAfterGallery() {
             <p className="text-sm text-gray-600 mb-4">
               Click any image to see detailed before/after comparison
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-teal-700 rounded-full text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-teal-700 rounded-full text-sm font-medium mb-6">
               <Zap className="w-4 h-4" />
               {SHOWCASE_TRANSFORMATIONS.length} Example Transformations
             </div>
+
+            {/* CTA Button to Start Editing */}
+            {onStartEditing && (
+              <div className="mt-6">
+                <button
+                  onClick={onStartEditing}
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-500 to-blue-500 text-white text-lg font-bold rounded-xl hover:from-teal-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                >
+                  Start Editing Your Images
+                  <ArrowDown className="w-5 h-5 animate-bounce" />
+                </button>
+                <p className="text-sm text-gray-500 mt-3">
+                  Upload your own photo and try any transformation
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}
