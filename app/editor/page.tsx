@@ -1056,15 +1056,15 @@ export default function EditorPage() {
 
             {/* Need a Background? CTA */}
             <div className="max-w-3xl mx-auto mb-12">
-              <Link href="/canvas" className="block p-6 bg-gradient-to-br from-teal-50 to-purple-50 rounded-xl border-2 border-teal-300 hover:border-teal-400 hover:shadow-xl transition-all group">
+              <Link href="/canvas" className="block p-6 bg-purple-600 rounded-xl border-2 border-purple-700 hover:border-purple-800 hover:shadow-xl transition-all group">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
                       <span>🎨</span> Need a Background?
                     </h3>
-                    <p className="text-base text-gray-700">Generate custom AI backgrounds from scratch with Canvas</p>
+                    <p className="text-base text-purple-100">Generate custom AI backgrounds from scratch with Canvas</p>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-600 font-semibold group-hover:gap-4 transition-all text-lg">
+                  <div className="flex items-center gap-2 text-white font-semibold group-hover:gap-4 transition-all text-lg">
                     <span>Try Canvas</span>
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

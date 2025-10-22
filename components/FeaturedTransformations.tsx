@@ -239,7 +239,7 @@ export default function FeaturedTransformations({
       {/* Header */}
       {showHeader && (
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-100 to-teal-100 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full mb-4">
             <Sparkles className="w-5 h-5 text-purple-600" />
             <span className="text-sm font-semibold text-purple-900">Featured Transformations</span>
           </div>
@@ -256,7 +256,7 @@ export default function FeaturedTransformations({
               onClick={() => setActiveFilter('trending')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
                 activeFilter === 'trending'
-                  ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
+                  ? 'bg-teal-500 text-white shadow-lg scale-105'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -267,7 +267,7 @@ export default function FeaturedTransformations({
               onClick={() => setActiveFilter('featured')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
                 activeFilter === 'featured'
-                  ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow-lg scale-105'
+                  ? 'bg-purple-600 text-white shadow-lg scale-105'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -278,7 +278,7 @@ export default function FeaturedTransformations({
               onClick={() => setActiveFilter('recent')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
                 activeFilter === 'recent'
-                  ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
+                  ? 'bg-teal-500 text-white shadow-lg scale-105'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -333,7 +333,7 @@ export default function FeaturedTransformations({
       <div className="mt-12 text-center">
         <Link
           href="/showcase"
-          className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-teal-500 to-purple-600 text-white rounded-xl font-bold text-lg hover:from-teal-600 hover:to-purple-700 transition-all hover:scale-105 shadow-xl hover:shadow-2xl"
+          className="inline-flex items-center gap-3 px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-xl hover:shadow-2xl"
         >
           View Full Showcase
           <ArrowRight className="w-5 h-5" />

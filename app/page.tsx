@@ -2,19 +2,8 @@
 
 import Link from 'next/link'
 import FeaturedTransformations from '@/components/FeaturedTransformations'
-import { prompts } from '@/lib/prompts'
-
-// Get daily rotating prompt - changes every 24 hours, same for all users
-const getPromptOfTheDay = () => {
-  const daysSinceEpoch = Math.floor(Date.now() / (24 * 60 * 60 * 1000))
-  const promptIndex = daysSinceEpoch % prompts.length
-  return prompts[promptIndex]
-}
 
 export default function Home() {
-  // Dynamic Prompt of the Day - rotates daily based on system time
-  const dailyPrompt = getPromptOfTheDay()
-  const PROMPT_OF_THE_DAY = dailyPrompt.description
 
   return (
     <div className="min-h-screen">
@@ -48,34 +37,6 @@ export default function Home() {
 
           </div>
 
-          {/* Prompt of the Day Section */}
-          <div className="max-w-3xl mx-auto mb-12 px-4">
-            <div className="border-2 rounded-xl p-6 shadow-lg bg-teal-50 border-teal-300">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-3xl">✨</span>
-                <h2 className="font-bold text-2xl text-gray-900">Prompt of the Day</h2>
-              </div>
-              <div className="mb-3">
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{dailyPrompt.title}</h3>
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-white border border-teal-300 rounded-full text-xs font-medium text-teal-700">
-                  {dailyPrompt.category}
-                </span>
-              </div>
-              <p className="text-base text-gray-700 italic mb-6 leading-relaxed">
-                &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
-              </p>
-              <Link
-                href="/editor"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 shadow-md"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Try This in Editor
-              </Link>
-            </div>
-          </div>
-
           {/* Featured Transformations */}
           <div className="px-4 pb-12 mb-8">
             <FeaturedTransformations limit={6} variant="grid" showHeader />
@@ -103,17 +64,11 @@ export default function Home() {
 
           {/* Quick Links Grid */}
           <div className="max-w-4xl mx-auto mb-12 px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Link href="/prompts" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
                 <div className="text-4xl mb-3">📚</div>
                 <h3 className="font-bold text-lg text-gray-900 mb-2">Prompts Library</h3>
                 <p className="text-sm text-gray-600">Browse 272+ creative prompts</p>
-              </Link>
-
-              <Link href="/showcase" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-purple-400 hover:shadow-lg transition-all group">
-                <div className="text-4xl mb-3">🎭</div>
-                <h3 className="font-bold text-lg text-gray-900 mb-2">Showcase</h3>
-                <p className="text-sm text-gray-600">See what others have created</p>
               </Link>
 
               <Link href="/examples" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
