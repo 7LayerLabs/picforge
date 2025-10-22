@@ -105,15 +105,15 @@ export default function FeaturedShowcase({ variant = 'full' }: FeaturedShowcaseP
   const displayItems = activeTab === 'featured' ? featured : trending.slice(0, 6);
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
+    <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-500 to-teal-500 text-white p-6">
+      <div className="bg-purple-600 text-white p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="font-heading text-3xl font-bold mb-2">
               Community Spotlight
             </h2>
-            <p className="text-purple-100">
+            <p className="text-white opacity-90">
               Amazing transformations from our creative community
             </p>
           </div>
@@ -199,13 +199,13 @@ export default function FeaturedShowcase({ variant = 'full' }: FeaturedShowcaseP
                 >
                   {/* Featured/Trending Badge */}
                   {activeTab === 'featured' && (
-                    <div className="absolute top-2 left-2 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+                    <div className="absolute top-2 left-2 z-10 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
                       <Award className="w-3 h-3" />
                       Featured
                     </div>
                   )}
                   {activeTab === 'trending' && index < 3 && (
-                    <div className="absolute top-2 left-2 z-10 bg-gradient-to-r from-teal-400 to-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+                    <div className="absolute top-2 left-2 z-10 bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
                       <TrendingUp className="w-3 h-3" />
                       #{index + 1} Trending
                     </div>
@@ -282,7 +282,7 @@ export default function FeaturedShowcase({ variant = 'full' }: FeaturedShowcaseP
             <div className="mt-8 text-center">
               <Link
                 href="/showcase"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-500 to-teal-500 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-teal-600 transition-all hover:scale-105 shadow-lg"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-all hover:scale-105 shadow-lg"
               >
                 Explore All Showcases
                 <ArrowRight className="w-5 h-5" />

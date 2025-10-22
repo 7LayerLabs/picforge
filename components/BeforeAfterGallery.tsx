@@ -106,13 +106,13 @@ export default function BeforeAfterGallery({ onStartEditing }: BeforeAfterGaller
   return (
     <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-500 to-blue-500 text-white p-6">
+      <div className="bg-teal-500 text-white p-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-heading text-3xl font-bold mb-2">
               See What&apos;s Possible
             </h2>
-            <p className="text-teal-100">
+            <p className="text-white opacity-90">
               Real transformations. Real results. Zero Photoshop skills required.
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function BeforeAfterGallery({ onStartEditing }: BeforeAfterGaller
               className={`px-4 py-2 rounded-lg font-medium transition-all ${
                 viewMode === 'grid'
                   ? 'bg-white text-teal-600'
-                  : 'bg-teal-600 text-white hover:bg-teal-700'
+                  : 'bg-white/20 text-white hover:bg-white/30'
               }`}
             >
               Grid
@@ -132,7 +132,7 @@ export default function BeforeAfterGallery({ onStartEditing }: BeforeAfterGaller
               className={`px-4 py-2 rounded-lg font-medium transition-all ${
                 viewMode === 'slider'
                   ? 'bg-white text-teal-600'
-                  : 'bg-teal-600 text-white hover:bg-teal-700'
+                  : 'bg-white/20 text-white hover:bg-white/30'
               }`}
             >
               Compare
@@ -203,7 +203,7 @@ export default function BeforeAfterGallery({ onStartEditing }: BeforeAfterGaller
             <div className="text-center">
               <button
                 onClick={onStartEditing}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-500 to-blue-500 text-white text-lg font-bold rounded-xl hover:from-teal-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-teal-500 text-white text-lg font-bold rounded-xl hover:bg-teal-600 transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 Start Editing Your Images
                 <ArrowDown className="w-5 h-5 animate-bounce" />
@@ -277,7 +277,7 @@ export default function BeforeAfterGallery({ onStartEditing }: BeforeAfterGaller
               <div className="mt-6">
                 <button
                   onClick={onStartEditing}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-500 to-blue-500 text-white text-lg font-bold rounded-xl hover:from-teal-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-teal-500 text-white text-lg font-bold rounded-xl hover:bg-teal-600 transition-all duration-300 hover:scale-105 hover:shadow-xl"
                 >
                   Start Editing Your Images
                   <ArrowDown className="w-5 h-5 animate-bounce" />
