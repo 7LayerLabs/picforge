@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Don't fail build on ESLint warnings
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // Next.js 16 default: ESLint warnings don't fail builds
+  // (eslint.ignoreDuringBuilds removed in Next.js 16)
 
   images: {
     remotePatterns: [],
