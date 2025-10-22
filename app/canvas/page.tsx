@@ -113,22 +113,25 @@ function CanvasContent() {
           </p>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-2xl shadow-lg">
-            <div className="text-4xl mb-3">🎨</div>
-            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Any Background. Any Scene.</h3>
-            <p className="text-sm text-gray-600">Cyberpunk alleys. Mountain sunsets. Whatever you need.</p>
-          </div>
-          <div className="bg-white p-6 rounded-2xl shadow-lg">
-            <div className="text-4xl mb-3">✨</div>
-            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Zero Limits</h3>
-            <p className="text-sm text-gray-600">If you can type it, AI can create it. Get weird with it.</p>
-          </div>
-          <div className="bg-white p-6 rounded-2xl shadow-lg">
-            <div className="text-4xl mb-3">⚡</div>
-            <h3 className="font-heading text-lg font-semibold text-gray-900 mb-2">Instant Results</h3>
-            <p className="text-sm text-gray-600">No waiting. No BS. Just pure creation speed.</p>
+        {/* How It Works - Compact Version */}
+        <div className="bg-purple-600 rounded-2xl p-6 mb-8 text-white">
+          <h2 className="font-heading text-2xl font-bold mb-4 text-center">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="text-3xl mb-2">1️⃣</div>
+              <h3 className="font-heading text-lg font-semibold mb-1">Describe</h3>
+              <p className="text-sm text-purple-100">Write what you want to create</p>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-2">2️⃣</div>
+              <h3 className="font-heading text-lg font-semibold mb-1">Generate</h3>
+              <p className="text-sm text-purple-100">AI creates it in seconds</p>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-2">3️⃣</div>
+              <h3 className="font-heading text-lg font-semibold mb-1">Download</h3>
+              <p className="text-sm text-purple-100">Save or edit your image</p>
+            </div>
           </div>
         </div>
 
@@ -214,27 +217,6 @@ function CanvasContent() {
           </div>
         )}
 
-        {/* How It Works */}
-        <div className="mt-16 bg-teal-600 rounded-3xl p-8 text-white">
-          <h2 className="font-heading text-3xl font-bold mb-6">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="text-4xl mb-3">1️⃣</div>
-              <h3 className="font-heading text-xl font-semibold mb-2">Describe</h3>
-              <p className="text-purple-100">Write a detailed description of the image you want to create</p>
-            </div>
-            <div>
-              <div className="text-4xl mb-3">2️⃣</div>
-              <h3 className="font-heading text-xl font-semibold mb-2">Generate</h3>
-              <p className="text-purple-100">Our AI brings your vision to life in seconds</p>
-            </div>
-            <div>
-              <div className="text-4xl mb-3">3️⃣</div>
-              <h3 className="font-heading text-xl font-semibold mb-2">Use</h3>
-              <p className="text-purple-100">Download or add your photos to the generated background</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Referral Modal - Shows 2 seconds after generation */}
