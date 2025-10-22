@@ -143,10 +143,96 @@ export default function FeaturedTransformations({
     );
   }
 
-  // Don't show if no items
-  if (displayItems.length === 0) {
-    return null;
-  }
+  // Show example transformations if database is empty
+  const exampleTransformations = [
+    {
+      id: 'example-1',
+      title: 'Van Gogh Style',
+      prompt: 'Transform into Van Gogh painting',
+      originalImageUrl: '/examples/before-1.jpg',
+      transformedImageUrl: '/examples/after-1.jpg',
+      likes: 42,
+      views: 128,
+      featured: true,
+      approved: true,
+      timestamp: Date.now(),
+      userId: 'system',
+      user: { name: 'PicForge Examples' }
+    },
+    {
+      id: 'example-2',
+      title: 'Cyberpunk',
+      prompt: 'Turn into cyberpunk character',
+      originalImageUrl: '/examples/before-2.jpg',
+      transformedImageUrl: '/examples/after-2.jpg',
+      likes: 38,
+      views: 94,
+      featured: true,
+      approved: true,
+      timestamp: Date.now(),
+      userId: 'system',
+      user: { name: 'PicForge Examples' }
+    },
+    {
+      id: 'example-3',
+      title: 'Watercolor',
+      prompt: 'Transform into watercolor painting',
+      originalImageUrl: '/examples/before-3.jpg',
+      transformedImageUrl: '/examples/after-3.jpg',
+      likes: 35,
+      views: 87,
+      featured: true,
+      approved: true,
+      timestamp: Date.now(),
+      userId: 'system',
+      user: { name: 'PicForge Examples' }
+    },
+    {
+      id: 'example-4',
+      title: 'Zombie',
+      prompt: 'Turn into zombie',
+      originalImageUrl: '/examples/before-4.jpg',
+      transformedImageUrl: '/examples/after-4.jpg',
+      likes: 52,
+      views: 156,
+      featured: true,
+      approved: true,
+      timestamp: Date.now(),
+      userId: 'system',
+      user: { name: 'PicForge Examples' }
+    },
+    {
+      id: 'example-5',
+      title: 'Oil Painting',
+      prompt: 'Transform into classical oil painting',
+      originalImageUrl: '/examples/before-5.jpg',
+      transformedImageUrl: '/examples/after-5.jpg',
+      likes: 29,
+      views: 73,
+      featured: true,
+      approved: true,
+      timestamp: Date.now(),
+      userId: 'system',
+      user: { name: 'PicForge Examples' }
+    },
+    {
+      id: 'example-6',
+      title: 'Anime Style',
+      prompt: 'Turn into anime character',
+      originalImageUrl: '/examples/before-6.jpg',
+      transformedImageUrl: '/examples/after-6.jpg',
+      likes: 64,
+      views: 201,
+      featured: true,
+      approved: true,
+      timestamp: Date.now(),
+      userId: 'system',
+      user: { name: 'PicForge Examples' }
+    }
+  ];
+
+  // Use examples if no real submissions
+  const itemsToShow = displayItems.length > 0 ? displayItems : exampleTransformations.slice(0, limit);
 
   return (
     <div className={`${className}`}>
@@ -213,7 +299,7 @@ export default function FeaturedTransformations({
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
               <span>
-                <span className="font-bold text-gray-900">{displayItems.length}</span> amazing
+                <span className="font-bold text-gray-900">{itemsToShow.length}</span> amazing
                 transformations
               </span>
             </div>
@@ -231,7 +317,7 @@ export default function FeaturedTransformations({
             : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
         }`}
       >
-        {displayItems.map((item, index) => (
+        {itemsToShow.map((item, index) => (
           <FeaturedCard
             key={item.id}
             showcase={item}
