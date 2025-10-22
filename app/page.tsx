@@ -14,6 +14,8 @@ import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 import ExportModal from '@/components/ExportModal'
 import WatermarkPreviewNotice from '@/components/WatermarkPreviewNotice'
 import ReferralCTA from '@/components/ReferralCTA'
+import BeforeAfterGallery from '@/components/BeforeAfterGallery'
+import FeaturedTransformations from '@/components/FeaturedTransformations'
 import { useImageTracking } from '@/hooks/useImageTracking'
 import { prompts } from '@/lib/prompts'
 
@@ -893,13 +895,39 @@ export default function Home() {
         {!currentImage && (
           <>
             {/* Hero Section */}
-            <div className="text-center mb-12 px-4 pt-8">
-              <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+            <div className="text-center mb-8 px-4 pt-8">
+              <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-3 leading-tight">
                 <span className="inline-block text-3xl md:text-4xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900">Imagine<span className="text-4xl md:text-5xl">.</span> Everything<span className="text-4xl md:text-5xl">.</span></span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed">
-                Upload your image. Pick a prompt. Watch reality bend.
+              <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
+                Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">272+ prompts and endless ideas</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
               </p>
+
+              {/* Feature Highlights - Compact Inline Badges */}
+              <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
+                  <span className="text-xl">⚡</span>
+                  <span className="text-sm font-semibold text-gray-900">Instant Results</span>
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
+                  <span className="text-xl">🎨</span>
+                  <span className="text-sm font-semibold text-gray-900">272+ Prompts</span>
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
+                  <span className="text-xl">🔒</span>
+                  <span className="text-sm font-semibold text-gray-900">Private & Secure</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Before/After Gallery */}
+            <div className="px-4 pb-8 mb-8">
+              <BeforeAfterGallery onStartEditing={scrollToUpload} />
+            </div>
+
+            {/* Featured Transformations */}
+            <div className="px-4 pb-12 mb-8">
+              <FeaturedTransformations limit={6} variant="grid" showHeader />
             </div>
           </>
         )}
