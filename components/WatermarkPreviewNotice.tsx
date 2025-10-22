@@ -49,7 +49,7 @@ export default function WatermarkPreviewNotice({
   };
 
   return (
-    <div className="bg-gradient-to-r from-teal-50 to-blue-50 border-2 border-teal-200 rounded-xl p-4 shadow-lg">
+    <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4 shadow-lg">
       {/* Header */}
       <div className="flex items-start gap-3 mb-3">
         <div className="flex-shrink-0 w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
@@ -147,7 +147,7 @@ export default function WatermarkPreviewNotice({
       </div>
 
       {/* Upgrade CTA */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-purple-500 to-teal-500 text-white rounded-lg p-3">
+      <div className="flex items-center justify-between bg-purple-600 text-white rounded-lg p-3">
         <div className="flex-1">
           <p className="text-sm font-bold mb-0.5">Want watermark-free downloads?</p>
           <p className="text-xs opacity-90">Upgrade to Pro for unlimited images without watermarks</p>

@@ -35,7 +35,7 @@ function SuccessContent() {
 
   if (isVerifying) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-700">
+      <div className="min-h-screen flex items-center justify-center bg-teal-600">
         <div className="bg-white rounded-2xl shadow-2xl p-12 max-w-md text-center">
           <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Verifying your payment...</h2>
@@ -46,7 +46,7 @@ function SuccessContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-700 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-teal-600 p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-2xl w-full">
         {/* Success Icon */}
         <div className="flex justify-center mb-6">
@@ -122,7 +122,7 @@ export default function SuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-700">
+        <div className="min-h-screen flex items-center justify-center bg-teal-600">
           <div className="bg-white rounded-2xl shadow-2xl p-12 max-w-md text-center">
             <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Loading...</h2>

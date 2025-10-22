@@ -48,7 +48,7 @@ export default function EditorNSFWPage() {
 
           {/* Title */}
           <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-teal-400 to-red-400 mb-2 animate-gradient">
+            <h1 className="text-3xl md:text-4xl font-bold text-red-400 mb-2">
               18+ Unrestricted Editor
             </h1>
             <p className="text-lg text-gray-400 font-semibold">

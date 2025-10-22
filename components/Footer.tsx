@@ -13,7 +13,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-2">
               <span className="text-2xl">🔥</span>
               <h3 className="font-heading text-xl font-bold">
-                <span className="bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">PicForge</span>
+                <span className="text-teal-500">PicForge</span>
               </h3>
             </div>
             <p className="text-gray-400 text-xs">

@@ -72,7 +72,7 @@ export default function AdminPage() {
   // Allow anyone who is signed in
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
         <div className="bg-white rounded-2xl shadow-2xl p-12 max-w-md text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-6" />
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Sign In Required</h1>
@@ -166,7 +166,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl shadow-xl p-8 mb-8 text-white">
+        <div className="bg-gray-900 rounded-2xl shadow-xl p-8 mb-8 text-white">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold mb-2">Admin Analytics</h1>

@@ -45,7 +45,7 @@ export default function Navigation() {
                   className="w-10 h-10"
                 />
                 <div className="flex flex-col">
-                  <span className="font-bold text-xl bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">PicForge</span>
+                  <span className="font-bold text-xl text-teal-500">PicForge</span>
                   <span className="text-xs text-gray-600">Forge your images into art</span>
                 </div>
               </Link>

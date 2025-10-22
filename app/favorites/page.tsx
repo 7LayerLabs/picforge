@@ -271,7 +271,7 @@ export default function FavoritesPage() {
                     {groupedPrompts[category].map((favorite: any) => (
                       <div
                         key={favorite.id}
-                        className="group relative p-4 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg border-2 border-yellow-200 dark:border-yellow-800 hover:border-yellow-400 dark:hover:border-yellow-600 transition-all duration-200"
+                        className="group relative p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-200 dark:border-yellow-800 hover:border-yellow-400 dark:hover:border-yellow-600 transition-all duration-200"
                       >
                         {/* Star Badge */}
                         <div className="absolute top-3 left-3">

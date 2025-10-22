@@ -36,8 +36,8 @@ export default function FavoritesPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-        <div className="bg-gradient-to-r from-red-600 to-red-500 text-white py-8 px-4 sm:px-6 lg:px-8 shadow-lg">
+      <main className="min-h-screen bg-slate-900">
+        <div className="bg-red-600 text-white py-8 px-4 sm:px-6 lg:px-8 shadow-lg">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-4xl sm:text-5xl font-bold mb-2">My Favorite Prompts</h1>
             <p className="text-lg text-red-100">Loading your saved prompts...</p>

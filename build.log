@@ -1,0 +1,111 @@
+
+> picforge@1.0.0 build
+> prisma generate && next build
+
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (v6.16.3) to .\node_modules\@prisma\client in 124ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+
+   ▲ Next.js 15.5.3
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ scrollRestoration
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 6.5s
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./app/api/showcase/route.ts
+14:10  Warning: 'NextRequest' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/batch/page.tsx
+29:10  Warning: 'downloadExportPack' is defined but never used.  @typescript-eslint/no-unused-vars
+421:13  Warning: 'ExportFormats' is defined but never used.  @typescript-eslint/no-unused-vars
+542:9  Warning: 'addSVGToZip' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+868:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/canvas/page.tsx
+155:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/components/BatchProcessorNSFW.tsx
+613:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/components/EditorNSFW.tsx
+5:65  Warning: 'Sparkles' is defined but never used.  @typescript-eslint/no-unused-vars
+256:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/editor-nsfw/page.tsx
+7:7  Warning: 'EditorNSFW' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/page.tsx
+6:10  Warning: 'Sparkles' is defined but never used.  @typescript-eslint/no-unused-vars
+58:10  Warning: 'isGeneratingCanvas' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+176:6  Warning: React Hook useEffect has missing dependencies: 'PROMPT_OF_THE_DAY' and 'promptOfDayActive'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+623:57  Warning: 'index' is defined but never used.  @typescript-eslint/no-unused-vars
+629:9  Warning: 'openExportModal' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/pricing/page.tsx
+11:30  Warning: 'setShowSuccessMessage' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+22:32  Warning: 'tier' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/roast/page.tsx
+4:33  Warning: 'Download' is defined but never used.  @typescript-eslint/no-unused-vars
+4:43  Warning: 'RefreshCw' is defined but never used.  @typescript-eslint/no-unused-vars
+148:16  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+158:9  Warning: 'downloadResult' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+380:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/roulette/page.tsx
+3:20  Warning: 'useEffect' is defined but never used.  @typescript-eslint/no-unused-vars
+4:56  Warning: 'Sparkles' is defined but never used.  @typescript-eslint/no-unused-vars
+412:30  Warning: 'newAchievements' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+577:16  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+803:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+816:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+854:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+977:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/showcase/page.tsx
+45:3  Warning: Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any').
+370:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+472:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+480:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+521:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/showcase/submit/ShowcaseSubmitClient.tsx
+105:9  Error: Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free.  @typescript-eslint/ban-ts-comment
+228:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+269:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/EffectTooltip.tsx
+4:10  Warning: 'Info' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/ExportModal.tsx
+6:3  Warning: 'getPresetsByCategory' is defined but never used.  @typescript-eslint/no-unused-vars
+41:10  Warning: 'showAdvanced' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+41:24  Warning: 'setShowAdvanced' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+77:13  Warning: 'fullFileName' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/FilterSidebar.tsx
+4:21  Warning: 'ChevronDown' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/LazyImage.tsx
+71:7  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/PromptCard.tsx
+117:14  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./components/SelectiveEditor.tsx
+4:41  Warning: 'Wand2' is defined but never used.  @typescript-eslint/no-unused-vars
+4:68  Warning: 'Download' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/UserMenu.tsx
+37:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules

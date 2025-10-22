@@ -360,7 +360,7 @@ export default function SelectiveEditor({ imageUrl, onApply }: SelectiveEditorPr
         {/* Apply Button */}
         <button
           onClick={applySelection}
-          className="w-full px-6 py-4 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-bold text-lg hover:from-teal-600 hover:to-teal-700 transition-all flex items-center justify-center gap-2 shadow-lg"
+          className="w-full px-6 py-4 bg-teal-500 text-white rounded-xl font-bold text-lg hover:bg-teal-600 transition-all flex items-center justify-center gap-2 shadow-lg"
         >
           <Zap className="w-5 h-5" />
           Transform Selection

@@ -61,7 +61,7 @@ interface PopularCombinationsProps {
 
 export default function PopularCombinations({ onSelectCombination }: PopularCombinationsProps) {
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 mb-6">
+    <div className="bg-purple-50 rounded-xl p-6 mb-6">
       <div className="flex items-center gap-2 mb-4">
         <Sparkles className="w-5 h-5 text-purple-600" />
         <h3 className="font-bold text-purple-900 text-lg">Popular Effect Combinations</h3>

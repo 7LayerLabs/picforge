@@ -643,7 +643,7 @@ export default function TransformRoulette() {
 
           {/* Streak Message */}
           {stats.streak >= 3 && (
-            <div className="mt-4 bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-500 rounded-lg p-3">
+            <div className="mt-4 bg-orange-50 border-l-4 border-orange-500 rounded-lg p-3">
               <p className="text-orange-900 font-semibold flex items-center gap-2">
                 <Flame className="w-5 h-5 text-orange-600 animate-pulse" />
                 {stats.streak} spins in a row! You&apos;re on fire! Keep spinning!
@@ -901,7 +901,7 @@ export default function TransformRoulette() {
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
                   <div
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-4 rounded-full transition-all duration-500"
+                    className="bg-purple-500 h-4 rounded-full transition-all duration-500"
                     style={{ width: `${Math.min(getProgress().percentage, 100)}%` }}
                   />
                 </div>
@@ -921,7 +921,7 @@ export default function TransformRoulette() {
                         key={achievement.id}
                         className={`p-4 rounded-lg border-2 text-center transition-all ${
                           isUnlocked
-                            ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-300'
+                            ? 'bg-yellow-50 border-yellow-300'
                             : 'bg-gray-50 border-gray-200 opacity-50'
                         }`}
                       >

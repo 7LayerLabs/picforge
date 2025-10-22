@@ -1,0 +1,95 @@
+
+> picforge@1.0.0 build
+> prisma generate && next build
+
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (v6.16.3) to .\node_modules\@prisma\client in 154ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+   ▲ Next.js 15.5.3
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ scrollRestoration
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 12.5s
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/54) ...
+   Generating static pages (13/54) 
+   Generating static pages (26/54) 
+   Generating static pages (40/54) 
+ ✓ Generating static pages (54/54)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    32.8 kB         350 kB
+├ ○ /_not-found                             1 kB         103 kB
+├ ○ /admin                                120 kB         269 kB
+├ ƒ /api/auth/[...nextauth]                197 B         102 kB
+├ ƒ /api/batch-styles                      197 B         102 kB
+├ ƒ /api/create-checkout-session           197 B         102 kB
+├ ƒ /api/generate-canvas                   197 B         102 kB
+├ ƒ /api/generate-canvas-free              197 B         102 kB
+├ ƒ /api/generate-canvas-hf                197 B         102 kB
+├ ƒ /api/generate-canvas-pollinations      197 B         102 kB
+├ ƒ /api/generate-caption                  197 B         102 kB
+├ ƒ /api/inpaint                           197 B         102 kB
+├ ƒ /api/process-image                     197 B         102 kB
+├ ƒ /api/process-image-nsfw                197 B         102 kB
+├ ƒ /api/process-image-v2                  197 B         102 kB
+├ ƒ /api/roast                             197 B         102 kB
+├ ƒ /api/sample-images                     197 B         102 kB
+├ ƒ /api/showcase                          197 B         102 kB
+├ ƒ /api/showcase/[id]/like                197 B         102 kB
+├ ƒ /api/showcase/featured                 197 B         102 kB
+├ ƒ /api/test-batch                        197 B         102 kB
+├ ƒ /api/test-replicate                    197 B         102 kB
+├ ƒ /api/track-share                       197 B         102 kB
+├ ƒ /api/track-template                    197 B         102 kB
+├ ƒ /api/track-visitor                     197 B         102 kB
+├ ƒ /api/vip                               197 B         102 kB
+├ ƒ /api/visitor-stats                     197 B         102 kB
+├ ƒ /api/webhooks/stripe                   197 B         102 kB
+├ ○ /auth/error                          2.19 kB         107 kB
+├ ○ /auth/signin                         2.48 kB         117 kB
+├ ○ /batch                               9.13 kB         303 kB
+├ ○ /batch-nsfw                          6.11 kB         166 kB
+├ ○ /canvas                               3.6 kB         109 kB
+├ ○ /contact                             2.37 kB         107 kB
+├ ƒ /dashboard                           1.77 kB         117 kB
+├ ○ /editor-nsfw                         6.11 kB         111 kB
+├ ○ /examples                            3.02 kB         113 kB
+├ ○ /favorites                           4.54 kB         151 kB
+├ ○ /icon.svg                                0 B            0 B
+├ ○ /ideas                                2.7 kB         108 kB
+├ ○ /my-images                           3.58 kB         150 kB
+├ ○ /pricing                             5.14 kB         147 kB
+├ ○ /privacy                               170 B         105 kB
+├ ○ /profile                             4.27 kB         146 kB
+├ ○ /prompt-wizard                       4.83 kB         107 kB
+├ ○ /prompts                             32.6 kB         171 kB
+├ ○ /prompts/favorites                   5.31 kB         155 kB
+├ ○ /roast                               4.05 kB         106 kB
+├ ○ /roulette                            13.1 kB         115 kB
+├ ○ /showcase                            4.19 kB         151 kB
+├ ƒ /showcase/submit                     2.95 kB         145 kB
+├ ○ /submit                              2.75 kB         108 kB
+├ ○ /success                              2.6 kB         108 kB
+├ ○ /terms                                 170 B         105 kB
+└ ○ /tips                                6.08 kB         111 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/1255-de419e8b3760f9d4.js      45.3 kB
+  ├ chunks/4bd1b696-182b6b13bdad92e3.js  54.2 kB
+  └ other shared chunks (total)          2.17 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

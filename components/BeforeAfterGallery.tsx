@@ -245,7 +245,7 @@ export default function BeforeAfterGallery({ onStartEditing }: BeforeAfterGaller
                 />
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
                     <p className="font-bold text-sm mb-1">{item.title}</p>
                     <p className="text-xs opacity-90">{item.category}</p>

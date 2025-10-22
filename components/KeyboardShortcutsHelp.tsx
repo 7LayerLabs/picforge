@@ -80,7 +80,7 @@ export default function KeyboardShortcutsHelp() {
       <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-[80vh] overflow-y-auto animate-scale-in">
         <div className="bg-white rounded-2xl shadow-2xl mx-4">
           {/* Header */}
-          <div className="bg-gradient-to-r from-teal-500 to-teal-600 rounded-t-2xl p-6 text-white">
+          <div className="bg-teal-500 rounded-t-2xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Keyboard className="w-8 h-8" />

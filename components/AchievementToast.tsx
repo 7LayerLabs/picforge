@@ -35,7 +35,7 @@ export default function AchievementToast({ achievement, onClose }: AchievementTo
         isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       }`}
     >
-      <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl shadow-2xl p-4 min-w-[300px] border-2 border-yellow-300">
+      <div className="bg-yellow-400 rounded-xl shadow-2xl p-4 min-w-[300px] border-2 border-yellow-300">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
             <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center animate-bounce">
