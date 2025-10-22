@@ -14,6 +14,8 @@ import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 import ExportModal from '@/components/ExportModal'
 import BeforeAfterGallery from '@/components/BeforeAfterGallery'
 import TrendingShowcase from '@/components/TrendingShowcase'
+import FeaturedTransformations from '@/components/FeaturedTransformations'
+import SocialProofCounter from '@/components/SocialProofCounter'
 import WatermarkPreviewNotice from '@/components/WatermarkPreviewNotice'
 import ReferralCTA from '@/components/ReferralCTA'
 import { useImageTracking } from '@/hooks/useImageTracking'
@@ -688,8 +690,6 @@ export default function Home() {
     setSubmitMessage('Generating your canvas...')
 
     try {
-      console.log('Sending request to generate canvas:', { canvasPrompt, canvasSize, canvasQuality })
-
       const response = await fetch('/api/generate-canvas-pollinations', {
         method: 'POST',
         headers: {
@@ -701,7 +701,6 @@ export default function Home() {
       })
 
       const data = await response.json()
-      console.log('API Response:', data)
 
       if (response.ok && data.image) {
         // Set the generated image as the current image
@@ -923,15 +922,25 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Social Proof Counter */}
+            <div className="px-4 pb-8 mb-8">
+              <SocialProofCounter variant="inline" showTransformations showUsers className="justify-center" />
+            </div>
+
             {/* Before/After Gallery */}
             <div className="px-4 pb-8 mb-8">
               <BeforeAfterGallery onStartEditing={scrollToUpload} />
             </div>
 
-            {/* Trending Showcase */}
-            <div className="px-4 pb-8 mb-8">
-              <TrendingShowcase />
+            {/* Featured Transformations */}
+            <div className="px-4 pb-12 mb-8">
+              <FeaturedTransformations limit={6} variant="grid" showHeader />
             </div>
+
+            {/* Trending Showcase - Replaced by Featured Transformations above but keeping for backward compatibility */}
+            {/* <div className="px-4 pb-8 mb-8">
+              <TrendingShowcase />
+            </div> */}
           </>
         )}
 

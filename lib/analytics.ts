@@ -29,6 +29,23 @@ export type GAEvent =
   | 'roulette_spin'
   | 'prompt_wizard_complete'
   | 'template_used'
+  | 'showcase_submit'
+  | 'showcase_vote'
+  | 'referral_signup'
+  | 'search'
+  | 'modal_open'
+  | 'button_click'
+  | 'user_engagement'
+  | 'filter_applied'
+  | 'export'
+  | 'tier_change'
+  | 'form_submission'
+  | 'navigation'
+  | 'email_preferences'
+  | 'enhanced_conversion'
+  | 'scroll'
+  | 'media_interaction'
+  | 'api_error'
   | 'page_view'
   | 'error_occurred';
 
@@ -66,6 +83,18 @@ export interface ErrorEvent {
   error_type: string;
   error_message: string;
   page_path: string;
+}
+
+export interface ShowcaseEvent {
+  has_description: boolean;
+  prompt_used?: string;
+}
+
+export interface RouletteSpinEvent {
+  category: string;
+  prompt_title: string;
+  spin_number: number;
+  streak: number;
 }
 
 /**
@@ -226,7 +255,7 @@ export const trackSocialShare = (params: SocialShareEvent) => {
 /**
  * Track image downloads
  */
-export const trackDownload = (source: 'main_editor' | 'batch' | 'share_modal' | 'gallery') => {
+export const trackDownload = (source: 'main_editor' | 'batch' | 'share_modal' | 'gallery' | 'roulette' | 'canvas') => {
   trackEvent('download_image', {
     event_category: 'engagement',
     source,
@@ -296,11 +325,13 @@ export const trackCanvasGeneration = (
 /**
  * Track roulette spins
  */
-export const trackRouletteSpinned = (category: string, promptTitle: string) => {
+export const trackRouletteSpinned = (params: RouletteSpinEvent) => {
   trackEvent('roulette_spin', {
     event_category: 'engagement',
-    event_label: promptTitle,
-    category,
+    event_label: params.prompt_title,
+    category: params.category,
+    spin_number: params.spin_number,
+    streak: params.streak,
   });
 };
 
@@ -321,10 +352,33 @@ export const trackPromptWizardComplete = (
 /**
  * Track template usage
  */
-export const trackTemplateUsed = (templateName: string) => {
+export const trackTemplateUsed = (templateName: string, source: string = 'editor') => {
   trackEvent('template_used', {
     event_category: 'content',
     event_label: templateName,
+    source,
+  });
+};
+
+/**
+ * Track showcase submissions
+ */
+export const trackShowcaseSubmit = (params: ShowcaseEvent) => {
+  trackEvent('showcase_submit', {
+    event_category: 'engagement',
+    has_description: params.has_description,
+    prompt_used: params.prompt_used,
+  });
+};
+
+/**
+ * Track showcase votes
+ */
+export const trackShowcaseVote = (submissionId: string, voteType: 'like') => {
+  trackEvent('showcase_vote', {
+    event_category: 'engagement',
+    submission_id: submissionId,
+    vote_type: voteType,
   });
 };
 
@@ -348,6 +402,7 @@ export const setUserProperties = (properties: {
   has_generated_images?: boolean;
   total_transformations?: number;
   favorite_category?: string;
+  registration_date?: string;
 }) => {
   if (typeof window === 'undefined' || !window.gtag) return;
 
@@ -368,5 +423,236 @@ export const trackConversion = (
     send_to: `${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}/${conversionLabel}`,
     value,
     currency,
+  });
+};
+
+/**
+ * Track referral signups
+ */
+export const trackReferralSignup = (referralCode: string, referrerId: string) => {
+  trackEvent('referral_signup', {
+    event_category: 'conversion',
+    referral_code: referralCode,
+    referrer_id: referrerId,
+    value: 1,
+  });
+};
+
+/**
+ * Track search queries in prompt library
+ */
+export const trackPromptSearch = (
+  searchQuery: string,
+  resultsCount: number,
+  filters?: { category?: string; tags?: string[] }
+) => {
+  trackEvent('search', {
+    event_category: 'engagement',
+    search_term: searchQuery,
+    results_count: resultsCount,
+    filters_applied: filters ? JSON.stringify(filters) : undefined,
+  });
+};
+
+/**
+ * Track modal interactions
+ */
+export const trackModalOpen = (
+  modalName: string,
+  source?: string
+) => {
+  trackEvent('modal_open', {
+    event_category: 'engagement',
+    modal_name: modalName,
+    source,
+  });
+};
+
+/**
+ * Track button clicks
+ */
+export const trackButtonClick = (
+  buttonName: string,
+  location: string,
+  metadata?: Record<string, any>
+) => {
+  trackEvent('button_click', {
+    event_category: 'engagement',
+    button_name: buttonName,
+    location,
+    ...metadata,
+  });
+};
+
+/**
+ * Track user engagement time on page
+ */
+export const trackEngagementTime = (
+  pagePath: string,
+  timeSeconds: number
+) => {
+  trackEvent('user_engagement', {
+    event_category: 'engagement',
+    page_path: pagePath,
+    engagement_time_seconds: timeSeconds,
+  });
+};
+
+/**
+ * Track filter usage in prompt library
+ */
+export const trackFilterUsage = (
+  filterType: 'category' | 'tag',
+  filterValue: string,
+  resultsCount: number
+) => {
+  trackEvent('filter_applied', {
+    event_category: 'engagement',
+    filter_type: filterType,
+    filter_value: filterValue,
+    results_count: resultsCount,
+  });
+};
+
+/**
+ * Track export actions
+ */
+export const trackExport = (
+  exportType: 'favorites' | 'batch_images' | 'all_images',
+  itemCount: number,
+  format?: string
+) => {
+  trackEvent('export', {
+    event_category: 'engagement',
+    export_type: exportType,
+    item_count: itemCount,
+    format,
+  });
+};
+
+/**
+ * Track user tier changes
+ */
+export const trackTierChange = (
+  fromTier: 'free' | 'pro' | 'unlimited',
+  toTier: 'free' | 'pro' | 'unlimited',
+  method: 'promo_code' | 'payment' | 'referral'
+) => {
+  trackEvent('tier_change', {
+    event_category: 'conversion',
+    from_tier: fromTier,
+    to_tier: toTier,
+    method,
+    value: toTier === 'unlimited' ? 1 : 0,
+  });
+};
+
+/**
+ * Track form submissions
+ */
+export const trackFormSubmission = (
+  formName: string,
+  success: boolean,
+  errorMessage?: string
+) => {
+  trackEvent('form_submission', {
+    event_category: 'engagement',
+    form_name: formName,
+    success,
+    error_message: errorMessage,
+  });
+};
+
+/**
+ * Track navigation menu interactions
+ */
+export const trackNavigation = (
+  clickedItem: string,
+  destination: string
+) => {
+  trackEvent('navigation', {
+    event_category: 'engagement',
+    clicked_item: clickedItem,
+    destination,
+  });
+};
+
+/**
+ * Track email preferences changes
+ */
+export const trackEmailPreferences = (
+  action: 'opt_in' | 'opt_out',
+  emailType: string
+) => {
+  trackEvent('email_preferences', {
+    event_category: 'user',
+    action,
+    email_type: emailType,
+  });
+};
+
+/**
+ * Enhanced conversion tracking with custom parameters
+ */
+export const trackEnhancedConversion = (
+  conversionType: 'signup' | 'upgrade' | 'referral' | 'share',
+  value: number = 0,
+  metadata?: Record<string, any>
+) => {
+  trackEvent('enhanced_conversion', {
+    event_category: 'conversion',
+    conversion_type: conversionType,
+    value,
+    currency: 'USD',
+    ...metadata,
+  });
+};
+
+/**
+ * Track scroll depth (for engagement analysis)
+ */
+export const trackScrollDepth = (
+  pagePath: string,
+  scrollPercentage: number
+) => {
+  // Only track at 25%, 50%, 75%, and 100% milestones
+  if ([25, 50, 75, 100].includes(scrollPercentage)) {
+    trackEvent('scroll', {
+      event_category: 'engagement',
+      page_path: pagePath,
+      scroll_percentage: scrollPercentage,
+    });
+  }
+};
+
+/**
+ * Track video/media interactions (if applicable)
+ */
+export const trackMediaInteraction = (
+  mediaType: 'video' | 'image' | 'demo',
+  action: 'play' | 'pause' | 'complete' | 'view',
+  mediaName: string
+) => {
+  trackEvent('media_interaction', {
+    event_category: 'engagement',
+    media_type: mediaType,
+    action,
+    media_name: mediaName,
+  });
+};
+
+/**
+ * Track API errors for monitoring
+ */
+export const trackAPIError = (
+  endpoint: string,
+  errorCode: number,
+  errorMessage: string
+) => {
+  trackEvent('api_error', {
+    event_category: 'error',
+    endpoint,
+    error_code: errorCode,
+    error_message: errorMessage,
   });
 };

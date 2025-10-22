@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { db } from '@/lib/instantdb';
 import { id as generateId } from '@instantdb/react';
+import { requireEnvVar } from '@/lib/validateEnv';
+import { Errors, handleApiError } from '@/lib/apiErrors';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const stripe = new Stripe(requireEnvVar('STRIPE_SECRET_KEY', 'Stripe webhooks'));
+const webhookSecret = requireEnvVar('STRIPE_WEBHOOK_SECRET', 'Stripe webhook verification');
 
 // Helper function to upgrade user to Pro in InstantDB
 async function upgradeUserToPro(userId: string, subscriptionId: string) {
@@ -83,20 +85,22 @@ async function downgradeUserToFree(userId: string) {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.text();
-  const signature = req.headers.get('stripe-signature')!;
-
-  let event: Stripe.Event;
-
   try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-  } catch (err) {
-    console.error('Webhook signature verification failed:', err);
-    return NextResponse.json(
-      { error: 'Webhook signature verification failed' },
-      { status: 400 }
-    );
-  }
+    const body = await req.text();
+    const signature = req.headers.get('stripe-signature');
+
+    if (!signature) {
+      throw Errors.unauthorized('Missing Stripe signature');
+    }
+
+    let event: Stripe.Event;
+
+    try {
+      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    } catch (err) {
+      console.error('Webhook signature verification failed:', err);
+      throw Errors.unauthorized('Invalid webhook signature');
+    }
 
   console.log(`📥 Stripe webhook received: ${event.type}`);
 
@@ -142,4 +146,10 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({ received: true });
+  } catch (error) {
+    return handleApiError(error, {
+      route: '/api/webhooks/stripe',
+      method: 'POST',
+    });
+  }
 }

@@ -15,14 +15,16 @@ export function useAdminAnalytics() {
   const { data: usageData, isLoading: usageLoading } = db.useQuery({ usage: {} } as any);
   const { data: favoritesData, isLoading: favoritesLoading } = db.useQuery({ favorites: {} } as any);
   const { data: promoCodesData, isLoading: promoCodesLoading } = db.useQuery({ promoCodes: {} } as any);
+  const { data: referralsData, isLoading: referralsLoading } = db.useQuery({ referrals: {} } as any);
 
   const users = (usersData as any)?.users || [];
   const images = (imagesData as any)?.images || [];
   const usage = (usageData as any)?.usage || [];
   const favorites = (favoritesData as any)?.favorites || [];
   const promoCodes = (promoCodesData as any)?.promoCodes || [];
+  const referrals = (referralsData as any)?.referrals || [];
 
-  const isLoading = usersLoading || imagesLoading || usageLoading || favoritesLoading || promoCodesLoading;
+  const isLoading = usersLoading || imagesLoading || usageLoading || favoritesLoading || promoCodesLoading || referralsLoading;
 
   // Calculate overview metrics
   const overviewMetrics = useMemo(() => {
@@ -241,5 +243,10 @@ export function useAdminAnalytics() {
     userAnalytics,
     retentionMetrics,
     promoCodes,
+    // Raw data for new analytics components
+    users,
+    images,
+    favorites,
+    referrals,
   };
 }

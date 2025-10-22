@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Replicate from 'replicate';
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv';
 import { requireEnvVar } from '@/lib/validateEnv';
-import { Errors, handleApiError } from '@/lib/apiErrors';
+import { Errors, handleApiError, createRateLimitResponse } from '@/lib/apiErrors';
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,23 +11,7 @@ export async function POST(request: NextRequest) {
     const rateLimit = await checkRateLimitKv(identifier, 25, 24 * 60 * 60 * 1000);
 
     if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          error: 'Rate limit exceeded',
-          message: 'Inpainting limit exceeded. Please try again later.',
-          limit: rateLimit.limit,
-          remaining: rateLimit.remaining,
-          resetTime: rateLimit.resetTime
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimit.limit.toString(),
-            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
-            'X-RateLimit-Reset': rateLimit.resetTime.toString()
-          }
-        }
-      );
+      return createRateLimitResponse(rateLimit);
     }
 
     // Validate required environment variables
@@ -76,27 +60,9 @@ export async function POST(request: NextRequest) {
       resultUrl: resultUrl,
     });
   } catch (error: unknown) {
-    console.error('Inpainting error:', error);
-
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-
-    // Check if it's a payment/credit issue
-    if (errorMessage.includes('402') || errorMessage.includes('Insufficient credit')) {
-      return NextResponse.json(
-        {
-          error: 'Replicate API credits depleted',
-          details: 'The selective editor requires Replicate API credits. Please contact support or try again later.',
-        },
-        { status: 402 }
-      );
-    }
-
-    return NextResponse.json(
-      {
-        error: 'Failed to process inpainting',
-        details: errorMessage,
-      },
-      { status: 500 }
-    );
+    return handleApiError(error, {
+      route: '/api/inpaint',
+      method: 'POST',
+    });
   }
 }

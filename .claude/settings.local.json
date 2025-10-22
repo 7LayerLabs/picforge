@@ -26,7 +26,18 @@
       "Read(//Users/derek/Desktop/**)",
       "Bash(git mv:*)",
       "WebFetch(domain:pic-forge.com)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(find:*)",
+      "Bash(npm run validate-env:*)",
+      "Bash(test:*)",
+      "Bash(npm run build:skip-validation:*)",
+      "Bash(timeout 120 npm run build:skip-validation)",
+      "Bash(npx next build)",
+      "Bash(npm run check-env:*)",
+      "Bash(npx tsc:*)",
+      "Bash(dir:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npx next build:*)"
     ],
     "deny": [],
     "ask": []

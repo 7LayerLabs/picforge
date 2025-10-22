@@ -21,6 +21,7 @@ export function useShowcaseVotes() {
       }
 
       // Query for existing like
+      // @ts-expect-error InstantDB queryOnce type inference issue
       const { data } = await db.queryOnce({
         showcaseLikes: {
           $: {
@@ -82,6 +83,7 @@ export function useShowcaseVotes() {
    */
   const incrementViews = useCallback(async (showcaseId: string) => {
     try {
+      // @ts-expect-error InstantDB queryOnce type inference issue
       const { data } = await db.queryOnce({
         showcaseSubmissions: {
           $: {
@@ -113,6 +115,7 @@ export function useShowcaseVotes() {
     async (showcaseId: string) => {
       if (!user) return false;
 
+      // @ts-expect-error InstantDB queryOnce type inference issue
       const { data } = await db.queryOnce({
         showcaseLikes: {
           $: {

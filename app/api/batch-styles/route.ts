@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { requireEnvVar } from '@/lib/validateEnv'
+import { Errors, handleApiError } from '@/lib/apiErrors'
 
 // Style presets for batch generation
 const STYLE_PRESETS = {
@@ -57,24 +59,16 @@ const STYLE_PRESETS = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate required environment variables
+    const apiKey = requireEnvVar('GEMINI_API_KEY', 'Gemini batch style generation')
+
     const formData = await request.formData()
     const imageFile = formData.get('image') as File
     const batchType = formData.get('batchType') as string
     const customPrompt = formData.get('customPrompt') as string | null
 
     if (!imageFile) {
-      return NextResponse.json(
-        { error: 'Missing image file' },
-        { status: 400 }
-      )
-    }
-
-    const apiKey = process.env.GEMINI_API_KEY
-    if (!apiKey || apiKey === 'your_api_key_here') {
-      return NextResponse.json(
-        { error: 'API key not configured' },
-        { status: 500 }
-      )
+      throw Errors.missingParameter('image')
     }
 
     // Get the appropriate style prompts
@@ -86,10 +80,7 @@ export async function POST(request: NextRequest) {
     } else if (batchType && STYLE_PRESETS[batchType as keyof typeof STYLE_PRESETS]) {
       stylePrompts = STYLE_PRESETS[batchType as keyof typeof STYLE_PRESETS]
     } else {
-      return NextResponse.json(
-        { error: 'Invalid batch type or missing custom prompt' },
-        { status: 400 }
-      )
+      throw Errors.invalidInput('Invalid batch type or missing custom prompt')
     }
 
     // Convert image to base64
@@ -177,12 +168,7 @@ Requirements:
     }
 
     if (generatedImages.length === 0) {
-      return NextResponse.json({
-        success: false,
-        error: 'Failed to generate any images',
-        errors,
-        attempted: limitedPrompts.length
-      }, { status: 500 })
+      throw Errors.generationFailed('Failed to generate any images')
     }
 
     return NextResponse.json({
@@ -195,10 +181,6 @@ Requirements:
     })
 
   } catch (error) {
-    console.error('Batch generation error:', error)
-    return NextResponse.json(
-      { error: `Batch generation failed: ${error instanceof Error ? error.message : 'Unknown error'}` },
-      { status: 500 }
-    )
+    return handleApiError(error)
   }
 }

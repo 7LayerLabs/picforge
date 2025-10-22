@@ -2,39 +2,137 @@ import { MetadataRoute } from 'next';
 
 /**
  * Robots.txt configuration for PicForge
- * Tells search engines what to crawl
+ * Optimized for search engine crawling and SEO
+ *
+ * Key optimizations:
+ * - Allow all major search engines to crawl public pages
+ * - Block admin, API, and user-specific pages
+ * - Block NSFW content from indexing
+ * - Specify crawl delay to prevent server overload
+ * - Multiple user agent rules for different bots
  */
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
+      // General bots - most restrictive
       {
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/',
+          '/prompts',
+          '/batch',
+          '/canvas',
+          '/roulette',
+          '/roast',
+          '/prompt-wizard',
+          '/examples',
+          '/tips',
+          '/showcase',
+          '/pricing',
+          '/contact',
+          '/terms',
+          '/privacy',
+        ],
         disallow: [
           '/api/',
           '/admin/',
           '/profile/',
+          '/my-images/',
           '/_next/',
-          '/batch-nsfw/', // Don't index NSFW content
+          '/batch-nsfw/',
+          '/editor-nsfw/',
+          '/success/',
+          '/referral/',
+          '/email-preferences/',
         ],
+        crawlDelay: 1, // Seconds between requests
       },
+      // Google's main crawler - most important
       {
         userAgent: 'Googlebot',
-        allow: '/',
+        allow: [
+          '/',
+          '/prompts',
+          '/prompts/favorites',
+          '/batch',
+          '/canvas',
+          '/roulette',
+          '/roast',
+          '/prompt-wizard',
+          '/examples',
+          '/tips',
+          '/showcase',
+          '/pricing',
+          '/contact',
+          '/terms',
+          '/privacy',
+        ],
         disallow: [
           '/api/',
           '/admin/',
           '/batch-nsfw/',
+          '/editor-nsfw/',
+          '/_next/static/',
+          '/success/',
+          '/referral/',
+          '/email-preferences/',
         ],
       },
+      // Google Image Search - allow image indexing
       {
         userAgent: 'Googlebot-Image',
-        allow: '/',
+        allow: [
+          '/',
+          '/examples',
+          '/showcase',
+          '/prompts',
+        ],
         disallow: [
           '/batch-nsfw/',
+          '/editor-nsfw/',
+          '/api/',
+          '/my-images/',
         ],
+      },
+      // Bing crawler
+      {
+        userAgent: 'Bingbot',
+        allow: [
+          '/',
+          '/prompts',
+          '/batch',
+          '/canvas',
+          '/roulette',
+          '/examples',
+          '/showcase',
+        ],
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/batch-nsfw/',
+          '/editor-nsfw/',
+        ],
+        crawlDelay: 1,
+      },
+      // Block bad bots and scrapers
+      {
+        userAgent: [
+          'GPTBot', // OpenAI crawler
+          'CCBot', // Common Crawl
+          'ChatGPT-User', // ChatGPT
+          'Google-Extended', // Google's AI training
+          'anthropic-ai', // Anthropic's crawler
+          'Claude-Web', // Claude's crawler
+          'cohere-ai', // Cohere's crawler
+          'Omgilibot', // Content aggregator
+          'FacebookBot', // Facebook crawler
+          'Bytespider', // TikTok/ByteDance crawler
+        ],
+        disallow: '/',
+        crawlDelay: 10,
       },
     ],
     sitemap: 'https://pic-forge.com/sitemap.xml',
+    host: 'https://pic-forge.com', // Preferred domain
   };
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireEnvVar } from '@/lib/validateEnv'
-import { Errors, handleApiError } from '@/lib/apiErrors'
+import { Errors, handleApiError, createRateLimitResponse } from '@/lib/apiErrors'
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 
 export async function POST(request: NextRequest) {
@@ -10,23 +10,7 @@ export async function POST(request: NextRequest) {
     const rateLimit = await checkRateLimitKv(identifier, 200, 24 * 60 * 60 * 1000)
 
     if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          error: 'Rate limit exceeded',
-          message: 'NSFW processing limit exceeded. Please try again later.',
-          limit: rateLimit.limit,
-          remaining: rateLimit.remaining,
-          resetTime: rateLimit.resetTime
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimit.limit.toString(),
-            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
-            'X-RateLimit-Reset': rateLimit.resetTime.toString()
-          }
-        }
-      )
+      return createRateLimitResponse(rateLimit)
     }
 
     // Validate required environment variables
@@ -123,6 +107,9 @@ export async function POST(request: NextRequest) {
       success: true,
     })
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, {
+      route: '/api/process-image-nsfw',
+      method: 'POST',
+    })
   }
 }

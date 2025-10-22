@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 import { requireEnvVar } from '@/lib/validateEnv'
-import { Errors, handleApiError } from '@/lib/apiErrors'
+import { Errors, handleApiError, createRateLimitResponse } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,23 +11,7 @@ export async function POST(request: NextRequest) {
     const rateLimit = await checkRateLimitKv(identifier, 500, 24 * 60 * 60 * 1000)
 
     if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          error: 'Rate limit exceeded',
-          message: 'You have exceeded the maximum number of requests. Please try again later.',
-          limit: rateLimit.limit,
-          remaining: rateLimit.remaining,
-          resetTime: rateLimit.resetTime
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimit.limit.toString(),
-            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
-            'X-RateLimit-Reset': rateLimit.resetTime.toString()
-          }
-        }
-      )
+      return createRateLimitResponse(rateLimit)
     }
 
     // Check content type to handle both JSON and FormData
@@ -328,6 +312,9 @@ Provide:
     }
 
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, {
+      route: '/api/process-image',
+      method: 'POST',
+    })
   }
 }

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
-
-// Hugging Face API token (set in .env.local)
-const HF_API_TOKEN = process.env.HF_API_TOKEN || ''
+import { isEnvVarConfigured } from '@/lib/validateEnv'
+import { Errors, handleApiError, createRateLimitResponse } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,23 +10,7 @@ export async function POST(request: NextRequest) {
     const rateLimit = await checkRateLimitKv(identifier, 100, 24 * 60 * 60 * 1000)
 
     if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          error: 'Rate limit exceeded',
-          message: 'HuggingFace generation limit exceeded. Please try again later.',
-          limit: rateLimit.limit,
-          remaining: rateLimit.remaining,
-          resetTime: rateLimit.resetTime
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimit.limit.toString(),
-            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
-            'X-RateLimit-Reset': rateLimit.resetTime.toString()
-          }
-        }
-      )
+      return createRateLimitResponse(rateLimit)
     }
 
     const { prompt, size = '1024x1024' } = await request.json()
@@ -35,10 +18,14 @@ export async function POST(request: NextRequest) {
     console.log('Generating image with Hugging Face:', { prompt, size })
 
     if (!prompt) {
-      return NextResponse.json(
-        { error: 'Prompt is required' },
-        { status: 400 }
-      )
+      throw Errors.missingParameter('prompt')
+    }
+
+    // HuggingFace API token is optional - will use public inference API if not provided
+    const HF_API_TOKEN = process.env.HF_API_TOKEN || ''
+
+    if (!HF_API_TOKEN) {
+      console.warn('HF_API_TOKEN not configured - using public inference API (slower, may have limits)')
     }
 
     // Use Stable Diffusion XL on Hugging Face (free)
@@ -47,7 +34,7 @@ export async function POST(request: NextRequest) {
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${HF_API_TOKEN}`,
+          ...(HF_API_TOKEN && { 'Authorization': `Bearer ${HF_API_TOKEN}` }),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -68,13 +55,10 @@ export async function POST(request: NextRequest) {
 
       // Check if model is loading
       if (errorText.includes('loading')) {
-        return NextResponse.json(
-          { error: 'Model is loading, please try again in 20 seconds...' },
-          { status: 503 }
-        )
+        throw Errors.timeout('Model is loading, please try again in 20 seconds')
       }
 
-      throw new Error(`API error: ${apiResponse.status}`)
+      throw Errors.externalServiceError('Hugging Face', `${apiResponse.status}`)
     }
 
     // Get the image as blob
@@ -93,13 +77,9 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error generating image:', error)
-
-    const errorMessage = error instanceof Error ? error.message : 'Failed to generate image'
-
-    return NextResponse.json(
-      { error: errorMessage || 'Failed to generate image. Please try again.' },
-      { status: 500 }
-    )
+    return handleApiError(error, {
+      route: '/api/generate-canvas-hf',
+      method: 'POST',
+    })
   }
 }

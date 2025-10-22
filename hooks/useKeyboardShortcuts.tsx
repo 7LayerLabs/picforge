@@ -21,21 +21,18 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers) {
       if (isCtrlOrCmd && e.key === 'z' && !isShift) {
         e.preventDefault()
         handlers.onUndo?.()
-        console.log('Keyboard shortcut: Undo')
       }
 
       // Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y (Redo)
       if ((isCtrlOrCmd && e.key === 'z' && isShift) || (isCtrlOrCmd && e.key === 'y')) {
         e.preventDefault()
         handlers.onRedo?.()
-        console.log('Keyboard shortcut: Redo')
       }
 
       // Ctrl/Cmd + S (Save)
       if (isCtrlOrCmd && e.key === 's') {
         e.preventDefault()
         handlers.onSave?.()
-        console.log('Keyboard shortcut: Save')
       }
 
       // Ctrl/Cmd + V (Paste)
@@ -43,7 +40,6 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers) {
         // Don't prevent default for paste in input fields
         if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
           handlers.onPaste?.()
-          console.log('Keyboard shortcut: Paste')
         }
       }
 
@@ -53,7 +49,6 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers) {
         if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
           e.preventDefault()
           handlers.onDelete?.()
-          console.log('Keyboard shortcut: Delete')
         }
       }
 
@@ -63,14 +58,12 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers) {
         if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
           e.preventDefault()
           handlers.onSelectAll?.()
-          console.log('Keyboard shortcut: Select All')
         }
       }
 
       // Escape
       if (e.key === 'Escape') {
         handlers.onEscape?.()
-        console.log('Keyboard shortcut: Escape')
       }
     }
 

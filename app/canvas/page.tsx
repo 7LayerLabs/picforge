@@ -44,6 +44,18 @@ function CanvasContent() {
       })
 
       const data = await response.json()
+      const success = !!data.image;
+
+      // Track canvas generation in GA
+      import('@/lib/analytics').then(({ trackCanvasGeneration }) => {
+        trackCanvasGeneration(
+          prompt,
+          '1024x1024',
+          'standard',
+          success
+        );
+      });
+
       if (data.image) {
         setGeneratedImage(data.image)
       } else if (data.error) {
@@ -51,6 +63,16 @@ function CanvasContent() {
       }
     } catch (error) {
       console.error('Generation failed:', error)
+
+      // Track failed generation
+      import('@/lib/analytics').then(({ trackCanvasGeneration }) => {
+        trackCanvasGeneration(
+          prompt,
+          '1024x1024',
+          'standard',
+          false
+        );
+      });
     } finally {
       setIsGenerating(false)
     }
@@ -169,6 +191,11 @@ function CanvasContent() {
             <div className="mt-6 flex gap-4">
               <button
                 onClick={() => {
+                  // Track download
+                  import('@/lib/analytics').then(({ trackDownload }) => {
+                    trackDownload('canvas');
+                  });
+
                   const link = document.createElement('a')
                   link.href = generatedImage
                   link.download = `ai-generated-${Date.now()}.png`

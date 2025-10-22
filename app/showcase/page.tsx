@@ -19,9 +19,12 @@ import {
   Filter,
   X,
   Copy,
+  Heart,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ShowcaseCard from '@/components/ShowcaseCard';
+import SocialProofCounter from '@/components/SocialProofCounter';
+import { getTrendingShowcases, getMostLikedShowcases, getRecentShowcases } from '@/lib/trendingAlgorithm';
 
 interface ShowcaseItem {
   id: string;
@@ -48,7 +51,7 @@ interface ShowcaseItem {
 export default function ShowcasePage() {
   const { user } = db.useAuth();
   const router = useRouter();
-  const [sort, setSort] = useState<'trending' | 'popular' | 'recent' | 'featured'>('trending');
+  const [sort, setSort] = useState<'trending' | 'most-liked' | 'recent' | 'featured'>('trending');
   const [style, setStyle] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -79,28 +82,16 @@ export default function ShowcasePage() {
     const allLikes = (typedData.showcaseLikes || []) as any[];
     const allUsers = (typedData.users || []) as any[];
 
-    // Calculate trending scores
-    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    const recentLikes = allLikes.filter((like: any) => like.timestamp > sevenDaysAgo);
-    const likeCounts = recentLikes.reduce((acc: Record<string, number>, like: any) => {
-      acc[like.showcaseId] = (acc[like.showcaseId] || 0) + 1;
-      return acc;
-    }, {});
-
+    // Add user data to all showcases
     return allShowcases.map((showcase) => {
-      const recentLikeCount = likeCounts[showcase.id] || 0;
-      const ageInDays = (Date.now() - showcase.timestamp) / (24 * 60 * 60 * 1000);
-      const recencyScore = Math.max(0, 7 - ageInDays) / 7;
-
-      // Trending score: (recent likes * 0.7) + (recency * total likes * 0.3)
-      const trendingScore = recentLikeCount * 0.7 + recencyScore * showcase.likes * 0.3;
-
-      // Add user data
       const showcaseUser = allUsers.find((u: any) => u.id === showcase.userId);
+
+      // Calculate trending score using the new algorithm
+      const trendingData = getTrendingShowcases([showcase], allLikes, 1)[0];
 
       return {
         ...showcase,
-        trendingScore,
+        trendingScore: trendingData?.trendingScore?.score || 0,
         user: showcaseUser
           ? {
               id: showcaseUser.id,
@@ -141,7 +132,7 @@ export default function ShowcasePage() {
       case 'trending':
         items.sort((a, b) => (b.trendingScore || 0) - (a.trendingScore || 0));
         break;
-      case 'popular':
+      case 'most-liked':
         items.sort((a, b) => b.likes - a.likes);
         break;
       case 'recent':
@@ -188,9 +179,15 @@ export default function ShowcasePage() {
             <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-3">
               Community Showcase
             </h1>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-4">
               Discover amazing transformations created by our community
             </p>
+
+            {/* Social Proof Stats */}
+            <div className="mb-6">
+              <SocialProofCounter variant="compact" showTransformations showUsers showShowcases className="mx-auto" />
+            </div>
+
             {user && (
               <Link
                 href="/showcase/submit"
@@ -240,15 +237,15 @@ export default function ShowcasePage() {
                 Trending
               </button>
               <button
-                onClick={() => setSort('popular')}
+                onClick={() => setSort('most-liked')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-                  sort === 'popular'
+                  sort === 'most-liked'
                     ? 'bg-gradient-to-r from-teal-500 to-purple-600 text-white shadow-lg scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                <Award className="w-4 h-4" />
-                Popular
+                <Heart className="w-4 h-4" />
+                Most Liked
               </button>
               <button
                 onClick={() => setSort('recent')}

@@ -1,28 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendEmail, EmailType } from '@/lib/email';
+import { Errors, handleApiError } from '@/lib/apiErrors';
+import { isEnvVarConfigured } from '@/lib/validateEnv';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if email service is configured
+    if (!isEnvVarConfigured('RESEND_API_KEY')) {
+      throw Errors.apiKeyMissing('Resend email service');
+    }
+
     const body = await request.json();
     const { to, type, data } = body;
 
     // Validate required fields
-    if (!to || !type) {
-      return NextResponse.json(
-        { error: 'Missing required fields: to, type' },
-        { status: 400 }
-      );
+    if (!to) {
+      throw Errors.missingParameter('to');
+    }
+    if (!type) {
+      throw Errors.missingParameter('type');
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(to)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
+      throw Errors.invalidInput('Invalid email format');
     }
 
     // Validate email type
@@ -34,9 +38,8 @@ export async function POST(request: NextRequest) {
       'weekly-digest',
     ];
     if (!validTypes.includes(type as EmailType)) {
-      return NextResponse.json(
-        { error: `Invalid email type. Must be one of: ${validTypes.join(', ')}` },
-        { status: 400 }
+      throw Errors.invalidInput(
+        `Invalid email type. Must be one of: ${validTypes.join(', ')}`
       );
     }
 
@@ -53,16 +56,12 @@ export async function POST(request: NextRequest) {
         message: `Email sent successfully to ${to}`,
       });
     } else {
-      return NextResponse.json(
-        { error: 'Failed to send email', details: result.error },
-        { status: 500 }
-      );
+      throw Errors.externalServiceError('Resend email service', String(result.error));
     }
   } catch (error) {
-    console.error('Error in send-email API:', error);
-    return NextResponse.json(
-      { error: 'Internal server error', details: String(error) },
-      { status: 500 }
-    );
+    return handleApiError(error, {
+      route: '/api/send-email',
+      method: 'POST',
+    });
   }
 }

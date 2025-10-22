@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
+import { Errors, handleApiError } from '@/lib/apiErrors'
 
 // In-memory storage for development
 const templateUsage: Record<string, number> = {}
@@ -9,7 +10,7 @@ export async function POST(request: NextRequest) {
     const { templateId, templateName } = await request.json()
 
     if (!templateId) {
-      return NextResponse.json({ error: 'Template ID required' }, { status: 400 })
+      throw Errors.missingParameter('templateId')
     }
 
     // Use Vercel KV in production, fallback to in-memory for development
@@ -48,11 +49,10 @@ export async function POST(request: NextRequest) {
       })
     }
   } catch (error) {
-    console.error('Error tracking template usage:', error)
-    return NextResponse.json(
-      { error: 'Failed to track template usage' },
-      { status: 500 }
-    )
+    return handleApiError(error, {
+      route: '/api/track-template',
+      method: 'POST',
+    })
   }
 }
 
@@ -103,10 +103,9 @@ export async function GET() {
       })
     }
   } catch (error) {
-    console.error('Error fetching template stats:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch template stats' },
-      { status: 500 }
-    )
+    return handleApiError(error, {
+      route: '/api/track-template',
+      method: 'GET',
+    })
   }
 }

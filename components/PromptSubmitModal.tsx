@@ -31,7 +31,7 @@ export default function PromptSubmitModal({ categories, onClose }: PromptSubmitM
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, this would send to a backend
-    console.log('Submitted prompt:', formData);
+    // TODO: Integrate with backend API when prompt submission system is implemented
     setSubmitted(true);
     setTimeout(() => {
       onClose();

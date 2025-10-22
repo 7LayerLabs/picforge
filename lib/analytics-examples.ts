@@ -173,10 +173,12 @@ export function exampleCanvasGeneration() {
  */
 export function exampleRouletteSpin() {
   // When roulette lands on a prompt
-  trackRouletteSpinned(
-    'Movie Magic', // Category
-    'Star Wars poster style' // Prompt title
-  );
+  trackRouletteSpinned({
+    category: 'Movie Magic',
+    prompt_title: 'Star Wars poster style',
+    spin_number: 1,
+    streak: 1,
+  });
 }
 
 /**

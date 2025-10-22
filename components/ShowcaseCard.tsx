@@ -215,13 +215,13 @@ export default function ShowcaseCard({
         {/* Stats and actions */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* Like button */}
+            {/* Like button - More prominent */}
             <button
               onClick={handleLike}
-              className={`flex items-center gap-1.5 transition-all group/like ${
+              className={`flex items-center gap-1.5 transition-all group/like px-3 py-1.5 rounded-lg ${
                 liked
-                  ? 'text-coral-500 scale-105'
-                  : 'text-gray-500 hover:text-coral-500 hover:scale-105'
+                  ? 'bg-coral-50 text-coral-600 scale-105 shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-coral-50 hover:text-coral-600 hover:scale-105'
               } ${isAnimating ? 'animate-bounce' : ''}`}
               title={liked ? 'Unlike' : 'Like'}
             >
@@ -230,7 +230,7 @@ export default function ShowcaseCard({
                   liked ? 'fill-current' : 'group-hover/like:fill-coral-200'
                 }`}
               />
-              <span className="text-sm font-medium">{likeCount}</span>
+              <span className="text-sm font-bold">{likeCount}</span>
             </button>
 
             {/* Views */}

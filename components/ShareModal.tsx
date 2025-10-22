@@ -500,7 +500,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                   >
                     {showShareLink ? '✓ Copied!' : 'Copy'}
                   </button>
-                  {navigator.share && (
+                  {typeof navigator !== 'undefined' && typeof navigator.share === 'function' && (
                     <button
                       onClick={nativeShare}
                       className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition-all hover:scale-105 active:scale-95"

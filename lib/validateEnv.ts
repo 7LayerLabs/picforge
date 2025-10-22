@@ -6,13 +6,33 @@
  */
 
 /**
+ * API key format validators for common providers
+ */
+const API_KEY_FORMATS = {
+  GEMINI_API_KEY: /^AIza[0-9A-Za-z_-]{35}$/,
+  OPENAI_API_KEY: /^sk-[a-zA-Z0-9]{48,}$/,
+  REPLICATE_API_TOKEN: /^r8_[a-zA-Z0-9]{40}$/,
+  TOGETHER_API_KEY: /^[a-f0-9]{64}$/,
+  HF_API_TOKEN: /^hf_[a-zA-Z0-9]{34,}$/,
+  RESEND_API_KEY: /^re_[a-zA-Z0-9]{32,}$/,
+  STRIPE_SECRET_KEY: /^sk_(test|live)_[a-zA-Z0-9]{98,}$/,
+  STRIPE_WEBHOOK_SECRET: /^whsec_[a-zA-Z0-9]{32,}$/,
+  KV_REST_API_TOKEN: /^[A-Za-z0-9_-]{40,}$/,
+} as const
+
+/**
  * Require an environment variable to be set, throw if missing
  * @param key - Environment variable name
  * @param context - Optional context for better error messages (e.g., 'OpenAI API', 'Gemini')
+ * @param validateFormat - Whether to validate API key format (default: true)
  * @returns The environment variable value
- * @throws Error if the variable is not set or is a placeholder
+ * @throws Error if the variable is not set, is a placeholder, or has invalid format
  */
-export function requireEnvVar(key: string, context?: string): string {
+export function requireEnvVar(
+  key: string,
+  context?: string,
+  validateFormat: boolean = true
+): string {
   const value = process.env[key]
 
   // Check if missing
@@ -31,7 +51,9 @@ export function requireEnvVar(key: string, context?: string): string {
     'your_replicate_token',
     'your_together_key',
     'YOUR_SECRET_HERE',
-    'placeholder'
+    'placeholder',
+    'replace_me',
+    'change_this',
   ]
 
   if (placeholders.some(placeholder => value.toLowerCase().includes(placeholder.toLowerCase()))) {
@@ -39,6 +61,18 @@ export function requireEnvVar(key: string, context?: string): string {
       `Environment variable ${key} is set to a placeholder value. ` +
       `Please update it with a real API key in .env.local`
     )
+  }
+
+  // Validate format if a known key format exists
+  if (validateFormat && key in API_KEY_FORMATS) {
+    const format = API_KEY_FORMATS[key as keyof typeof API_KEY_FORMATS]
+    if (!format.test(value)) {
+      throw new Error(
+        `Environment variable ${key} has invalid format. ` +
+        `Expected format: ${format.toString()}. ` +
+        `Please check your API key in .env.local`
+      )
+    }
   }
 
   return value

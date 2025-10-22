@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
+import { handleApiError } from '@/lib/apiErrors'
 
 // In-memory storage for development
 const shareData = {
@@ -74,11 +75,10 @@ export async function POST(request: NextRequest) {
       })
     }
   } catch (error) {
-    console.error('Error tracking share:', error)
-    return NextResponse.json(
-      { error: 'Failed to track share' },
-      { status: 500 }
-    )
+    return handleApiError(error, {
+      route: '/api/track-share',
+      method: 'POST',
+    })
   }
 }
 
@@ -108,10 +108,9 @@ export async function GET() {
       return NextResponse.json(shareData)
     }
   } catch (error) {
-    console.error('Error fetching share stats:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch share stats' },
-      { status: 500 }
-    )
+    return handleApiError(error, {
+      route: '/api/track-share',
+      method: 'GET',
+    })
   }
 }

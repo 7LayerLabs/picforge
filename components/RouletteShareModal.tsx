@@ -99,7 +99,7 @@ export default function RouletteShareModal({
         });
         onShare();
       } catch (err) {
-        console.log('Share cancelled');
+        // Share cancelled by user
       }
     }
   };
@@ -185,7 +185,7 @@ export default function RouletteShareModal({
           </div>
 
           {/* Native Share (mobile) */}
-          {navigator.share && (
+          {typeof navigator !== 'undefined' && typeof navigator.share === 'function' && (
             <button
               onClick={useNativeShare}
               className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-all"

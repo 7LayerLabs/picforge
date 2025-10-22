@@ -45,7 +45,10 @@ export async function GET() {
       })
     }
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, {
+      route: '/api/track-visitor',
+      method: 'GET',
+    })
   }
 }
 
@@ -105,10 +108,9 @@ export async function POST(request: NextRequest) {
       })
     }
   } catch (error) {
-    console.error('Error tracking visitor:', error)
-    return NextResponse.json(
-      { error: 'Failed to track visitor' },
-      { status: 500 }
-    )
+    return handleApiError(error, {
+      route: '/api/track-visitor',
+      method: 'POST',
+    })
   }
 }

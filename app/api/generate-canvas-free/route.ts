@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 import { requireEnvVar } from '@/lib/validateEnv'
-import { handleApiError } from '@/lib/apiErrors'
+import { Errors, handleApiError, createRateLimitResponse } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,23 +10,7 @@ export async function POST(request: NextRequest) {
     const rateLimit = await checkRateLimitKv(identifier, 50, 24 * 60 * 60 * 1000)
 
     if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          error: 'Rate limit exceeded',
-          message: 'Free canvas generation limit exceeded. Please try again later.',
-          limit: rateLimit.limit,
-          remaining: rateLimit.remaining,
-          resetTime: rateLimit.resetTime
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimit.limit.toString(),
-            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
-            'X-RateLimit-Reset': rateLimit.resetTime.toString()
-          }
-        }
-      )
+      return createRateLimitResponse(rateLimit)
     }
 
     // Validate required environment variables
@@ -37,10 +21,7 @@ export async function POST(request: NextRequest) {
     console.log('Generating free canvas with:', { prompt, size, model })
 
     if (!prompt) {
-      return NextResponse.json(
-        { error: 'Prompt is required' },
-        { status: 400 }
-      )
+      throw Errors.missingParameter('prompt')
     }
 
     // Parse size to get width and height
@@ -68,7 +49,7 @@ export async function POST(request: NextRequest) {
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text()
       console.error('Together AI error response:', errorText)
-      throw new Error(`API error: ${apiResponse.status} - ${errorText}`)
+      throw Errors.externalServiceError('Together AI', `${apiResponse.status} - ${errorText}`)
     }
 
     const responseData = await apiResponse.json()
@@ -99,12 +80,15 @@ export async function POST(request: NextRequest) {
           provider: 'Together AI (Free)',
         })
       } else {
-        throw new Error('No image URL or base64 in response')
+        throw Errors.generationFailed('No image URL or base64 in response')
       }
     } else {
-      throw new Error('No image data in response')
+      throw Errors.generationFailed('No image data in response')
     }
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error, {
+      route: '/api/generate-canvas-free',
+      method: 'POST',
+    })
   }
 }

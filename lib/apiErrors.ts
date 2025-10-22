@@ -6,6 +6,9 @@
  */
 
 import { NextResponse } from 'next/server'
+import { logError } from './errorLogger'
+import { ApiErrorResponse } from './apiTypes'
+import { randomUUID } from 'crypto'
 
 /**
  * Custom API Error class with status code and error code
@@ -144,56 +147,76 @@ export const Errors = {
 }
 
 /**
- * Convert an ApiError to a NextResponse
+ * Convert an ApiError to a NextResponse with standardized format
  */
-export function errorToResponse(error: ApiError): NextResponse {
-  return NextResponse.json(
-    {
-      error: error.message,
-      code: error.code,
-      ...(error.details && { details: error.details }),
-    },
-    { status: error.statusCode }
-  )
+export function errorToResponse(error: ApiError, requestId?: string): NextResponse {
+  const response: ApiErrorResponse = {
+    error: error.message,
+    code: error.code,
+    ...(error.details && { details: error.details }),
+    ...(requestId && { requestId }),
+    timestamp: new Date().toISOString(),
+  }
+
+  return NextResponse.json(response, { status: error.statusCode })
 }
 
 /**
  * Handle any error and convert to appropriate NextResponse
  * Use this as a catch-all in try-catch blocks
+ *
+ * @param error - The error to handle
+ * @param context - Additional context for logging (route, method, userId, etc.)
  */
-export function handleApiError(error: unknown): NextResponse {
-  console.error('API Error:', error)
+export function handleApiError(
+  error: unknown,
+  context?: {
+    route?: string
+    method?: string
+    userId?: string
+    ip?: string
+    userAgent?: string
+    [key: string]: unknown
+  }
+): NextResponse {
+  const requestId = randomUUID()
+
+  // Log the error with context
+  logError(error, {
+    requestId,
+    ...context,
+  })
 
   // If it's already an ApiError, use it directly
   if (error instanceof ApiError) {
-    return errorToResponse(error)
+    return errorToResponse(error, requestId)
   }
 
   // If it's a standard Error
   if (error instanceof Error) {
     // Check for specific error patterns
     if (error.message.includes('rate limit') || error.message.includes('429')) {
-      return errorToResponse(Errors.rateLimitExceeded())
+      return errorToResponse(Errors.rateLimitExceeded(), requestId)
     }
 
     if (error.message.includes('API key') || error.message.includes('authentication')) {
-      return errorToResponse(Errors.apiKeyInvalid('Service'))
+      return errorToResponse(Errors.apiKeyInvalid('Service'), requestId)
     }
 
     if (error.message.includes('quota') || error.message.includes('billing')) {
-      return errorToResponse(Errors.quotaExceeded('Service'))
+      return errorToResponse(Errors.quotaExceeded('Service'), requestId)
     }
 
     if (error.message.includes('timeout')) {
-      return errorToResponse(Errors.timeout('Operation'))
+      return errorToResponse(Errors.timeout('Operation'), requestId)
     }
 
     // Generic error
-    return errorToResponse(Errors.internal(error.message))
+    return errorToResponse(Errors.internal(error.message), requestId)
   }
 
   // Unknown error type
-  return errorToResponse(Errors.internal('An unexpected error occurred'))
+  return errorToResponse(Errors.internal('An unexpected error occurred'), requestId)
 }
 
 /**
@@ -205,13 +228,87 @@ export function handleApiError(error: unknown): NextResponse {
  *   })
  */
 export function withErrorHandler(
-  handler: (request: Request) => Promise<NextResponse>
+  handler: (request: Request) => Promise<NextResponse>,
+  routeName?: string
 ) {
   return async (request: Request): Promise<NextResponse> => {
     try {
       return await handler(request)
     } catch (error) {
-      return handleApiError(error)
+      // Extract context from request
+      const url = new URL(request.url)
+      const context = {
+        route: routeName || url.pathname,
+        method: request.method,
+        ip: request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown',
+        userAgent: request.headers.get('user-agent') || 'unknown',
+      }
+
+      return handleApiError(error, context)
     }
   }
+}
+
+/**
+ * Create a standardized rate limit error response
+ * Use this for consistent rate limit errors with proper headers
+ */
+export function createRateLimitResponse(rateLimit: {
+  limit: number
+  remaining: number
+  resetTime: number
+}): NextResponse {
+  const requestId = randomUUID()
+
+  const response: ApiErrorResponse = {
+    error: 'Rate limit exceeded. Please try again later.',
+    code: ErrorCodes.RATE_LIMIT_EXCEEDED,
+    details: {
+      limit: rateLimit.limit,
+      remaining: rateLimit.remaining,
+      resetTime: rateLimit.resetTime,
+    },
+    requestId,
+    timestamp: new Date().toISOString(),
+  }
+
+  return NextResponse.json(response, {
+    status: 429,
+    headers: {
+      'X-RateLimit-Limit': rateLimit.limit.toString(),
+      'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+      'X-RateLimit-Reset': rateLimit.resetTime.toString(),
+      'X-Request-ID': requestId,
+    },
+  })
+}
+
+/**
+ * Create a standardized success response
+ * Use this for consistent success responses across all routes
+ */
+export function createSuccessResponse<T = unknown>(
+  data: T,
+  message?: string,
+  metadata?: Record<string, unknown>
+): NextResponse {
+  const requestId = randomUUID()
+
+  return NextResponse.json(
+    {
+      success: true,
+      ...(data && { data }),
+      ...(message && { message }),
+      metadata: {
+        timestamp: new Date().toISOString(),
+        requestId,
+        ...metadata,
+      },
+    },
+    {
+      headers: {
+        'X-Request-ID': requestId,
+      },
+    }
+  )
 }

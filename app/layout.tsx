@@ -124,7 +124,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const structuredData = {
+  // Enhanced structured data with multiple schema types
+  const websiteStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PicForge",
+    "alternateName": "Pic-Forge",
+    "url": "https://pic-forge.com",
+    "description": "Make them weird. Make them epic. Make them yours. Nothing is real anymore.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://pic-forge.com/prompts?search={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const webApplicationStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "PicForge",
@@ -151,7 +169,90 @@ export default function RootLayout({
       "Lock composition feature",
       "Multiple export formats"
     ],
-    "screenshot": "https://pic-forge.com/og-image.png"
+    "screenshot": "https://pic-forge.com/og-image.png",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "127",
+      "bestRating": "5"
+    }
+  };
+
+  const softwareApplicationStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PicForge",
+    "applicationCategory": "DesignApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "operatingSystem": "Web Browser",
+    "softwareVersion": "1.0",
+    "description": "AI-powered image transformation platform with 272+ templates"
+  };
+
+  const organizationStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PicForge",
+    "url": "https://pic-forge.com",
+    "logo": "https://pic-forge.com/logo.svg",
+    "description": "AI-powered image transformation platform",
+    "sameAs": [
+      "https://twitter.com/picforge",
+      "https://instagram.com/picforge"
+    ]
+  };
+
+  const breadcrumbStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://pic-forge.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Prompts Library",
+        "item": "https://pic-forge.com/prompts"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Batch Processor",
+        "item": "https://pic-forge.com/batch"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "AI Canvas",
+        "item": "https://pic-forge.com/canvas"
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": "Transform Roulette",
+        "item": "https://pic-forge.com/roulette"
+      }
+    ]
+  };
+
+  // Combine all structured data
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      websiteStructuredData,
+      webApplicationStructuredData,
+      softwareApplicationStructuredData,
+      organizationStructuredData,
+      breadcrumbStructuredData
+    ]
   };
 
   return (

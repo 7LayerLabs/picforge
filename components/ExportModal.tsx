@@ -120,10 +120,7 @@ export default function ExportModal({
             imageData,
             preset,
             packFormats,
-            `${fileName}-pack`,
-            (current, total) => {
-              console.log(`Packing: ${current}/${total}`)
-            }
+            `${fileName}-pack`
           )
           break
 

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
+import { handleApiError } from '@/lib/apiErrors'
 
 export async function GET() {
   try {
@@ -22,10 +23,9 @@ export async function GET() {
       })
     }
   } catch (error) {
-    console.error('Error fetching stats:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch stats' },
-      { status: 500 }
-    )
+    return handleApiError(error, {
+      route: '/api/visitor-stats',
+      method: 'GET',
+    })
   }
 }

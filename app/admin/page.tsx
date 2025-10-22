@@ -37,8 +37,13 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { format } from 'date-fns';
+import { ActivityFeed } from '@/components/analytics/ActivityFeed';
+import { UsageHeatmap } from '@/components/analytics/UsageHeatmap';
+import { CategoryBreakdown } from '@/components/analytics/CategoryBreakdown';
+import { TrendingPrompts } from '@/components/analytics/TrendingPrompts';
+import { ConversionMetrics } from '@/components/analytics/ConversionMetrics';
 
-type TabType = 'overview' | 'prompts' | 'users' | 'codes';
+type TabType = 'overview' | 'prompts' | 'users' | 'codes' | 'insights';
 
 export default function AdminPage() {
   const { user } = useImageTracking();
@@ -51,6 +56,10 @@ export default function AdminPage() {
     userAnalytics,
     retentionMetrics,
     promoCodes,
+    users,
+    images,
+    favorites,
+    referrals,
   } = useAdminAnalytics();
 
   const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -228,6 +237,17 @@ export default function AdminPage() {
             >
               <Key className="w-5 h-5" />
               Codes
+            </button>
+            <button
+              onClick={() => setActiveTab('insights')}
+              className={`flex-1 px-6 py-4 font-semibold transition-all flex items-center justify-center gap-2 ${
+                activeTab === 'insights'
+                  ? 'bg-teal-500 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <Activity className="w-5 h-5" />
+              Insights
             </button>
           </div>
         </div>
@@ -768,6 +788,37 @@ export default function AdminPage() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Insights Tab */}
+        {!isLoading && activeTab === 'insights' && (
+          <div className="space-y-8">
+            {/* Conversion Metrics */}
+            <ConversionMetrics
+              users={users}
+              images={images}
+              promoCodes={promoCodes}
+              referrals={referrals}
+            />
+
+            {/* Activity Feed and Trending Prompts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ActivityFeed
+                images={images}
+                favorites={favorites}
+                users={users}
+                promoCodes={promoCodes}
+                limit={15}
+              />
+              <TrendingPrompts images={images} />
+            </div>
+
+            {/* Usage Heatmap */}
+            <UsageHeatmap images={images} />
+
+            {/* Category Breakdown */}
+            <CategoryBreakdown favorites={favorites} />
           </div>
         )}
       </div>

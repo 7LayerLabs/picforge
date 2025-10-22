@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { TrendingUp, ArrowRight, Award, Clock, Sparkles } from 'lucide-react';
 import { db } from '@/lib/instantdb';
 import ShowcaseCard from './ShowcaseCard';
+import { getTrendingShowcases, getRecentShowcases, getFeaturedShowcases } from '@/lib/trendingAlgorithm';
 
 interface ShowcaseItem {
   id: string;
@@ -47,7 +48,7 @@ export default function TrendingShowcase() {
 
   const typedData = data as any;
 
-  // Calculate trending scores and process data
+  // Calculate trending scores and process data using the new algorithm
   const { trendingItems, featuredItems, recentItems, userLikes } = useMemo(() => {
     if (!typedData?.showcaseSubmissions) {
       return { trendingItems: [], featuredItems: [], recentItems: [], userLikes: new Set() };
@@ -62,90 +63,34 @@ export default function TrendingShowcase() {
       allLikes.filter((like: any) => like.userId === user?.id).map((like: any) => like.showcaseId)
     );
 
-    // Featured items (manually flagged)
-    const featured = allShowcases.filter((item) => item.featured).slice(0, 6);
+    // Helper function to add user data
+    const addUserData = (showcase: ShowcaseItem) => {
+      const showcaseUser = allUsers.find((u: any) => u.id === showcase.userId);
+      return {
+        ...showcase,
+        user: showcaseUser
+          ? {
+              id: showcaseUser.id,
+              name: showcaseUser.name || null,
+              image: null,
+            }
+          : {
+              id: showcase.userId,
+              name: null,
+              image: null,
+            },
+      };
+    };
 
-    // Recent items (last 7 days)
-    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    const recent = allShowcases
-      .filter((item) => item.timestamp > sevenDaysAgo)
-      .sort((a, b) => b.timestamp - a.timestamp)
-      .slice(0, 6);
-
-    // Trending algorithm: (likes * 0.7) + (recency * 0.3)
-    const recentLikes = allLikes.filter((like: any) => like.timestamp > sevenDaysAgo);
-    const likeCounts = recentLikes.reduce((acc: Record<string, number>, like: any) => {
-      acc[like.showcaseId] = (acc[like.showcaseId] || 0) + 1;
-      return acc;
-    }, {});
-
-    const trending = allShowcases
-      .map((showcase) => {
-        const recentLikeCount = likeCounts[showcase.id] || 0;
-        const ageInDays = (Date.now() - showcase.timestamp) / (24 * 60 * 60 * 1000);
-        const recencyScore = Math.max(0, 7 - ageInDays) / 7; // 0-1 score based on age
-
-        // Trending score: weighted combination of recent likes and recency
-        const trendingScore = recentLikeCount * 0.7 + recencyScore * showcase.likes * 0.3;
-
-        // Add user data
-        const showcaseUser = allUsers.find((u: any) => u.id === showcase.userId);
-
-        return {
-          ...showcase,
-          trendingScore,
-          user: showcaseUser
-            ? {
-                id: showcaseUser.id,
-                name: showcaseUser.name || null,
-                image: null, // InstantDB users don't have image field yet
-              }
-            : {
-                id: showcase.userId,
-                name: null,
-                image: null,
-              },
-        };
-      })
-      .sort((a, b) => (b.trendingScore || 0) - (a.trendingScore || 0))
-      .slice(0, 6);
+    // Use centralized trending algorithm
+    const trending = getTrendingShowcases(allShowcases, allLikes, 6).map(addUserData);
+    const featured = getFeaturedShowcases(allShowcases, 6).map(addUserData);
+    const recent = getRecentShowcases(allShowcases, 6).map(addUserData);
 
     return {
       trendingItems: trending,
-      featuredItems: featured.map((item) => {
-        const showcaseUser = allUsers.find((u: any) => u.id === item.userId);
-        return {
-          ...item,
-          user: showcaseUser
-            ? {
-                id: showcaseUser.id,
-                name: showcaseUser.name || null,
-                image: null,
-              }
-            : {
-                id: item.userId,
-                name: null,
-                image: null,
-              },
-        };
-      }),
-      recentItems: recent.map((item) => {
-        const showcaseUser = allUsers.find((u: any) => u.id === item.userId);
-        return {
-          ...item,
-          user: showcaseUser
-            ? {
-                id: showcaseUser.id,
-                name: showcaseUser.name || null,
-                image: null,
-              }
-            : {
-                id: item.userId,
-                name: null,
-                image: null,
-              },
-        };
-      }),
+      featuredItems: featured,
+      recentItems: recent,
       userLikes: userLikesSet,
     };
   }, [typedData, user]);

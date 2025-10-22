@@ -1,14 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
+import { requireEnvVar } from '@/lib/validateEnv'
+import { Errors, handleApiError } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate required environment variables
+    const apiKey = requireEnvVar('GEMINI_API_KEY', 'Gemini caption generation')
+    const genAI = new GoogleGenerativeAI(apiKey)
+
     const { imageBase64, platform } = await request.json()
 
     if (!imageBase64) {
-      return NextResponse.json({ error: 'No image provided' }, { status: 400 })
+      throw Errors.missingParameter('imageBase64')
     }
 
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
@@ -41,10 +45,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ caption: brandedCaption })
 
   } catch (error) {
-    console.error('Caption generation error:', error)
-    return NextResponse.json(
-      { error: 'Failed to generate caption' },
-      { status: 500 }
-    )
+    return handleApiError(error)
   }
 }

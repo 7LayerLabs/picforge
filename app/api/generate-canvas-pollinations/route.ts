@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
+import { Errors, handleApiError, createRateLimitResponse } from '@/lib/apiErrors'
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,23 +9,7 @@ export async function POST(request: NextRequest) {
     const rateLimit = await checkRateLimitKv(identifier, 150, 24 * 60 * 60 * 1000)
 
     if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          error: 'Rate limit exceeded',
-          message: 'Pollinations generation limit exceeded. Please try again later.',
-          limit: rateLimit.limit,
-          remaining: rateLimit.remaining,
-          resetTime: rateLimit.resetTime
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimit.limit.toString(),
-            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
-            'X-RateLimit-Reset': rateLimit.resetTime.toString()
-          }
-        }
-      )
+      return createRateLimitResponse(rateLimit)
     }
 
     const { prompt } = await request.json()
@@ -32,10 +17,7 @@ export async function POST(request: NextRequest) {
     console.log('Generating image with Pollinations.ai:', { prompt })
 
     if (!prompt) {
-      return NextResponse.json(
-        { error: 'Prompt is required' },
-        { status: 400 }
-      )
+      throw Errors.missingParameter('prompt')
     }
 
     // Pollinations.ai - 100% free, no API key required!
@@ -47,7 +29,7 @@ export async function POST(request: NextRequest) {
     const imageResponse = await fetch(imageUrl)
 
     if (!imageResponse.ok) {
-      throw new Error(`Failed to generate image: ${imageResponse.status}`)
+      throw Errors.externalServiceError('Pollinations.ai', `Failed to generate image: ${imageResponse.status}`)
     }
 
     // Convert to base64
@@ -65,13 +47,9 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error generating image:', error)
-
-    const errorMessage = error instanceof Error ? error.message : 'Failed to generate image'
-
-    return NextResponse.json(
-      { error: errorMessage || 'Failed to generate image. Please try again.' },
-      { status: 500 }
-    )
+    return handleApiError(error, {
+      route: '/api/generate-canvas-pollinations',
+      method: 'POST',
+    })
   }
 }
