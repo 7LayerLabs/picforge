@@ -48,11 +48,6 @@ export default function Home() {
 
           </div>
 
-          {/* Featured Transformations */}
-          <div className="px-4 pb-12 mb-8">
-            <FeaturedTransformations limit={6} variant="grid" showHeader />
-          </div>
-
           {/* Prompt of the Day Section */}
           <div className="max-w-3xl mx-auto mb-12 px-4">
             <div className="border-2 rounded-xl p-6 shadow-lg bg-teal-50 border-teal-300">
@@ -79,6 +74,11 @@ export default function Home() {
                 Try This in Editor
               </Link>
             </div>
+          </div>
+
+          {/* Featured Transformations */}
+          <div className="px-4 pb-12 mb-8">
+            <FeaturedTransformations limit={6} variant="grid" showHeader />
           </div>
 
           {/* Need a Background? CTA */}
