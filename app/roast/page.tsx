@@ -223,7 +223,7 @@ export default function RoastMode() {
   }
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-6">
@@ -254,7 +254,7 @@ export default function RoastMode() {
                 onClick={() => setRoastIntensity('mild')}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   roastIntensity === 'mild'
-                    ? 'bg-yellow-500 text-white'
+                    ? 'bg-teal-500 text-white'
                     : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
@@ -274,7 +274,7 @@ export default function RoastMode() {
                 onClick={() => setRoastIntensity('nuclear')}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   roastIntensity === 'nuclear'
-                    ? 'bg-coral-500 text-white'
+                    ? 'bg-purple-600 text-white'
                     : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
@@ -389,7 +389,7 @@ export default function RoastMode() {
                 <div className="flex gap-3 mt-6">
                   <button
                     onClick={shareRoast}
-                    className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all flex items-center justify-center gap-2"
                   >
                     <Share2 className="w-5 h-5" />
                     Share
@@ -400,7 +400,7 @@ export default function RoastMode() {
                       setRoastResult(null)
                       setDisplayedText('')
                     }}
-                    className="flex-1 px-4 py-3 bg-gray-500 text-white rounded-xl font-semibold hover:bg-gray-600 transition-all"
+                    className="flex-1 px-4 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all"
                   >
                     New Photo
                   </button>
@@ -424,7 +424,7 @@ export default function RoastMode() {
         )}
 
         {/* Disclaimer */}
-        <div className="max-w-2xl mx-auto mt-12 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+        <div className="max-w-2xl mx-auto mt-12 p-4 bg-teal-50 rounded-xl border border-yellow-200">
           <p className="text-sm text-yellow-800 text-center">
             <strong>Disclaimer:</strong> AI Roast Mode is meant for fun and entertainment.
             Roasts are randomly generated and not meant to be taken seriously.

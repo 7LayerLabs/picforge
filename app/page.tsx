@@ -861,26 +861,26 @@ export default function Home() {
           <>
             {/* Hero Section */}
             <div className="text-center mb-8 px-4 pt-8">
-              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
-                <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900 dark:text-white">Imagine<span className="text-4xl md:text-5xl lg:text-6xl">.</span> Everything<span className="text-4xl md:text-5xl lg:text-6xl">.</span></span>
+              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-3 leading-tight">
+                <span className="inline-block text-3xl md:text-4xl lg:text-5xl -rotate-12 text-purple-600 mr-1">(re)</span><span className="text-gray-900">Imagine<span className="text-4xl md:text-5xl lg:text-6xl">.</span> Everything<span className="text-4xl md:text-5xl lg:text-6xl">.</span></span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
+              <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
                 Your photos deserve better. Make them weird. Make them epic. Make them yours. <span className="text-teal-600">272+ prompts and endless ideas</span> to break reality. <span className="text-purple-600">Zero artistic talent required.</span>
               </p>
 
               {/* Feature Highlights - Compact Inline Badges */}
               <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
                   <span className="text-xl">⚡</span>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">Instant Results</span>
+                  <span className="text-sm font-semibold text-gray-900">Instant Results</span>
                 </div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
                   <span className="text-xl">🎨</span>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">272+ Prompts</span>
+                  <span className="text-sm font-semibold text-gray-900">272+ Prompts</span>
                 </div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
                   <span className="text-xl">🔒</span>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">Private & Secure</span>
+                  <span className="text-sm font-semibold text-gray-900">Private & Secure</span>
                 </div>
               </div>
             </div>
@@ -902,7 +902,7 @@ export default function Home() {
             <button
               type="button"
               onClick={handleReset}
-              className="px-6 py-3 text-gray-600 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-2 font-medium"
+              className="px-6 py-3 text-gray-600 border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-2 font-medium"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -964,15 +964,15 @@ export default function Home() {
                   }}
                   className={`flex-1 flex flex-col items-center justify-center px-8 py-20 rounded-xl cursor-pointer transition-all duration-200 border-2 min-h-[400px] ${
                     isDraggingMain
-                      ? 'bg-teal-50 dark:bg-teal-900/20 border-teal-500 scale-[1.01]'
-                      : 'bg-gray-900 dark:bg-gray-800 hover:bg-black dark:hover:bg-gray-900 border-gray-800 dark:border-gray-700'
+                      ? 'bg-teal-50 border-teal-500 scale-[1.01]'
+                      : 'bg-white hover:bg-gray-50 border-gray-300'
                   }`}
                 >
                   <div className="flex flex-col items-center gap-6">
                     <svg className={`w-20 h-20 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
-                    <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-white'}`}>
+                    <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-gray-900'}`}>
                       <div className="text-2xl font-semibold mb-3">
                         {isDraggingMain ? 'Drop to upload' : 'Upload your image'}
                       </div>
@@ -982,8 +982,8 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400 text-xs flex items-center gap-2 justify-center mt-3">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700">
+                <p className="text-gray-500 text-xs flex items-center gap-2 justify-center mt-3">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 rounded-full border border-gray-200">
                     <svg className="w-3.5 h-3.5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 7zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.061l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.061l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.061 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z"/>
                     </svg>
@@ -1082,7 +1082,7 @@ export default function Home() {
                         setTimeout(() => setCopiedPrompt(false), 2000);
                       }}
                       className={`inline-flex items-center gap-1.5 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all hover:scale-105 ${
-                        copiedPrompt ? 'bg-green-500' : 'bg-teal-500 hover:bg-teal-600 shadow-md'
+                        copiedPrompt ? 'bg-teal-600' : 'bg-teal-500 hover:bg-teal-600 shadow-md'
                       }`}
                     >
                     {copiedPrompt ? (
@@ -1113,7 +1113,7 @@ export default function Home() {
                         }
                       }}
                       className={`inline-flex items-center gap-1.5 px-4 py-2 text-white text-sm font-medium rounded-lg transition-all hover:scale-105 shadow-md ${
-                        isPromptFavorited ? 'bg-pink-500 hover:bg-pink-600' : 'bg-gray-500 hover:bg-gray-600'
+                        isPromptFavorited ? 'bg-purple-600 hover:bg-purple-700' : 'bg-teal-500 hover:bg-teal-600'
                       }`}
                       title={isPromptFavorited ? 'Already in favorites' : 'Add to favorites'}
                     >
@@ -1155,11 +1155,11 @@ export default function Home() {
                 </div>
 
                 {/* Canvas Link Card */}
-                <Link href="/canvas" className="block p-4 bg-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-teal-400 hover:shadow-lg transition-all group">
+                <Link href="/canvas" className="block p-4 bg-gray-50 rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Need a background?</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Generate custom AI backgrounds</p>
+                      <p className="text-sm font-semibold text-gray-900 mb-1">Need a background?</p>
+                      <p className="text-xs text-gray-600">Generate custom AI backgrounds</p>
                     </div>
                     <div className="flex items-center gap-2 text-teal-600 font-medium group-hover:gap-3 transition-all">
                       <span className="text-sm">Canvas</span>
@@ -1177,7 +1177,7 @@ export default function Home() {
             <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
               {/* Left Sidebar - Templates & Batch Generator (Hidden on Mobile) */}
               <div className="hidden lg:flex lg:w-[320px] flex-col space-y-3 animate-slide-in-left">
-                <div className="bg-white dark:bg-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 shadow-lg sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+                <div className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-lg sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
                   <h2 className="text-lg font-bold mb-4 bg-teal-600 bg-clip-text text-transparent">
                     🎨 Creative Studio
                   </h2>
@@ -1241,7 +1241,7 @@ export default function Home() {
                       className="w-full"
                     />
                   ) : (
-                    <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50 dark:from-gray-900 dark:to-gray-800 shadow-inner transition-all duration-300 card-smooth hover-lift">
+                    <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 rounded-xl overflow-hidden bg-gray-50 shadow-inner transition-all duration-300 card-smooth hover-lift">
                       {currentImage && (
                         <>
                           <NextImage
@@ -1286,9 +1286,9 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => setShowMobileOptions(!showMobileOptions)}
-                    className="w-full flex items-center justify-between p-3 bg-teal-50 dark:bg-teal-900/20 border-2 border-teal-200 dark:border-teal-800 rounded-xl hover:bg-teal-100 dark:hover:bg-teal-900/30 transition-all"
+                    className="w-full flex items-center justify-between p-3 bg-teal-50 border-2 border-teal-200 rounded-xl hover:bg-teal-100 transition-all"
                   >
-                    <span className="flex items-center gap-2 text-sm font-semibold text-teal-900 dark:text-teal-100">
+                    <span className="flex items-center gap-2 text-sm font-semibold text-teal-900">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                       </svg>
@@ -1306,8 +1306,8 @@ export default function Home() {
 
                   {/* Collapsible Content */}
                   {showMobileOptions && (
-                    <div className="mt-3 p-4 bg-white dark:bg-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 shadow-lg space-y-4 animate-slide-down">
-                      <h3 className="text-base font-bold text-teal-600 dark:text-teal-400 mb-3">
+                    <div className="mt-3 p-4 bg-white rounded-xl border-2 border-gray-200 shadow-lg space-y-4 animate-slide-down">
+                      <h3 className="text-base font-bold text-teal-600 mb-3">
                         🎨 Creative Studio
                       </h3>
 
@@ -1321,7 +1321,7 @@ export default function Home() {
                       />
 
                       {/* Batch Style Generator */}
-                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                      <div className="mt-4 pt-4 border-t border-gray-200">
                         <BatchStyleGenerator
                           currentImage={currentImage}
                           onBatchGenerated={(images) => {
@@ -1336,7 +1336,7 @@ export default function Home() {
 
                 <div className="relative">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="text-sm font-medium text-gray-700">
                       Editing Instructions {instructions && <span className="text-teal-500">✏️ (Edit & customize below)</span>}
                     </label>
                     {user && (
@@ -1353,7 +1353,7 @@ export default function Home() {
                     onChange={(e) => setInstructions(e.target.value)}
                     placeholder="Enter editing instructions or select a template above..."
                     rows={3}
-                    className="w-full px-4 sm:px-5 py-3 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm transition-all duration-200 hover:shadow-lg placeholder-gray-400 dark:placeholder-gray-500 font-medium focus-smooth resize-none"
+                    className="w-full px-4 sm:px-5 py-3 border-2 border-gray-200 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm transition-all duration-200 hover:shadow-lg placeholder-gray-400 font-medium focus-smooth resize-none"
                     disabled={isSubmitting}
                   />
 
@@ -1369,7 +1369,7 @@ export default function Home() {
                     />
                     <label
                       htmlFor="lock-composition"
-                      className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer select-none flex items-center gap-1.5"
+                      className="text-sm text-gray-700 cursor-pointer select-none flex items-center gap-1.5"
                     >
                       <span className="font-medium">🔒 Lock Composition</span>
                       <span className="text-xs text-gray-500">- Keep everything else the same, only apply my edit</span>
@@ -1465,10 +1465,10 @@ export default function Home() {
                 {submitMessage && (
                   <div className={`text-center p-3 rounded-lg text-sm font-medium shadow-md transition-all duration-300 animate-fadeIn ${
                     submitMessage.includes('Error') || submitMessage.includes('Failed')
-                      ? 'bg-red-100 text-red-700'
+                      ? 'bg-purple-50 text-purple-700'
                       : submitMessage.includes('not available')
-                      ? 'bg-yellow-100 text-yellow-700'
-                      : 'bg-green-100 text-green-700'
+                      ? 'bg-purple-50 text-purple-700'
+                      : 'bg-teal-50 text-teal-700'
                   }`}>
                     {submitMessage}
                   </div>
@@ -1493,7 +1493,7 @@ export default function Home() {
                       </button>
                       <button
                         onClick={downloadAllImages}
-                        className="px-3 py-1.5 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                        className="px-3 py-1.5 text-xs bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                         title="Download All Images"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

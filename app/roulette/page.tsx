@@ -684,7 +684,7 @@ export default function TransformRoulette() {
                 <p className="text-gray-600 mb-4">
                   Then spin the wheel of transformation!
                 </p>
-                <div className="inline-block px-6 py-3 bg-coral-500 text-white rounded-xl font-semibold hover:bg-coral-600 transition-all">
+                <div className="inline-block px-6 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-all">
                   Choose Image
                 </div>
               </div>
@@ -830,20 +830,20 @@ export default function TransformRoulette() {
                       <button
                         onClick={spinWheel}
                         disabled={isSpinning || isProcessing}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-coral-500 text-white rounded-xl font-semibold hover:bg-coral-600 transition-all disabled:opacity-50"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-all disabled:opacity-50"
                       >
                         <RefreshCw className="w-5 h-5" />
                         Spin Again
                       </button>
                       <button
                         onClick={shareResult}
-                        className="px-4 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all"
+                        className="px-4 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all"
                       >
                         <Share2 className="w-5 h-5" />
                       </button>
                       <button
                         onClick={downloadResult}
-                        className="px-4 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition-all"
+                        className="px-4 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all"
                       >
                         <Download className="w-5 h-5" />
                       </button>
@@ -859,7 +859,7 @@ export default function TransformRoulette() {
                     <button
                       onClick={spinWheel}
                       disabled={isSpinning || isProcessing}
-                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-coral-500 text-white rounded-xl font-bold text-lg hover:bg-coral-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-purple-600 text-white rounded-xl font-bold text-lg hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                     >
                       {isSpinning ? (
                         <>

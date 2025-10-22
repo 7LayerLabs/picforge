@@ -59,7 +59,7 @@ function CanvasContent() {
         {/* Back Button */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-blue-600 font-medium hover:bg-blue-50 rounded-xl transition-all duration-200 mb-8"
+          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-teal-600 font-medium hover:bg-blue-50 rounded-xl transition-all duration-200 mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Editor
@@ -72,7 +72,7 @@ function CanvasContent() {
             <span className="text-sm font-medium">AI Image Generation</span>
           </div>
           <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            <span className="bg-coral-500 bg-clip-text text-transparent">Dream It. Type It. Get It.</span>
+            <span className="bg-purple-600 bg-clip-text text-transparent">Dream It. Type It. Get It.</span>
           </h1>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-bold">
             No photo? No problem. Describe literally anything and watch AI conjure it into existence. Backgrounds, scenes, whatever weird stuff you&apos;re thinking.
@@ -115,7 +115,7 @@ function CanvasContent() {
           <button
             onClick={handleGenerate}
             disabled={!prompt.trim() || isGenerating}
-            className="w-full py-4 bg-coral-500 text-white font-semibold rounded-xl hover:bg-coral-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-4 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
@@ -138,7 +138,7 @@ function CanvasContent() {
                 <button
                   key={index}
                   onClick={() => setPrompt(example)}
-                  className="text-left p-3 bg-gray-50 hover:bg-purple-50 border border-gray-200 hover:border-purple-300 rounded-lg transition-all text-sm text-gray-700 hover:text-purple-700"
+                  className="text-left p-3 bg-gray-50 hover:bg-purple-50 border border-gray-200 hover:border-teal-300 rounded-lg transition-all text-sm text-gray-700 hover:text-purple-700"
                 >
                   {example}
                 </button>
@@ -167,7 +167,7 @@ function CanvasContent() {
               </button>
               <Link
                 href="/"
-                className="flex-1 py-3 bg-coral-500 text-white font-medium rounded-xl hover:bg-coral-600 transition-all text-center"
+                className="flex-1 py-3 bg-purple-600 text-white font-medium rounded-xl hover:bg-purple-700 transition-all text-center"
               >
                 Use in Editor
               </Link>
