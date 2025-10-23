@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
+import CookieConsent from "@/components/CookieConsent";
 import { Analytics } from "@vercel/analytics/react";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 // import AuthSessionProvider from "@/components/providers/SessionProvider";
@@ -282,7 +282,7 @@ export default function RootLayout({
           <Navigation />
           {children}
           <Footer />
-          <KeyboardShortcutsHelp />
+          <CookieConsent />
           <Analytics />
         {/* </AuthSessionProvider> */}
       </body>
