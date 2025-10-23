@@ -6,7 +6,7 @@ import FeaturedTransformations from '@/components/FeaturedTransformations'
 export default function Home() {
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* Main content */}
       <div className="p-2 sm:p-4 flex flex-col items-center">
         <div className="max-w-6xl w-full relative z-10 animate-fade-in-up">
