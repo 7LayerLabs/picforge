@@ -1,6 +1,20 @@
 # PicForge TODO & Progress Tracker
 
-## ✅ Recently Completed (October 15, 2025)
+## ✅ Recently Completed (October 26, 2025)
+
+### Roast Mode Major Upgrade 🔥
+- [x] Implemented double parallel roast generation (two roasts per photo in ~6-7 seconds)
+- [x] Added Pixxy & Trixxy mascot characters with slide-in animations
+- [x] Redesigned roast display with black/yellow warning box theme
+- [x] Added yellow diagonal warning stripes for construction zone aesthetic
+- [x] Replaced thought bubbles with warning signs (⚠️)
+- [x] Updated share text to "PIC-FORGE.com Roasted my photo"
+- [x] Optimized mascot images with Next.js Image component (10MB → ~200KB)
+- [x] Made roast prompts MUCH more savage (especially Nuclear mode)
+- [x] Removed AI vision analysis display for cleaner UI
+- [x] Fixed Image constructor conflict in download function
+
+## ✅ Previously Completed (October 15, 2025)
 
 ### Promo Code System Implementation
 - [x] Changed free tier limit from 500 to 20 images per day
