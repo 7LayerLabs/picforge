@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { Upload, Flame, Share2, X as XIcon } from 'lucide-react'
 // Removed BeforeAfterSlider - just show single image
 
@@ -404,10 +405,13 @@ export default function RoastMode() {
                   <div className="relative">
                     {/* Left Mascot - Slides in from left */}
                     <div className="flex flex-col items-center mb-4 animate-slide-in-left">
-                      <img
+                      <Image
                         src="/mascots/pixxy.png"
                         alt="Pixxy"
-                        className="w-32 h-32 mb-2"
+                        width={128}
+                        height={128}
+                        className="mb-2"
+                        priority
                       />
                       <p className="text-sm font-bold text-yellow-600">Pixxy</p>
                     </div>
@@ -438,13 +442,15 @@ export default function RoastMode() {
                     <div className="relative">
                       {/* Right Mascot - Slides in from right */}
                       <div className="flex flex-col items-center mb-4 animate-slide-in-right">
-                        <img
-                          src="/mascots/pixxy.png"
-                          alt="Pixxy"
-                          className="w-32 h-32 mb-2"
-                          style={{ transform: 'scaleX(-1)' }}
+                        <Image
+                          src="/mascots/trixxy.png"
+                          alt="Trixxy"
+                          width={128}
+                          height={128}
+                          className="mb-2"
+                          priority
                         />
-                        <p className="text-sm font-bold text-yellow-600">Pixxy</p>
+                        <p className="text-sm font-bold text-yellow-600">Trixxy</p>
                       </div>
 
                       {/* Warning box - appears after mascot */}
