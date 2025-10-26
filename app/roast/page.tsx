@@ -188,7 +188,7 @@ export default function RoastMode() {
   const shareToX = () => {
     if (!roastResult) return
 
-    const shareText = `🔥 AI Roasted my photo:\n\n"${roastResult.roastText}"\n\nTry it yourself at pic-forge.com/roast`
+    const shareText = `🔥 PIC-FORGE.com Roasted my photo:\n\n"${roastResult.roastText}"\n\nTry it yourself at pic-forge.com/roast`
     const url = encodeURIComponent('https://pic-forge.com/roast')
     const text = encodeURIComponent(shareText)
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
@@ -199,7 +199,7 @@ export default function RoastMode() {
     if (!roastResult) return
 
     const url = encodeURIComponent('https://pic-forge.com/roast')
-    const quote = encodeURIComponent(`🔥 AI Roasted my photo: "${roastResult.roastText}"`)
+    const quote = encodeURIComponent(`🔥 PIC-FORGE.com Roasted my photo: "${roastResult.roastText}"`)
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, '_blank')
     setShowShareModal(false)
   }
@@ -405,17 +405,18 @@ export default function RoastMode() {
                     {/* Left Mascot - Slides in from left */}
                     <div className="flex flex-col items-center mb-4 animate-slide-in-left">
                       <div className="text-8xl mb-2">😈</div>
-                      <p className="text-sm font-bold text-red-600">Roast Bot #1</p>
+                      <p className="text-sm font-bold text-yellow-600">Roast Bot #1</p>
                     </div>
 
-                    {/* Thought bubble - appears after mascot */}
+                    {/* Warning box - appears after mascot */}
                     <div className="relative animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                      <div className="absolute -top-2 left-8 text-4xl">💭</div>
-                      <div className="bg-gradient-to-br from-red-500 to-orange-500 text-white rounded-3xl shadow-2xl p-6 relative overflow-hidden border-4 border-red-600">
-                        <div className="absolute inset-0 bg-white/10 animate-pulse" />
-                        <div className="relative">
+                      <div className="bg-black text-white rounded-xl shadow-2xl p-6 relative overflow-hidden border-4 border-yellow-400">
+                        {/* Yellow warning stripes on top */}
+                        <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-yellow-400 via-black to-yellow-400 opacity-70"
+                             style={{ backgroundImage: 'repeating-linear-gradient(45deg, #facc15, #facc15 10px, #000 10px, #000 20px)' }} />
+                        <div className="relative mt-2">
                           <div className="flex items-start gap-3">
-                            <Flame className="w-6 h-6 text-yellow-300 mt-1 flex-shrink-0" />
+                            <span className="text-3xl mt-1 flex-shrink-0">⚠️</span>
                             <div className="flex-1">
                               <p className="text-base font-medium leading-relaxed">
                                 {displayedText}
@@ -434,17 +435,18 @@ export default function RoastMode() {
                       {/* Right Mascot - Slides in from right */}
                       <div className="flex flex-col items-center mb-4 animate-slide-in-right">
                         <div className="text-8xl mb-2">👿</div>
-                        <p className="text-sm font-bold text-purple-600">Roast Bot #2</p>
+                        <p className="text-sm font-bold text-yellow-600">Roast Bot #2</p>
                       </div>
 
-                      {/* Thought bubble - appears after mascot */}
+                      {/* Warning box - appears after mascot */}
                       <div className="relative animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-                        <div className="absolute -top-2 right-8 text-4xl">💭</div>
-                        <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-3xl shadow-2xl p-6 relative overflow-hidden border-4 border-purple-700">
-                          <div className="absolute inset-0 bg-white/10 animate-pulse" />
-                          <div className="relative">
+                        <div className="bg-black text-white rounded-xl shadow-2xl p-6 relative overflow-hidden border-4 border-yellow-400">
+                          {/* Yellow warning stripes on top */}
+                          <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-yellow-400 via-black to-yellow-400 opacity-70"
+                               style={{ backgroundImage: 'repeating-linear-gradient(45deg, #facc15, #facc15 10px, #000 10px, #000 20px)' }} />
+                          <div className="relative mt-2">
                             <div className="flex items-start gap-3">
-                              <Flame className="w-6 h-6 text-yellow-300 mt-1 flex-shrink-0" />
+                              <span className="text-3xl mt-1 flex-shrink-0">⚠️</span>
                               <div className="flex-1">
                                 <p className="text-base font-medium leading-relaxed">
                                   {displayedText2}
