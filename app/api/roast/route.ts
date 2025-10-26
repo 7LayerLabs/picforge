@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     // Initialize Gemini API
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
 
     const { image, intensity, prompt } = await request.json()
 
@@ -65,17 +65,100 @@ export async function POST(request: NextRequest) {
     // Remove data:image prefix if present
     const base64Image = image.replace(/^data:image\/\w+;base64,/, '')
 
-    // Generate roast using Gemini Vision
-    const roastPrompt = `${prompt || "Give a witty, sarcastic 2-sentence roast of this photo. Be funny but not mean."}
+    // First, analyze the image for detailed context (same as chat assistant)
+    let imageContext = null
+    try {
+      const contextAnalysis = await model.generateContent([
+        {
+          inlineData: {
+            mimeType: 'image/jpeg',
+            data: base64Image
+          }
+        },
+        `Analyze this image and provide a brief, structured description for context.
 
-After the roast, categorize the image as one of: selfie, group, food, pet, or default.
+Format your response as JSON with this structure:
+{
+  "type": "bedroom" | "portrait" | "landscape" | "food" | "pet" | "product" | "architecture" | "abstract" | "selfie" | "group" | "other",
+  "subject": "main subject of the image (e.g., 'young woman', 'golden retriever', 'living room')",
+  "setting": "where the photo was taken (e.g., 'outdoor park', 'modern bedroom', 'studio')",
+  "mood": "overall mood/vibe (e.g., 'cozy', 'dramatic', 'playful', 'professional')",
+  "colors": ["primary", "color", "palette"],
+  "lighting": "lighting conditions (e.g., 'natural daylight', 'warm indoor', 'dramatic shadows', 'poor lighting', 'overexposed')",
+  "style": "current style (e.g., 'casual snapshot', 'professional portrait', 'minimalist', 'cluttered', 'amateur')",
+  "quality": "photo quality assessment (e.g., 'high quality', 'blurry', 'low resolution', 'poorly composed', 'grainy')",
+  "roastableElements": ["things worth roasting - be specific and funny"]
+}
+
+Be accurate and specific. Include roastable elements for comedy.`
+      ])
+
+      const contextText = contextAnalysis.response.text()
+
+      // 🔍 LOG ACTUAL GEMINI VISION API RESPONSE - CONTEXT ANALYSIS
+      console.log('\n========================================')
+      console.log('🔥 ROAST MODE - GEMINI VISION CONTEXT ANALYSIS')
+      console.log('========================================')
+      console.log('📊 Raw Context Response:')
+      console.log(contextText)
+      console.log('========================================\n')
+
+      const jsonMatch = contextText.match(/\{[\s\S]*\}/)
+      if (jsonMatch) {
+        imageContext = JSON.parse(jsonMatch[0])
+
+        // 🔍 LOG PARSED CONTEXT
+        console.log('✅ Parsed Image Context:')
+        console.log(JSON.stringify(imageContext, null, 2))
+        console.log('========================================\n')
+      }
+    } catch (error) {
+      console.error('Image context analysis failed:', error)
+    }
+
+    // Generate context-aware roast using detailed image analysis
+    const contextInfo = imageContext ? `
+Image Analysis:
+- Type: ${imageContext.type}
+- Subject: ${imageContext.subject}
+- Setting: ${imageContext.setting}
+- Lighting: ${imageContext.lighting}
+- Quality: ${imageContext.quality}
+- Roastable elements: ${imageContext.roastableElements?.join(', ')}
+
+Use these specific details to make your roast more targeted and hilarious.` : ''
+
+    const intensityGuidelines = {
+      mild: "Be playful but still throw some shade. Gentle roasting with a smirk. Think friendly banter that stings just a little.",
+      spicy: "Go HARD. Be savage, sarcastic, and brutal. Don't hold back. Attack the photo's flaws mercilessly. Make them feel the burn.",
+      nuclear: "DESTROY THEM. Be absolutely ruthless. Obliterate every flaw you see. No mercy, no filter, maximum devastation. This should HURT (in a funny way). Channel your inner comedian roasting a heckler. Go for the JUGULAR."
+    }
+
+    const roastPrompt = `${prompt || `You are a ruthless roast comedian. Your job is to absolutely DESTROY this photo with comedy.
+
+${intensityGuidelines[intensity as keyof typeof intensityGuidelines] || intensityGuidelines.spicy}
+${contextInfo}
+
+RULES:
+- Make it 2-3 sentences of pure savagery
+- Be SPECIFIC about what you see (don't use generic roasts)
+- Reference the actual elements, lighting, composition, quality flaws
+- Attack HARD - this is a ROAST, not a compliment session
+- Make it FUNNY but BRUTAL
+- No holding back - they ASKED to be roasted
+- Think: "What would a savage stand-up comedian say about this?"
+
+DESTROY THIS PHOTO NOW:`}
+
+After the roast, provide the best category for this image.
 
 Format your response as:
 ROAST: [your roast here]
-CATEGORY: [category]`
+CATEGORY: [selfie/group/food/pet/bedroom/landscape/portrait/other]`
 
     try {
-      const result = await model.generateContent([
+      // 🔥 GENERATE TWO DIFFERENT ROASTS FOR DOUBLE THE PAIN
+      const roast1Promise = model.generateContent([
         roastPrompt,
         {
           inlineData: {
@@ -85,49 +168,69 @@ CATEGORY: [category]`
         }
       ])
 
-      const response = result.response.text()
+      const roast2Promise = model.generateContent([
+        `${roastPrompt}\n\nIMPORTANT: This is your SECOND roast. Make it COMPLETELY DIFFERENT from your first roast. Attack from a totally different angle. Find NEW flaws to destroy. Use DIFFERENT jokes. Go EVEN HARDER if possible. No repetition - fresh savagery only.`,
+        {
+          inlineData: {
+            mimeType: 'image/jpeg',
+            data: base64Image
+          }
+        }
+      ])
 
-      // Parse the response
-      const roastMatch = response.match(/ROAST:\s*([\s\S]+?)(?:CATEGORY:|$)/)
-      const categoryMatch = response.match(/CATEGORY:\s*(\w+)/i)
+      // Run both roasts in parallel for speed
+      const [result1, result2] = await Promise.all([roast1Promise, roast2Promise])
 
-      const roastText = roastMatch
-        ? roastMatch[1].trim()
+      const response1 = result1.response.text()
+      const response2 = result2.response.text()
+
+      // 🔍 LOG ACTUAL GEMINI VISION API RESPONSE - ROAST GENERATION
+      console.log('\n========================================')
+      console.log('💥 ROAST MODE - DOUBLE ROAST GENERATION')
+      console.log('========================================')
+      console.log('📊 Roast #1:')
+      console.log(response1)
+      console.log('\n📊 Roast #2:')
+      console.log(response2)
+      console.log('========================================\n')
+
+      // Parse both responses
+      const roast1Match = response1.match(/ROAST:\s*([\s\S]+?)(?:CATEGORY:|$)/)
+      const roast2Match = response2.match(/ROAST:\s*([\s\S]+?)(?:CATEGORY:|$)/)
+      const categoryMatch = response1.match(/CATEGORY:\s*(\w+)/i)
+
+      const roastText = roast1Match
+        ? roast1Match[1].trim()
         : "This image is so unique, even AI is speechless. That's... something."
+
+      const roastText2 = roast2Match
+        ? roast2Match[1].trim()
+        : "Seriously, I'm running out of insults. This photo broke the roast generator."
 
       const category = categoryMatch
         ? categoryMatch[1].toLowerCase()
         : 'default'
 
+      // 🔍 LOG FINAL PARSED ROASTS
+      console.log('✅ Final Roast Outputs:')
+      console.log(`   Roast #1: "${roastText}"`)
+      console.log(`   Roast #2: "${roastText2}"`)
+      console.log(`   Category: ${category}`)
+      console.log('========================================\n')
+
       // Select random transformation based on category
       const templates = roastTemplates[category as keyof typeof roastTemplates] || roastTemplates.default
       const transformPrompt = templates[Math.floor(Math.random() * templates.length)]
 
-      // Generate transformed image using the same process-image endpoint
-      const transformResponse = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/process-image`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          image,
-          prompt: transformPrompt,
-          style: 'enhance'
-        })
-      })
-
-      let transformedImage = image // Default to original if transformation fails
-
-      if (transformResponse.ok) {
-        const transformData = await transformResponse.json()
-        if (transformData.processedImage) {
-          transformedImage = transformData.processedImage
-        }
-      }
-
+      // ⚡ SPEED OPTIMIZATION: Return roast immediately, skip slow transformation
+      // Users care about the roast, not the transformation
       return NextResponse.json({
         roastText,
+        roastText2, // Second roast for double damage
         transformPrompt,
-        transformedImage,
-        category
+        transformedImage: image, // Just return original for speed
+        category,
+        imageContext // Include context for display
       })
 
     } catch (error) {

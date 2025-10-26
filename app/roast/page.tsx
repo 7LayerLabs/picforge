@@ -4,11 +4,39 @@ import { useState, useEffect } from 'react'
 import { Upload, Flame, Share2, X as XIcon } from 'lucide-react'
 // Removed BeforeAfterSlider - just show single image
 
+interface ImageContext {
+  type: string
+  subject: string
+  setting: string
+  mood: string
+  colors: string[]
+  lighting: string
+  style: string
+  quality: string
+  roastableElements: string[]
+}
+
 interface RoastResult {
   roastText: string
+  roastText2?: string // Second roast for double damage
   transformPrompt: string
   transformedImage: string
+  imageContext?: ImageContext
 }
+
+// Fun loading messages that rotate while preparing the roast
+const loadingMessages = [
+  "Last chance to cancel before you get roasted...",
+  "AI is analyzing your mistakes...",
+  "Preparing to violate your feelings...",
+  "Loading savage mode...",
+  "Consulting the roast archives...",
+  "Warming up the AI flame thrower...",
+  "This is gonna hurt...",
+  "Sharpening the digital knives...",
+  "No mercy protocol activated...",
+  "Your ego is about to take damage..."
+]
 
 export default function RoastMode() {
   const [uploadedImage, setUploadedImage] = useState<string>('')
@@ -16,11 +44,31 @@ export default function RoastMode() {
   const [roastResult, setRoastResult] = useState<RoastResult | null>(null)
   const [roastIntensity, setRoastIntensity] = useState<'mild' | 'spicy' | 'nuclear'>('spicy')
   const [displayedText, setDisplayedText] = useState('')
+  const [displayedText2, setDisplayedText2] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [isTyping2, setIsTyping2] = useState(false)
   const [dragActive, setDragActive] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
 
-  // Typewriter effect for roast text
+  // Rotate loading messages while processing (RANDOM ORDER for more fun)
+  useEffect(() => {
+    if (isProcessing) {
+      // Start with a random message
+      const randomMessage = loadingMessages[Math.floor(Math.random() * loadingMessages.length)]
+      setLoadingMessage(randomMessage)
+
+      const messageInterval = setInterval(() => {
+        // Pick a random message each time
+        const newMessage = loadingMessages[Math.floor(Math.random() * loadingMessages.length)]
+        setLoadingMessage(newMessage)
+      }, 1500) // Change message every 1.5 seconds
+
+      return () => clearInterval(messageInterval)
+    }
+  }, [isProcessing])
+
+  // Typewriter effect for BOTH roast texts
   useEffect(() => {
     if (roastResult && roastResult.roastText) {
       setIsTyping(true)
@@ -39,6 +87,30 @@ export default function RoastMode() {
       }, 30)
 
       return () => clearInterval(typeInterval)
+    }
+  }, [roastResult])
+
+  // Typewriter effect for second roast (starts slightly after first)
+  useEffect(() => {
+    if (roastResult && roastResult.roastText2) {
+      setIsTyping2(true)
+      setDisplayedText2('')
+
+      // Delay start by 500ms so they don't type at exact same time
+      setTimeout(() => {
+        const text = roastResult.roastText2!
+        let currentIndex = 0
+
+        const typeInterval = setInterval(() => {
+          if (currentIndex < text.length) {
+            setDisplayedText2(text.slice(0, currentIndex + 1))
+            currentIndex++
+          } else {
+            clearInterval(typeInterval)
+            setIsTyping2(false)
+          }
+        }, 30)
+      }, 500)
     }
   }, [roastResult])
 
@@ -313,7 +385,7 @@ export default function RoastMode() {
                 {isProcessing ? (
                   <>
                     <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                    Preparing the Roast...
+                    <span className="animate-pulse">{loadingMessage}</span>
                   </>
                 ) : (
                   <>
@@ -324,22 +396,69 @@ export default function RoastMode() {
               </button>
             </div>
 
-            {/* Roast Display */}
+            {/* Double Roast Display - Mascots with Thought Bubbles */}
             {roastResult && (
-              <div className="bg-black text-white rounded-2xl shadow-2xl p-6 mb-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-teal-500/20 animate-pulse" />
-                <div className="relative">
-                  <div className="flex items-start gap-3">
-                    <Flame className="w-6 h-6 text-teal-500 mt-1 flex-shrink-0" />
-                    <div className="flex-1">
-                      <p className="text-lg font-medium leading-relaxed">
-                        {displayedText}
-                        {isTyping && <span className="animate-pulse">|</span>}
-                      </p>
+              <>
+                <div className="grid md:grid-cols-2 gap-8 mb-6">
+                  {/* Left Mascot + Roast #1 */}
+                  <div className="relative">
+                    {/* Left Mascot - Slides in from left */}
+                    <div className="flex flex-col items-center mb-4 animate-slide-in-left">
+                      <div className="text-8xl mb-2">😈</div>
+                      <p className="text-sm font-bold text-red-600">Roast Bot #1</p>
+                    </div>
+
+                    {/* Thought bubble - appears after mascot */}
+                    <div className="relative animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                      <div className="absolute -top-2 left-8 text-4xl">💭</div>
+                      <div className="bg-gradient-to-br from-red-500 to-orange-500 text-white rounded-3xl shadow-2xl p-6 relative overflow-hidden border-4 border-red-600">
+                        <div className="absolute inset-0 bg-white/10 animate-pulse" />
+                        <div className="relative">
+                          <div className="flex items-start gap-3">
+                            <Flame className="w-6 h-6 text-yellow-300 mt-1 flex-shrink-0" />
+                            <div className="flex-1">
+                              <p className="text-base font-medium leading-relaxed">
+                                {displayedText}
+                                {isTyping && <span className="animate-pulse">|</span>}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                  {/* Right Mascot + Roast #2 */}
+                  {roastResult.roastText2 && (
+                    <div className="relative">
+                      {/* Right Mascot - Slides in from right */}
+                      <div className="flex flex-col items-center mb-4 animate-slide-in-right">
+                        <div className="text-8xl mb-2">👿</div>
+                        <p className="text-sm font-bold text-purple-600">Roast Bot #2</p>
+                      </div>
+
+                      {/* Thought bubble - appears after mascot */}
+                      <div className="relative animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+                        <div className="absolute -top-2 right-8 text-4xl">💭</div>
+                        <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-3xl shadow-2xl p-6 relative overflow-hidden border-4 border-purple-700">
+                          <div className="absolute inset-0 bg-white/10 animate-pulse" />
+                          <div className="relative">
+                            <div className="flex items-start gap-3">
+                              <Flame className="w-6 h-6 text-yellow-300 mt-1 flex-shrink-0" />
+                              <div className="flex-1">
+                                <p className="text-base font-medium leading-relaxed">
+                                  {displayedText2}
+                                  {isTyping2 && <span className="animate-pulse">|</span>}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              </>
             )}
 
             {/* Image Display - Smaller */}
