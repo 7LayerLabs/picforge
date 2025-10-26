@@ -404,8 +404,12 @@ export default function RoastMode() {
                   <div className="relative">
                     {/* Left Mascot - Slides in from left */}
                     <div className="flex flex-col items-center mb-4 animate-slide-in-left">
-                      <div className="text-8xl mb-2">😈</div>
-                      <p className="text-sm font-bold text-yellow-600">Roast Bot #1</p>
+                      <img
+                        src="/mascots/pixxy.png"
+                        alt="Pixxy"
+                        className="w-32 h-32 mb-2"
+                      />
+                      <p className="text-sm font-bold text-yellow-600">Pixxy</p>
                     </div>
 
                     {/* Warning box - appears after mascot */}
@@ -434,8 +438,13 @@ export default function RoastMode() {
                     <div className="relative">
                       {/* Right Mascot - Slides in from right */}
                       <div className="flex flex-col items-center mb-4 animate-slide-in-right">
-                        <div className="text-8xl mb-2">👿</div>
-                        <p className="text-sm font-bold text-yellow-600">Roast Bot #2</p>
+                        <img
+                          src="/mascots/pixxy.png"
+                          alt="Pixxy"
+                          className="w-32 h-32 mb-2"
+                          style={{ transform: 'scaleX(-1)' }}
+                        />
+                        <p className="text-sm font-bold text-yellow-600">Pixxy</p>
                       </div>
 
                       {/* Warning box - appears after mascot */}
