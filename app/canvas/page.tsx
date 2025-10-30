@@ -95,11 +95,11 @@ function CanvasContent() {
       <div className="max-w-6xl mx-auto">
         {/* Back Button */}
         <Link
-          href="/"
+          href="/forge"
           className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-teal-600 font-medium hover:bg-blue-50 rounded-xl transition-all duration-200 mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Editor
+          Back to The Forge
         </Link>
 
         {/* Hero Section */}
@@ -172,7 +172,7 @@ function CanvasContent() {
 
           {/* Example Prompts */}
           <div className="mt-6">
-            <p className="text-sm font-medium text-gray-700 mb-3">Try these examples:</p>
+            <p className="text-sm font-medium text-gray-700 mb-3">Need inspiration? Steal these:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {examplePrompts.map((example, index) => (
                 <button

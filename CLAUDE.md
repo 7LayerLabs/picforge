@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 PicForge is an AI-powered image transformation platform built with Next.js 15. It provides multiple modes:
-- **Single Image Editor** (/) - AI-powered image editing with 272+ prompts, custom prompts, and Lock Composition feature
+- **The Forge** (/forge) - AI-powered image editing with 272+ prompts, custom prompts, and Lock Composition feature
 - **18+ Editor** (/editor-nsfw) - COMING SOON page with ribbon design (Q1 2026 launch)
 - **Batch Processor** (/batch) - Process 100+ images simultaneously with bulk operations and 21 effects
 - **18+ Batch** (/batch-nsfw) - Unrestricted batch processing for adult content (access restricted)
@@ -13,6 +13,7 @@ PicForge is an AI-powered image transformation platform built with Next.js 15. I
 - **Transform Roulette** (/roulette) - Gamified random transformation with 8 categories (320 prompts including Banksy art)
 - **Roast Mode** (/roast) - AI roasts your photos with 3 intensity levels
 - **Prompt Wizard** (/prompt-wizard) - 5-step guided prompt builder
+- **AI Prompt Assistant** (floating chat) - Claude-powered conversational prompt enhancement with image context (Pro feature)
 - **Templates Gallery** (/examples) - 110+ sample images to try before uploading
 - **Prompts Library** (/prompts) - 325+ categorized prompts across 13 categories with filtering, search, and favorites
 - **Favorites Page** (/prompts/favorites) - User's saved favorite prompts with export functionality
@@ -75,6 +76,8 @@ npm run lint
    - `generate-canvas-free/`, `generate-canvas-hf/`, `generate-canvas-pollinations/` - Alternative free generation APIs
    - `track-visitor/`, `track-share/`, `track-template/` - Analytics endpoints using Vercel KV
    - `test-replicate/` - Test endpoint to verify Replicate API token configuration
+   - `analyze-image/` - Gemini Vision analysis for uploaded images (50 req/hour, Pro only)
+   - `enhance-prompt/` - Claude AI prompt enhancement with 3 variations (30 req/hour, Pro only)
 
 3. **Rate Limiting & User Management**
    - `hooks/useImageTracking.ts` - Tracks user image generation, favorites, and usage limits
@@ -84,10 +87,27 @@ npm run lint
    - Pro/Unlimited tiers: No daily limits
    - Resets every 24 hours
 
+4. **AI Prompt Assistant** (Pro Feature)
+   - `components/PromptAssistantChat.tsx` - Floating chat widget with conversational AI
+   - **Image Context Detection** - Automatically analyzes uploaded images using Gemini Vision
+   - **Prompt Enhancement** - Claude Sonnet 3.5 generates 3 optimized prompt variations
+   - **One-Click Insertion** - Custom events dispatch prompts to editor (`insertPrompt` event)
+   - **Tutorial System** - First-time user onboarding (localStorage: `chatTutorialSeen`)
+   - **Rate Limiting** - 50 image analyses/hour, 30 prompt enhancements/hour (per IP)
+   - **Pro Paywall** - Shows upgrade modal for Free users
+   - **API Routes:**
+     - `/api/analyze-image` - Gemini Vision analyzes image type, subject, mood, colors, lighting, style
+     - `/api/enhance-prompt` - Claude generates contextual prompt variations from casual input
+   - **Integration:**
+     - Editors listen for `window.addEventListener('insertPrompt', ...)` to receive prompts
+     - Editors dispatch `window.dispatchEvent(new CustomEvent('imageUploaded', ...))` to trigger analysis
+   - **State Management** - Uses InstantDB to check user tier (Pro/Unlimited only)
+
 ### AI Integrations
 
 The app uses multiple AI providers:
-- **Google Gemini** (`@google/generative-ai`) - Primary image processing and vision tasks (blocks NSFW)
+- **Google Gemini** (`@google/generative-ai`) - Primary image processing, vision tasks, and image context analysis (blocks NSFW)
+- **Anthropic Claude** (`@anthropic-ai/sdk`) - Sonnet 3.5 for conversational prompt enhancement (Pro feature)
 - **Replicate** - SDXL img2img for unrestricted adult/graphic content transformations (~$0.023/image)
 - **OpenAI** (`openai`) - DALL-E image generation
 - **Together AI** (`together-ai`) - Alternative AI model provider
@@ -123,6 +143,7 @@ Required in `.env.local`:
 # AI Providers
 GEMINI_API_KEY=your_gemini_key
 REPLICATE_API_TOKEN=your_replicate_token (required for NSFW editor - costs ~$0.023/image)
+ANTHROPIC_API_KEY=your_anthropic_key (required for AI Prompt Assistant - Pro feature)
 OPENAI_API_KEY=your_openai_key (optional for canvas generation)
 TOGETHER_API_KEY=your_together_key (optional)
 

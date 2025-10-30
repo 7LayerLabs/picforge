@@ -701,7 +701,7 @@ export default function TransformRoulette() {
               Transform Roulette
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-4">
-              Spin the wheel of transformation chaos. Let fate decide your image&apos;s destiny!
+              Spin the wheel. Let chaos decide. No takebacks.
             </p>
 
             {/* Quick Action Buttons */}

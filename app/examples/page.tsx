@@ -57,8 +57,8 @@ export default function ExamplesPage() {
   const handleImageClick = (imagePath: string) => {
     // Store the selected sample image path in localStorage
     localStorage.setItem('selectedSampleImage', imagePath)
-    // Navigate to the main editor
-    router.push('/')
+    // Navigate to The Forge
+    router.push('/forge')
   }
 
   // Memoize display images to avoid recalculation on every render
@@ -90,11 +90,11 @@ export default function ExamplesPage() {
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-6">
         <Link
-          href="/"
+          href="/forge"
           className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-teal-600 font-medium hover:bg-teal-50 rounded-xl transition-all duration-200"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Editor
+          Back to The Forge
         </Link>
       </div>
 
@@ -199,7 +199,7 @@ export default function ExamplesPage() {
               <div className="text-6xl mb-4">🖼️</div>
               <p className="text-gray-600 mb-4">No sample images found</p>
               <Link
-                href="/"
+                href="/forge"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all"
               >
                 <Upload className="w-4 h-4" />
@@ -213,7 +213,7 @@ export default function ExamplesPage() {
         {displayImages.length > 0 && (
           <div className="text-center mt-16">
             <Link
-              href="/"
+              href="/forge"
               className="inline-flex items-center gap-2 px-8 py-4 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-700 transition-all duration-200 hover:scale-105 shadow-xl"
             >
               <Upload className="w-5 h-5" />

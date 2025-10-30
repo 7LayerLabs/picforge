@@ -280,10 +280,10 @@ export default function RoastMode() {
           <div className="text-center">
             <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
               <Flame className="w-8 h-8 text-teal-500" />
-              AI Roast Mode
+              Get Roasted
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Upload a photo. Get roasted. Laugh (or cry). Share the burns.
+              Upload a photo. Choose your pain level. Cry or share the burns.
             </p>
           </div>
 

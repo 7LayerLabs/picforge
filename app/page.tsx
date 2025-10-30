@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import FeaturedTransformations from '@/components/FeaturedTransformations'
+import SocialButtons from '@/components/SocialButtons'
 
 export default function Home() {
 
@@ -35,6 +36,10 @@ export default function Home() {
               </div>
             </div>
 
+            <div className="flex justify-center mt-4">
+              <SocialButtons className="opacity-90" />
+            </div>
+
           </div>
 
           {/* Featured Transformations */}
@@ -42,18 +47,18 @@ export default function Home() {
             <FeaturedTransformations limit={6} variant="grid" showHeader />
           </div>
 
-          {/* Need a Background? CTA */}
+          {/* Canvas CTA */}
           <div className="max-w-3xl mx-auto mb-12 px-4">
             <Link href="/canvas" className="block p-6 bg-purple-600 rounded-xl border-2 border-purple-700 hover:border-purple-800 hover:shadow-xl transition-all group">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <span>🎨</span> Need a Background?
+                    <span>🎨</span> Dream It. Type It. Get It.
                   </h3>
-                  <p className="text-base text-purple-100">Generate custom AI backgrounds from scratch with Canvas</p>
+                  <p className="text-base text-purple-100">No photo? No problem. Generate anything from thin air.</p>
                 </div>
                 <div className="flex items-center gap-2 text-white font-semibold group-hover:gap-4 transition-all text-lg">
-                  <span>Try Canvas</span>
+                  <span>Hit Canvas</span>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
@@ -68,13 +73,13 @@ export default function Home() {
               <Link href="/prompts" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
                 <div className="text-4xl mb-3">📚</div>
                 <h3 className="font-bold text-lg text-gray-900 mb-2">Prompts Library</h3>
-                <p className="text-sm text-gray-600">Browse 272+ creative prompts</p>
+                <p className="text-sm text-gray-600">272+ ways to break reality</p>
               </Link>
 
               <Link href="/examples" className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:shadow-lg transition-all group">
                 <div className="text-4xl mb-3">✨</div>
-                <h3 className="font-bold text-lg text-gray-900 mb-2">Examples</h3>
-                <p className="text-sm text-gray-600">110+ samples to try first</p>
+                <h3 className="font-bold text-lg text-gray-900 mb-2">Templates Gallery</h3>
+                <p className="text-sm text-gray-600">Test drive before you commit</p>
               </Link>
             </div>
           </div>

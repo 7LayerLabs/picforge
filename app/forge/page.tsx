@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import NextImage from 'next/image'
 import Link from 'next/link'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import ShareModal from '@/components/ShareModal'
-import BeforeAfterSlider from '@/components/BeforeAfterSlider'
+const BeforeAfterSlider = dynamic(() => import('@/components/BeforeAfterSlider'), { ssr: false })
 import TemplateSelector from '@/components/TemplateSelector'
 import ImageGallery from '@/components/ImageGallery'
 import BatchStyleGenerator from '@/components/BatchStyleGenerator'
@@ -851,10 +852,10 @@ export default function EditorPage() {
             {/* Page Header */}
             <div className="text-center mb-8 px-4 pt-8">
               <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-3 leading-tight">
-                Image Editor
+                The Forge
               </h1>
               <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
-                Upload your image and start creating. <span className="text-teal-600">272+ prompts</span> ready to go.
+                <span className="text-purple-600">(re)Imagine.</span> <span className="text-teal-600">Break Reality.</span> Just Create.
               </p>
             </div>
           </>

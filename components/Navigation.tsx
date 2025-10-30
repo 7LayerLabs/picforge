@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Image as ImageIcon, Images, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2, Crown, User, Star } from 'lucide-react';
+import { Image as ImageIcon, Images, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2, Crown, User, Star, Scale, Shield, FileText } from 'lucide-react';
 import { useState } from 'react';
 import AuthButton from './AuthButton';
+import MegaMenu from './MegaMenu';
+import { MessageSquare } from 'lucide-react';
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -13,6 +15,7 @@ export default function Navigation() {
   const [gamesDropdownOpen, setGamesDropdownOpen] = useState(false);
   const [resourcesDropdownOpen, setResourcesDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [legalDropdownOpen, setLegalDropdownOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
   const isGameActive = () => isActive('/roast') || isActive('/roulette');
@@ -24,6 +27,9 @@ export default function Navigation() {
   const isProfileActive = () =>
     isActive('/profile') ||
     isActive('/favorites');
+  const isLegalActive = () =>
+    isActive('/legal/privacy') ||
+    isActive('/legal/terms');
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -45,7 +51,7 @@ export default function Navigation() {
                 />
                 <div className="flex flex-col">
                   <span className="font-bold text-xl text-teal-500">PicForge</span>
-                  <span className="text-xs text-gray-600">Forge your images into art</span>
+                  <span className="text-xs text-gray-600">Nothing is real anymore</span>
                 </div>
               </Link>
             </div>
@@ -53,15 +59,15 @@ export default function Navigation() {
             {/* Desktop Navigation */}
             <div className="hidden sm:ml-4 sm:flex sm:space-x-2">
               <Link
-                href="/editor"
+                href="/forge"
                 className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
-                  isActive('/editor')
+                  isActive('/forge')
                     ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
                 <ImageIcon className="w-3 h-3 mr-1.5" />
-                Editor
+                The Forge
               </Link>
 
               <Link
@@ -88,7 +94,7 @@ export default function Navigation() {
                 Canvas
               </Link>
 
-              {/* Resources Dropdown */}
+              {/* Explore Mega Menu */}
               <div
                 className="relative z-[100]"
                 onMouseEnter={() => setResourcesDropdownOpen(true)}
@@ -102,61 +108,32 @@ export default function Navigation() {
                   }`}
                 >
                   <Layers className="w-3 h-3 mr-1.5" />
-                  Resources
+                  Explore
                   <ChevronDown className="w-2.5 h-2.5 ml-1" />
                 </button>
-
-                {resourcesDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-[100]">
-                    <Link
-                      href="/prompt-wizard"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/prompt-wizard')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Wand2 className="w-3 h-3 mr-1.5" />
-                      Prompt Wizard
-                    </Link>
-                    <Link
-                      href="/prompts"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/prompts')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Layers className="w-3 h-3 mr-1.5" />
-                      Prompts Library
-                    </Link>
-                    <Link
-                      href="/examples"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/examples')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <ImageIcon className="w-3 h-3 mr-1.5" />
-                      Templates Gallery
-                    </Link>
-                    <Link
-                      href="/tips"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/tips')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Lightbulb className="w-3 h-3 mr-1.5" />
-                      Tips & Tricks
-                    </Link>
-                  </div>
-                )}
+                <MegaMenu
+                  open={resourcesDropdownOpen}
+                  sections={[
+                    {
+                      title: 'Discover',
+                      items: [
+                        { href: '/prompts', label: 'Prompts Library', description: '272+ curated prompts', icon: <Layers className="w-4 h-4" /> },
+                        { href: '/examples', label: 'Templates Gallery', description: '110+ sample transformations', icon: <ImageIcon className="w-4 h-4" /> },
+                        { href: '/feedback', label: 'Feedback', description: 'Tell us what to build next', icon: <MessageSquare className="w-4 h-4" /> },
+                      ],
+                    },
+                    {
+                      title: 'Create Faster',
+                      items: [
+                        { href: '/prompt-wizard', label: 'Prompt Wizard', description: 'Step-by-step prompt builder', icon: <Wand2 className="w-4 h-4" /> },
+                        { href: '/tips', label: 'Tips & Tricks', description: 'Best practices and guides', icon: <Lightbulb className="w-4 h-4" /> },
+                      ],
+                    },
+                  ]}
+                />
               </div>
 
-              {/* Games Dropdown */}
+              {/* Play Mega Menu */}
               <div
                 className="relative z-[100]"
                 onMouseEnter={() => setGamesDropdownOpen(true)}
@@ -170,39 +147,22 @@ export default function Navigation() {
                   }`}
                 >
                   <Gamepad2 className="w-3 h-3 mr-1.5" />
-                  Games
+                  Play
                   <ChevronDown className="w-2.5 h-2.5 ml-1" />
                 </button>
-
-                {gamesDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-[100]">
-                    <Link
-                      href="/roast"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/roast')
-                          ? 'bg-purple-50 text-purple-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Flame className="w-3 h-3 mr-1.5" />
-                      Roast Mode
-                    </Link>
-                    <Link
-                      href="/roulette"
-                      className={`flex items-center px-4 py-2 text-sm ${
-                        isActive('/roulette')
-                          ? 'bg-purple-50 text-purple-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Shuffle className="w-3 h-3 mr-1.5" />
-                      Transform Roulette
-                    </Link>
-                    <div className="border-t border-gray-200 mt-2 pt-2 px-4 py-2">
-                      <p className="text-xs text-gray-500 italic">More coming soon...</p>
-                    </div>
-                  </div>
-                )}
+                <MegaMenu
+                  open={gamesDropdownOpen}
+                  sections={[
+                    {
+                      title: 'Games',
+                      items: [
+                        { href: '/roast', label: 'Roast Mode', description: 'Hilarious AI feedback', icon: <Flame className="w-4 h-4" /> },
+                        { href: '/roulette', label: 'Transform Roulette', description: 'Spin for random effects', icon: <Shuffle className="w-4 h-4" /> },
+                      ],
+                    },
+                    { title: 'Coming Soon', items: [{ href: '/roulette', label: 'More game modes', description: 'Stay tuned' }] },
+                  ]}
+                />
               </div>
 
               <Link
@@ -216,6 +176,52 @@ export default function Navigation() {
                 <Crown className="w-3 h-3 mr-1.5 text-coral-500" />
                 Pricing
               </Link>
+
+              {/* Legal Dropdown */}
+              <div
+                className="relative z-[100]"
+                onMouseEnter={() => setLegalDropdownOpen(true)}
+                onMouseLeave={() => setLegalDropdownOpen(false)}
+              >
+                <button
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium h-full ${
+                    isLegalActive()
+                      ? 'border-teal-500 text-gray-900'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <Scale className="w-3 h-3 mr-1.5" />
+                  Legal
+                  <ChevronDown className="w-2.5 h-2.5 ml-1" />
+                </button>
+
+                {legalDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-[100]">
+                    <Link
+                      href="/legal/privacy"
+                      className={`flex items-center px-4 py-2 text-sm ${
+                        isActive('/legal/privacy')
+                          ? 'bg-teal-50 text-teal-700 font-medium'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <Shield className="w-3 h-3 mr-1.5" />
+                      Privacy Policy
+                    </Link>
+                    <Link
+                      href="/legal/terms"
+                      className={`flex items-center px-4 py-2 text-sm ${
+                        isActive('/legal/terms')
+                          ? 'bg-teal-50 text-teal-700 font-medium'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <FileText className="w-3 h-3 mr-1.5" />
+                      Terms of Service
+                    </Link>
+                  </div>
+                )}
+              </div>
 
               {/* Profile Dropdown */}
               <div
@@ -292,9 +298,9 @@ export default function Navigation() {
         <div className="sm:hidden">
           <div className="pt-2 pb-3 space-y-1">
             <Link
-              href="/editor"
+              href="/forge"
               className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-                isActive('/editor')
+                isActive('/forge')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
               }`}
@@ -302,7 +308,7 @@ export default function Navigation() {
             >
               <div className="flex items-center">
                 <ImageIcon className="w-3 h-3 mr-1.5" />
-                Editor
+                The Forge
               </div>
             </Link>
 
@@ -459,6 +465,44 @@ export default function Navigation() {
               <div className="flex items-center">
                 <Crown className="w-3 h-3 mr-1.5 text-coral-500" />
                 Pricing
+              </div>
+            </Link>
+
+            {/* Legal Section */}
+            <div className="px-3 py-2">
+              <div className="flex items-center text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
+                <Scale className="w-3 h-3 mr-1" />
+                Legal
+              </div>
+            </div>
+
+            <Link
+              href="/legal/privacy"
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+                isActive('/legal/privacy')
+                  ? 'bg-teal-50 border-teal-500 text-teal-700'
+                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex items-center">
+                <Shield className="w-3 h-3 mr-1.5" />
+                Privacy Policy
+              </div>
+            </Link>
+
+            <Link
+              href="/legal/terms"
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+                isActive('/legal/terms')
+                  ? 'bg-teal-50 border-teal-500 text-teal-700'
+                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex items-center">
+                <FileText className="w-3 h-3 mr-1.5" />
+                Terms of Service
               </div>
             </Link>
 
