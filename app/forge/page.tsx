@@ -850,11 +850,11 @@ export default function EditorPage() {
         {!currentImage && (
           <>
             {/* Page Header */}
-            <div className="text-center mb-8 px-4 pt-8">
-              <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-3 leading-tight">
+            <div className="text-center mb-4 px-4 pt-4">
+              <h1 className="font-heading text-4xl md:text-5xl font-black text-gray-900 mb-2 leading-tight tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                 The Forge
               </h1>
-              <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-6 leading-relaxed font-bold">
+              <p className="text-lg md:text-xl text-gray-800 max-w-3xl mx-auto mb-4 leading-snug font-bold tracking-tight">
                 <span className="text-purple-600">(re)Imagine.</span> <span className="text-teal-600">Break Reality.</span> Just Create.
               </p>
             </div>
@@ -877,9 +877,9 @@ export default function EditorPage() {
         )}
 
         {!currentImage ? (
-          <div ref={uploadSectionRef} className="px-4 pb-8">
+          <div ref={uploadSectionRef} className="px-4 pb-4">
             {/* Main Upload Section - Hero CTA */}
-            <div className="max-w-3xl mx-auto mb-12">
+            <div className="max-w-3xl mx-auto mb-4">
               <input
                 type="file"
                 accept="image/*"
@@ -923,21 +923,22 @@ export default function EditorPage() {
                     }
                   }
                 }}
-                className={`flex flex-col items-center justify-center px-8 py-24 rounded-2xl cursor-pointer transition-all duration-200 border-2 shadow-xl hover:shadow-2xl ${
+                className={`flex flex-col items-center justify-center px-6 py-12 rounded-xl cursor-pointer transition-all duration-200 border-2 hover:scale-[1.01] ${
                   isDraggingMain
-                    ? 'bg-teal-50 border-teal-500 scale-[1.02]'
-                    : 'bg-white hover:bg-gray-50 border-gray-300'
+                    ? 'bg-teal-50 border-teal-500 shadow-lg'
+                    : 'bg-white hover:bg-gray-50 border-gray-300 shadow-md'
                 }`}
+                style={{ boxShadow: isDraggingMain ? '0 4px 12px rgba(20,184,166,0.2)' : '0 2px 8px rgba(0,0,0,0.08)' }}
               >
-                <div className="flex flex-col items-center gap-6">
-                  <svg className={`w-24 h-24 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <div className="flex flex-col items-center gap-3">
+                  <svg className={`w-16 h-16 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                   <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-gray-900'}`}>
-                    <div className="text-3xl font-bold mb-2">
+                    <div className="text-2xl font-extrabold mb-1 leading-tight tracking-tight">
                       {isDraggingMain ? 'Drop to Upload' : 'Upload Your Image'}
                     </div>
-                    <div className="text-lg opacity-75">
+                    <div className="text-base font-medium opacity-70 leading-snug">
                       {isDraggingMain ? 'Release to start creating' : 'Drag & drop, click, or paste (Ctrl+V)'}
                     </div>
                   </div>
@@ -945,61 +946,63 @@ export default function EditorPage() {
               </div>
             </div>
 
-            {/* Prompt of the Day - Prominent Feature */}
-            <div className="max-w-3xl mx-auto mb-12">
-              <div className={`border-2 rounded-xl p-6 shadow-lg transition-all duration-300 ${
+            {/* Prompt of the Day - Compact Banner */}
+            <div className="max-w-3xl mx-auto mb-4">
+              <div className={`border-2 rounded-lg p-4 transition-all duration-300 ${
                 promptOfDayActive
-                  ? 'bg-purple-50 border-purple-300 ring-2 ring-purple-200'
-                  : 'bg-teal-50 border-teal-300'
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">✨</span>
-                    <h2 className="font-bold text-2xl text-gray-900">Prompt of the Day</h2>
+                  ? 'bg-purple-50 border-purple-400 shadow-md'
+                  : 'bg-teal-50 border-teal-400 shadow-sm'
+              }`}
+                style={{ boxShadow: promptOfDayActive ? '0 3px 10px rgba(168,85,247,0.15)' : '0 2px 6px rgba(20,184,166,0.12)' }}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl leading-none">✨</span>
+                    <div>
+                      <h2 className="font-black text-lg text-gray-900 leading-tight tracking-tight">Prompt of the Day</h2>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-teal-300 rounded-full text-[10px] font-bold text-teal-700 mt-1">
+                        {dailyPrompt.category}
+                      </span>
+                    </div>
                   </div>
                   {promptOfDayActive && (
-                    <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-500 text-white text-sm font-medium rounded-full animate-pulse">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-500 text-white text-xs font-bold rounded-full animate-pulse shadow-sm">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                       </svg>
-                      Active
+                      LIVE
                     </span>
                   )}
                 </div>
-                <div className="mb-3">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{dailyPrompt.title}</h3>
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-white border border-teal-300 rounded-full text-xs font-medium text-teal-700">
-                    {dailyPrompt.category}
-                  </span>
-                </div>
-                <p className="text-base text-gray-700 italic mb-6 leading-relaxed">
+                <p className="text-sm text-gray-800 italic mb-3 leading-snug font-medium">
                   &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
                 </p>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(PROMPT_OF_THE_DAY);
                       setCopiedPrompt(true);
                       setTimeout(() => setCopiedPrompt(false), 2000);
                     }}
-                    className={`inline-flex items-center gap-2 px-5 py-3 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 ${
-                      copiedPrompt ? 'bg-teal-600' : 'bg-teal-500 hover:bg-teal-600 shadow-md'
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${
+                      copiedPrompt ? 'bg-teal-600 shadow-sm' : 'bg-teal-500 hover:bg-teal-600 shadow-sm'
                     }`}
+                    style={{ boxShadow: '0 2px 4px rgba(20,184,166,0.2)' }}
                   >
                     {copiedPrompt ? (
                       <>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                         </svg>
-                        Copied!
+                        Copied
                       </>
                     ) : (
                       <>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
-                        Copy Prompt
+                        Copy
                       </>
                     )}
                   </button>
@@ -1012,15 +1015,16 @@ export default function EditorPage() {
                         setIsPromptFavorited(true);
                       }
                     }}
-                    className={`inline-flex items-center gap-2 px-5 py-3 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 shadow-md ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${
                       isPromptFavorited ? 'bg-purple-600 hover:bg-purple-700' : 'bg-teal-500 hover:bg-teal-600'
                     }`}
+                    style={{ boxShadow: isPromptFavorited ? '0 2px 4px rgba(168,85,247,0.2)' : '0 2px 4px rgba(20,184,166,0.2)' }}
                     title={isPromptFavorited ? 'Already in favorites' : 'Add to favorites'}
                   >
-                    <svg className="w-5 h-5" fill={isPromptFavorited ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    <svg className="w-3.5 h-3.5" fill={isPromptFavorited ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
-                    {isPromptFavorited ? 'Favorited' : 'Favorite'}
+                    {isPromptFavorited ? 'Saved' : 'Save'}
                   </button>
                   <button
                     onClick={() => {
@@ -1031,23 +1035,24 @@ export default function EditorPage() {
                         setInstructions('');
                       }
                     }}
-                    className={`inline-flex items-center gap-2 px-5 py-3 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 shadow-md ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${
                       promptOfDayActive ? 'bg-purple-500 hover:bg-purple-600' : 'bg-gray-600 hover:bg-gray-700'
                     }`}
+                    style={{ boxShadow: promptOfDayActive ? '0 2px 4px rgba(168,85,247,0.2)' : '0 2px 4px rgba(0,0,0,0.15)' }}
                   >
                     {promptOfDayActive ? (
                       <>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                         </svg>
                         Active
                       </>
                     ) : (
                       <>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
-                        Try This Prompt
+                        Try It
                       </>
                     )}
                   </button>
@@ -1056,19 +1061,20 @@ export default function EditorPage() {
             </div>
 
             {/* Need a Background? CTA */}
-            <div className="max-w-3xl mx-auto mb-12">
-              <Link href="/canvas" className="block p-6 bg-purple-600 rounded-xl border-2 border-purple-700 hover:border-purple-800 hover:shadow-xl transition-all group">
+            <div className="max-w-3xl mx-auto mb-6">
+              <Link href="/canvas" className="block p-3 bg-purple-600 rounded-lg border-2 border-purple-700 hover:border-purple-800 hover:scale-[1.01] transition-all duration-200 group shadow-md hover:shadow-lg">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                      <span>🎨</span> Need a Background?
-                    </h3>
-                    <p className="text-base text-purple-100">Generate custom AI backgrounds from scratch with Canvas</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl leading-none">🎨</span>
+                    <div>
+                      <h3 className="text-base font-black text-white leading-tight tracking-tight">Need a Background?</h3>
+                      <p className="text-xs text-purple-100 font-medium leading-tight mt-0.5">Generate custom AI backgrounds with Canvas</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-white font-semibold group-hover:gap-4 transition-all text-lg">
+                  <div className="flex items-center gap-1.5 text-white font-bold group-hover:gap-2.5 transition-all text-sm">
                     <span>Try Canvas</span>
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </div>
                 </div>

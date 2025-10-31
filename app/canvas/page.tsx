@@ -91,71 +91,47 @@ function CanvasContent() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 py-6 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Back Button */}
         <Link
           href="/forge"
-          className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-teal-600 font-medium hover:bg-blue-50 rounded-xl transition-all duration-200 mb-8"
+          className="inline-flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:text-teal-600 font-medium hover:bg-blue-50 rounded-lg transition-all duration-200 mb-4"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to The Forge
         </Link>
 
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full mb-4">
-            <Palette className="w-4 h-4" />
-            <span className="text-sm font-medium">AI Image Generation</span>
-          </div>
-          <h1 className="font-heading text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+        {/* Hero Section - Compressed */}
+        <div className="text-center mb-6">
+          <h1 className="font-heading text-4xl md:text-5xl font-black text-gray-900 mb-2 tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
             <span className="bg-purple-600 bg-clip-text text-transparent">Dream It. Type It. Get It.</span>
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-bold">
-            No photo? No problem. Describe literally anything and watch AI conjure it into existence. Backgrounds, scenes, whatever weird stuff you&apos;re thinking.
+          <p className="text-base text-gray-700 max-w-2xl mx-auto font-semibold">
+            No photo? No problem. Describe anything. AI creates it.
           </p>
         </div>
 
-        {/* How It Works - Compact Version */}
-        <div className="bg-purple-600 rounded-2xl p-6 mb-8 text-white">
-          <h2 className="font-heading text-2xl font-bold mb-4 text-center">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="text-3xl mb-2">1️⃣</div>
-              <h3 className="font-heading text-lg font-semibold mb-1">Describe</h3>
-              <p className="text-sm text-purple-100">Write what you want to create</p>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl mb-2">2️⃣</div>
-              <h3 className="font-heading text-lg font-semibold mb-1">Generate</h3>
-              <p className="text-sm text-purple-100">AI creates it in seconds</p>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl mb-2">3️⃣</div>
-              <h3 className="font-heading text-lg font-semibold mb-1">Download</h3>
-              <p className="text-sm text-purple-100">Save or edit your image</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Canvas Area */}
-        <div className="bg-white rounded-3xl shadow-2xl p-8 mb-8">
-          <div className="mb-6">
-            <label className="block font-heading text-lg font-semibold text-gray-900 mb-3">
+        {/* Main Canvas Area - Priority positioning */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+          <div className="mb-4">
+            <label className="block font-heading text-xl font-black text-gray-900 mb-2 tracking-tight" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
               Describe Your Image
             </label>
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="A serene mountain landscape at golden hour with misty valleys and dramatic clouds..."
-              className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-4 focus:ring-purple-100 transition-all min-h-[120px] resize-none"
+              className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-200 transition-all min-h-[100px] resize-none font-medium"
+              style={{ boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)' }}
             />
           </div>
 
           <button
             onClick={handleGenerate}
             disabled={!prompt.trim() || isGenerating}
-            className="w-full py-4 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 tracking-wide"
+            style={{ boxShadow: '0 3px 8px rgba(124, 58, 237, 0.3)' }}
           >
             {isGenerating ? (
               <>
@@ -171,14 +147,15 @@ function CanvasContent() {
           </button>
 
           {/* Example Prompts */}
-          <div className="mt-6">
-            <p className="text-sm font-medium text-gray-700 mb-3">Need inspiration? Steal these:</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="mt-4">
+            <p className="text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Need inspiration? Steal these:</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {examplePrompts.map((example, index) => (
                 <button
                   key={index}
                   onClick={() => setPrompt(example)}
-                  className="text-left p-3 bg-gray-50 hover:bg-purple-50 border border-gray-200 hover:border-teal-300 rounded-lg transition-all text-sm text-gray-700 hover:text-purple-700"
+                  className="text-left p-2.5 bg-gray-50 hover:bg-purple-50 border border-gray-300 hover:border-purple-400 rounded-lg transition-all text-xs text-gray-700 hover:text-purple-700 font-medium"
+                  style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
                 >
                   {example}
                 </button>
@@ -187,14 +164,35 @@ function CanvasContent() {
           </div>
         </div>
 
+        {/* How It Works - Below generation area */}
+        <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-4 mb-6 text-white" style={{ boxShadow: '0 3px 8px rgba(124, 58, 237, 0.3)' }}>
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <div className="text-2xl mb-1">1</div>
+              <h3 className="font-heading text-sm font-bold mb-0.5 tracking-tight">Describe</h3>
+              <p className="text-xs text-purple-100">Write it</p>
+            </div>
+            <div>
+              <div className="text-2xl mb-1">2</div>
+              <h3 className="font-heading text-sm font-bold mb-0.5 tracking-tight">Generate</h3>
+              <p className="text-xs text-purple-100">AI creates it</p>
+            </div>
+            <div>
+              <div className="text-2xl mb-1">3</div>
+              <h3 className="font-heading text-sm font-bold mb-0.5 tracking-tight">Download</h3>
+              <p className="text-xs text-purple-100">Use it</p>
+            </div>
+          </div>
+        </div>
+
         {/* Generated Image Display */}
         {generatedImage && (
-          <div className="bg-white rounded-3xl shadow-2xl p-8">
-            <h3 className="font-heading text-2xl font-bold text-gray-900 mb-4">Your Generated Image</h3>
-            <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
+          <div className="bg-white rounded-2xl shadow-lg p-6" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+            <h3 className="font-heading text-xl font-black text-gray-900 mb-3 tracking-tight" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>Your Generated Image</h3>
+            <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-100" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
               <img src={generatedImage} alt="Generated" className="w-full h-full object-cover" />
             </div>
-            <div className="mt-6 flex gap-4">
+            <div className="mt-4 flex gap-3">
               <button
                 onClick={async () => {
                   if (!generatedImage) return;
@@ -212,12 +210,14 @@ function CanvasContent() {
                   link.download = `ai-generated-${Date.now()}.png`
                   link.click()
                 }}
-                className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all">
+                className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg transition-all tracking-wide"
+                style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                 Download
               </button>
               <Link
                 href="/"
-                className="flex-1 py-3 bg-purple-600 text-white font-medium rounded-xl hover:bg-purple-700 transition-all text-center"
+                className="flex-1 py-2.5 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all text-center tracking-wide"
+                style={{ boxShadow: '0 3px 8px rgba(124, 58, 237, 0.3)' }}
               >
                 Use in Editor
               </Link>
