@@ -4,349 +4,282 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PicForge is an AI-powered image transformation platform built with Next.js 15. It provides multiple modes:
-- **The Forge** (/forge) - AI-powered image editing with 272+ prompts, custom prompts, and Lock Composition feature
-- **18+ Editor** (/editor-nsfw) - COMING SOON page with ribbon design (Q1 2026 launch)
-- **Batch Processor** (/batch) - Process 100+ images simultaneously with bulk operations and 21 effects
-- **18+ Batch** (/batch-nsfw) - Unrestricted batch processing for adult content (access restricted)
-- **AI Canvas** (/canvas) - Generate images from text descriptions
-- **Transform Roulette** (/roulette) - Gamified random transformation with 8 categories (320 prompts including Banksy art)
-- **Roast Mode** (/roast) - AI roasts your photos with 3 intensity levels
-- **Prompt Wizard** (/prompt-wizard) - 5-step guided prompt builder
-- **AI Prompt Assistant** (floating chat) - Claude-powered conversational prompt enhancement with image context (Pro feature)
-- **Templates Gallery** (/examples) - 110+ sample images to try before uploading
-- **Prompts Library** (/prompts) - 325+ categorized prompts across 13 categories with filtering, search, and favorites
-- **Favorites Page** (/prompts/favorites) - User's saved favorite prompts with export functionality
-- **Tips & Tricks** (/tips) - Best practices and Nano Banana techniques
-- **Showcase** (/showcase) - User-submitted transformations gallery
+PicForge is an AI-powered image transformation platform built with Next.js 15. Users upload images and transform them using 320+ AI prompts across multiple editing modes.
 
-## Brand & Tone
-
-**Headline:** (re)Imagine. Everything.
-**Tagline:** Nothing is real anymore.
-
-**Copy Voice:**
-- Edgy, playful, direct (NOT corporate)
-- Bold statements: "Make them weird. Make them epic. Make them yours."
-- "Zero artistic talent required"
-- Examples: "Dream It. Type It. Get It." / "Something Broke?" / "Show Off Your Work"
-
-## Interaction Guidance
-
-- Always ask clarifying questions if an instruction is ambiguous or open-ended.
-- List potential alternative approaches before choosing one for implementation.
-- If context or requirements are missing, ask for further details.
-- After completing a task, ask "Is there anything that needs improvement or refinement?"
+**Core Features:**
+- **The Forge** (/forge) - Single-image AI editor with 272+ prompts and Lock Composition
+- **Batch Processor** (/batch) - Process 100+ images with 21 client-side effects
+- **AI Canvas** (/canvas) - Text-to-image generation
+- **Transform Roulette** (/roulette) - Gamified random transformations (8 categories)
+- **Roast Mode** (/roast) - AI photo roasting (mild/spicy/nuclear)
+- **AI Prompt Assistant** - Claude-powered chat for prompt enhancement (Pro feature)
+- **18+ Editor/Batch** - NSFW content processing using Replicate SDXL (~$0.023/image)
 
 ## Development Commands
 
 ```bash
-# Install dependencies
-npm install
+# Development
+npm install              # Install dependencies
+npm run dev             # Start dev server (localhost:3000, Turbopack enabled)
+npm run build           # Production build (includes env validation)
+npm run build:skip-validation  # Build without env checks
+npm start               # Run production server
 
-# Run development server (uses Turbopack)
-npm run dev
-# Opens on http://localhost:3000 (or next available port)
+# Testing & QA
+npm test                # Run Jest tests
+npm run test:watch      # Jest watch mode
+npm run test:coverage   # Coverage report
+npm run test:rate-limit # Test rate limiting
+npm run lint            # ESLint
 
-# Build for production
-npm run build --turbopack
-
-# Run production server
-npm start
-
-# Run linting
-npm run lint
+# Monitoring & Utilities
+npm run check-env       # Validate environment variables
+npm run security-audit  # Security audit script
+npm run monitor:rate-limits    # Rate limit monitoring
+npm run monitor:costs   # AI API cost monitoring
 ```
 
-## Architecture & Key Components
+## Brand Voice
 
-### Core Features
+**Headline:** (re)Imagine. Everything.
+**Tagline:** Nothing is real anymore.
 
-1. **Image Processing Pipeline**
-   - `lib/imageProcessor.ts` - Client-side Canvas API operations (resize, crop, filters, watermark)
-   - `lib/geminiProcessor.ts` - AI features using Gemini API (background removal, enhancement)
-   - `lib/watermark.ts` - Adds "PicForge.com" watermark to free tier images
-   - Hybrid approach: 80% operations run client-side (FREE), AI operations use Gemini API
+**Copy Style:** Edgy, playful, direct (NOT corporate). Examples: "Make them weird. Make them epic. Make them yours." / "Zero artistic talent required"
 
-2. **API Routes** (`app/api/`)
-   - `process-image/` - Main image processing with Gemini Vision API, includes rate limiting (500/day/IP)
-   - `process-image-nsfw/` - Unrestricted image processing using Replicate SDXL img2img (bypasses Gemini restrictions)
-   - `roast/` - AI photo roasting with intensity levels (mild/spicy/nuclear)
-   - `generate-canvas/` - AI image generation using DALL-E
-   - `generate-canvas-free/`, `generate-canvas-hf/`, `generate-canvas-pollinations/` - Alternative free generation APIs
-   - `track-visitor/`, `track-share/`, `track-template/` - Analytics endpoints using Vercel KV
-   - `test-replicate/` - Test endpoint to verify Replicate API token configuration
-   - `analyze-image/` - Gemini Vision analysis for uploaded images (50 req/hour, Pro only)
-   - `enhance-prompt/` - Claude AI prompt enhancement with 3 variations (30 req/hour, Pro only)
+## Architecture Overview
 
-3. **Rate Limiting & User Management**
-   - `hooks/useImageTracking.ts` - Tracks user image generation, favorites, and usage limits
-   - `hooks/usePromoCode.ts` - Handles promo code redemption for unlimited access
-   - `lib/promoCodes.ts` - Promo code generation and validation logic
-   - Free tier: 20 images per day (down from 500)
-   - Pro/Unlimited tiers: No daily limits
-   - Resets every 24 hours
+### Core Data Flow
 
-4. **AI Prompt Assistant** (Pro Feature)
-   - `components/PromptAssistantChat.tsx` - Floating chat widget with conversational AI
-   - **Image Context Detection** - Automatically analyzes uploaded images using Gemini Vision
-   - **Prompt Enhancement** - Claude Sonnet 3.5 generates 3 optimized prompt variations
-   - **One-Click Insertion** - Custom events dispatch prompts to editor (`insertPrompt` event)
-   - **Tutorial System** - First-time user onboarding (localStorage: `chatTutorialSeen`)
-   - **Rate Limiting** - 50 image analyses/hour, 30 prompt enhancements/hour (per IP)
-   - **Pro Paywall** - Shows upgrade modal for Free users
-   - **API Routes:**
-     - `/api/analyze-image` - Gemini Vision analyzes image type, subject, mood, colors, lighting, style
-     - `/api/enhance-prompt` - Claude generates contextual prompt variations from casual input
-   - **Integration:**
-     - Editors listen for `window.addEventListener('insertPrompt', ...)` to receive prompts
-     - Editors dispatch `window.dispatchEvent(new CustomEvent('imageUploaded', ...))` to trigger analysis
-   - **State Management** - Uses InstantDB to check user tier (Pro/Unlimited only)
+**Image Transformation Pipeline:**
+1. User uploads image → Base64 conversion (client)
+2. Basic effects (sharpen, crop, etc.) → Canvas API (client-side, FREE)
+3. AI transformations → API route → Gemini/Replicate → Result
+4. Track usage → InstantDB → Update user limits
+5. Display result + download option
 
-### AI Integrations
+**Key Architectural Decisions:**
+- **Hybrid Processing**: 80% client-side (Canvas API) for free operations, 20% server-side AI for advanced features
+- **No Traditional Backend**: InstantDB handles ALL server state (auth, data, real-time sync)
+- **Fail-Open Rate Limiting**: APIs work without Vercel KV but are vulnerable to abuse
+- **Custom Events**: Window events bridge AI Prompt Assistant ↔ Editor communication
 
-The app uses multiple AI providers:
-- **Google Gemini** (`@google/generative-ai`) - Primary image processing, vision tasks, and image context analysis (blocks NSFW)
-- **Anthropic Claude** (`@anthropic-ai/sdk`) - Sonnet 3.5 for conversational prompt enhancement (Pro feature)
-- **Replicate** - SDXL img2img for unrestricted adult/graphic content transformations (~$0.023/image)
-- **OpenAI** (`openai`) - DALL-E image generation
-- **Together AI** (`together-ai`) - Alternative AI model provider
-- **Pollinations/HuggingFace** - Free image generation alternatives
+### Critical API Routes (`app/api/`)
 
-### Database & Authentication
+**Image Processing:**
+- `process-image/` - Main editor (Gemini Vision API, 500 req/day/IP)
+- `process-image-nsfw/` - NSFW editor (Replicate SDXL, 200 req/day/IP, ~$0.023/image)
+- `generate-canvas/` - Text-to-image (DALL-E, 100 req/day/IP)
+- `roast/` - Photo roasting (300 req/day/IP)
 
-**InstantDB - Single Source of Truth** (`@instantdb/react`)
-- Real-time database with built-in auth (October 2025: migrated from Prisma)
-- Handles ALL data: users, images, favorites, usage tracking, promo codes, referrals, showcase, email preferences, roulette game
-- No backend server required - all client-side
-- Magic link authentication (passwordless)
-- Offline support with automatic sync
-- Real-time data queries and mutations
+**AI Prompt Assistant (Pro feature):**
+- `analyze-image/` - Gemini Vision analyzes uploaded images (50 req/hour)
+- `enhance-prompt/` - Claude Sonnet 3.5 generates 3 prompt variations (30 req/hour)
 
-**Key Files:**
-- `lib/instantdb.ts` - Complete schema definition with 11 entities (users, images, favorites, usage, promoCodes, showcaseSubmissions, showcaseLikes, referrals, emailPreferences, rouletteStreaks, rouletteAchievements, rouletteSpins, rouletteVotes)
-- `components/AuthButton.tsx` - Magic link authentication UI
-- `hooks/useImageTracking.ts` - Image generation, favorites, and usage limits
+**Analytics:**
+- `track-visitor/`, `track-share/`, `track-template/` - Vercel KV counters
+
+### Database Architecture (InstantDB)
+
+**Single Source of Truth** - `lib/instantdb.ts` defines entire schema:
+- **No separate backend** - All CRUD operations via InstantDB client hooks
+- **Real-time sync** - State updates propagate to all connected clients instantly
+- **Magic link auth** - Passwordless authentication built-in
+- **11 entities**: users, images, favorites, usage, promoCodes, showcaseSubmissions, showcaseLikes, referrals, emailPreferences, rouletteStreaks, rouletteAchievements, rouletteSpins, rouletteVotes
+
+**Key Hooks:**
+- `hooks/useImageTracking.ts` - Image generation, favorites, usage limits
 - `hooks/usePromoCode.ts` - Promo code redemption
-- `hooks/useReferral.ts` - Referral tracking and bonuses
-- `hooks/useShowcaseVotes.ts` - Showcase voting system
-- `hooks/useRouletteGame.ts` - Roulette game state management
-- `hooks/useEmailPreferences.ts` - Email notification settings
-- `app/profile/page.tsx` - User profile with stats and redemption
-- `app/admin/page.tsx` - Admin panel for promo code generation (derek.bobola@gmail.com only)
-- `app/showcase/page.tsx` - Showcase gallery with real-time voting
+- `hooks/useReferral.ts` - Referral tracking
+- `hooks/useShowcaseVotes.ts` - Showcase voting
+- `hooks/useRouletteGame.ts` - Roulette game state
 
-### Environment Variables
+**User Tiers:**
+- Free: 20 images/day, watermarked
+- Pro: Unlimited images, no watermark (Stripe subscription)
+- Unlimited: Unlimited via promo codes (DEREK-FOUNDER-2025, etc.)
 
-Required in `.env.local`:
+### AI Provider Strategy
+
+**Multi-Provider Architecture** - Different providers for different use cases:
+
+| Provider | Use Case | Cost | Notes |
+|----------|----------|------|-------|
+| **Google Gemini** | Main editor, vision analysis | Free tier | Blocks NSFW content |
+| **Anthropic Claude** | Prompt enhancement (Pro) | Pay-as-you-go | Sonnet 3.5, 30 req/hour limit |
+| **Replicate SDXL** | NSFW transformations | ~$0.023/image | Bypasses Gemini restrictions |
+| **OpenAI DALL-E** | Text-to-image generation | $0.040-$0.080/image | Canvas feature |
+| **Pollinations/HF** | Free alternatives | Free | Fallback generation |
+
+**Cost Control:**
+- Rate limiting on all paid endpoints (Vercel KV)
+- User tier enforcement (Free: 20/day, Pro: unlimited)
+- IP-based limits to prevent abuse
+
+## Environment Setup
+
+**Required Variables** (`.env.local`):
+```bash
+# InstantDB (REQUIRED - single source of truth for all data)
+NEXT_PUBLIC_INSTANT_APP_ID=xxx  # Get from instantdb.com/dash
+
+# AI Providers (REQUIRED)
+GEMINI_API_KEY=xxx              # Google Gemini for main editor
+ANTHROPIC_API_KEY=xxx           # Claude for AI Prompt Assistant (Pro)
+
+# Paid Features (OPTIONAL but limits functionality)
+REPLICATE_API_TOKEN=xxx         # NSFW editor (~$0.023/image)
+OPENAI_API_KEY=xxx              # Canvas text-to-image
+
+# Rate Limiting (OPTIONAL but recommended)
+KV_URL=xxx                      # Vercel KV for rate limiting
+KV_REST_API_URL=xxx
+KV_REST_API_TOKEN=xxx
+KV_REST_API_READ_ONLY_TOKEN=xxx
 ```
-# AI Providers
-GEMINI_API_KEY=your_gemini_key
-REPLICATE_API_TOKEN=your_replicate_token (required for NSFW editor - costs ~$0.023/image)
-ANTHROPIC_API_KEY=your_anthropic_key (required for AI Prompt Assistant - Pro feature)
-OPENAI_API_KEY=your_openai_key (optional for canvas generation)
-TOGETHER_API_KEY=your_together_key (optional)
 
-# Analytics (Vercel KV)
-KV_URL=your_vercel_kv_url
-KV_REST_API_URL=your_vercel_kv_rest_url
-KV_REST_API_TOKEN=your_vercel_kv_token
-KV_REST_API_READ_ONLY_TOKEN=your_vercel_kv_read_token
+**Setup Commands:**
+- `npm run check-env` - Validate all environment variables
+- `npm run validate-env` - Run during build (fails if missing required vars)
 
-# InstantDB (User Auth & Database)
-NEXT_PUBLIC_INSTANT_APP_ID=your_instantdb_app_id
+**Critical Notes:**
+- InstantDB replaced Prisma in October 2025 - no other database exists
+- Without Vercel KV, rate limiting fails open (APIs work but vulnerable to abuse)
+- REPLICATE_API_TOKEN costs ~$2 for 86 images (~$0.023 each)
+
+## Critical Implementation Patterns
+
+### Next.js 15 SSR + Client Hooks
+
+**Problem:** Route config exports (`export const dynamic`) only work in Server Components, but hooks like `useSession()` require Client Components.
+
+**Solution:** Split into Server/Client components:
+```typescript
+// app/dashboard/page.tsx (Server Component)
+export const dynamic = 'force-dynamic';
+import DashboardClient from './DashboardClient';
+export default function DashboardPage() {
+  return <DashboardClient />;
+}
+
+// app/dashboard/DashboardClient.tsx (Client Component)
+'use client';
+export default function DashboardClient() {
+  const { user } = useAuth(); // hooks work here
+  // ... component logic
+}
 ```
 
-**Setup Notes:**
-- **REPLICATE_API_TOKEN**: For NSFW editor (/editor-nsfw and /batch-nsfw). Get token at https://replicate.com/account/api-tokens. Requires paid credits (~$2 = 86 images).
-- **NEXT_PUBLIC_INSTANT_APP_ID**: Create app at https://www.instantdb.com/dash and copy the App ID. Required for all user authentication and data persistence. **This is the ONLY database** - Prisma was removed in October 2025.
+### AI Prompt Assistant ↔ Editor Communication
 
-### Key UI Components
+**Cross-Component Communication** using custom window events:
 
-- `components/Navigation.tsx` - Site-wide navigation with Editor/Batch/Games/Resources/Profile dropdowns
-- `components/BeforeAfterSlider.tsx` - Interactive comparison slider
-- `components/ShareModal.tsx` - Social sharing functionality
-- `components/TemplateSelector.tsx` - Pre-built prompt templates
-- `components/AuthButton.tsx` - Magic link authentication button
-- `app/components/BatchUploader.tsx` - Drag-and-drop for multiple images
-- `app/components/BatchProcessorNSFW.tsx` - NSFW batch processor (dark theme)
-- `app/components/EditorNSFW.tsx` - NSFW single-image editor (dark theme)
-- `app/components/EditPanel.tsx` - Batch editing controls
-- `app/components/PricingCard.tsx` - Tiered pricing display with promo code info
-- `lib/imageEffects.ts` - 21 client-side image effects (sharpen, vignette, glitch, etc.)
+```typescript
+// Editor listens for prompt insertion
+useEffect(() => {
+  const handleInsert = (e: CustomEvent) => {
+    setPrompt(e.detail.prompt);
+  };
+  window.addEventListener('insertPrompt', handleInsert);
+  return () => window.removeEventListener('insertPrompt', handleInsert);
+}, []);
 
-### Prompt Library Components
+// Editor notifies when image uploaded
+window.dispatchEvent(new CustomEvent('imageUploaded', {
+  detail: { imageUrl: uploadedImageUrl }
+}));
 
-- `components/PromptCard.tsx` - Individual prompt display with copy button and favorite toggle
-- `components/FilterSidebar.tsx` - Category and tag filtering interface
-- `components/SearchBar.tsx` - Search input with clear button
-- `components/PromptSubmitModal.tsx` - User prompt submission form
-- `lib/prompts.ts` - 325+ prompt definitions across 13 categories
-- `app/prompts/page.tsx` - Main prompt library page with filtering and search
-- `app/prompts/favorites/page.tsx` - Favorites page with export and statistics
+// AI Assistant dispatches prompt
+window.dispatchEvent(new CustomEvent('insertPrompt', {
+  detail: { prompt: enhancedPrompt }
+}));
+```
 
-**Prompt Library Features:**
-- **272+ Prompts** across 13 categories (Art Styles, Nature, People, Sports, Politics, Wellness, Events, Pro Photography, Fantasy, Abstract, Film, and more)
-- **Category Filtering** - Single-select filter for browsing by category
-- **Tag Filtering** - Multi-select tag system for refined searches
-- **Search** - Full-text search across titles, descriptions, and tags
-- **Favorites System** - LocalStorage-based favorites with persistence (no backend yet)
-- **Prompt of the Day** - Featured daily prompt (currently static, not rotating)
-- **Copy Functionality** - One-click copy to clipboard for each prompt
-- **Submit Modal** - User submission form (logs to console, no backend)
-- **Design System** - Black/white/teal matching PicForge brand, Courier New monospace headings
-
-**Important Notes:**
-- Favorites stored in localStorage (no cross-device sync yet)
-- Navigation component is in root layout - DO NOT include in individual pages to avoid duplication
-- Prompt submissions currently log to console only (backend integration needed)
-
-### State Management
-
-- React hooks (useState, useEffect) for component state
-- InstantDB for user data, auth state, and real-time database queries
-- Zustand installed but not actively used
-
-### Deployment
-
-- Deployed on Vercel (auto-deploys from main branch)
-- Production URL: https://pic-forge.com
-- Uses Vercel KV for visitor tracking and analytics
-
-## Important Implementation Notes
-
-1. **Next.js 15 SSR Patterns**:
-   - Route segment config exports (`export const dynamic`, `export const revalidate`) ONLY work in Server Components, NOT Client Components
-   - For authenticated pages using `useSession()`: Create separate Client/Server components
-   - **Pattern**:
-     - `page.tsx` = Server Component with route config exports
-     - `PageClient.tsx` = Client Component with all hooks and logic
-     - Example: `app/dashboard/page.tsx` imports `DashboardClient.tsx`
-   - This prevents SSR prerendering errors with hooks like `useSession()`
-
-2. **Import Paths**: Components in `/app/batch/` must use `../components/` for imports, not `./components/`
-
-3. **Client Components**: Most components use `'use client'` directive for interactivity
-
-4. **ESLint Requirements**:
-   - Escape special characters in JSX: use `&apos;` for apostrophes, `&quot;` for quotes
-   - Example: `"Prompt of the Day"` → `&quot;Prompt of the Day&quot;`
-
-5. **User Tiers & Limits**:
-   - **Free Tier**: 20 images per day, includes watermark
-   - **Pro Tier**: Unlimited images, no watermark
-   - **Unlimited Tier**: Unlimited images (via promo codes), no watermark
-   - Admin access: derek.bobola@gmail.com only
-
-6. **Image Processing Flow**:
-   - Client uploads image → Base64 conversion
-   - Basic edits use Canvas API (client-side)
-   - AI features send to Gemini API
-   - Results displayed with download option
-
-7. **Batch Processing**:
-   - Regular batch: 21 client-side effects (sharpen, vignette, saturation, warm, cool, grain, glitch/vhs, sketch, resize, enhance, etc.)
-   - NSFW batch: Uses Replicate API for unrestricted transformations
-   - Processes images sequentially with priority queue support
-   - Export presets: Web Optimized, Social Media, High Quality, Thumbnail
-
-8. **NSFW Content Handling**:
-   - **18+ Editor**: Currently showing "Coming Soon" page with ribbon design (Q1 2026 expected launch)
-   - **18+ Batch**: Active but access restricted from editor-nsfw page
-   - Separate routes: /editor-nsfw (coming soon page) and /batch-nsfw (active)
-   - Uses Replicate SDXL img2img (bypasses Gemini restrictions) - ~$0.023/image
-   - Dark red/gray/orange gradient theme to distinguish from regular editor
-   - Legal disclaimers and age verification warnings
-   - No content storage - ephemeral processing only
-   - User responsibility clearly stated in Terms of Service
-
-9. **Gamification Features**:
-   - **Transform Roulette**: Spin-the-wheel with 8 categories (Art Styles, Movie Magic, Time Travel, Nature, Fantasy, Sci-Fi, Artistic, Abstract) - 320 total prompts including Banksy art
-   - **Roast Mode**: AI photo roasting with 3 intensity levels (mild, spicy, nuclear)
-   - **Prompt Wizard**: 5-step guided prompt builder
-
-10. **User Experience Features**:
-   - **Lock Composition**: Checkbox on main editor to preserve composition during iterative edits (auto-appends "don't change anything else" to prompts)
-   - **Creative Journey**: Image gallery with masonry layout showing edit history
-   - **Download All**: Bulk download all versions as ZIP file
-   - **Before/After Slider**: Interactive comparison view
-   - **Share Modal**: Social sharing functionality
-   - **Promo Codes**: One-time redemption codes for unlimited access
-   - **User Profile**: View usage, redeem codes, manage account
-   - **Admin Panel**: Generate promo codes (derek.bobola@gmail.com only)
-
-## InstantDB Usage Examples
+### InstantDB Usage Patterns
 
 **Track Image Generation:**
 ```typescript
 import { useImageTracking } from '@/hooks/useImageTracking';
 
-const { trackImageGeneration, hasReachedLimit, getRemainingImages } = useImageTracking();
+const { trackImageGeneration, hasReachedLimit } = useImageTracking();
 
-// When user generates an image
+if (hasReachedLimit()) {
+  // Show upgrade modal
+  return;
+}
+
 await trackImageGeneration({
-  prompt: "turn into a zombie",
-  originalUrl: originalImageUrl,
-  transformedUrl: resultImageUrl,
+  prompt: "turn into zombie",
+  originalUrl: originalUrl,
+  transformedUrl: resultUrl,
   locked: false
 });
 ```
 
-**Check Usage Limits:**
+**Check User Tier:**
 ```typescript
-const { hasReachedLimit, getRemainingImages, user, usage } = useImageTracking();
-
-if (hasReachedLimit()) {
-  alert('Daily limit reached! Upgrade to Pro or redeem a promo code for unlimited images.');
-  return;
-}
-
-// Show remaining: "18 images remaining today" (Free tier: 20/day)
-// Or "Unlimited" for Pro/Unlimited tiers
+const { user, usage } = useImageTracking();
+const isProUser = usage?.tier === 'pro' || usage?.tier === 'unlimited';
 ```
 
-**Save Favorite Prompts:**
-```typescript
-const { saveFavorite } = useImageTracking();
+### Common Gotchas
 
-await saveFavorite("turn into Van Gogh painting", "Art Styles");
-```
+1. **Import Paths**: Use `@/` alias, not relative paths. Exception: `/app/batch/` must use `../components/`
+2. **Navigation Duplication**: Navigation is in root layout - DO NOT import in individual pages
+3. **ESLint**: Escape quotes in JSX: `&apos;` for apostrophes, `&quot;` for quotes
+4. **Watermarks**: Free tier images get "PicForge.com" watermark via `lib/watermark.ts`
+5. **Admin Access**: Only derek.bobola@gmail.com can access `/app/admin/page.tsx`
+6. **Lock Composition**: Auto-appends "don't change anything else" to prompts when checkbox enabled
 
-**Get User's Image History:**
-```typescript
-const { imageHistory } = useImageTracking();
+## Key File Locations
 
-// imageHistory is an array of all user's generated images
-// Auto-updates in real-time!
-```
+**Core Infrastructure:**
+- `lib/instantdb.ts` - Complete database schema (11 entities)
+- `lib/imageProcessor.ts` - Client-side Canvas API operations
+- `lib/imageEffects.ts` - 21 effect definitions (sharpen, glitch, vignette, etc.)
+- `lib/prompts.ts` - 325+ AI prompt definitions
+- `middleware.ts` - HTTPS enforcement, www → apex redirect
+- `next.config.ts` - Security headers, image optimization, CDN config
 
-**Add Auth Button to Navigation:**
-```typescript
-import AuthButton from '@/components/AuthButton';
+**Critical Hooks:**
+- `hooks/useImageTracking.ts` - Usage limits, favorites, image history
+- `hooks/usePromoCode.ts` - Promo code redemption
+- `hooks/useRouletteGame.ts` - Roulette game state
 
-// In your Navigation component:
-<AuthButton />
-```
+**Main Pages:**
+- `app/forge/page.tsx` - Single image editor
+- `app/batch/page.tsx` - Batch processor
+- `app/canvas/page.tsx` - Text-to-image generation
+- `app/roulette/page.tsx` - Transform Roulette game
+- `app/admin/page.tsx` - Promo code generation (admin only)
 
-**Redeem Promo Code:**
-```typescript
-import { usePromoCode } from '@/hooks/usePromoCode';
+**API Routes:**
+- `app/api/process-image/route.ts` - Main Gemini transformation
+- `app/api/process-image-nsfw/route.ts` - Replicate NSFW processing
+- `app/api/analyze-image/route.ts` - Gemini Vision analysis (Pro)
+- `app/api/enhance-prompt/route.ts` - Claude prompt enhancement (Pro)
 
-const { redeemCode, isRedeeming, error, success } = usePromoCode();
+## Pre-Generated Promo Codes
 
-// Redeem a code
-await redeemCode('DEREK-FOUNDER-2025');
-```
+For testing unlimited tier access:
+- `DEREK-FOUNDER-2025` (Unlimited)
+- `BOBOLA-FAM-01`, `BOBOLA-FAM-02`, `BOBOLA-FAM-03` (Unlimited)
+- `BETA-VIP-001`, `BETA-VIP-002`, `BETA-VIP-003` (Unlimited)
 
-**Pre-Generated Promo Codes:**
-- DEREK-FOUNDER-2025 (Unlimited tier)
-- BOBOLA-FAM-01, BOBOLA-FAM-02, BOBOLA-FAM-03 (Unlimited tier)
-- BETA-VIP-001, BETA-VIP-002, BETA-VIP-003 (Unlimited tier)
+## Testing Strategy
 
-## Testing
+**Current State:** Manual testing only (no Jest test suite actively maintained)
 
-No formal test suite currently implemented. Manual testing required for:
-- Image upload and processing
-- Rate limiting enforcement
-- Batch processing operations
-- Cross-browser compatibility
+**Test Commands Available:**
+- `npm test` - Run Jest (basic setup exists)
+- `npm run test:rate-limit` - Test rate limiting logic
+- `npm run test:api` - Test API error handling
+- `npm run security-audit` - Run security audit script
+
+**Manual Testing Checklist:**
+1. Image upload and transformation (Forge)
+2. Batch processing (21 effects)
+3. Rate limiting enforcement (20/day for Free tier)
+4. Promo code redemption
+5. AI Prompt Assistant (Pro feature)
+6. Showcase voting
+7. Roulette game mechanics
