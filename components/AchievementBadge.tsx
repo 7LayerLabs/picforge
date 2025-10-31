@@ -31,7 +31,7 @@ export default function AchievementBadge({
       onClick={onClick}
       className={`relative p-4 rounded-xl border-2 text-center transition-all cursor-pointer group ${
         isUnlocked
-          ? 'bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-400 shadow-lg hover:shadow-xl hover:scale-105'
+          ? 'bg-white border-orange-500 shadow-lg hover:shadow-xl hover:scale-105'
           : 'bg-gray-50 border-gray-200 opacity-60 hover:opacity-80'
       }`}
     >

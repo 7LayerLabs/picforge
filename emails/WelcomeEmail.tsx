@@ -114,7 +114,7 @@ export const WelcomeEmail = ({
           <Text style={footer}>
             You&apos;re receiving this because you signed up at <Link href="https://pic-forge.com" style={link}>PicForge.com</Link>
             <br />
-            <Link href="https://pic-forge.com/profile" style={link}>Manage preferences</Link> | <Link href="https://pic-forge.com/profile" style={link}>Unsubscribe</Link>
+            <Link href="https://pic-forge.com/profile/emails" style={link}>Manage preferences</Link> | <Link href="https://pic-forge.com/unsubscribe" style={link}>Unsubscribe</Link>
           </Text>
         </Container>
       </Body>

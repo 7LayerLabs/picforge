@@ -60,7 +60,7 @@ export default function Navigation() {
             <div className="hidden sm:ml-4 sm:flex sm:space-x-2">
               <Link
                 href="/forge"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold ${
                   isActive('/forge')
                     ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -72,7 +72,7 @@ export default function Navigation() {
 
               <Link
                 href="/batch"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold ${
                   isActive('/batch')
                     ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -84,7 +84,7 @@ export default function Navigation() {
 
               <Link
                 href="/canvas"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold ${
                   isActive('/canvas')
                     ? 'border-teal-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -101,7 +101,7 @@ export default function Navigation() {
                 onMouseLeave={() => setResourcesDropdownOpen(false)}
               >
                 <button
-                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium h-full ${
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${
                     isResourceActive()
                       ? 'border-teal-500 text-gray-900'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -140,7 +140,7 @@ export default function Navigation() {
                 onMouseLeave={() => setGamesDropdownOpen(false)}
               >
                 <button
-                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium h-full ${
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${
                     isGameActive()
                       ? 'border-pink-500 text-gray-900'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -167,7 +167,7 @@ export default function Navigation() {
 
               <Link
                 href="/pricing"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium ${
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold ${
                   isActive('/pricing')
                     ? 'border-purple-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -184,7 +184,7 @@ export default function Navigation() {
                 onMouseLeave={() => setLegalDropdownOpen(false)}
               >
                 <button
-                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium h-full ${
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${
                     isLegalActive()
                       ? 'border-teal-500 text-gray-900'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -199,9 +199,9 @@ export default function Navigation() {
                   <div className="absolute top-full right-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-[100]">
                     <Link
                       href="/legal/privacy"
-                      className={`flex items-center px-4 py-2 text-sm ${
+                      className={`flex items-center px-4 py-2 text-sm font-semibold ${
                         isActive('/legal/privacy')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
+                          ? 'bg-teal-50 text-teal-700'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -210,9 +210,9 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/legal/terms"
-                      className={`flex items-center px-4 py-2 text-sm ${
+                      className={`flex items-center px-4 py-2 text-sm font-semibold ${
                         isActive('/legal/terms')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
+                          ? 'bg-teal-50 text-teal-700'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -230,7 +230,7 @@ export default function Navigation() {
                 onMouseLeave={() => setProfileDropdownOpen(false)}
               >
                 <button
-                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-xs font-medium h-full ${
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${
                     isProfileActive()
                       ? 'border-teal-500 text-gray-900'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -245,9 +245,9 @@ export default function Navigation() {
                   <div className="absolute top-full right-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-[100]">
                     <Link
                       href="/profile"
-                      className={`flex items-center px-4 py-2 text-sm ${
+                      className={`flex items-center px-4 py-2 text-sm font-semibold ${
                         isActive('/profile')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
+                          ? 'bg-teal-50 text-teal-700'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -256,9 +256,9 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/favorites"
-                      className={`flex items-center px-4 py-2 text-sm ${
+                      className={`flex items-center px-4 py-2 text-sm font-semibold ${
                         isActive('/favorites')
-                          ? 'bg-teal-50 text-teal-700 font-medium'
+                          ? 'bg-teal-50 text-teal-700'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -299,7 +299,7 @@ export default function Navigation() {
           <div className="pt-2 pb-3 space-y-1">
             <Link
               href="/forge"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/forge')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -314,7 +314,7 @@ export default function Navigation() {
 
             <Link
               href="/batch"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/batch')
                   ? 'bg-purple-50 border-purple-500 text-purple-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -329,7 +329,7 @@ export default function Navigation() {
 
             <Link
               href="/canvas"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/canvas')
                   ? 'bg-purple-50 border-purple-500 text-purple-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -352,7 +352,7 @@ export default function Navigation() {
 
             <Link
               href="/prompt-wizard"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/prompt-wizard')
                   ? 'bg-purple-50 border-purple-500 text-purple-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -375,7 +375,7 @@ export default function Navigation() {
 
             <Link
               href="/roast"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/roast')
                   ? 'bg-purple-50 border-purple-500 text-purple-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -390,7 +390,7 @@ export default function Navigation() {
 
             <Link
               href="/roulette"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/roulette')
                   ? 'bg-purple-50 border-purple-500 text-purple-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -409,7 +409,7 @@ export default function Navigation() {
 
             <Link
               href="/prompts"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/prompts')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -424,7 +424,7 @@ export default function Navigation() {
 
             <Link
               href="/examples"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/examples')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -439,7 +439,7 @@ export default function Navigation() {
 
             <Link
               href="/tips"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/tips')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -455,7 +455,7 @@ export default function Navigation() {
 
             <Link
               href="/pricing"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/pricing')
                   ? 'bg-purple-50 border-purple-500 text-purple-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -478,7 +478,7 @@ export default function Navigation() {
 
             <Link
               href="/legal/privacy"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/legal/privacy')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -493,7 +493,7 @@ export default function Navigation() {
 
             <Link
               href="/legal/terms"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/legal/terms')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -516,7 +516,7 @@ export default function Navigation() {
 
             <Link
               href="/profile"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/profile')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
@@ -531,7 +531,7 @@ export default function Navigation() {
 
             <Link
               href="/favorites"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base font-medium ${
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
                 isActive('/favorites')
                   ? 'bg-teal-50 border-teal-500 text-teal-700'
                   : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'

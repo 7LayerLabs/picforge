@@ -19,7 +19,7 @@ export default function SubmitPage() {
     // Create mailto link with form data
     const subject = 'PicForge - Submit My Creation'
     const body = `Name: ${formData.name}\nEmail: ${formData.email}\nTemplate Used: ${formData.template}\n\nDescription:\n${formData.description}\n\nPlease attach your before/after images to this email!`
-    const mailtoLink = `mailto:submissions@pic-forge.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    const mailtoLink = `mailto:showcase@pic-forge.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 
     window.location.href = mailtoLink
     setSubmitted(true)

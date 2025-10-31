@@ -130,8 +130,7 @@ function CanvasContent() {
           <button
             onClick={handleGenerate}
             disabled={!prompt.trim() || isGenerating}
-            className="w-full py-3 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 tracking-wide"
-            style={{ boxShadow: '0 3px 8px rgba(124, 58, 237, 0.3)' }}
+            className="w-full px-8 py-4 bg-purple-600 text-white font-black uppercase rounded-lg hover:bg-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 tracking-wide shadow-lg hover:shadow-xl"
           >
             {isGenerating ? (
               <>
@@ -165,22 +164,22 @@ function CanvasContent() {
         </div>
 
         {/* How It Works - Below generation area */}
-        <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-4 mb-6 text-white" style={{ boxShadow: '0 3px 8px rgba(124, 58, 237, 0.3)' }}>
+        <div className="bg-black rounded-lg p-4 mb-6 text-white border-t-4 border-orange-500" style={{ boxShadow: '0 3px 8px rgba(0, 0, 0, 0.3)' }}>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <div className="text-2xl mb-1">1</div>
               <h3 className="font-heading text-sm font-bold mb-0.5 tracking-tight">Describe</h3>
-              <p className="text-xs text-purple-100">Write it</p>
+              <p className="text-xs text-gray-300">Write it</p>
             </div>
             <div>
               <div className="text-2xl mb-1">2</div>
               <h3 className="font-heading text-sm font-bold mb-0.5 tracking-tight">Generate</h3>
-              <p className="text-xs text-purple-100">AI creates it</p>
+              <p className="text-xs text-gray-300">AI creates it</p>
             </div>
             <div>
               <div className="text-2xl mb-1">3</div>
               <h3 className="font-heading text-sm font-bold mb-0.5 tracking-tight">Download</h3>
-              <p className="text-xs text-purple-100">Use it</p>
+              <p className="text-xs text-gray-300">Use it</p>
             </div>
           </div>
         </div>

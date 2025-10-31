@@ -22,18 +22,28 @@ export default function Home() {
 
             {/* Feature Highlights - Compact Inline Badges */}
             <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-[0_3px_0_rgba(0,0,0,0.12)] border-2 border-gray-300 hover:shadow-[0_5px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all">
                 <span className="text-xl">⚡</span>
                 <span className="text-sm font-semibold text-gray-900">Instant Results</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-[0_3px_0_rgba(0,0,0,0.12)] border-2 border-gray-300 hover:shadow-[0_5px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all">
                 <span className="text-xl">🎨</span>
                 <span className="text-sm font-semibold text-gray-900">272+ Prompts</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg transition-all">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-[0_3px_0_rgba(0,0,0,0.12)] border-2 border-gray-300 hover:shadow-[0_5px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all">
                 <span className="text-xl">🔒</span>
                 <span className="text-sm font-semibold text-gray-900">Private & Secure</span>
               </div>
+            </div>
+
+            {/* Primary Hero CTA - Rebellious Edge */}
+            <div className="flex justify-center mb-6">
+              <Link
+                href="/editor"
+                className="inline-block px-10 py-5 bg-purple-600 text-white text-xl font-black uppercase rounded-lg border-4 border-black shadow-[0_6px_0_rgba(0,0,0,0.3)] hover:translate-y-1 hover:shadow-[0_4px_0_rgba(0,0,0,0.3)] transition-all duration-150 rotate-1 hover:rotate-0"
+              >
+                Start Transforming
+              </Link>
             </div>
 
             <div className="flex justify-center mt-4">
@@ -49,7 +59,7 @@ export default function Home() {
 
           {/* Canvas CTA */}
           <div className="max-w-3xl mx-auto mb-12 px-4">
-            <Link href="/canvas" className="block p-6 bg-purple-600 rounded-xl border-2 border-purple-700 hover:border-purple-800 hover:shadow-xl transition-all group">
+            <Link href="/canvas" className="block p-6 bg-purple-600 rounded-xl border-4 border-purple-800 shadow-[0_6px_0_rgba(88,28,135,0.5)] hover:shadow-[0_10px_0_rgba(88,28,135,0.6)] hover:-translate-y-1 transition-all group">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">

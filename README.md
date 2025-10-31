@@ -8,6 +8,16 @@ Transform your images with 320+ AI effects across 8 categories. From zombie apoc
 
 ---
 
+## ⚠️ CRITICAL: Rate Limiting Setup Required
+
+**Status:** API is UNPROTECTED - configure Vercel KV immediately to prevent $10k+ monthly costs.
+
+**Quick Start:** [docs/RATE_LIMIT_QUICKSTART.md](docs/RATE_LIMIT_QUICKSTART.md) (15 minutes)
+
+**Full Details:** [RATE_LIMIT_SUMMARY.md](RATE_LIMIT_SUMMARY.md)
+
+---
+
 ## 🎨 Features
 
 ### Main Editors
@@ -44,8 +54,38 @@ Transform your images with 320+ AI effects across 8 categories. From zombie apoc
   - Pollinations AI (free generation)
   - OpenAI DALL-E (canvas generation)
 - **Deployment:** Vercel
+- **Database:** InstantDB (user auth & data)
+- **Rate Limiting:** Vercel KV (Redis) - IP-based protection
 - **Analytics:** Vercel KV
 - **Image Processing:** Canvas API (client-side) + 21 effects library
+
+## 🛡️ Rate Limiting & Security
+
+PicForge uses Vercel KV (Redis) for IP-based rate limiting to prevent API abuse:
+
+| Endpoint | Rate Limit | Why? |
+|----------|------------|------|
+| `/api/process-image` | 500 requests/day/IP | Main editor - most common use |
+| `/api/process-image-nsfw` | 200 requests/day/IP | Replicate API costs $0.023/image |
+| `/api/generate-canvas` | 100 requests/day/IP | DALL-E costs $0.040-$0.080/image |
+| `/api/roast` | 300 requests/day/IP | Fun feature, moderate limit |
+
+**Setup Required:** Rate limiting requires Vercel KV configuration. See [docs/VERCEL_KV_SETUP.md](docs/VERCEL_KV_SETUP.md) for complete setup instructions.
+
+**Test Rate Limiting:**
+```bash
+npm run test:rate-limit
+```
+
+**Without rate limiting configured:**
+- APIs fail-open (no blocking)
+- Your account is vulnerable to abuse
+- Potential cost: $10,000+/month if attacked
+
+**With rate limiting configured:**
+- Protected against automated abuse
+- Sustainable costs: $50-$200/month
+- Vercel KV cost: ~$1/month
 
 ## 📜 License
 

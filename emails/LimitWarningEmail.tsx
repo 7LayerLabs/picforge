@@ -87,7 +87,7 @@ export const LimitWarningEmail = ({
           <Text style={footer}>
             You&apos;re receiving this because you&apos;re approaching your daily limit.
             <br />
-            <Link href="https://pic-forge.com/profile" style={link}>Manage preferences</Link> | <Link href="https://pic-forge.com/profile" style={link}>Unsubscribe</Link>
+            <Link href="https://pic-forge.com/profile/emails" style={link}>Manage preferences</Link> | <Link href="https://pic-forge.com/unsubscribe?type=limit-warning" style={link}>Unsubscribe</Link>
           </Text>
         </Container>
       </Body>

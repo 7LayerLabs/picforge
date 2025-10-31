@@ -33,17 +33,17 @@ export default function ReferralCTA({ variant = 'banner', showStats = true }: Re
   // Compact variant - minimal footer CTA
   if (variant === 'compact') {
     return (
-      <div className="bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-4 flex items-center justify-between gap-4">
+      <div className="bg-black border-t-4 border-orange-500 rounded-lg p-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Gift className="w-6 h-6 text-black flex-shrink-0" />
+          <Gift className="w-6 h-6 text-orange-500 flex-shrink-0" />
           <div>
-            <p className="font-body font-bold text-black text-sm">Love PicForge?</p>
-            <p className="font-body text-black text-xs">Share & earn 10 free images per friend!</p>
+            <p className="font-body font-bold text-white text-sm">Love PicForge?</p>
+            <p className="font-body text-gray-300 text-xs">Share & earn 10 free images per friend!</p>
           </div>
         </div>
         <Link
           href="/profile"
-          className="px-4 py-2 bg-black text-teal-500 rounded-lg font-bold hover:bg-gray-900 transition-all flex items-center gap-2 whitespace-nowrap"
+          className="px-4 py-2 bg-orange-500 text-black rounded-lg font-bold hover:bg-orange-600 transition-all flex items-center gap-2 whitespace-nowrap"
         >
           Share Now
           <ArrowRight className="w-4 h-4" />
@@ -92,7 +92,7 @@ export default function ReferralCTA({ variant = 'banner', showStats = true }: Re
 
   // Banner variant (default) - collapsible banner
   return (
-    <div className="bg-gradient-to-r from-teal-500 to-purple-600 rounded-xl overflow-hidden">
+    <div className="bg-black border-t-4 border-orange-500 rounded-xl overflow-hidden">
       {/* Collapsed State */}
       {!isExpanded && (
         <button
@@ -100,26 +100,26 @@ export default function ReferralCTA({ variant = 'banner', showStats = true }: Re
           className="w-full p-6 flex items-center justify-between hover:bg-black hover:bg-opacity-10 transition-all"
         >
           <div className="flex items-center gap-4">
-            <div className="bg-black bg-opacity-20 rounded-full p-3">
-              <Users className="w-6 h-6 text-black" />
+            <div className="bg-orange-500 bg-opacity-20 rounded-full p-3">
+              <Users className="w-6 h-6 text-orange-500" />
             </div>
             <div className="text-left">
-              <h3 className="font-heading text-xl font-bold text-black mb-1">
+              <h3 className="font-heading text-xl font-bold text-white mb-1">
                 Invite Friends & Earn Free Images
               </h3>
-              <p className="font-body text-black text-sm">
+              <p className="font-body text-gray-300 text-sm">
                 Get 10 bonus images for every friend who joins!
               </p>
             </div>
           </div>
           {showStats && completedReferralsCount > 0 && (
-            <div className="bg-black bg-opacity-20 rounded-lg px-4 py-2">
-              <p className="font-body text-black text-xs mb-1">You've earned</p>
-              <p className="font-heading text-2xl font-bold text-black">{totalBonusImages}</p>
-              <p className="font-body text-black text-xs">bonus images</p>
+            <div className="bg-orange-500 bg-opacity-20 rounded-lg px-4 py-2">
+              <p className="font-body text-gray-300 text-xs mb-1">You've earned</p>
+              <p className="font-heading text-2xl font-bold text-orange-500">{totalBonusImages}</p>
+              <p className="font-body text-gray-300 text-xs">bonus images</p>
             </div>
           )}
-          <ArrowRight className="w-6 h-6 text-black flex-shrink-0 ml-4" />
+          <ArrowRight className="w-6 h-6 text-orange-500 flex-shrink-0 ml-4" />
         </button>
       )}
 
@@ -127,13 +127,13 @@ export default function ReferralCTA({ variant = 'banner', showStats = true }: Re
       {isExpanded && (
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-heading text-2xl font-bold text-black flex items-center gap-2">
-              <Users className="w-7 h-7 text-black" />
+            <h3 className="font-heading text-2xl font-bold text-white flex items-center gap-2">
+              <Users className="w-7 h-7 text-orange-500" />
               Share Your Referral Link
             </h3>
             <button
               onClick={() => setIsExpanded(false)}
-              className="text-black hover:text-gray-800 transition-colors"
+              className="text-white hover:text-gray-300 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -144,30 +144,30 @@ export default function ReferralCTA({ variant = 'banner', showStats = true }: Re
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Code Display */}
             <div>
-              <p className="font-body text-black text-sm mb-2 font-medium">Your Referral Code</p>
-              <div className="bg-black bg-opacity-20 rounded-lg p-3 text-center">
-                <code className="font-mono text-black text-xl font-bold">{activeReferralCode}</code>
+              <p className="font-body text-gray-300 text-sm mb-2 font-medium">Your Referral Code</p>
+              <div className="bg-orange-500 bg-opacity-20 rounded-lg p-3 text-center border border-orange-500">
+                <code className="font-mono text-orange-500 text-xl font-bold">{activeReferralCode}</code>
               </div>
             </div>
 
             {/* Stats */}
             {showStats && (
-              <div className="bg-black bg-opacity-20 rounded-lg p-4 flex items-center justify-around">
+              <div className="bg-orange-500 bg-opacity-20 rounded-lg p-4 flex items-center justify-around border border-orange-500">
                 <div className="text-center">
-                  <p className="font-body text-black text-xs mb-1">Friends</p>
-                  <p className="font-heading text-2xl font-bold text-black">{completedReferralsCount}</p>
+                  <p className="font-body text-gray-300 text-xs mb-1">Friends</p>
+                  <p className="font-heading text-2xl font-bold text-orange-500">{completedReferralsCount}</p>
                 </div>
-                <div className="w-px h-10 bg-black bg-opacity-30"></div>
+                <div className="w-px h-10 bg-orange-500 bg-opacity-50"></div>
                 <div className="text-center">
-                  <p className="font-body text-black text-xs mb-1">Bonus</p>
-                  <p className="font-heading text-2xl font-bold text-black">{totalBonusImages}</p>
+                  <p className="font-body text-gray-300 text-xs mb-1">Bonus</p>
+                  <p className="font-heading text-2xl font-bold text-orange-500">{totalBonusImages}</p>
                 </div>
               </div>
             )}
           </div>
 
           {/* Share Buttons */}
-          <div className="bg-black rounded-xl p-4">
+          <div className="bg-gray-900 rounded-xl p-4 border border-orange-500">
             <ReferralShareButton referralLink={referralLink} referralCode={activeReferralCode} />
           </div>
         </div>

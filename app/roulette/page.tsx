@@ -914,7 +914,7 @@ export default function TransformRoulette() {
 
                     {/* Rare Badge */}
                     {result.isRare && (
-                      <div className="mb-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-3 text-center border-2 border-yellow-300">
+                      <div className="mb-4 bg-orange-500 rounded-xl p-3 text-center border-2 border-yellow-300">
                         <p className="text-white font-bold text-lg flex items-center justify-center gap-2">
                           <Award className="w-5 h-5" />
                           RARE TRANSFORMATION!

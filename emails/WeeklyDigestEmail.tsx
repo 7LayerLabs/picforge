@@ -165,7 +165,7 @@ export const WeeklyDigestEmail = ({
           <Text style={footer}>
             You&apos;re receiving weekly digests because you&apos;re a PicForge user.
             <br />
-            <Link href="https://pic-forge.com/profile" style={link}>Manage preferences</Link> | <Link href="https://pic-forge.com/profile" style={link}>Unsubscribe</Link>
+            <Link href="https://pic-forge.com/profile/emails" style={link}>Manage preferences</Link> | <Link href="https://pic-forge.com/unsubscribe?type=weekly-digest" style={link}>Unsubscribe</Link>
           </Text>
         </Container>
       </Body>

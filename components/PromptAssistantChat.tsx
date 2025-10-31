@@ -78,8 +78,7 @@ export default function PromptAssistantChat() {
   )
 
   const usage = (usageData as any)?.usage?.[0]
-  const isPro = true // TEMP: Testing mode - remove after testing
-  // const isPro = usage?.tier === 'pro' || usage?.tier === 'unlimited'
+  const isPro = usage?.tier === 'pro' || usage?.tier === 'unlimited'
   const isAuthenticated = !!user
 
   const scrollToBottom = () => {

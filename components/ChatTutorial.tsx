@@ -61,9 +61,9 @@ export default function ChatTutorial({ onClose }: ChatTutorialProps) {
                 key={idx}
                 className={`h-2 rounded-full transition-all ${
                   idx === step
-                    ? 'w-8 bg-gradient-to-r from-purple-600 to-teal-500'
+                    ? 'w-8 bg-black'
                     : idx < step
-                    ? 'w-2 bg-teal-400'
+                    ? 'w-2 bg-orange-500'
                     : 'w-2 bg-gray-300'
                 }`}
               />
@@ -78,8 +78,8 @@ export default function ChatTutorial({ onClose }: ChatTutorialProps) {
           </p>
 
           {/* Example Box */}
-          <div className="bg-gradient-to-br from-purple-50 to-teal-50 border-2 border-purple-200 rounded-lg p-4">
-            <p className="text-sm text-purple-800 font-medium">
+          <div className="bg-gray-50 border-2 border-orange-500 rounded-lg p-4">
+            <p className="text-sm text-gray-900 font-medium">
               💡 {currentStep.example}
             </p>
           </div>
@@ -97,7 +97,7 @@ export default function ChatTutorial({ onClose }: ChatTutorialProps) {
               </button>
               <button
                 onClick={handleNext}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-teal-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
+                className="flex-1 px-4 py-3 bg-black text-white rounded-lg hover:shadow-lg transition-all font-medium"
               >
                 Next ({step + 1}/{steps.length})
               </button>
@@ -105,7 +105,7 @@ export default function ChatTutorial({ onClose }: ChatTutorialProps) {
           ) : (
             <button
               onClick={handleNext}
-              className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-teal-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
+              className="w-full px-4 py-3 bg-black text-white rounded-lg hover:shadow-lg transition-all font-medium"
             >
               Get Started! 🚀
             </button>

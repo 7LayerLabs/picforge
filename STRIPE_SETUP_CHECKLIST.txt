@@ -1,0 +1,322 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    PICFORGE STRIPE WEBHOOK SETUP                             ║
+║                         30-Minute Checklist                                  ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+CRITICAL ISSUE:
+Your webhook secret is currently a placeholder (whsec_YOUR_SECRET_HERE).
+Payments won't grant Pro access until you complete this setup.
+
+STATUS: 95% complete - Just need webhook configuration!
+
+─────────────────────────────────────────────────────────────────────────────
+
+STEP 1: CREATE WEBHOOK IN STRIPE DASHBOARD (10 minutes)
+─────────────────────────────────────────────────────────────────────────────
+
+[ ] 1. Go to: https://dashboard.stripe.com/webhooks
+
+[ ] 2. Click "Add endpoint" button
+
+[ ] 3. Enter endpoint URL:
+        https://pic-forge.com/api/webhooks/stripe
+
+[ ] 4. Enter description:
+        PicForge subscription webhook
+
+[ ] 5. Click "Select events" and choose these 3:
+        [ ] checkout.session.completed
+        [ ] customer.subscription.updated
+        [ ] customer.subscription.deleted
+
+[ ] 6. Click "Add endpoint" button
+
+[ ] 7. COPY THE WEBHOOK SIGNING SECRET (starts with whsec_...)
+        ⚠️ This is shown ONLY ONCE!
+        ⚠️ If you miss it, click "Roll secret" to generate new one
+
+        Write it here: whsec_________________________________
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+STEP 2: UPDATE VERCEL ENVIRONMENT VARIABLES (5 minutes)
+─────────────────────────────────────────────────────────────────────────────
+
+[ ] 1. Go to: https://vercel.com/dashboard
+
+[ ] 2. Select your PicForge project
+
+[ ] 3. Click "Settings" → "Environment Variables"
+
+[ ] 4. Find STRIPE_WEBHOOK_SECRET (or click "Add New")
+
+[ ] 5. Set values:
+        Name: STRIPE_WEBHOOK_SECRET
+        Value: (paste your secret from Step 1)
+        Environments: ✓ Production  ✓ Preview  ✓ Development
+
+[ ] 6. Click "Save"
+
+[ ] 7. Go to "Deployments" tab
+
+[ ] 8. Click "..." menu on latest deployment
+
+[ ] 9. Click "Redeploy"
+
+[ ] 10. Wait for deployment to complete
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+STEP 3: UPDATE LOCAL .ENV.LOCAL FILE (2 minutes)
+─────────────────────────────────────────────────────────────────────────────
+
+[ ] 1. Open file: C:\Users\derek\OneDrive\Desktop\nano\.env.local
+
+[ ] 2. Find line 27: STRIPE_WEBHOOK_SECRET=whsec_YOUR_SECRET_HERE
+
+[ ] 3. Replace with: STRIPE_WEBHOOK_SECRET=whsec_... (your actual secret)
+
+[ ] 4. Save file
+
+[ ] 5. Restart dev server: npm run dev
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+STEP 4: TEST THE INTEGRATION (13 minutes)
+─────────────────────────────────────────────────────────────────────────────
+
+OPTION A: Local Testing with Stripe CLI (Recommended)
+─────────────────────────────────────────────────────
+
+[ ] 1. Install Stripe CLI:
+        Windows: scoop install stripe
+        Mac: brew install stripe/stripe-cli/stripe
+
+[ ] 2. Login to Stripe:
+        stripe login
+
+[ ] 3. Start webhook listener:
+        stripe listen --forward-to localhost:3003/api/webhooks/stripe
+
+[ ] 4. Copy test webhook secret from output (whsec_test_...)
+
+[ ] 5. Update .env.local with TEST secret
+
+[ ] 6. Restart dev server
+
+[ ] 7. Open browser: http://localhost:3003/pricing
+
+[ ] 8. Sign in with test account
+
+[ ] 9. Click "Upgrade to Pro"
+
+[ ] 10. Use test card:
+         Card: 4242 4242 4242 4242
+         Expiry: 12/25
+         CVC: 123
+         ZIP: 12345
+
+[ ] 11. Complete checkout
+
+[ ] 12. Verify redirected to /success page
+
+[ ] 13. Check terminal - should see:
+         📥 Stripe webhook received: checkout.session.completed
+         ✅ User [id] upgraded to Pro tier
+
+[ ] 14. Go to profile page - should show "Pro" tier
+
+[ ] 15. Generate and download an image - NO watermark!
+
+
+OPTION B: Production Testing
+─────────────────────────────
+
+[ ] 1. Go to: https://pic-forge.com/pricing
+
+[ ] 2. Sign in with test account
+
+[ ] 3. Click "Upgrade to Pro"
+
+[ ] 4. Complete checkout (use test card if TEST mode, or real card if LIVE)
+
+[ ] 5. Verify redirected to /success page
+
+[ ] 6. Check Stripe webhook logs: https://dashboard.stripe.com/webhooks
+        Should show: checkout.session.completed - 200 OK
+
+[ ] 7. Check profile - should show "Pro" tier
+
+[ ] 8. Download an image - NO watermark!
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+VERIFICATION CHECKLIST
+─────────────────────────────────────────────────────────────────────────────
+
+After setup, verify these all work:
+
+[ ] User clicks "Upgrade to Pro" → Redirects to Stripe Checkout
+[ ] User enters payment → Redirects to /success page
+[ ] Stripe webhook fires → Check: https://dashboard.stripe.com/webhooks
+[ ] User tier updated → Check profile page shows "Pro"
+[ ] User has unlimited images → Check profile: "Unlimited"
+[ ] Downloads have no watermark → Generate and download image
+[ ] Webhook returns 200 OK → Check Stripe webhook logs
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+TROUBLESHOOTING
+─────────────────────────────────────────────────────────────────────────────
+
+Problem: Webhook returns 401 Unauthorized
+Fix:
+  [ ] Verify webhook secret in Vercel matches Stripe Dashboard
+  [ ] Redeploy Vercel after updating env var
+  [ ] Try rolling webhook secret in Stripe Dashboard
+
+Problem: User paid but still shows Free tier
+Fix:
+  [ ] Check Stripe webhook logs for errors
+  [ ] Check Vercel function logs: Vercel Dashboard → Logs
+  [ ] Verify webhook events include checkout.session.completed
+  [ ] Manually update user tier in InstantDB if needed
+
+Problem: Watermark still shows after upgrade
+Fix:
+  [ ] Have user refresh page
+  [ ] Check InstantDB: verify tier = "pro"
+  [ ] Clear browser cache
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+QUICK REFERENCE
+─────────────────────────────────────────────────────────────────────────────
+
+Webhook Endpoint:
+  https://pic-forge.com/api/webhooks/stripe
+
+Required Events:
+  - checkout.session.completed
+  - customer.subscription.updated
+  - customer.subscription.deleted
+
+Test Card:
+  Card: 4242 4242 4242 4242
+  Expiry: 12/25
+  CVC: 123
+  ZIP: 12345
+
+Price IDs (Already Set):
+  Monthly: price_1SIcgtDlxrM8ZIxcgNwPSV1Y ($14/mo)
+  Yearly: price_1SIchxDlxrM8ZIxcRxrH56WL ($119/yr)
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+DOCUMENTATION
+─────────────────────────────────────────────────────────────────────────────
+
+Quick Start:
+  docs/STRIPE_QUICKSTART.md
+
+Full Setup Guide:
+  docs/STRIPE_WEBHOOK_SETUP.md
+
+Testing Instructions:
+  scripts/test-stripe-webhook.md
+
+Payment Flow Diagram:
+  docs/PAYMENT_FLOW_DIAGRAM.md
+
+Verification Checklist:
+  docs/WEBHOOK_VERIFICATION_CHECKLIST.md
+
+Summary:
+  docs/STRIPE_SETUP_SUMMARY.md
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+BEFORE GOING LIVE
+─────────────────────────────────────────────────────────────────────────────
+
+[ ] Webhook endpoint created in Stripe Dashboard
+[ ] Webhook secret updated in Vercel Production
+[ ] Webhook secret updated in local .env.local
+[ ] Vercel redeployed with new env vars
+[ ] Test payment completed successfully
+[ ] Webhook logs show 200 OK
+[ ] User tier updates correctly
+[ ] Watermark removal works
+[ ] All environment variables present in Vercel
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+AFTER GOING LIVE
+─────────────────────────────────────────────────────────────────────────────
+
+[ ] Monitor webhook logs for first 24 hours
+[ ] Verify first real payment upgrades user
+[ ] Set up alerts for webhook failures
+[ ] Add Stripe Customer Portal link to profile
+[ ] Set up email notifications for payment events
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+ESTIMATED REVENUE
+─────────────────────────────────────────────────────────────────────────────
+
+Monthly Plan ($14/mo):
+  10 users = $140/mo
+  50 users = $700/mo
+  100 users = $1,400/mo
+
+Yearly Plan ($119/yr = $9.92/mo):
+  10 users = $99/mo
+  50 users = $496/mo
+  100 users = $992/mo
+
+Target (50/50 mix):
+  100 users = ~$1,200/mo MRR
+
+Profit Margin: 99.7% (Gemini API costs ~$0.04/user/mo at 1,000 images)
+
+
+─────────────────────────────────────────────────────────────────────────────
+
+COMPLETION CHECKLIST
+─────────────────────────────────────────────────────────────────────────────
+
+[ ] Step 1: Webhook created in Stripe Dashboard
+[ ] Step 2: Webhook secret updated in Vercel
+[ ] Step 3: Local .env.local file updated
+[ ] Step 4: Testing completed successfully
+[ ] All verification items checked
+[ ] Production ready!
+
+
+═════════════════════════════════════════════════════════════════════════════
+
+YOU'RE 95% DONE!
+
+Just configure the webhook secret and you'll be accepting payments!
+
+Total Time: 30 minutes
+Impact: Users who pay get instant Pro access
+
+═════════════════════════════════════════════════════════════════════════════
+
+Questions? Start with: docs/STRIPE_QUICKSTART.md
+
+═════════════════════════════════════════════════════════════════════════════

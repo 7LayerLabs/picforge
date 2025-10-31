@@ -4,7 +4,9 @@ import WelcomeEmail from '@/emails/WelcomeEmail';
 import LimitWarningEmail from '@/emails/LimitWarningEmail';
 import LimitReachedEmail from '@/emails/LimitReachedEmail';
 import PromoCodeRedeemedEmail from '@/emails/PromoCodeRedeemedEmail';
+import ProUpgradeEmail from '@/emails/ProUpgradeEmail';
 import WeeklyDigestEmail from '@/emails/WeeklyDigestEmail';
+import FeedbackEmail from '@/emails/FeedbackEmail';
 import { isEnvVarConfigured } from '@/lib/validateEnv';
 
 // Initialize Resend only if API key is configured
@@ -15,7 +17,9 @@ export type EmailType =
   | 'limit-warning'
   | 'limit-reached'
   | 'promo-redeemed'
-  | 'weekly-digest';
+  | 'pro-upgrade'
+  | 'weekly-digest'
+  | 'feedback';
 
 interface SendEmailParams {
   to: string;
@@ -79,6 +83,18 @@ export async function sendEmail({ to, type, data }: SendEmailParams) {
         );
         break;
 
+      case 'pro-upgrade':
+        subject = 'Welcome to PicForge Pro - Unlimited creativity starts now!';
+        html = await render(
+          ProUpgradeEmail({
+            userName: data.userName,
+            subscriptionId: data.subscriptionId,
+            planName: data.planName || 'Pro',
+            amount: data.amount || '$9.00',
+          })
+        );
+        break;
+
       case 'weekly-digest':
         subject = `Your week in transformations - ${data.totalTransformations} images created!`;
         html = await render(
@@ -89,6 +105,24 @@ export async function sendEmail({ to, type, data }: SendEmailParams) {
             topImages: data.topImages,
             weekStart: data.weekStart,
             weekEnd: data.weekEnd,
+          })
+        );
+        break;
+
+      case 'feedback':
+        subject = `New Feedback: ${
+          data.category ? String(data.category).toUpperCase() : 'GENERAL'
+        }${data.rating ? ` • ${data.rating}/5` : ''}`;
+        html = await render(
+          FeedbackEmail({
+            name: data.name,
+            email: data.email,
+            category: (data.category || 'other') as 'bug' | 'idea' | 'praise' | 'other',
+            rating: data.rating || 5,
+            message: data.message,
+            submittedAt: data.submittedAt,
+            userAgent: data.userAgent,
+            ip: data.ip,
           })
         );
         break;

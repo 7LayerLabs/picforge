@@ -123,6 +123,37 @@ type Schema = {
     voteType: 'creative' | 'funny' | 'chaotic';
     timestamp: number;
   };
+  // Curated Image Library entities
+  contributors: {
+    id: string;
+    name: string;
+    website?: string;
+    avatarUrl?: string;
+    contactEmail?: string;
+    joinedAt: number;
+    verified: boolean;
+  };
+  libraryAssets: {
+    id: string;
+    contributorId?: string;
+    title?: string;
+    description?: string;
+    categories: string[]; // e.g., ["people", "nature", "urban"]
+    tags: string[];
+    url: string; // CDN URL
+    width: number;
+    height: number;
+    dominantColor?: string;
+    qualityScore?: number; // 0-100, QC computed
+    status: 'pending' | 'approved' | 'rejected';
+    rejectionReason?: string;
+    isEditorial?: boolean;
+    createdAt: number;
+    reviewedAt?: number;
+    reviewerId?: string; // admin userId who reviewed
+    downloads: number;
+    views: number;
+  };
 };
 
 // Initialize with app ID from environment variable

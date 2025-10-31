@@ -5,6 +5,7 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import PromptAssistantChat from "@/components/PromptAssistantChat";
 import { Analytics } from "@vercel/analytics/react";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 // import AuthSessionProvider from "@/components/providers/SessionProvider";
@@ -283,6 +284,7 @@ export default function RootLayout({
           {children}
           <Footer />
           <CookieConsent />
+          <PromptAssistantChat />
           <Analytics />
         {/* </AuthSessionProvider> */}
       </body>

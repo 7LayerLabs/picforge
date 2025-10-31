@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
       'limit-warning',
       'limit-reached',
       'promo-redeemed',
+      'pro-upgrade',
       'weekly-digest',
     ];
     if (!validTypes.includes(type as EmailType)) {

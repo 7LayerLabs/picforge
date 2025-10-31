@@ -333,7 +333,7 @@ export default function FeaturedTransformations({
       <div className="mt-12 text-center">
         <Link
           href="/showcase"
-          className="inline-flex items-center gap-3 px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-xl hover:shadow-2xl"
+          className="inline-flex items-center gap-3 px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-[0_6px_0_rgba(88,28,135,0.5)] hover:shadow-[0_10px_0_rgba(88,28,135,0.6)] hover:-translate-y-1 border-4 border-purple-800"
         >
           View Full Showcase
           <ArrowRight className="w-5 h-5" />

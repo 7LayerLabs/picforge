@@ -420,7 +420,7 @@ export default function RoastMode() {
                     <div className="relative animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
                       <div className="bg-black text-white rounded-xl shadow-2xl p-6 relative overflow-hidden border-4 border-yellow-400">
                         {/* Yellow warning stripes on top */}
-                        <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-yellow-400 via-black to-yellow-400 opacity-70"
+                        <div className="absolute top-0 left-0 right-0 h-3 opacity-70"
                              style={{ backgroundImage: 'repeating-linear-gradient(45deg, #facc15, #facc15 10px, #000 10px, #000 20px)' }} />
                         <div className="relative mt-2">
                           <div className="flex items-start gap-3">
@@ -457,7 +457,7 @@ export default function RoastMode() {
                       <div className="relative animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
                         <div className="bg-black text-white rounded-xl shadow-2xl p-6 relative overflow-hidden border-4 border-yellow-400">
                           {/* Yellow warning stripes on top */}
-                          <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-yellow-400 via-black to-yellow-400 opacity-70"
+                          <div className="absolute top-0 left-0 right-0 h-3 opacity-70"
                                style={{ backgroundImage: 'repeating-linear-gradient(45deg, #facc15, #facc15 10px, #000 10px, #000 20px)' }} />
                           <div className="relative mt-2">
                             <div className="flex items-start gap-3">

@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { Heart, Eye, Copy, Sparkles, Award } from 'lucide-react';
 import { useShowcaseVotes } from '@/hooks/useShowcaseVotes';
 import TrendingBadge from './TrendingBadge';
-import BeforeAfterSlider from './BeforeAfterSlider';
+import dynamic from 'next/dynamic';
+const BeforeAfterSlider = dynamic(() => import('./BeforeAfterSlider'), { ssr: false });
 
 interface FeaturedCardProps {
   showcase: {
@@ -120,7 +121,7 @@ export default function FeaturedCard({
     <>
       {/* Card */}
       <div
-        className="group relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 cursor-pointer border-2 border-gray-200 hover:border-teal-400 hover:shadow-2xl hover:scale-[1.02]"
+        className="group relative bg-white rounded-2xl shadow-[0_4px_0_rgba(0,0,0,0.15)] overflow-hidden transition-all duration-300 cursor-pointer border-2 border-gray-300 hover:border-teal-500 hover:shadow-[0_8px_0_rgba(0,0,0,0.2)] hover:scale-[1.03] hover:-translate-y-1"
         onClick={handleCardClick}
       >
         {/* Badges */}

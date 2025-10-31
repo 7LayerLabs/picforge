@@ -1360,7 +1360,7 @@ export default function EditorPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting || !instructions.trim()}
-                    className="px-8 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-xl transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 text-sm font-semibold shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 btn-premium button-press hover-lift min-w-[200px]"
+                    className="px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white rounded-xl transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 text-sm font-black uppercase shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 btn-premium button-press hover-lift min-w-[200px]"
                   >
                     {isSubmitting ? '⏳ Processing...' : '🚀 Apply Edit & Generate'}
                   </button>
