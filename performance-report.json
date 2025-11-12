@@ -1,0 +1,22 @@
+{
+  "score": 0,
+  "results": [
+    {
+      "test": "Bundle Size",
+      "passed": false,
+      "value": 3242,
+      "target": 500,
+      "unit": "KB",
+      "message": "Bundle size exceeds target by 2742 KB"
+    },
+    {
+      "test": "Lighthouse (manual)",
+      "passed": false,
+      "value": 0,
+      "target": 90,
+      "unit": "",
+      "message": "Run manually in Chrome DevTools"
+    }
+  ],
+  "timestamp": "2025-10-31T21:26:32.352Z"
+}

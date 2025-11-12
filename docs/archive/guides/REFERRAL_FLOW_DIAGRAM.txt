@@ -1,0 +1,506 @@
+# PicForge Referral System - Visual Flow Diagram
+
+## User Journey Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         NEW USER SIGNUP FLOW                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    User Signs In (Magic Link)
+            │
+            ▼
+    ┌───────────────────────┐
+    │   useReferral Hook    │
+    │   Auto-Generates Code │
+    │   Format: USER-ABC123 │
+    └───────────────────────┘
+            │
+            ▼
+    ┌───────────────────────┐
+    │  InstantDB: referrals │
+    │  status: "pending"    │
+    │  bonusImages: 10      │
+    └───────────────────────┘
+            │
+            ▼
+    Profile Page Shows:
+    ✓ Unique Referral Code
+    ✓ Referral Link
+    ✓ Share Buttons
+    ✓ Stats: 0 referrals
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SHARING FLOW                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    User Creates Amazing Image
+            │
+            ▼
+    ┌───────────────────────┐
+    │  ReferralCTA Banner   │
+    │  "Invite & Earn 10!"  │
+    └───────────────────────┘
+            │
+            ▼
+    User Clicks Share Button
+            │
+    ┌───────┴────────┬────────────┬─────────────┐
+    │                │            │             │
+    ▼                ▼            ▼             ▼
+  Copy            Twitter       Email        WhatsApp
+  Link            Share         Share         Share
+    │                │            │             │
+    └────────────────┴────────────┴─────────────┘
+                     │
+                     ▼
+    Friend Receives:
+    "Join PicForge! Use code USER-ABC123
+     and we BOTH get 10 FREE images!"
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         REDEMPTION FLOW                                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Friend Clicks Link
+            │
+            ▼
+    pic-forge.com/referral?code=USER-ABC123
+            │
+            ▼
+    ┌───────────────────────────────┐
+    │   Referral Landing Page       │
+    │   "You've Been Invited!"      │
+    │   Shows:                      │
+    │   • Referral Code             │
+    │   • Bonus Details (10 images) │
+    │   • Sign In Button            │
+    └───────────────────────────────┘
+            │
+            ▼
+    Friend Signs In (Magic Link)
+            │
+            ▼
+    ┌───────────────────────────────┐
+    │   useReferral.redeemCode()    │
+    │   Validates:                  │
+    │   • Code exists?              │
+    │   • Not self-referral?        │
+    │   • Not already redeemed?     │
+    └───────────────────────────────┘
+            │
+    ┌───────┴────────┐
+    │                │
+    ▼                ▼
+  Valid          Invalid
+    │                │
+    │                ▼
+    │          Show Error
+    │          "Code already used"
+    │
+    ▼
+┌─────────────────────────────────────────────────────┐
+│           BONUS IMAGE DISTRIBUTION                  │
+├─────────────────────────────────────────────────────┤
+│  1. Update Referral Record:                         │
+│     • status: "completed"                           │
+│     • referredUserId: friend.id                     │
+│     • redeemedAt: timestamp                         │
+│                                                     │
+│  2. Update Friend's Usage:                          │
+│     • count: 0 → -10 (10 bonus images)              │
+│     • tier: "free"                                  │
+│                                                     │
+│  3. Update Referrer's Usage:                        │
+│     • count: 15 → 5 (10 bonus images)               │
+│     • Keep existing tier                            │
+└─────────────────────────────────────────────────────┘
+            │
+            ▼
+    ┌───────────────────────────────┐
+    │   Success Page                │
+    │   "You both got 10 images!"   │
+    │   • Show celebration animation│
+    │   • Link to start creating    │
+    │   • Link to profile           │
+    └───────────────────────────────┘
+            │
+            ▼
+    Both Users Start Creating
+            │
+            ▼
+    Both Users Share Their Links
+            │
+            ▼
+    VIRAL LOOP REPEATS!
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         DATA FLOW ARCHITECTURE                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐
+│   Frontend UI   │────────▶│  useReferral    │────────▶│   InstantDB     │
+│                 │         │     Hook        │         │   (Real-time)   │
+│  • Profile Page │         │                 │         │                 │
+│  • Landing Page │         │  • Generate     │         │  • referrals    │
+│  • Share Button │         │  • Validate     │         │  • usage        │
+│  • CTA Banner   │         │  • Redeem       │         │  • users        │
+└─────────────────┘         │  • Track Stats  │         └─────────────────┘
+                            └─────────────────┘
+                                     │
+                                     ▼
+                            ┌─────────────────┐
+                            │   Auto-Sync     │
+                            │   All Devices   │
+                            │   Real-time     │
+                            └─────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         VIRAL GROWTH LOOP                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    1 User Signs Up
+         │
+         ▼
+    Creates Images ──────────┐
+         │                   │
+         │                   ▼
+         │            Loves Product
+         │                   │
+         │                   ▼
+         │            Shares Referral Link
+         │                   │
+         ▼                   ▼
+    1.4 New Users      Friends Sign Up
+    (40% conversion)         │
+         │                   │
+         └───────────┬───────┘
+                     │
+                     ▼
+              All Users Create
+                     │
+                     ▼
+              All Users Share
+                     │
+                     ▼
+         ┌───────────┴───────────┐
+         │                       │
+         ▼                       ▼
+    Week 1: 100 users       Month 1: 300 users
+         │                       │
+         ▼                       ▼
+    Week 2: 140 users       Month 2: 600 users
+         │                       │
+         ▼                       ▼
+    Week 3: 196 users       Month 3: 1,200 users
+         │                       │
+         ▼                       ▼
+    Week 4: 274 users       K > 1.0 = VIRAL!
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         CONVERSION FUNNEL                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    1,000 Users with Referral Codes
+              │
+              ▼ (80% share)
+    800 Share Their Link
+              │
+              ▼ (50% click through)
+    400 Friends Click Link
+              │
+              ▼ (60% sign up)
+    240 Friends Sign Up
+              │
+              ▼
+    240 Completed Referrals
+              │
+    ┌─────────┴─────────┐
+    │                   │
+    ▼                   ▼
+ Original Users    New Users
+ Get 2,400         Get 2,400
+ Bonus Images      Bonus Images
+    │                   │
+    └─────────┬─────────┘
+              │
+              ▼
+    Overall Conversion: 24%
+    (240 / 1,000 users)
+
+    Viral Coefficient (K):
+    K = 240 / 1,000 = 0.24
+
+    Target: K > 1.0 for viral growth
+    (Need 40%+ overall conversion)
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         HOOK POINTS (WHERE TO SHOW CTAs)                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    User Journey Timeline:
+
+    0min: Sign Up
+          │
+          ▼ [NO CTA - Let them explore]
+
+    5min: First Transformation
+          │
+          ▼ [NO CTA - Don't interrupt excitement]
+
+    15min: Third Transformation
+           │
+           ▼ ┌────────────────────────────────┐
+             │  SHOW BANNER CTA               │
+             │  "Love this? Share & earn 10!" │
+             │  Dismissible, non-intrusive    │
+             └────────────────────────────────┘
+
+    30min: Batch Processing
+           │
+           ▼ ┌────────────────────────────────┐
+             │  SHOW COMPACT CTA              │
+             │  Footer with share link        │
+             └────────────────────────────────┘
+
+    1hr: Hits Daily Limit
+         │
+         ▼ ┌────────────────────────────────┐
+           │  SHOW MODAL CTA (Full Screen)  │
+           │  "Need more? Invite 1 friend   │
+           │   and get 10 more images!"     │
+           └────────────────────────────────┘
+
+    Day 2: Returns to App
+           │
+           ▼ [Profile shows referral dashboard]
+
+    Week 1: Still Active
+            │
+            ▼ ┌────────────────────────────────┐
+              │  Celebrate if 1+ referrals     │
+              │  "You've earned X bonus images!"│
+              └────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         METRICS DASHBOARD (Future)                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Admin View:
+
+    ┌─────────────────────────────────────────────┐
+    │  REFERRAL SYSTEM ANALYTICS                  │
+    ├─────────────────────────────────────────────┤
+    │                                             │
+    │  Total Codes Generated:     5,284           │
+    │  Pending Codes:             3,012           │
+    │  Completed Referrals:       2,272           │
+    │                                             │
+    │  Conversion Rate:           43.0%  ▲        │
+    │  Viral Coefficient (K):     1.14   ▲        │
+    │  Avg Referrals per User:    2.7    ▲        │
+    │                                             │
+    │  ┌──────────────────────────────────────┐  │
+    │  │  Growth Chart (Last 30 Days)         │  │
+    │  │                                      │  │
+    │  │  Users ▲                          ╱  │  │
+    │  │      5k│                        ╱    │  │
+    │  │      4k│                     ╱       │  │
+    │  │      3k│                  ╱          │  │
+    │  │      2k│              ╱              │  │
+    │  │      1k│         ╱                   │  │
+    │  │       0└──────────────────────────▶  │  │
+    │  │         Day 1              Day 30    │  │
+    │  └──────────────────────────────────────┘  │
+    │                                             │
+    │  Top Referrers:                             │
+    │  1. derek@example.com      47 referrals    │
+    │  2. alice@example.com      38 referrals    │
+    │  3. bob@example.com        29 referrals    │
+    │                                             │
+    │  Share Method Performance:                  │
+    │  • Copy Link:      45%  ████████████▌      │
+    │  • Twitter:        30%  ████████▌          │
+    │  • Email:          15%  ████▌              │
+    │  • WhatsApp:       10%  ███                │
+    │                                             │
+    │  Cost Analysis:                             │
+    │  • Bonus Images Given:    45,440           │
+    │  • API Cost:              $454.40          │
+    │  • New Users Acquired:    2,272            │
+    │  • Cost per User:         $0.20            │
+    │  • vs. Paid Ads:          95% cheaper!     │
+    │                                             │
+    └─────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         COMPONENT HIERARCHY                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    app/
+    ├── profile/page.tsx
+    │   └── Uses:
+    │       ├── useReferral() hook
+    │       ├── useImageTracking() hook
+    │       ├── usePromoCode() hook
+    │       └── <ReferralShareButton />
+    │
+    ├── referral/page.tsx
+    │   └── Uses:
+    │       ├── useReferral() hook
+    │       ├── useSearchParams() (for code)
+    │       └── <AuthButton />
+    │
+    └── [future] page.tsx (main editor)
+        └── Will use:
+            └── <ReferralCTA variant="banner" />
+
+    components/
+    ├── ReferralShareButton.tsx
+    │   ├── Variants: default, compact
+    │   └── Handles: copy, Twitter, email, WhatsApp
+    │
+    └── ReferralCTA.tsx
+        ├── Variants: banner, modal, compact
+        ├── Uses: <ReferralShareButton />
+        └── Uses: useReferral() hook
+
+    hooks/
+    └── useReferral.ts
+        ├── generateCode()
+        ├── redeemReferralCode()
+        ├── getReferralLink()
+        └── Returns: stats, codes, loading states
+
+    lib/
+    └── instantdb.ts
+        └── Schema:
+            └── referrals {
+                  id, referrerId, referralCode,
+                  referredUserId, status,
+                  bonusImages, timestamps
+                }
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         TESTING SCENARIOS                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Scenario 1: Happy Path
+    ──────────────────────
+    1. User A signs up → Gets code "USERA-ABC123"
+    2. User A shares link with User B
+    3. User B clicks link → Sees landing page
+    4. User B signs in → Auto-redeems code
+    5. ✓ User A: 15 → 5 images used (got +10 bonus)
+    6. ✓ User B: 0 → -10 images used (got +10 bonus)
+    7. ✓ Referral marked as "completed"
+
+    Scenario 2: Self-Referral (Edge Case)
+    ─────────────────────────────────────
+    1. User A has code "USERA-ABC123"
+    2. User A tries to redeem own code
+    3. ✗ Error: "You cannot use your own referral code"
+    4. ✓ No bonus images given
+
+    Scenario 3: Duplicate Redemption (Edge Case)
+    ────────────────────────────────────────────
+    1. User B already redeemed User A's code
+    2. User B tries to redeem User C's code
+    3. ✗ Error: "You have already redeemed a referral code"
+    4. ✓ Only one referral bonus per user lifetime
+
+    Scenario 4: Invalid Code (Edge Case)
+    ────────────────────────────────────
+    1. User C visits /referral?code=INVALID-XXXXXX
+    2. Code doesn't exist in database
+    3. ✗ Error: "Invalid or already used referral code"
+    4. ✓ No bonus images given
+
+    Scenario 5: Already Redeemed Code (Edge Case)
+    ─────────────────────────────────────────────
+    1. User B redeems User A's code
+    2. User C tries to redeem same code
+    3. ✗ Error: "Invalid or already used referral code"
+    4. ✓ Each code can only be used once
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         DEPLOYMENT CHECKLIST                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Pre-Deployment:
+    ☐ Test code generation on localhost
+    ☐ Test share buttons (all 4 methods)
+    ☐ Test redemption flow with 2 test accounts
+    ☐ Verify bonus images applied correctly
+    ☐ Test all edge cases (self-referral, duplicates, etc.)
+    ☐ Mobile responsive check
+    ☐ Cross-browser testing
+
+    Deployment:
+    ☐ Commit changes to git
+    ☐ Push to main branch
+    ☐ Vercel auto-deploy completes
+    ☐ Check production build logs
+
+    Post-Deployment:
+    ☐ Create test account on production
+    ☐ Verify referral code generated
+    ☐ Share link to second test account
+    ☐ Verify redemption works
+    ☐ Check InstantDB dashboard
+    ☐ Monitor error logs (first 24 hours)
+
+    Marketing:
+    ☐ Announce referral system on social media
+    ☐ Email existing users about new feature
+    ☐ Update pricing page with referral option
+    ☐ Create tutorial video/GIF
+    ☐ Add to onboarding flow
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SUCCESS INDICATORS                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Week 1:
+    ✓ 50+ codes generated (10% of active users)
+    ✓ 10+ successful redemptions (20% conversion)
+    ✓ 0 critical bugs
+    ✓ Positive user feedback
+
+    Month 1:
+    ✓ 500+ codes generated (25% of active users)
+    ✓ 100+ successful redemptions (20% conversion)
+    ✓ K-factor: 0.3+
+    ✓ 5+ power users (5+ referrals each)
+
+    Month 3:
+    ✓ 2,000+ codes generated (40% of active users)
+    ✓ 600+ successful redemptions (30% conversion)
+    ✓ K-factor: 1.0+ (VIRAL!)
+    ✓ 20+ power users (10+ referrals each)
+    ✓ 40%+ of new users via referral
+
+    Month 6:
+    ✓ 10,000+ active users
+    ✓ 50%+ of new users via referral
+    ✓ Self-sustaining growth loop
+    ✓ Reduced CAC by 80%+
+    ✓ Featured case study on viral growth
+
+
+                           ╔═══════════════════════╗
+                           ║  VIRAL GROWTH ENGINE  ║
+                           ║      ACTIVATED!       ║
+                           ╚═══════════════════════╝
+```

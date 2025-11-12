@@ -1,0 +1,6 @@
+# List of all gradient fixes needed:
+app/roulette/page.tsx:646: bg-gradient-to-r from-orange-50 to-red-50 -> bg-orange-50
+app/roulette/page.tsx:904: bg-gradient-to-r from-purple-500 to-pink-500 -> bg-purple-500
+app/roulette/page.tsx:924: bg-gradient-to-br from-yellow-50 to-orange-50 -> bg-yellow-50
+app/editor-nsfw/page.tsx:51: bg-gradient-to-r from-red-400 via-teal-400 to-red-400 -> text-red-400
+components/BeforeAfterGallery.tsx:248: bg-gradient-to-t from-black/80 via-black/20 to-transparent -> bg-black/60

@@ -1,0 +1,100 @@
+
+> picforge@1.0.0 build:skip-validation
+> next build
+
+   ▲ Next.js 16.0.0 (Turbopack)
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ scrollRestoration
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 8.4s
+   Running TypeScript ...
+   Collecting page data ...
+   Generating static pages (0/70) ...
+   Generating static pages (17/70) 
+   Generating static pages (34/70) 
+   Generating static pages (52/70) 
+ ✓ Generating static pages (70/70) in 1300.8ms
+   Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /admin
+├ ○ /admin/library
+├ ○ /admin/moderation
+├ ƒ /api/analyze-image
+├ ƒ /api/batch-styles
+├ ƒ /api/create-checkout-session
+├ ƒ /api/enhance-prompt
+├ ƒ /api/feedback
+├ ƒ /api/generate-canvas
+├ ƒ /api/generate-canvas-free
+├ ƒ /api/generate-canvas-hf
+├ ƒ /api/generate-canvas-pollinations
+├ ƒ /api/generate-caption
+├ ƒ /api/inpaint
+├ ƒ /api/newsletter
+├ ƒ /api/process-image
+├ ƒ /api/process-image-nsfw
+├ ƒ /api/process-image-v2
+├ ƒ /api/roast
+├ ƒ /api/sample-images
+├ ƒ /api/send-email
+├ ƒ /api/test-batch
+├ ƒ /api/test-replicate
+├ ƒ /api/track-share
+├ ƒ /api/track-template
+├ ƒ /api/track-visitor
+├ ƒ /api/vip
+├ ƒ /api/visitor-stats
+├ ƒ /api/webhooks/stripe
+├ ○ /batch
+├ ○ /batch-nsfw
+├ ○ /blog
+├ ƒ /blog/[slug]
+├ ○ /canvas
+├ ○ /community
+├ ○ /community/submit
+├ ○ /contact
+├ ○ /editor-advanced
+├ ○ /editor-nsfw
+├ ○ /email-preferences
+├ ○ /examples
+├ ○ /favorites
+├ ○ /feedback
+├ ○ /forge
+├ ○ /icon.svg
+├ ○ /ideas
+├ ○ /legal/privacy
+├ ○ /legal/terms
+├ ○ /library
+├ ○ /my-images
+├ ○ /pricing
+├ ○ /privacy
+├ ○ /profile
+├ ○ /profile/emails
+├ ○ /prompt-wizard
+├ ○ /prompts
+├ ○ /prompts/favorites
+├ ○ /referral
+├ ○ /roast
+├ ○ /robots.txt
+├ ○ /roulette
+├ ƒ /rss.xml
+├ ○ /showcase
+├ ƒ /showcase/submit
+├ ○ /sitemap.xml
+├ ○ /submit
+├ ○ /success
+├ ○ /terms
+├ ○ /tips
+└ ○ /unsubscribe
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

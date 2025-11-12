@@ -1,0 +1,21 @@
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <g fill="#000000">
+    <!-- Camera Body -->
+    <rect x="136" y="160" width="400" height="320" rx="40"/>
+
+    <!-- Top strap -->
+    <rect x="200" y="120" width="140" height="60" rx="20"/>
+
+    <!-- Lens outer circle -->
+    <circle cx="330" cy="320" r="100"/>
+
+    <!-- Lens inner circle (creates depth) -->
+    <circle cx="330" cy="320" r="60" fill="#ffffff" opacity="0.3"/>
+
+    <!-- Flash dot -->
+    <circle cx="450" cy="220" r="25"/>
+
+    <!-- Film slot -->
+    <rect x="180" y="420" width="300" height="40" rx="10"/>
+  </g>
+</svg>
