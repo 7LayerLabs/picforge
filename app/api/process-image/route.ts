@@ -155,13 +155,39 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Create prompt for image transformation
-      const transformPrompt = `Transform this image: ${prompt}. Keep the same person/subject from the original image. Apply the transformation while preserving their identity and features. High quality, detailed output.`
+      // Prepare content array with prompt and main image
+      const contentParts: Array<string | { inlineData: { data: string; mimeType: string } }> = []
 
-      logger.info('Sending request to Gemini Nano Banana...', { prompt: transformPrompt })
+      // Create prompt for image transformation
+      let transformPrompt = `Transform this image: ${prompt}. Keep the same person/subject from the original image. Apply the transformation while preserving their identity and features. High quality, detailed output.`
+
+      // If additional image is provided, update prompt to include it
+      if (base64AdditionalImage && additionalImageType) {
+        transformPrompt = `You are given TWO images. The first image is the main image to transform. The second image is an additional element to incorporate into the transformation. ${prompt}. Blend, fuse, or incorporate elements from the second image into the first image according to the instructions. Keep the composition natural and high quality.`
+
+        logger.info('Including additional image in transformation...')
+
+        // Add prompt first
+        contentParts.push(transformPrompt)
+        // Add main image
+        contentParts.push(imagePart)
+        // Add additional image
+        contentParts.push({
+          inlineData: {
+            data: base64AdditionalImage,
+            mimeType: additionalImageType
+          }
+        })
+      } else {
+        // Single image transformation
+        contentParts.push(transformPrompt)
+        contentParts.push(imagePart)
+      }
+
+      logger.info('Sending request to Gemini Nano Banana...', { prompt: transformPrompt, hasAdditionalImage: !!base64AdditionalImage })
 
       // Generate image
-      const result = await model.generateContent([transformPrompt, imagePart])
+      const result = await model.generateContent(contentParts)
       const response = await result.response
 
       logger.info('Received response from Gemini')
