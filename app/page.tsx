@@ -44,9 +44,10 @@ export default function Home() {
             <div className="hidden lg:block relative">
               <div className="bg-brutal-cyan border-4 border-black shadow-brutal-lg rotate-2 p-12 relative">
                 <div className="bg-white border-4 border-black p-8 -rotate-1 relative">
-                  <div className="text-4xl md:text-5xl font-black text-black mb-3 leading-tight text-center">
-                    &quot;Nothing is real anymore&quot;
-                    <div className="text-2xl mt-2">- or is it?</div>
+                  <div className="text-4xl md:text-5xl font-black text-black leading-tight text-center">
+                    <div className="mb-3"><span className="text-brutal-pink">Upload</span>.</div>
+                    <div className="mb-3"><span className="text-brutal-cyan">Transform</span>.</div>
+                    <div className="mb-3"><span className="text-brutal-yellow bg-black px-2">Break Reality</span>.</div>
                   </div>
                   <img src="/mascots/pixxy.png" alt="Pixie" className="absolute -bottom-2 -right-2 w-32 h-32" />
                 </div>

@@ -503,6 +503,14 @@ export default function EditorPage() {
         body: formData,
       })
 
+      // Check if response is JSON before parsing
+      const contentType = response.headers.get('content-type')
+      if (!contentType || !contentType.includes('application/json')) {
+        const textResponse = await response.text()
+        logger.error('Non-JSON response from API:', textResponse)
+        throw new Error(`Server error: Expected JSON response but got ${contentType}. This might be a timeout or server error. Please try again.`)
+      }
+
       const data = await response.json()
 
       if (response.ok && data.generatedImage) {
