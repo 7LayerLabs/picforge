@@ -8,6 +8,11 @@ import { logger } from '@/lib/logger'
 // Increase timeout for image processing (can take 10-20 seconds)
 export const maxDuration = 60
 
+// Increase body size limit to 50MB for fusion images (two images + metadata)
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+// Updated: Enhanced quality prompts for sharper, more detailed results
+
 export async function POST(request: NextRequest) {
   try {
     logger.info('=== API /process-image called ===')
@@ -143,9 +148,16 @@ export async function POST(request: NextRequest) {
     logger.info('Using Gemini 2.5 Flash Image (Nano Banana) for transformation...')
 
     try {
-      // Initialize Gemini
+      // Initialize Gemini with quality-focused configuration
       const genAI = new GoogleGenerativeAI(geminiApiKey)
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-image' })
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash-image',
+        generationConfig: {
+          temperature: 0.4,  // Lower temperature for more consistent, detailed results
+          topP: 0.95,
+          topK: 40,
+        }
+      })
 
       // Prepare image part
       const imagePart = {
@@ -158,12 +170,34 @@ export async function POST(request: NextRequest) {
       // Prepare content array with prompt and main image
       const contentParts: Array<string | { inlineData: { data: string; mimeType: string } }> = []
 
-      // Create prompt for image transformation
-      let transformPrompt = `Transform this image: ${prompt}. Keep the same person/subject from the original image. Apply the transformation while preserving their identity and features. High quality, detailed output.`
+      // Create enhanced prompt for image transformation with quality emphasis
+      let transformPrompt = `Transform this image: ${prompt}.
 
-      // If additional image is provided, update prompt to include it
+CRITICAL QUALITY REQUIREMENTS:
+- Maintain SHARP, CRISP details - NO blur or soft focus
+- Preserve high resolution and clarity from original image
+- Keep facial features, textures, and fine details SHARP and well-defined
+- Apply transformation while maintaining photographic quality
+- Output should be crystal clear with excellent detail preservation
+- Keep the same person/subject identity and features from the original image
+
+Generate a high-fidelity, professional quality result with maximum sharpness and detail.`
+
+      // If additional image is provided, update prompt to include it with quality emphasis
       if (base64AdditionalImage && additionalImageType) {
-        transformPrompt = `You are given TWO images. The first image is the main image to transform. The second image is an additional element to incorporate into the transformation. ${prompt}. Blend, fuse, or incorporate elements from the second image into the first image according to the instructions. Keep the composition natural and high quality.`
+        transformPrompt = `You are given TWO images. The first image is the main image to transform. The second image is an additional element to incorporate into the transformation.
+
+TASK: ${prompt}
+
+CRITICAL QUALITY REQUIREMENTS:
+- Maintain SHARP, CRISP details - NO blur or soft focus
+- Preserve high resolution and clarity from both images
+- Keep facial features, textures, and fine details SHARP and well-defined
+- Blend naturally while maintaining photographic quality
+- Output should be crystal clear with excellent detail preservation
+- Seamlessly fuse/incorporate elements from the second image into the first
+
+Generate a high-fidelity, professional quality result with maximum sharpness and natural composition.`
 
         logger.info('Including additional image in transformation...')
 
