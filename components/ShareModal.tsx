@@ -59,7 +59,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
     await navigator.clipboard.writeText(shareableLink)
     setShowShareLink(true)
     setTimeout(() => setShowShareLink(false), 3000)
-    trackShare('link', false)
+    trackShare('link')
   }
 
   const nativeShare = async () => {
@@ -70,7 +70,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
           text: 'I just transformed my photo with AI on PicForge. Nothing is real anymore.',
           url: shareableLink,
         })
-        trackShare('native', !shareBonus)
+        trackShare('native')
       } catch (error) {
         logger.error('Error sharing:', error)
       }
@@ -361,7 +361,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
 
     // Track share
-    trackShare('twitter', false)
+    trackShare('twitter')
 
     // Show instructions
     setShowCopiedToast(true)
@@ -383,7 +383,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
     const quote = encodeURIComponent(caption)
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, '_blank')
 
-    trackShare('facebook', !shareBonus)
+    trackShare('facebook')
     setShowCopiedToast(true)
     setTimeout(() => setShowCopiedToast(false), 3000)
   }
@@ -394,7 +394,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
     // Download watermarked image
     downloadImage()
 
-    trackShare(selectedPlatform, !shareBonus)
+    trackShare(selectedPlatform)
     setShowCopiedToast(true)
     setTimeout(() => setShowCopiedToast(false), 3000)
   }
@@ -405,7 +405,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
     // Download watermarked image
     downloadImage()
 
-    trackShare('tiktok', !shareBonus)
+    trackShare('tiktok')
     setShowCopiedToast(true)
     setTimeout(() => setShowCopiedToast(false), 3000)
   }
