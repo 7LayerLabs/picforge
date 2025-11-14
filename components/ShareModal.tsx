@@ -361,21 +361,26 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
     link.click()
     document.body.removeChild(link)
 
+    // Show clear instructions BEFORE opening Twitter
+    alert('✅ IMAGE DOWNLOADED!\n\n📸 Next step: When X/Twitter opens...\n\n1. Click the image icon 🖼️\n2. Select the downloaded PicForge image\n3. Your caption is already pre-filled!\n4. Click Post to share\n\nYour image was just downloaded to your Downloads folder.')
+
     // Add tracking param to caption for attribution
     const trackingUrl = 'pic-forge.com?ref=twitter-share'
     const captionWithTracking = caption.replace('pic-forge.com', trackingUrl)
 
-    // Open Twitter with the caption pre-filled
-    const text = encodeURIComponent(captionWithTracking)
-    const url = encodeURIComponent(trackingUrl)
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
+    // Open Twitter with the caption pre-filled (after 1 second delay so user sees alert)
+    setTimeout(() => {
+      const text = encodeURIComponent(captionWithTracking)
+      const url = encodeURIComponent(trackingUrl)
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
+    }, 1000)
 
     // Track share and offer bonus
     trackShare('twitter', !shareBonus)
 
     // Show instructions
     setShowCopiedToast(true)
-    setTimeout(() => setShowCopiedToast(false), 5000)
+    setTimeout(() => setShowCopiedToast(false), 8000)
   }
 
   const shareToFacebook = () => {
@@ -781,7 +786,7 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
           <div className="font-black text-xl mb-2">LOCKED AND LOADED!</div>
           <div className="text-sm font-medium mb-2">
             {selectedPlatform === 'twitter'
-              ? 'Image saved • X opening with caption'
+              ? 'Image downloaded • Now attach it to your X post!'
               : 'Image saved • Caption copied to clipboard'}
           </div>
           {canEarnBonus && (
@@ -789,7 +794,12 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
               Post now → Unlock +5 FREE images! 🎁
             </div>
           )}
-          {!canEarnBonus && (
+          {!canEarnBonus && selectedPlatform === 'twitter' && (
+            <div className="text-xs opacity-80 mt-2">
+              Don't forget to attach your downloaded image!
+            </div>
+          )}
+          {!canEarnBonus && selectedPlatform !== 'twitter' && (
             <div className="text-xs opacity-80 mt-2">
               Get ready for the likes to roll in...
             </div>
