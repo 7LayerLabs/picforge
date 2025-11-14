@@ -225,30 +225,8 @@ export default function EditorPage() {
     return () => window.removeEventListener('keydown', handleEsc)
   }, [zoomedImage])
 
-  // Load saved history from localStorage on mount
+  // Check if user wants to try a prompt from showcase
   useEffect(() => {
-    const savedHistory = localStorage.getItem('imageHistory')
-    const savedCurrentImage = localStorage.getItem('currentImage')
-    const savedOriginalImage = localStorage.getItem('originalImage')
-
-    if (savedHistory) {
-      try {
-        const parsedHistory = JSON.parse(savedHistory)
-        setHistory(parsedHistory)
-      } catch (e) {
-        logger.error('Failed to parse saved history:', e)
-      }
-    }
-
-    if (savedCurrentImage) {
-      setCurrentImage(savedCurrentImage)
-    }
-
-    if (savedOriginalImage) {
-      setOriginalImage(savedOriginalImage)
-    }
-
-    // Check if user wants to try a prompt from showcase
     const tryPrompt = sessionStorage.getItem('tryPrompt')
     if (tryPrompt) {
       setInstructions(tryPrompt)
@@ -259,47 +237,6 @@ export default function EditorPage() {
       }, 100)
     }
   }, [])
-
-  // Save history to localStorage whenever it changes (with quota handling)
-  useEffect(() => {
-    if (history.length > 0) {
-      try {
-        // Limit history to last 5 items to prevent quota issues
-        const limitedHistory = history.slice(-5)
-        localStorage.setItem('imageHistory', JSON.stringify(limitedHistory))
-      } catch (e) {
-        if (e instanceof DOMException && e.name === 'QuotaExceededError') {
-          logger.warn('localStorage quota exceeded. Reducing history size...')
-          // Try with just the last 2 items
-          try {
-            localStorage.setItem('imageHistory', JSON.stringify(history.slice(-2)))
-          } catch {
-            localStorage.removeItem('imageHistory')
-          }
-        }
-      }
-    }
-  }, [history])
-
-  // Save current images to localStorage with error handling
-  useEffect(() => {
-    try {
-      if (currentImage) {
-        localStorage.setItem('currentImage', currentImage)
-      }
-      if (originalImage) {
-        localStorage.setItem('originalImage', originalImage)
-      }
-    } catch (e) {
-      if (e instanceof DOMException && e.name === 'QuotaExceededError') {
-        logger.warn('localStorage quota exceeded. Clearing old data...')
-        // Clear old history to make space
-        localStorage.removeItem('imageHistory')
-        localStorage.removeItem('currentImage')
-        localStorage.removeItem('originalImage')
-      }
-    }
-  }, [currentImage, originalImage])
 
   // Check if Prompt of the Day is already favorited
   useEffect(() => {
