@@ -32,7 +32,6 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
   const [showCopiedToast, setShowCopiedToast] = useState(false)
   const [showBeforeAfter, setShowBeforeAfter] = useState(false)
   const [isGeneratingGif, setIsGeneratingGif] = useState(false)
-  const [shareBonus, setShareBonus] = useState(false)
   const [showShareLink, setShowShareLink] = useState(false)
   const [shareableLink, setShareableLink] = useState('')
 
@@ -317,15 +316,14 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
     }
   }
 
-  const trackShare = async (platform: string, earnedBonus = false) => {
+  const trackShare = async (platform: string) => {
     try {
-      const response = await fetch('/api/track-share', {
+      await fetch('/api/track-share', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           platform,
           userId: user?.id,
-          earnedBonus,
           timestamp: new Date().toISOString()
         })
       })
@@ -336,14 +334,6 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
           platform: platform as 'twitter' | 'instagram' | 'tiktok' | 'download',
           content_type: showBeforeAfter ? 'before_after' : 'single',
         });
-      }
-
-      if (earnedBonus && response.ok) {
-        setShareBonus(true)
-        // Bonus will be added on next page load
-        setTimeout(() => {
-          alert('🎉 Bonus unlocked! +5 free images added to your account!\n\nThanks for sharing PicForge!')
-        }, 1000)
       }
     } catch (error) {
       logger.error('Error tracking share:', error)
@@ -361,22 +351,17 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
     link.click()
     document.body.removeChild(link)
 
-    // Show clear instructions BEFORE opening Twitter
-    alert('✅ IMAGE DOWNLOADED!\n\n📸 Next step: When X/Twitter opens...\n\n1. Click the image icon 🖼️\n2. Select the downloaded PicForge image\n3. Your caption is already pre-filled!\n4. Click Post to share\n\nYour image was just downloaded to your Downloads folder.')
-
     // Add tracking param to caption for attribution
     const trackingUrl = 'pic-forge.com?ref=twitter-share'
     const captionWithTracking = caption.replace('pic-forge.com', trackingUrl)
 
-    // Open Twitter with the caption pre-filled (after 1 second delay so user sees alert)
-    setTimeout(() => {
-      const text = encodeURIComponent(captionWithTracking)
-      const url = encodeURIComponent(trackingUrl)
-      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
-    }, 1000)
+    // Open Twitter with the caption pre-filled
+    const text = encodeURIComponent(captionWithTracking)
+    const url = encodeURIComponent(trackingUrl)
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
 
-    // Track share and offer bonus
-    trackShare('twitter', !shareBonus)
+    // Track share
+    trackShare('twitter', false)
 
     // Show instructions
     setShowCopiedToast(true)
@@ -437,9 +422,6 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
 
   if (!isOpen) return null
 
-  const remaining = getRemainingImages()
-  const canEarnBonus = user && !shareBonus && typeof remaining === 'number' && remaining < 15
-
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto relative">
@@ -454,37 +436,8 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
         </button>
 
         <div className="p-6">
-          <h2 className="text-3xl font-bold mb-2">Go Viral. Get Rewarded.</h2>
-          <p className="text-gray-600 mb-4">Platform-optimized images ready to dominate social media</p>
-
-          {/* Enhanced Viral Incentive Banner */}
-          {canEarnBonus && (
-            <div className="mb-6 bg-gradient-to-r from-teal-500 via-purple-600 to-pink-500 text-white rounded-2xl p-6 shadow-2xl border-2 border-white/20 animate-pulse">
-              <div className="flex items-center gap-4">
-                <div className="text-5xl">🚀</div>
-                <div className="flex-1">
-                  <h3 className="font-black text-2xl mb-1">SHARE = GET 5 FREE IMAGES</h3>
-                  <p className="text-base font-medium">Pick any platform below. Instant bonus. Zero catch.</p>
-                </div>
-                <div className="bg-white/20 rounded-xl px-4 py-3">
-                  <div className="text-4xl font-black">+5</div>
-                  <div className="text-xs font-bold">BONUS</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {shareBonus && (
-            <div className="mb-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl p-5 shadow-2xl">
-              <div className="flex items-center gap-4">
-                <div className="text-5xl">✨</div>
-                <div className="flex-1">
-                  <h3 className="font-black text-xl">BOOM! Bonus Unlocked!</h3>
-                  <p className="text-base font-medium">+5 images added. You&apos;re crushing it.</p>
-                </div>
-              </div>
-            </div>
-          )}
+          <h2 className="text-3xl font-bold mb-2">Share Your Creation</h2>
+          <p className="text-gray-600 mb-4">Platform-optimized images ready to share</p>
 
           {/* Quick Share Link - Always Visible */}
           <div className="mb-6 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl p-4 shadow-lg">
@@ -658,11 +611,6 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                       </svg>
                       POST TO X
-                      {canEarnBonus && (
-                        <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-black">
-                          +5 FREE
-                        </span>
-                      )}
                     </button>
                     <button
                       onClick={shareToFacebook}
@@ -670,10 +618,9 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                     >
                       <span className="text-xl">📘</span>
                       SHARE ON FACEBOOK
-                      {canEarnBonus && <span className="ml-2 text-yellow-300">+5</span>}
                     </button>
                     <p className="text-sm text-gray-600 text-center font-medium bg-gray-50 rounded-lg p-2">
-                      ⚡ Auto-downloads image • Opens with caption ready
+                      Image auto-downloads • Caption ready to post
                     </p>
                   </div>
                 )}
@@ -687,11 +634,6 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                       <div className="flex items-center justify-center gap-3">
                         <span className="text-2xl">📸</span>
                         <span>COPY & DOWNLOAD</span>
-                        {canEarnBonus && (
-                          <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-black">
-                            +5 FREE
-                          </span>
-                        )}
                       </div>
                     </button>
                     <p className="text-sm text-gray-600 text-center font-medium bg-gray-50 rounded-lg p-2">
@@ -711,11 +653,6 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                       <div className="flex items-center justify-center gap-3">
                         <span className="text-2xl">🎵</span>
                         <span>COPY & DOWNLOAD</span>
-                        {canEarnBonus && (
-                          <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-black">
-                            +5 FREE
-                          </span>
-                        )}
                       </div>
                     </button>
                     <p className="text-sm text-gray-600 text-center font-medium bg-gray-50 rounded-lg p-2">
@@ -730,80 +667,23 @@ export default function ShareModal({ isOpen, onClose, imageUrl, originalImageUrl
                     onClick={downloadImage}
                     className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                   >
-                    Just Download (with watermark)
+                    Download (with watermark)
                   </button>
-                  <p className="text-xs text-gray-400 text-center mt-2">
-                    No bonus for download-only
-                  </p>
                 </div>
-              </div>
-
-              {/* Enhanced Engagement Tips */}
-              <div className="mt-4 bg-gradient-to-br from-teal-500 to-purple-600 text-white rounded-xl p-4 shadow-lg">
-                <div className="flex items-start gap-3">
-                  <div className="text-2xl">💡</div>
-                  <div className="flex-1">
-                    <h4 className="font-black text-base mb-2 uppercase tracking-wide">Maximize Your Reach</h4>
-                    <ul className="text-sm space-y-1.5 font-medium">
-                      <li className="flex items-start gap-2">
-                        <span className="text-yellow-300">•</span>
-                        <span>Post 12-3pm or 7-9pm for peak engagement</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-yellow-300">•</span>
-                        <span>Tag @PicForge - we repost the best ones</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-yellow-300">•</span>
-                        <span>Before/After = 3x more comments & shares</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-yellow-300">•</span>
-                        <span>Ask &quot;Which is better?&quot; for interaction</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* Social Proof */}
-              <div className="mt-3 p-3 bg-gray-50 rounded-lg text-center border border-gray-200">
-                <p className="text-xs font-bold text-gray-700 mb-1">🔥 VIRAL ALERT</p>
-                <p className="text-sm font-medium text-gray-800">
-                  2,847 images shared today • Avg. 324 likes per post
-                </p>
-                <p className="text-xs text-gray-500 mt-1">Your turn to go viral</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Toast Notification */}
+      {/* Toast Notification */}
       {showCopiedToast && (
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-green-500 via-teal-500 to-emerald-500 text-white px-8 py-5 rounded-2xl shadow-2xl max-w-md text-center z-50 animate-bounce border-2 border-white/30">
-          <div className="text-3xl mb-2">🚀</div>
-          <div className="font-black text-xl mb-2">LOCKED AND LOADED!</div>
-          <div className="text-sm font-medium mb-2">
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-teal-600 text-white px-6 py-3 rounded-xl shadow-2xl z-50 border-2 border-white/20">
+          <div className="font-bold text-base">
             {selectedPlatform === 'twitter'
-              ? 'Image downloaded • Now attach it to your X post!'
-              : 'Image saved • Caption copied to clipboard'}
+              ? '✓ Image downloaded • Attach it to your X post'
+              : '✓ Image saved • Caption copied'}
           </div>
-          {canEarnBonus && (
-            <div className="mt-3 bg-yellow-400 text-black px-4 py-2 rounded-xl font-black text-base">
-              Post now → Unlock +5 FREE images! 🎁
-            </div>
-          )}
-          {!canEarnBonus && selectedPlatform === 'twitter' && (
-            <div className="text-xs opacity-80 mt-2">
-              Don't forget to attach your downloaded image!
-            </div>
-          )}
-          {!canEarnBonus && selectedPlatform !== 'twitter' && (
-            <div className="text-xs opacity-80 mt-2">
-              Get ready for the likes to roll in...
-            </div>
-          )}
         </div>
       )}
 

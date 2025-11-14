@@ -14,7 +14,6 @@ import BatchStyleGenerator from '@/components/BatchStyleGenerator'
 import ExportModal from '@/components/ExportModal'
 import WatermarkPreviewNotice from '@/components/WatermarkPreviewNotice'
 import { logger } from '@/lib/logger'
-import ReferralCTA from '@/components/ReferralCTA'
 import { useImageTracking } from '@/hooks/useImageTracking'
 import { prompts } from '@/lib/prompts'
 import { addWatermarkIfFree, blobToDataUrl, dataUrlToBlob } from '@/lib/watermark'
@@ -83,10 +82,6 @@ export default function EditorPage() {
 
   // Mobile options dropdown state
   const [showMobileOptions, setShowMobileOptions] = useState(false)
-
-  // Referral CTA state
-  const [showReferralCTA, setShowReferralCTA] = useState(false)
-  const [referralCTADismissed, setReferralCTADismissed] = useState(false)
 
   // Convert image to supported format (JPEG/PNG) if needed
   const convertImageToSupported = async (file: File): Promise<string> => {
@@ -314,23 +309,6 @@ export default function EditorPage() {
       setIsPromptFavorited(isFavorited)
     }
   }, [favorites, PROMPT_OF_THE_DAY])
-
-  // Check localStorage for referral CTA dismissal on mount
-  useEffect(() => {
-    const dismissed = localStorage.getItem('referralCTADismissed') === 'true'
-    setReferralCTADismissed(dismissed)
-  }, [])
-
-  // Show referral CTA after 2+ transformations (if not dismissed)
-  useEffect(() => {
-    if (user && history.length >= 2 && !referralCTADismissed) {
-      // Wait 2 seconds after transformation to show CTA
-      const timer = setTimeout(() => {
-        setShowReferralCTA(true)
-      }, 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [history.length, referralCTADismissed, user])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -778,11 +756,6 @@ export default function EditorPage() {
     setTimeout(() => setSubmitMessage(''), 5000)
   }
 
-  const dismissReferralCTA = () => {
-    localStorage.setItem('referralCTADismissed', 'true')
-    setReferralCTADismissed(true)
-    setShowReferralCTA(false)
-  }
 
   return (
     <div className="min-h-screen">
@@ -1416,24 +1389,6 @@ export default function EditorPage() {
                   </div>
                 )}
               </form>
-
-              {/* Referral CTA - Shows after 2+ transformations */}
-              {showReferralCTA && user && (
-                <div className="mt-6 animate-fade-in-up">
-                  <div className="relative">
-                    <ReferralCTA variant="banner" showStats={true} />
-                    <button
-                      onClick={dismissReferralCTA}
-                      className="absolute top-2 right-2 text-black hover:text-gray-800 transition-colors bg-white bg-opacity-20 rounded-full p-1 hover:bg-opacity-30"
-                      title="Dismiss"
-                    >
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              )}
               </div>
 
               {/* Right side - Enhanced Image Gallery */}
