@@ -619,18 +619,13 @@ export default function EditorPage() {
         const response = await fetch(item.image)
         const blob = await response.blob()
 
-        // Convert blob to data URL
-        const dataUrl = await blobToDataUrl(blob)
-
-        // No watermarks - just use the image as-is
-        const finalBlob = dataUrlToBlob(dataUrl)
-
         // Create filename based on whether it's original or edited
         const filename = item.isOriginal
           ? '00_original.png'
           : `${String(i).padStart(2, '0')}_${item.prompt.replace(/[^a-z0-9]/gi, '_').substring(0, 30)}.png`
 
-        zip.file(filename, finalBlob)
+        // Use the blob directly - no need for unnecessary conversions
+        zip.file(filename, blob)
       } catch (error) {
         logger.error(`Failed to add image ${i} to zip:`, error)
       }
