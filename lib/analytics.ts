@@ -283,12 +283,14 @@ export const trackFavoritePrompt = (
  */
 export const trackBatchProcess = (
   imageCount: number,
-  effectType: string
+  effectType: string,
+  isNSFWBatch?: boolean
 ) => {
   trackEvent('batch_process', {
     event_category: 'engagement',
     image_count: imageCount,
     effect_type: effectType,
+    is_nsfw_batch: isNSFWBatch ?? false,
   });
 };
 
