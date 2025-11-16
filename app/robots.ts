@@ -7,7 +7,6 @@ import { MetadataRoute } from 'next';
  * Key optimizations:
  * - Allow all major search engines to crawl public pages
  * - Block admin, API, and user-specific pages
- * - Block NSFW content from indexing
  * - Specify crawl delay to prevent server overload
  * - Multiple user agent rules for different bots
  */
@@ -39,8 +38,6 @@ export default function robots(): MetadataRoute.Robots {
           '/profile/',
           '/my-images/',
           '/_next/',
-          '/batch-nsfw/',
-          '/editor-nsfw/',
           '/success/',
           '/referral/',
           '/email-preferences/',
@@ -70,8 +67,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/api/',
           '/admin/',
-          '/batch-nsfw/',
-          '/editor-nsfw/',
           '/_next/static/',
           '/success/',
           '/referral/',
@@ -88,8 +83,6 @@ export default function robots(): MetadataRoute.Robots {
           '/prompts',
         ],
         disallow: [
-          '/batch-nsfw/',
-          '/editor-nsfw/',
           '/api/',
           '/my-images/',
         ],
@@ -109,8 +102,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/api/',
           '/admin/',
-          '/batch-nsfw/',
-          '/editor-nsfw/',
         ],
         crawlDelay: 1,
       },
