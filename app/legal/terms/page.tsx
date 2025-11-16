@@ -79,7 +79,6 @@ export default function TermsOfService() {
                 <h3 className="font-semibold text-yellow-900 mb-2">Age Requirements</h3>
                 <ul className="list-disc pl-6 space-y-1 text-gray-700 text-sm">
                   <li><strong>General Use:</strong> You must be at least 13 years old to use PicForge</li>
-                  <li><strong>18+ Features:</strong> You must be 18 years or older to access the NSFW editor (/editor-nsfw) and NSFW batch processor (/batch-nsfw)</li>
                   <li><strong>Parental Consent:</strong> Users under 18 must have parental or guardian consent</li>
                 </ul>
               </div>
@@ -150,13 +149,6 @@ export default function TermsOfService() {
                 <h3 className="font-semibold text-gray-800">Batch Processor</h3>
                 <p className="text-gray-700 text-sm">
                   Process 100+ images simultaneously with bulk operations and 21 client-side effects
-                </p>
-              </div>
-
-              <div className="border-l-4 border-red-500 pl-4">
-                <h3 className="font-semibold text-gray-800">18+ Editor (NSFW)</h3>
-                <p className="text-gray-700 text-sm">
-                  Unrestricted image processing for adult content using Replicate SDXL API (18+ only)
                 </p>
               </div>
 
@@ -255,20 +247,7 @@ export default function TermsOfService() {
               </div>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-300 p-4 rounded-lg mt-6">
-              <h3 className="font-semibold text-yellow-900 mb-2">NSFW Content Guidelines</h3>
-              <p className="text-gray-700 text-sm mb-2">
-                The 18+ editor allows adult content <strong>within legal boundaries</strong>:
-              </p>
-              <ul className="list-disc pl-6 space-y-1 text-gray-700 text-sm">
-                <li><strong>Allowed:</strong> Artistic nudity, adult consensual content (18+), mature themes</li>
-                <li><strong>Prohibited:</strong> Illegal content, non-consensual imagery, minors, extreme violence</li>
-                <li><strong>User Responsibility:</strong> You are solely responsible for ensuring your uploads comply with all applicable laws</li>
-                <li><strong>No Storage:</strong> NSFW images are processed ephemerally and never stored on our servers</li>
-              </ul>
-            </div>
-
-            <p className="text-gray-700 leading-relaxed mt-4 font-semibold">
+            <p className="text-gray-700 leading-relaxed mt-6 font-semibold">
               Violation of this Acceptable Use Policy may result in immediate account suspension or termination without refund.
             </p>
           </section>
@@ -385,16 +364,6 @@ export default function TermsOfService() {
               <li>Promo codes cannot be redeemed for cash or combined with other offers</li>
               <li>We reserve the right to void fraudulent or duplicated promo codes</li>
               <li>Unlimited tier access via promo codes is perpetual (no expiration)</li>
-            </ul>
-
-            <h3 className="text-xl font-semibold text-gray-800 mb-3 mt-6">NSFW Editor Costs</h3>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              The 18+ editor uses Replicate&apos;s SDXL API, which incurs processing costs:
-            </p>
-            <ul className="list-disc pl-6 space-y-1 text-gray-700 mb-4">
-              <li><strong>Cost per image:</strong> Approximately $0.023 (charged to your account tier limits)</li>
-              <li><strong>No additional fees:</strong> NSFW processing is included in Pro and Unlimited tiers</li>
-              <li><strong>Free tier:</strong> NSFW editor usage counts toward daily 20-image limit</li>
             </ul>
 
             <h3 className="text-xl font-semibold text-gray-800 mb-3 mt-6">Refund Policy</h3>

@@ -55,7 +55,6 @@ export interface ImageTransformationEvent {
   prompt_category?: string;
   prompt_title?: string;
   locked_composition: boolean;
-  is_nsfw: boolean;
   processing_time?: number;
   image_size?: number;
 }
@@ -165,7 +164,6 @@ export const trackImageTransformation = (params: ImageTransformationEvent) => {
     event_label: params.prompt_title || 'custom_prompt',
     prompt_category: params.prompt_category,
     locked_composition: params.locked_composition,
-    is_nsfw: params.is_nsfw,
     processing_time_ms: params.processing_time,
     image_size_bytes: params.image_size,
   });
@@ -285,14 +283,12 @@ export const trackFavoritePrompt = (
  */
 export const trackBatchProcess = (
   imageCount: number,
-  effectType: string,
-  isNSFW: boolean
+  effectType: string
 ) => {
   trackEvent('batch_process', {
     event_category: 'engagement',
     image_count: imageCount,
     effect_type: effectType,
-    is_nsfw: isNSFW,
   });
 };
 

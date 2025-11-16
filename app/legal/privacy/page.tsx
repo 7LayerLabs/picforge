@@ -243,26 +243,7 @@ export default function PrivacyPolicy() {
                   <strong>Data Shared:</strong> Uploaded images, transformation prompts
                 </p>
                 <p className="text-gray-700 text-sm">
-                  <strong>Note:</strong> Gemini filters NSFW content (see NSFW editor for unrestricted processing)
-                </p>
-                <p className="text-gray-700 text-sm">
                   <strong>Privacy Policy:</strong> <a href="https://policies.google.com/privacy" className="text-teal-600 hover:underline" target="_blank" rel="noopener noreferrer">policies.google.com/privacy</a>
-                </p>
-              </div>
-
-              <div className="border-l-4 border-orange-500 pl-4">
-                <h3 className="font-semibold text-gray-800">Replicate API</h3>
-                <p className="text-gray-700 text-sm">
-                  <strong>Purpose:</strong> NSFW/unrestricted image processing (18+ editor and batch)
-                </p>
-                <p className="text-gray-700 text-sm">
-                  <strong>Data Shared:</strong> Uploaded images, transformation prompts
-                </p>
-                <p className="text-gray-700 text-sm">
-                  <strong>Cost:</strong> Approximately $0.023 per image transformation
-                </p>
-                <p className="text-gray-700 text-sm">
-                  <strong>Privacy Policy:</strong> <a href="https://replicate.com/privacy" className="text-teal-600 hover:underline" target="_blank" rel="noopener noreferrer">replicate.com/privacy</a>
                 </p>
               </div>
 
@@ -531,9 +512,6 @@ export default function PrivacyPolicy() {
               <strong>Automatic Deletion:</strong> Uploaded images are automatically deleted after 30 days. Transformed images in your account are deleted after 90 days or upon account deletion.
             </p>
 
-            <p className="text-gray-700 leading-relaxed text-sm">
-              <strong>NSFW Editor:</strong> Images processed through the 18+ editor (/editor-nsfw and /batch-nsfw) are <strong>never stored</strong> and are deleted immediately after processing (ephemeral processing only).
-            </p>
           </section>
 
           {/* Children's Privacy */}
@@ -543,9 +521,6 @@ export default function PrivacyPolicy() {
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               PicForge is not intended for users under the age of 13. We do not knowingly collect personal information from children under 13.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              <strong>18+ Content:</strong> The NSFW editor and batch processor require users to be 18 years or older. By accessing these features, you confirm that you meet this age requirement.
             </p>
             <p className="text-gray-700 leading-relaxed">
               If you believe we have inadvertently collected data from a child under 13, please contact us immediately at <a href="mailto:derek.bobola@gmail.com" className="text-teal-600 hover:underline">derek.bobola@gmail.com</a> and we will delete it.

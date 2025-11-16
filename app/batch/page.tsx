@@ -26,6 +26,8 @@ import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import { applyImageEffect } from '@/lib/imageEffects'
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
+import { useImageTracking } from '@/hooks/useImageTracking'
+import { addWatermarkIfFree } from '@/lib/watermark'
 import ExportModal from '@/components/ExportModal'
 import { downloadExportPack } from '@/lib/exportFormats'
 import EffectTooltip from '@/components/EffectTooltip'
@@ -90,6 +92,9 @@ export default function BatchPage() {
   const [exportMode, setExportMode] = useState<'single' | 'batch'>('batch')
   const [singleExportImage, setSingleExportImage] = useState<BatchImage | null>(null)
   const [currentProcessingFile, setCurrentProcessingFile] = useState<string>('')
+
+  // Get user tier for watermark logic
+  const { usage } = useImageTracking()
 
   // Save preset preference
   useEffect(() => {
@@ -367,11 +372,21 @@ export default function BatchPage() {
       const zip = new JSZip()
       const completedImages = images.filter(img => img.status === 'completed' && img.result)
 
+      if (completedImages.length === 0) {
+        alert('No completed images to download. Please process images first.')
+        return
+      }
+
+      logger.log(`Creating zip with ${completedImages.length} images (tier: ${usage?.tier || 'none'})`)
+
       for (let i = 0; i < completedImages.length; i++) {
         const img = completedImages[i]
         if (img.result) {
+          // Apply watermark based on user tier (pro/unlimited get no watermark)
+          const watermarkedImage = await addWatermarkIfFree(img.result, usage?.tier)
+
           // Extract base64 data
-          let base64Data = img.result
+          let base64Data = watermarkedImage
           if (base64Data.includes('base64,')) {
             base64Data = base64Data.split('base64,')[1]
           }
@@ -390,11 +405,15 @@ export default function BatchPage() {
           const fileName = `${selectedPreset.prefix || ''}${originalName}_${i + 1}${selectedPreset.suffix || ''}.${selectedPreset.format}`
 
           zip.file(fileName, blob)
+
+          logger.log(`Added to zip: ${fileName} (watermarked: ${usage?.tier !== 'pro' && usage?.tier !== 'unlimited'})`)
         }
       }
 
+      logger.log('Generating zip file...')
       const content = await zip.generateAsync({ type: 'blob' })
       saveAs(content, `batch_export_${new Date().toISOString().split('T')[0]}.zip`)
+      logger.log('Zip download complete!')
     } catch (error) {
       logger.error('ZIP download failed:', error)
       alert('Failed to create ZIP file. Please try downloading images individually.')
@@ -404,8 +423,11 @@ export default function BatchPage() {
   const downloadSingle = async (image: BatchImage) => {
     if (!image.result) return
 
+    // Apply watermark based on user tier
+    const watermarkedImage = await addWatermarkIfFree(image.result, usage?.tier)
+
     const link = document.createElement('a')
-    link.href = image.result
+    link.href = watermarkedImage
     link.download = `${selectedPreset.prefix || ''}${image.file.name.split('.')[0]}${selectedPreset.suffix || ''}.${selectedPreset.format}`
     link.click()
   }

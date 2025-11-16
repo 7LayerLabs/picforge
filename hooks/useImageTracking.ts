@@ -103,7 +103,6 @@ export function useImageTracking() {
     transformedUrl?: string;
     locked: boolean;
     category?: string;
-    isNSFW?: boolean;
   }) => {
     if (!user) {
       logger.log('User not logged in - skipping tracking');
@@ -130,21 +129,34 @@ export function useImageTracking() {
     const usageId = usage?.id || id();
     const currentCount = usage?.count || 0;
     const lastReset = usage?.lastReset || now;
-    const tier = usage?.tier || 'free';
+    // IMPORTANT: Don't default tier to 'free' here - tier should only be set by:
+    // 1. Promo code redemption (usePromoCode.ts)
+    // 2. Stripe subscription (webhooks/stripe/route.ts)
+    // 3. Manual admin action
+    // If tier is undefined, it will be treated as 'free' for watermark purposes,
+    // but we don't want to explicitly save 'free' to the database
+    const tier = usage?.tier;
 
-    // Check if we need to reset (24 hours for free tier)
-    const shouldReset = tier === 'free' && now - lastReset > 24 * 60 * 60 * 1000;
+    // Check if we need to reset (24 hours for free tier or undefined/not-set)
+    const shouldReset = (tier === 'free' || !tier) && now - lastReset > 24 * 60 * 60 * 1000;
 
     const newCount = shouldReset ? 1 : currentCount + 1;
 
+    // Build update object - only include tier if it already exists
+    const updateData: any = {
+      userId: user.id,
+      count: newCount,
+      lastReset: shouldReset ? now : lastReset,
+    };
+
+    // Only update tier if it's already set (don't set a default)
+    if (tier) {
+      updateData.tier = tier;
+    }
+
     await db.transact([
       // @ts-expect-error InstantDB tx type inference issue
-      db.tx.usage[usageId].update({
-        userId: user.id,
-        count: newCount,
-        lastReset: shouldReset ? now : lastReset,
-        tier,
-      })
+      db.tx.usage[usageId].update(updateData)
     ]);
 
     // Track in Google Analytics
@@ -152,18 +164,17 @@ export function useImageTracking() {
       prompt_category: imageData.category,
       prompt_title: imageData.prompt.substring(0, 100), // Limit length
       locked_composition: imageData.locked,
-      is_nsfw: imageData.isNSFW || false,
     });
 
     // Update user properties for segmentation
     setUserProperties({
-      user_tier: tier,
+      user_tier: tier || 'free', // Default to 'free' for analytics only
       has_generated_images: true,
       total_transformations: newCount,
     });
 
-    // Send email notifications for free tier users
-    if (tier === 'free') {
+    // Send email notifications for free tier users (including users without a tier set)
+    if (tier === 'free' || !tier) {
       const remaining = 20 - newCount;
 
       // Send warning at 5 images remaining

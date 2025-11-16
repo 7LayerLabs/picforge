@@ -13,7 +13,6 @@ PicForge is an AI-powered image transformation platform built with Next.js 15. U
 - **Transform Roulette** (/roulette) - Gamified random transformations (8 categories)
 - **Roast Mode** (/roast) - AI photo roasting (mild/spicy/nuclear)
 - **AI Prompt Assistant** - Claude-powered chat for prompt enhancement (Pro feature)
-- **18+ Editor/Batch** - NSFW content processing using Replicate SDXL (~$0.023/image)
 
 ## Development Commands
 
@@ -67,7 +66,6 @@ npm run monitor:costs   # AI API cost monitoring
 
 **Image Processing:**
 - `process-image/` - Main editor (Gemini Vision API, 500 req/day/IP)
-- `process-image-nsfw/` - NSFW editor (Replicate SDXL, 200 req/day/IP, ~$0.023/image)
 - `generate-canvas/` - Text-to-image (DALL-E, 100 req/day/IP)
 - `roast/` - Photo roasting (300 req/day/IP)
 
@@ -104,9 +102,8 @@ npm run monitor:costs   # AI API cost monitoring
 
 | Provider | Use Case | Cost | Notes |
 |----------|----------|------|-------|
-| **Google Gemini** | Main editor, vision analysis | Free tier | Blocks NSFW content |
+| **Google Gemini** | Main editor, vision analysis | Free tier | Primary transformation engine |
 | **Anthropic Claude** | Prompt enhancement (Pro) | Pay-as-you-go | Sonnet 3.5, 30 req/hour limit |
-| **Replicate SDXL** | NSFW transformations | ~$0.023/image | Bypasses Gemini restrictions |
 | **OpenAI DALL-E** | Text-to-image generation | $0.040-$0.080/image | Canvas feature |
 | **Pollinations/HF** | Free alternatives | Free | Fallback generation |
 
@@ -127,7 +124,6 @@ GEMINI_API_KEY=xxx              # Google Gemini for main editor
 ANTHROPIC_API_KEY=xxx           # Claude for AI Prompt Assistant (Pro)
 
 # Paid Features (OPTIONAL but limits functionality)
-REPLICATE_API_TOKEN=xxx         # NSFW editor (~$0.023/image)
 OPENAI_API_KEY=xxx              # Canvas text-to-image
 
 # Rate Limiting (OPTIONAL but recommended)
@@ -254,7 +250,6 @@ const isProUser = usage?.tier === 'pro' || usage?.tier === 'unlimited';
 
 **API Routes:**
 - `app/api/process-image/route.ts` - Main Gemini transformation
-- `app/api/process-image-nsfw/route.ts` - Replicate NSFW processing
 - `app/api/analyze-image/route.ts` - Gemini Vision analysis (Pro)
 - `app/api/enhance-prompt/route.ts` - Claude prompt enhancement (Pro)
 
