@@ -382,41 +382,52 @@ export default function BatchPage() {
       for (let i = 0; i < completedImages.length; i++) {
         const img = completedImages[i]
         if (img.result) {
-          // Apply watermark based on user tier (pro/unlimited get no watermark)
-          const watermarkedImage = await addWatermarkIfFree(img.result, usage?.tier)
+          try {
+            logger.log(`Processing image ${i + 1}/${completedImages.length}...`)
 
-          // Extract base64 data
-          let base64Data = watermarkedImage
-          if (base64Data.includes('base64,')) {
-            base64Data = base64Data.split('base64,')[1]
+            // Apply watermark based on user tier (pro/unlimited get no watermark)
+            const watermarkedImage = await addWatermarkIfFree(img.result, usage?.tier)
+            logger.log(`Watermark applied, image length: ${watermarkedImage.length}`)
+
+            // Extract base64 data
+            let base64Data = watermarkedImage
+            if (base64Data.includes('base64,')) {
+              base64Data = base64Data.split('base64,')[1]
+            }
+            logger.log(`Base64 extracted, length: ${base64Data.length}`)
+
+            // Convert base64 to blob
+            const byteCharacters = atob(base64Data)
+            const byteNumbers = new Array(byteCharacters.length)
+            for (let j = 0; j < byteCharacters.length; j++) {
+              byteNumbers[j] = byteCharacters.charCodeAt(j)
+            }
+            const byteArray = new Uint8Array(byteNumbers)
+            const blob = new Blob([byteArray], { type: `image/${selectedPreset.format}` })
+            logger.log(`Blob created, size: ${blob.size} bytes`)
+
+            // Generate filename
+            const originalName = img.file.name.split('.')[0]
+            const fileName = `${selectedPreset.prefix || ''}${originalName}_${i + 1}${selectedPreset.suffix || ''}.${selectedPreset.format}`
+
+            zip.file(fileName, blob)
+
+            logger.log(`✓ Added to zip: ${fileName} (size: ${blob.size} bytes, watermarked: ${usage?.tier !== 'pro' && usage?.tier !== 'unlimited'})`)
+          } catch (imgError) {
+            logger.error(`Failed to process image ${i + 1}:`, imgError)
+            alert(`Failed to process image ${img.file.name}: ${imgError instanceof Error ? imgError.message : 'Unknown error'}`)
           }
-
-          // Convert base64 to blob
-          const byteCharacters = atob(base64Data)
-          const byteNumbers = new Array(byteCharacters.length)
-          for (let j = 0; j < byteCharacters.length; j++) {
-            byteNumbers[j] = byteCharacters.charCodeAt(j)
-          }
-          const byteArray = new Uint8Array(byteNumbers)
-          const blob = new Blob([byteArray], { type: `image/${selectedPreset.format}` })
-
-          // Generate filename
-          const originalName = img.file.name.split('.')[0]
-          const fileName = `${selectedPreset.prefix || ''}${originalName}_${i + 1}${selectedPreset.suffix || ''}.${selectedPreset.format}`
-
-          zip.file(fileName, blob)
-
-          logger.log(`Added to zip: ${fileName} (watermarked: ${usage?.tier !== 'pro' && usage?.tier !== 'unlimited'})`)
         }
       }
 
       logger.log('Generating zip file...')
       const content = await zip.generateAsync({ type: 'blob' })
+      logger.log(`Zip generated, size: ${content.size} bytes`)
       saveAs(content, `batch_export_${new Date().toISOString().split('T')[0]}.zip`)
       logger.log('Zip download complete!')
     } catch (error) {
       logger.error('ZIP download failed:', error)
-      alert('Failed to create ZIP file. Please try downloading images individually.')
+      alert(`Failed to create ZIP file: ${error instanceof Error ? error.message : 'Unknown error'}. Please try downloading images individually.`)
     }
   }
 
