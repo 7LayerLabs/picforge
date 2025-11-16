@@ -90,7 +90,7 @@ IMAGE TRANSFORMATION:
 3. Select a prompt or enter custom prompt
 4. Click "Transform"
 5. Check DebugView for: image_transformation event
-   Parameters: prompt_category, locked_composition, is_nsfw
+   Parameters: prompt_category, locked_composition
 
 PROMO CODE REDEMPTION:
 1. Sign in (if not already)
@@ -106,7 +106,7 @@ BATCH PROCESSING:
 3. Select an effect
 4. Click "Start Processing"
 5. Check DebugView for: batch_process event
-   Parameters: image_count, effect_type, is_nsfw
+   Parameters: image_count, effect_type
 
 FAVORITE PROMPT:
 1. Go to /prompts

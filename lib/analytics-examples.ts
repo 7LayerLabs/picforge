@@ -33,7 +33,6 @@ export function exampleImageTransformation() {
     prompt_category: 'Art Styles',
     prompt_title: 'Van Gogh Starry Night style',
     locked_composition: true, // User had Lock Composition checked
-    is_nsfw: false, // Regular editor
     processing_time: 2300, // Optional: 2.3 seconds
     image_size: 1024000, // Optional: 1MB
   });
@@ -256,7 +255,6 @@ export function exampleCompleteUserJourney() {
     prompt_category: 'Art Styles',
     prompt_title: 'Van Gogh style',
     locked_composition: false,
-    is_nsfw: false,
   });
 
   // Update user properties
@@ -312,7 +310,6 @@ export function exampleCompleteUserJourney() {
  *        prompt_category: category,
  *        prompt_title: prompt,
  *        locked_composition: isLocked,
- *        is_nsfw: false,
  *      });
  *    };
  *
