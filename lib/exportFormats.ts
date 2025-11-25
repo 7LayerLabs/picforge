@@ -513,6 +513,61 @@ export async function downloadWebP(
 }
 
 /**
+ * Download as JPG (JPEG format with quality control)
+ */
+export async function downloadJPG(
+  imageData: string,
+  preset: string,
+  filename: string = 'design.jpg',
+  quality: number = 0.9
+): Promise<void> {
+  try {
+    const presetConfig = EXPORT_PRESETS[preset]
+    if (!presetConfig) {
+      throw new Error('Invalid preset selected')
+    }
+
+    const img = new Image()
+    await new Promise((resolve, reject) => {
+      img.onload = resolve
+      img.onerror = reject
+      img.src = imageData
+    })
+
+    const canvas = document.createElement('canvas')
+    canvas.width = presetConfig.width
+    canvas.height = presetConfig.height
+    const ctx = canvas.getContext('2d')
+
+    if (!ctx) {
+      throw new Error('Canvas context not available')
+    }
+
+    // Fill white background (JPG doesn't support transparency)
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    const scale = Math.min(
+      canvas.width / img.width,
+      canvas.height / img.height
+    )
+    const x = (canvas.width - img.width * scale) / 2
+    const y = (canvas.height - img.height * scale) / 2
+
+    ctx.drawImage(img, x, y, img.width * scale, img.height * scale)
+
+    canvas.toBlob((blob) => {
+      if (blob) {
+        saveAs(blob, filename)
+      }
+    }, 'image/jpeg', quality)
+  } catch (error) {
+    logger.error('Error creating JPG:', error)
+    throw error
+  }
+}
+
+/**
  * Download as ICO (for favicon generation)
  */
 export async function downloadICO(

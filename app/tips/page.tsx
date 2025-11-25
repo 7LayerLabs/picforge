@@ -244,9 +244,9 @@ export default function TipsPage() {
           </div>
         </div>
 
-        {/* Nano Banana Best Practices */}
+        {/* Gemini 3 Pro Image Best Practices */}
         <div className="mb-12">
-          <h2 className="text-3xl font-black uppercase text-black mb-6 tracking-tight">🍌 Nano Banana Best Practices (2025)</h2>
+          <h2 className="text-3xl font-black uppercase text-black mb-6 tracking-tight">✨ Gemini 3 Pro Image Best Practices (2025)</h2>
           <div className="bg-black border-4 border-brutal-yellow p-6 shadow-brutal-lg">
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-brutal-yellow p-5 border-4 border-black shadow-brutal">

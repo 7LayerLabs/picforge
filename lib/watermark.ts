@@ -9,6 +9,7 @@
  */
 
 import { logger } from './logger';
+import { TierType, shouldHaveWatermark } from './tierConfig';
 
 export interface WatermarkOptions {
   /**
@@ -261,6 +262,13 @@ export async function addWatermark(
 /**
  * Adds watermark to an image if the user is on the Free tier or not logged in
  *
+ * Tier watermark rules (from tierConfig):
+ * - Free: HAS watermark
+ * - Starter: NO watermark
+ * - Creator: NO watermark
+ * - Pro: NO watermark
+ * - Unlimited: NO watermark
+ *
  * @param imageDataUrl - Data URL or image URL of the source image
  * @param tier - User's subscription tier
  * @param options - Watermark options (optional)
@@ -280,16 +288,16 @@ export async function addWatermark(
  */
 export async function addWatermarkIfFree(
   imageDataUrl: string,
-  tier: 'free' | 'pro' | 'unlimited' | undefined,
+  tier: TierType | undefined,
   options: WatermarkOptions = {}
 ): Promise<string> {
-  // Add watermark for free tier users OR users not logged in (undefined tier)
-  // Only pro and unlimited users get watermark-free downloads
-  if (tier !== 'pro' && tier !== 'unlimited') {
+  // Use tierConfig to determine if watermark should be applied
+  // This centralizes the logic for tier-based features
+  if (shouldHaveWatermark(tier)) {
     return addWatermark(imageDataUrl, options);
   }
 
-  // Return original image for pro/unlimited users only
+  // Return original image for paid tier users
   return imageDataUrl;
 }
 
@@ -326,11 +334,11 @@ export async function addWatermarkBatch(
  */
 export async function addWatermarkBatchIfFree(
   imageDataUrls: string[],
-  tier: 'free' | 'pro' | 'unlimited' | undefined,
+  tier: TierType | undefined,
   options: WatermarkOptions = {}
 ): Promise<string[]> {
-  // Add watermark for free tier users OR users not logged in (undefined tier)
-  if (tier !== 'pro' && tier !== 'unlimited') {
+  // Use tierConfig to determine if watermark should be applied
+  if (shouldHaveWatermark(tier)) {
     return addWatermarkBatch(imageDataUrls, options);
   }
 
@@ -359,7 +367,7 @@ export async function addWatermarkBatchIfFree(
 export async function downloadImageWithWatermark(
   imageDataUrl: string,
   filename: string,
-  tier: 'free' | 'pro' | 'unlimited' | undefined,
+  tier: TierType | undefined,
   options: WatermarkOptions = {}
 ): Promise<void> {
   try {
@@ -453,9 +461,8 @@ export async function generateWatermarkPreview(
  * @returns Boolean indicating if watermark should be applied
  */
 export function shouldApplyWatermark(
-  tier: 'free' | 'pro' | 'unlimited' | undefined
+  tier: TierType | undefined
 ): boolean {
-  // Apply watermark to free tier and non-logged-in users (undefined)
-  // Only pro and unlimited users get watermark-free downloads
-  return tier !== 'pro' && tier !== 'unlimited';
+  // Use tierConfig to centralize tier-based logic
+  return shouldHaveWatermark(tier);
 }

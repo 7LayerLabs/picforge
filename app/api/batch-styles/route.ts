@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     // Initialize Gemini
     const genAI = new GoogleGenerativeAI(apiKey)
     const imageGenModel = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash-image-preview"
+      model: "gemini-3-pro-image"
     })
 
     const imagePart = {

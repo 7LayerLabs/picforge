@@ -9,6 +9,7 @@ import {
   downloadSVG,
   downloadPDF,
   downloadWebP,
+  downloadJPG,
   downloadICO,
   estimateFileSize,
   downloadExportPack,
@@ -90,10 +91,7 @@ export default function ExportModal({
           break
 
         case 'jpg':
-          const link = document.createElement('a')
-          link.href = finalImageData
-          link.download = `${fileName}.jpg`
-          link.click()
+          await downloadJPG(finalImageData, preset, `${fileName}.jpg`, quality / 100)
           break
 
         case 'webp':

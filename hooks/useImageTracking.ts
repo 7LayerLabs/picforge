@@ -5,10 +5,23 @@ import { useEffect, useCallback } from 'react';
 import { id } from '@instantdb/react';
 import { trackImageTransformation, trackFavoritePrompt, setUserProperties } from '@/lib/analytics';
 import { logger } from '@/lib/logger';
+import {
+  TierType,
+  getTierConfig,
+  hasReachedLimit as checkLimit,
+  getRemainingImages as calcRemaining,
+  getBatchLimit,
+  shouldHaveWatermark,
+  hasPriorityQueue,
+  needsMonthlyReset,
+  needsDailyReset,
+  getLimitDisplayText,
+} from '@/lib/tierConfig';
 
 /**
  * Hook to track user's image generation usage
  * Handles both authenticated and anonymous users
+ * Supports new tier system: free, starter, creator, pro, unlimited
  */
 export function useImageTracking() {
   let user = null;
@@ -95,6 +108,13 @@ export function useImageTracking() {
   }
 
   /**
+   * Get the user's current tier
+   */
+  const getTier = (): TierType => {
+    return (usage?.tier as TierType) || 'free';
+  };
+
+  /**
    * Track a new image generation
    */
   const trackImageGeneration = async (imageData: {
@@ -127,31 +147,46 @@ export function useImageTracking() {
 
     // Update usage count
     const usageId = usage?.id || id();
-    const currentCount = usage?.count || 0;
-    const lastReset = usage?.lastReset || now;
-    // IMPORTANT: Don't default tier to 'free' here - tier should only be set by:
-    // 1. Promo code redemption (usePromoCode.ts)
-    // 2. Stripe subscription (webhooks/stripe/route.ts)
-    // 3. Manual admin action
-    // If tier is undefined, it will be treated as 'free' for watermark purposes,
-    // but we don't want to explicitly save 'free' to the database
-    const tier = usage?.tier;
+    const tier = getTier();
+    const tierConfig = getTierConfig(tier);
 
-    // Check if we need to reset (24 hours for free tier or undefined/not-set)
-    const shouldReset = (tier === 'free' || !tier) && now - lastReset > 24 * 60 * 60 * 1000;
+    // Get current counts
+    let dailyCount = usage?.count || 0;
+    let monthlyCount = usage?.monthlyCount || 0;
+    let lastDailyReset = usage?.lastReset || now;
+    let lastMonthlyReset = usage?.monthlyReset || now;
 
-    const newCount = shouldReset ? 1 : currentCount + 1;
+    // Check if resets are needed
+    const shouldResetDaily = needsDailyReset(lastDailyReset);
+    const shouldResetMonthly = needsMonthlyReset(lastMonthlyReset);
 
-    // Build update object - only include tier if it already exists
+    // Apply resets
+    if (shouldResetDaily) {
+      dailyCount = 0;
+      lastDailyReset = now;
+    }
+
+    if (shouldResetMonthly) {
+      monthlyCount = 0;
+      lastMonthlyReset = now;
+    }
+
+    // Increment counts
+    const newDailyCount = dailyCount + 1;
+    const newMonthlyCount = monthlyCount + 1;
+
+    // Build update object
     const updateData: any = {
       userId: user.id,
-      count: newCount,
-      lastReset: shouldReset ? now : lastReset,
+      count: newDailyCount,
+      monthlyCount: newMonthlyCount,
+      lastReset: lastDailyReset,
+      monthlyReset: lastMonthlyReset,
     };
 
     // Only update tier if it's already set (don't set a default)
-    if (tier) {
-      updateData.tier = tier;
+    if (usage?.tier) {
+      updateData.tier = usage.tier;
     }
 
     await db.transact([
@@ -162,23 +197,24 @@ export function useImageTracking() {
     // Track in Google Analytics
     trackImageTransformation({
       prompt_category: imageData.category,
-      prompt_title: imageData.prompt.substring(0, 100), // Limit length
+      prompt_title: imageData.prompt.substring(0, 100),
       locked_composition: imageData.locked,
     });
 
     // Update user properties for segmentation
     setUserProperties({
-      user_tier: tier || 'free', // Default to 'free' for analytics only
+      user_tier: tier,
       has_generated_images: true,
-      total_transformations: newCount,
+      total_transformations: newMonthlyCount,
     });
 
-    // Send email notifications for free tier users (including users without a tier set)
-    if (tier === 'free' || !tier) {
-      const remaining = 20 - newCount;
+    // Send email notifications for free tier users
+    if (tier === 'free') {
+      const dailyLimit = tierConfig.limits.imagesPerDay || 10;
+      const remaining = dailyLimit - newDailyCount;
 
-      // Send warning at 5 images remaining
-      if (remaining === 5) {
+      // Send warning at 3 images remaining
+      if (remaining === 3) {
         sendEmailNotification('limit-warning', {
           userName: user.email?.split('@')[0],
           remainingImages: remaining,
@@ -187,7 +223,7 @@ export function useImageTracking() {
 
       // Send limit reached notification
       if (remaining === 0) {
-        const resetTime = new Date(lastReset + 24 * 60 * 60 * 1000);
+        const resetTime = new Date(lastDailyReset + 24 * 60 * 60 * 1000);
         const hoursUntilReset = Math.ceil((resetTime.getTime() - now) / (1000 * 60 * 60));
 
         let resetTimeText = '';
@@ -291,21 +327,53 @@ export function useImageTracking() {
    */
   const hasReachedLimit = () => {
     if (!user || !usage) return false;
-    if (usage.tier === 'pro' || usage.tier === 'unlimited') return false; // Pro and code users have unlimited
 
-    // Free tier: 20 images per day
-    return usage.count >= 20;
+    const tier = getTier();
+    const dailyCount = usage?.count || 0;
+    const monthlyCount = usage?.monthlyCount || 0;
+
+    return checkLimit(tier, dailyCount, monthlyCount);
   };
 
   /**
-   * Get remaining images for free tier
+   * Get remaining images for the user
    */
   const getRemainingImages = () => {
     if (!user || !usage) return null;
-    if (usage.tier === 'pro' || usage.tier === 'unlimited') return 'Unlimited';
 
-    const remaining = Math.max(0, 20 - usage.count);
-    return remaining;
+    const tier = getTier();
+    const dailyCount = usage?.count || 0;
+    const monthlyCount = usage?.monthlyCount || 0;
+
+    return calcRemaining(tier, dailyCount, monthlyCount);
+  };
+
+  /**
+   * Get the batch limit for the user's tier
+   */
+  const getUserBatchLimit = () => {
+    return getBatchLimit(getTier());
+  };
+
+  /**
+   * Check if user should have watermark on their images
+   */
+  const userShouldHaveWatermark = () => {
+    return shouldHaveWatermark(getTier());
+  };
+
+  /**
+   * Check if user has priority queue access
+   */
+  const userHasPriorityQueue = () => {
+    return hasPriorityQueue(getTier());
+  };
+
+  /**
+   * Get human-readable limit text
+   */
+  const getLimitText = () => {
+    return getLimitDisplayText(getTier());
   };
 
   /**
@@ -364,6 +432,7 @@ export function useImageTracking() {
   return {
     user,
     usage,
+    tier: getTier(),
     favorites: (favoritesData as any)?.favorites || [],
     imageHistory: (imagesData as any)?.images || [],
     trackImageGeneration,
@@ -372,6 +441,10 @@ export function useImageTracking() {
     deleteImage,
     hasReachedLimit,
     getRemainingImages,
+    getUserBatchLimit,
+    userShouldHaveWatermark,
+    userHasPriorityQueue,
+    getLimitText,
     migrateFavoritesFromLocalStorage,
     isLoading,
     error,

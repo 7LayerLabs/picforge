@@ -31,10 +31,18 @@ type Schema = {
   usage: {
     id: string;
     userId: string;
-    count: number;
-    lastReset: number;
-    tier: 'free' | 'pro' | 'unlimited';
+    count: number; // Current period usage count
+    monthlyCount: number; // Monthly usage for paid tiers
+    lastReset: number; // Last daily reset (for free tier)
+    monthlyReset: number; // Last monthly reset (for paid tiers)
+    tier: 'free' | 'starter' | 'creator' | 'pro' | 'unlimited';
     subscriptionId?: string;
+    // Tier limits reference:
+    // free: 10/day
+    // starter: 100/month
+    // creator: 500/month
+    // pro: 2000/month
+    // unlimited: unlimited
   };
   promoCodes: {
     id: string;

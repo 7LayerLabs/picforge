@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     // No server-side IP-based rate limiting - users manage their own limits through sign-in
 
     // Validate required environment variables
-    const geminiApiKey = requireEnvVar('GEMINI_API_KEY', 'Gemini Nano Banana image processing')
+    const geminiApiKey = requireEnvVar('GEMINI_API_KEY', 'Gemini 3 Pro Image processing')
 
     // Get image size in bytes
     let imageSize = 0
@@ -144,14 +144,14 @@ export async function POST(request: NextRequest) {
       additionalImageType = additionalImageFile.type
     }
 
-    // Use Gemini 2.5 Flash Image (Nano Banana) for image transformation
-    logger.info('Using Gemini 2.5 Flash Image (Nano Banana) for transformation...')
+    // Use Gemini 3 Pro Image for image transformation
+    logger.info('Using Gemini 3 Pro Image for transformation...')
 
     try {
       // Initialize Gemini with quality-focused configuration
       const genAI = new GoogleGenerativeAI(geminiApiKey)
       const model = genAI.getGenerativeModel({
-        model: 'gemini-2.5-flash-image',
+        model: 'gemini-3-pro-image',
         generationConfig: {
           temperature: 0.4,  // Lower temperature for more consistent, detailed results
           topP: 0.95,
@@ -218,7 +218,7 @@ Generate a high-fidelity, professional quality result with maximum sharpness and
         contentParts.push(imagePart)
       }
 
-      logger.info('Sending request to Gemini Nano Banana...', { prompt: transformPrompt, hasAdditionalImage: !!base64AdditionalImage })
+      logger.info('Sending request to Gemini 3 Pro Image...', { prompt: transformPrompt, hasAdditionalImage: !!base64AdditionalImage })
 
       // Generate image
       const result = await model.generateContent(contentParts)
@@ -234,7 +234,7 @@ Generate a high-fidelity, professional quality result with maximum sharpness and
           for (const part of candidate.content.parts) {
             if (part.inlineData && part.inlineData.data) {
               generatedImageData = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`
-              logger.info('✅ Image generated successfully with Nano Banana!')
+              logger.info('✅ Image generated successfully with Gemini 3 Pro Image!')
               break
             }
           }
@@ -248,22 +248,22 @@ Generate a high-fidelity, professional quality result with maximum sharpness and
 
       return NextResponse.json({
         success: true,
-        message: '🎉🍌 Image transformed successfully with Nano Banana!',
+        message: '🎉 Image transformed successfully with Gemini 3 Pro Image!',
         imageSize: imageSize,
         prompt: prompt,
         generatedImage: generatedImageData,
         generationStatus: 'success',
-        modelUsed: 'gemini-2.5-flash-image (Nano Banana)'
+        modelUsed: 'gemini-3-pro-image'
       })
 
     } catch (modelError: unknown) {
-      logger.error('Nano Banana transformation error:', modelError)
+      logger.error('Gemini 3 Pro Image transformation error:', modelError)
       const error = modelError as Error
 
       // Log the full error details for debugging
       logger.error('Full error object:', JSON.stringify(modelError, null, 2))
 
-      throw Errors.imageProcessingFailed(error.message || 'Nano Banana transformation failed')
+      throw Errors.imageProcessingFailed(error.message || 'Gemini 3 Pro Image transformation failed')
     }
 
   } catch (error) {
