@@ -41,7 +41,7 @@ export default function EditorPage() {
   const uploadSectionRef = useRef<HTMLDivElement>(null);
 
   // Use actual auth/tracking functionality
-  const { user, usage, trackImageGeneration, hasReachedLimit, getRemainingImages, saveFavorite, favorites } = useImageTracking()
+  const { user, usage, tier, trackImageGeneration, hasReachedLimit, getRemainingImages, saveFavorite, favorites } = useImageTracking()
 
   const [currentImage, setCurrentImage] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -412,6 +412,7 @@ export default function EditorPage() {
       }
 
       formData.append('prompt', finalPrompt)
+      formData.append('userTier', tier) // Pass user tier for model selection
 
       const response = await fetch('/api/process-image', {
         method: 'POST',
@@ -698,679 +699,670 @@ export default function EditorPage() {
     <div className="min-h-screen">
       {/* Main content */}
       <div className="p-2 sm:p-4 flex flex-col items-center">
-      {/* Zoom Modal */}
-      {zoomedImage && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center overflow-hidden transition-all duration-300"
-          onClick={() => {
-            setZoomedImage(null)
-            setZoomLevel(1)
-            setZoomPosition({ x: 0, y: 0 })
-          }}
-          onWheel={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            const delta = e.deltaY > 0 ? 0.9 : 1.1
-            setZoomLevel(prev => Math.min(Math.max(prev * delta, 0.5), 5))
-          }}
-        >
+        {/* Zoom Modal */}
+        {zoomedImage && (
           <div
-            className="relative"
-            style={{
-              transform: `scale(${zoomLevel}) translate(${zoomPosition.x}px, ${zoomPosition.y}px)`,
-              transition: 'transform 0.1s ease-out',
-              cursor: zoomLevel > 1 ? 'move' : 'zoom-in'
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center overflow-hidden transition-all duration-300"
+            onClick={() => {
+              setZoomedImage(null)
+              setZoomLevel(1)
+              setZoomPosition({ x: 0, y: 0 })
             }}
-            onClick={(e) => e.stopPropagation()}
-            onMouseDown={(e) => {
-              if (zoomLevel > 1) {
-                e.preventDefault()
-                const startX = e.clientX - zoomPosition.x
-                const startY = e.clientY - zoomPosition.y
-
-                const handleMouseMove = (moveEvent: MouseEvent) => {
-                  setZoomPosition({
-                    x: moveEvent.clientX - startX,
-                    y: moveEvent.clientY - startY
-                  })
-                }
-
-                const handleMouseUp = () => {
-                  document.removeEventListener('mousemove', handleMouseMove)
-                  document.removeEventListener('mouseup', handleMouseUp)
-                }
-
-                document.addEventListener('mousemove', handleMouseMove)
-                document.addEventListener('mouseup', handleMouseUp)
-              }
+            onWheel={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              const delta = e.deltaY > 0 ? 0.9 : 1.1
+              setZoomLevel(prev => Math.min(Math.max(prev * delta, 0.5), 5))
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={zoomedImage}
-              alt="Zoomed view"
-              className="max-w-[90vw] max-h-[90vh] object-contain select-none"
-              draggable={false}
-            />
-          </div>
-
-          {/* Zoom controls overlay */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-black/50 text-white px-6 py-3 rounded-full flex items-center gap-4 shadow-2xl border border-white/20">
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                setZoomLevel(prev => Math.max(prev - 0.25, 0.5))
+            <div
+              className="relative"
+              style={{
+                transform: `scale(${zoomLevel}) translate(${zoomPosition.x}px, ${zoomPosition.y}px)`,
+                transition: 'transform 0.1s ease-out',
+                cursor: zoomLevel > 1 ? 'move' : 'zoom-in'
               }}
-              className="hover:text-teal-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
-            >
-              −
-            </button>
-            <span className="min-w-[60px] text-center font-medium">{Math.round(zoomLevel * 100)}%</span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                setZoomLevel(prev => Math.min(prev + 0.25, 5))
-              }}
-              className="hover:text-teal-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
-            >
-              +
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                setZoomLevel(1)
-                setZoomPosition({ x: 0, y: 0 })
-              }}
-              className="ml-2 text-sm hover:text-teal-400 transition-all hover:scale-105 border-l pl-3 border-gray-600 active:scale-95"
-            >
-              Reset
-            </button>
-          </div>
-
-          {/* Instructions */}
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-black/50 text-white text-sm px-5 py-2.5 rounded-full shadow-xl border border-white/20 animate-fade-in">
-            Scroll to zoom • {zoomLevel > 1 ? 'Drag to pan' : 'Click to close'} • ESC to exit
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-6xl w-full relative z-10 animate-fade-in-up">
-        {!currentImage && (
-          <>
-            {/* Page Header */}
-            <div className="text-center mb-6 px-4 pt-4">
-              <h1 className="font-heading text-5xl md:text-6xl font-black text-black mb-3 leading-tight tracking-tight uppercase border-b-4 border-brutal-yellow inline-block pb-2">
-                The Forge
-              </h1>
-              <p className="text-lg md:text-xl text-black max-w-3xl mx-auto mb-4 leading-snug font-bold tracking-tight">
-                <span className="text-brutal-pink">(re)Imagine.</span> <span className="text-brutal-cyan">Break Reality.</span> <span className="bg-brutal-yellow px-2">Just Create.</span>
-              </p>
-            </div>
-          </>
-        )}
-
-        {currentImage && (
-          <div className="flex justify-end mb-8 px-4">
-            <button
-              type="button"
-              onClick={handleReset}
-              className="px-6 py-3 text-gray-600 border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-2 font-medium"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              Start Over
-            </button>
-          </div>
-        )}
-
-        {!currentImage ? (
-          <div ref={uploadSectionRef} className="px-4 pb-4">
-            {/* Main Upload Section - Hero CTA */}
-            <div className="max-w-3xl mx-auto mb-4">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                style={{ display: 'none' }}
-                id="image-upload-input"
-              />
-              <div
-                onClick={() => document.getElementById('image-upload-input')?.click()}
-                onDragOver={(e) => {
+              onClick={(e) => e.stopPropagation()}
+              onMouseDown={(e) => {
+                if (zoomLevel > 1) {
                   e.preventDefault()
-                  setIsDraggingMain(true)
-                }}
-                onDragLeave={(e) => {
-                  e.preventDefault()
-                  setIsDraggingMain(false)
-                }}
-                onDrop={async (e) => {
-                  e.preventDefault()
-                  setIsDraggingMain(false)
-                  const files = e.dataTransfer.files
-                  if (files && files[0] && files[0].type.startsWith('image/')) {
-                    const file = files[0]
-                    setSelectedFile(file)
-                    try {
-                      const imageData = await convertImageToSupported(file)
-                      setCurrentImage(imageData)
-                      setOriginalImage(imageData)
-                      setHistory([{
-                        prompt: 'Original Image',
-                        image: imageData,
-                        timestamp: new Date(),
-                        isOriginal: true
-                      }])
-                      if (promptOfDayActive) {
-                        setInstructions(PROMPT_OF_THE_DAY)
-                      }
-                    } catch (error) {
-                      logger.error('Error converting dropped image:', error)
-                      alert('Failed to process dropped image. Please try a different format.')
-                    }
+                  const startX = e.clientX - zoomPosition.x
+                  const startY = e.clientY - zoomPosition.y
+
+                  const handleMouseMove = (moveEvent: MouseEvent) => {
+                    setZoomPosition({
+                      x: moveEvent.clientX - startX,
+                      y: moveEvent.clientY - startY
+                    })
                   }
+
+                  const handleMouseUp = () => {
+                    document.removeEventListener('mousemove', handleMouseMove)
+                    document.removeEventListener('mouseup', handleMouseUp)
+                  }
+
+                  document.addEventListener('mousemove', handleMouseMove)
+                  document.addEventListener('mouseup', handleMouseUp)
+                }
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={zoomedImage}
+                alt="Zoomed view"
+                className="max-w-[90vw] max-h-[90vh] object-contain select-none"
+                draggable={false}
+              />
+            </div>
+
+            {/* Zoom controls overlay */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-black/50 text-white px-6 py-3 rounded-full flex items-center gap-4 shadow-2xl border border-white/20">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setZoomLevel(prev => Math.max(prev - 0.25, 0.5))
                 }}
-                className={`flex flex-col items-center justify-center px-6 py-12 rounded-xl cursor-pointer transition-all duration-200 border-2 hover:scale-[1.01] ${
-                  isDraggingMain
+                className="hover:text-teal-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
+              >
+                −
+              </button>
+              <span className="min-w-[60px] text-center font-medium">{Math.round(zoomLevel * 100)}%</span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setZoomLevel(prev => Math.min(prev + 0.25, 5))
+                }}
+                className="hover:text-teal-400 transition-all hover:scale-110 text-xl px-2 active:scale-95"
+              >
+                +
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setZoomLevel(1)
+                  setZoomPosition({ x: 0, y: 0 })
+                }}
+                className="ml-2 text-sm hover:text-teal-400 transition-all hover:scale-105 border-l pl-3 border-gray-600 active:scale-95"
+              >
+                Reset
+              </button>
+            </div>
+
+            {/* Instructions */}
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-black/50 text-white text-sm px-5 py-2.5 rounded-full shadow-xl border border-white/20 animate-fade-in">
+              Scroll to zoom • {zoomLevel > 1 ? 'Drag to pan' : 'Click to close'} • ESC to exit
+            </div>
+          </div>
+        )}
+
+        <div className="max-w-6xl w-full relative z-10 animate-fade-in-up">
+          {!currentImage && (
+            <>
+              {/* Page Header */}
+              <div className="text-center mb-6 px-4 pt-4">
+                <h1 className="font-heading text-5xl md:text-6xl font-black text-black mb-3 leading-tight tracking-tight uppercase border-b-4 border-brutal-yellow inline-block pb-2">
+                  The Forge
+                </h1>
+                <p className="text-lg md:text-xl text-black max-w-3xl mx-auto mb-4 leading-snug font-bold tracking-tight">
+                  <span className="text-brutal-pink">(re)Imagine.</span> <span className="text-brutal-cyan">Break Reality.</span> <span className="bg-brutal-yellow px-2">Just Create.</span>
+                </p>
+              </div>
+            </>
+          )}
+
+          {currentImage && (
+            <div className="flex justify-end mb-8 px-4">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="px-6 py-3 text-gray-600 border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center gap-2 font-medium"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Start Over
+              </button>
+            </div>
+          )}
+
+          {!currentImage ? (
+            <div ref={uploadSectionRef} className="px-4 pb-4">
+              {/* Main Upload Section - Hero CTA */}
+              <div className="max-w-3xl mx-auto mb-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  style={{ display: 'none' }}
+                  id="image-upload-input"
+                />
+                <div
+                  onClick={() => document.getElementById('image-upload-input')?.click()}
+                  onDragOver={(e) => {
+                    e.preventDefault()
+                    setIsDraggingMain(true)
+                  }}
+                  onDragLeave={(e) => {
+                    e.preventDefault()
+                    setIsDraggingMain(false)
+                  }}
+                  onDrop={async (e) => {
+                    e.preventDefault()
+                    setIsDraggingMain(false)
+                    const files = e.dataTransfer.files
+                    if (files && files[0] && files[0].type.startsWith('image/')) {
+                      const file = files[0]
+                      setSelectedFile(file)
+                      try {
+                        const imageData = await convertImageToSupported(file)
+                        setCurrentImage(imageData)
+                        setOriginalImage(imageData)
+                        setHistory([{
+                          prompt: 'Original Image',
+                          image: imageData,
+                          timestamp: new Date(),
+                          isOriginal: true
+                        }])
+                        if (promptOfDayActive) {
+                          setInstructions(PROMPT_OF_THE_DAY)
+                        }
+                      } catch (error) {
+                        logger.error('Error converting dropped image:', error)
+                        alert('Failed to process dropped image. Please try a different format.')
+                      }
+                    }
+                  }}
+                  className={`flex flex-col items-center justify-center px-6 py-12 rounded-xl cursor-pointer transition-all duration-200 border-2 hover:scale-[1.01] ${isDraggingMain
                     ? 'bg-teal-50 border-teal-500 shadow-lg'
                     : 'bg-white hover:bg-gray-50 border-gray-300 shadow-md'
-                }`}
-                style={{ boxShadow: isDraggingMain ? '0 4px 12px rgba(20,184,166,0.2)' : '0 2px 8px rgba(0,0,0,0.08)' }}
-              >
-                <div className="flex flex-col items-center gap-3">
-                  <svg className={`w-16 h-16 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-gray-900'}`}>
-                    <div className="text-2xl font-extrabold mb-1 leading-tight tracking-tight">
-                      {isDraggingMain ? 'Drop to Upload' : 'Upload Your Image'}
-                    </div>
-                    <div className="text-base font-medium opacity-70 leading-snug">
-                      {isDraggingMain ? 'Release to start creating' : 'Drag & drop, click, or paste (Ctrl+V)'}
+                    }`}
+                  style={{ boxShadow: isDraggingMain ? '0 4px 12px rgba(20,184,166,0.2)' : '0 2px 8px rgba(0,0,0,0.08)' }}
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <svg className={`w-16 h-16 ${isDraggingMain ? 'text-teal-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <div className={`text-center ${isDraggingMain ? 'text-teal-600' : 'text-gray-900'}`}>
+                      <div className="text-2xl font-extrabold mb-1 leading-tight tracking-tight">
+                        {isDraggingMain ? 'Drop to Upload' : 'Upload Your Image'}
+                      </div>
+                      <div className="text-base font-medium opacity-70 leading-snug">
+                        {isDraggingMain ? 'Release to start creating' : 'Drag & drop, click, or paste (Ctrl+V)'}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Prompt of the Day - Compact Banner */}
-            <div className="max-w-3xl mx-auto mb-4">
-              <div className={`border-2 rounded-lg p-4 transition-all duration-300 ${
-                promptOfDayActive
+              {/* Prompt of the Day - Compact Banner */}
+              <div className="max-w-3xl mx-auto mb-4">
+                <div className={`border-2 rounded-lg p-4 transition-all duration-300 ${promptOfDayActive
                   ? 'bg-purple-50 border-purple-400 shadow-md'
                   : 'bg-teal-50 border-teal-400 shadow-sm'
-              }`}
-                style={{ boxShadow: promptOfDayActive ? '0 3px 10px rgba(168,85,247,0.15)' : '0 2px 6px rgba(20,184,166,0.12)' }}
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl leading-none">✨</span>
-                    <div>
-                      <h2 className="font-black text-lg text-gray-900 leading-tight tracking-tight">Prompt of the Day</h2>
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-teal-300 rounded-full text-[10px] font-bold text-teal-700 mt-1">
-                        {dailyPrompt.category}
+                  }`}
+                  style={{ boxShadow: promptOfDayActive ? '0 3px 10px rgba(168,85,247,0.15)' : '0 2px 6px rgba(20,184,166,0.12)' }}
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl leading-none">✨</span>
+                      <div>
+                        <h2 className="font-black text-lg text-gray-900 leading-tight tracking-tight">Prompt of the Day</h2>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-teal-300 rounded-full text-[10px] font-bold text-teal-700 mt-1">
+                          {dailyPrompt.category}
+                        </span>
+                      </div>
+                    </div>
+                    {promptOfDayActive && (
+                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-500 text-white text-xs font-bold rounded-full animate-pulse shadow-sm">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                        LIVE
                       </span>
-                    </div>
-                  </div>
-                  {promptOfDayActive && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-500 text-white text-xs font-bold rounded-full animate-pulse shadow-sm">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                      </svg>
-                      LIVE
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-800 italic mb-3 leading-snug font-medium">
-                  &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(PROMPT_OF_THE_DAY);
-                      setCopiedPrompt(true);
-                      setTimeout(() => setCopiedPrompt(false), 2000);
-                    }}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${
-                      copiedPrompt ? 'bg-teal-600 shadow-sm' : 'bg-teal-500 hover:bg-teal-600 shadow-sm'
-                    }`}
-                    style={{ boxShadow: '0 2px 4px rgba(20,184,166,0.2)' }}
-                  >
-                    {copiedPrompt ? (
-                      <>
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Copied
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                        Copy
-                      </>
                     )}
-                  </button>
-                  <button
-                    onClick={async () => {
-                      if (isPromptFavorited) {
-                        alert('This prompt is already in your favorites!');
-                      } else {
-                        await saveFavorite(PROMPT_OF_THE_DAY, dailyPrompt.category);
-                        setIsPromptFavorited(true);
-                      }
-                    }}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${
-                      isPromptFavorited ? 'bg-purple-600 hover:bg-purple-700' : 'bg-teal-500 hover:bg-teal-600'
-                    }`}
-                    style={{ boxShadow: isPromptFavorited ? '0 2px 4px rgba(168,85,247,0.2)' : '0 2px 4px rgba(20,184,166,0.2)' }}
-                    title={isPromptFavorited ? 'Already in favorites' : 'Add to favorites'}
-                  >
-                    <svg className="w-3.5 h-3.5" fill={isPromptFavorited ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    {isPromptFavorited ? 'Saved' : 'Save'}
-                  </button>
-                  <button
-                    onClick={() => {
-                      setPromptOfDayActive(!promptOfDayActive);
-                      if (!promptOfDayActive) {
-                        setInstructions(PROMPT_OF_THE_DAY);
-                      } else {
-                        setInstructions('');
-                      }
-                    }}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${
-                      promptOfDayActive ? 'bg-purple-500 hover:bg-purple-600' : 'bg-gray-600 hover:bg-gray-700'
-                    }`}
-                    style={{ boxShadow: promptOfDayActive ? '0 2px 4px rgba(168,85,247,0.2)' : '0 2px 4px rgba(0,0,0,0.15)' }}
-                  >
-                    {promptOfDayActive ? (
-                      <>
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Active
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                        Try It
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Need a Background? CTA */}
-            <div className="max-w-3xl mx-auto mb-6">
-              <Link href="/canvas" className="block p-3 bg-purple-600 rounded-lg border-2 border-purple-700 hover:border-purple-800 hover:scale-[1.01] transition-all duration-200 group shadow-md hover:shadow-lg">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl leading-none">🎨</span>
-                    <div>
-                      <h3 className="text-base font-black text-white leading-tight tracking-tight">Need a Background?</h3>
-                      <p className="text-xs text-purple-100 font-medium leading-tight mt-0.5">Generate custom AI backgrounds with Canvas</p>
-                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-white font-bold group-hover:gap-2.5 transition-all text-sm">
-                    <span>Try Canvas</span>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
-              {/* Left Sidebar - Templates & Batch Generator (Hidden on Mobile) */}
-              <div className="hidden lg:flex lg:w-[320px] flex-col space-y-3 animate-slide-in-left">
-                <div className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-lg sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
-                  <h2 className="text-lg font-bold mb-4 bg-teal-600 bg-clip-text text-transparent">
-                    🎨 Creative Studio
-                  </h2>
+                  <p className="text-sm text-gray-800 italic mb-3 leading-snug font-medium">
+                    &ldquo;{PROMPT_OF_THE_DAY}&rdquo;
+                  </p>
 
-                  {/* Template Selector */}
-                  <TemplateSelector
-                    onSelectTemplate={handleTemplateSelect}
-                    currentImage={currentImage}
-                  />
-
-                  {/* Batch Style Generator */}
-                  <div className="mt-4">
-                    <BatchStyleGenerator
-                      currentImage={currentImage}
-                      onBatchGenerated={handleBatchGenerated}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Center - Main Image and Form */}
-              <div className="flex-1 flex flex-col space-y-2 sm:space-y-3">
-                {/* Main Image Display with Before/After Toggle */}
-                <div className="space-y-2">
-                  {/* View Toggle Buttons */}
-                  {currentImage && originalImage && currentImage !== originalImage && (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setShowBeforeAfter(false)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg ${
-                          !showBeforeAfter
-                            ? 'bg-teal-600 text-white'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(PROMPT_OF_THE_DAY);
+                        setCopiedPrompt(true);
+                        setTimeout(() => setCopiedPrompt(false), 2000);
+                      }}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${copiedPrompt ? 'bg-teal-600 shadow-sm' : 'bg-teal-500 hover:bg-teal-600 shadow-sm'
                         }`}
-                      >
-                        Current View
-                      </button>
-                      <button
-                        onClick={() => setShowBeforeAfter(true)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg flex items-center gap-2 ${
-                          showBeforeAfter
-                            ? 'bg-teal-600 text-white'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h8m-4-3v3m0 0v3m0-3h3m-3 0H5" />
-                        </svg>
-                        Before/After
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Image Display Area */}
-                  {showBeforeAfter && originalImage && currentImage && currentImage !== originalImage ? (
-                    <BeforeAfterSlider
-                      beforeImage={originalImage}
-                      afterImage={currentImage}
-                      beforeLabel="Original"
-                      afterLabel="Edited"
-                      className="w-full"
-                    />
-                  ) : (
-                    <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 rounded-xl overflow-hidden bg-gray-50 shadow-inner transition-all duration-300 card-smooth hover-lift">
-                      {currentImage && (
+                      style={{ boxShadow: '0 2px 4px rgba(20,184,166,0.2)' }}
+                    >
+                      {copiedPrompt ? (
                         <>
-                          <NextImage
-                            src={currentImage}
-                            alt="Current image"
-                            fill
-                            className="object-contain cursor-zoom-in"
-                            onClick={() => openZoom(currentImage)}
-                          />
-                          <button
-                            onClick={() => openZoom(currentImage)}
-                            className="absolute top-2 left-2 glass-dark text-white p-2.5 rounded-lg hover:scale-110 transition-all duration-200 shadow-lg border border-white/10 active:scale-95 hover-grow button-press"
-                            title="Click to zoom"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                            </svg>
-                          </button>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                          Copied
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          Copy
                         </>
                       )}
-                      {history.length > 0 && (
-                        <div className="absolute top-2 right-2 glass-dark text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg border border-white/10">
-                          Edit #{history.length}
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if (isPromptFavorited) {
+                          alert('This prompt is already in your favorites!');
+                        } else {
+                          await saveFavorite(PROMPT_OF_THE_DAY, dailyPrompt.category);
+                          setIsPromptFavorited(true);
+                        }
+                      }}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${isPromptFavorited ? 'bg-purple-600 hover:bg-purple-700' : 'bg-teal-500 hover:bg-teal-600'
+                        }`}
+                      style={{ boxShadow: isPromptFavorited ? '0 2px 4px rgba(168,85,247,0.2)' : '0 2px 4px rgba(20,184,166,0.2)' }}
+                      title={isPromptFavorited ? 'Already in favorites' : 'Add to favorites'}
+                    >
+                      <svg className="w-3.5 h-3.5" fill={isPromptFavorited ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      {isPromptFavorited ? 'Saved' : 'Save'}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setPromptOfDayActive(!promptOfDayActive);
+                        if (!promptOfDayActive) {
+                          setInstructions(PROMPT_OF_THE_DAY);
+                        } else {
+                          setInstructions('');
+                        }
+                      }}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-bold rounded-md transition-all hover:scale-105 active:scale-95 ${promptOfDayActive ? 'bg-purple-500 hover:bg-purple-600' : 'bg-gray-600 hover:bg-gray-700'
+                        }`}
+                      style={{ boxShadow: promptOfDayActive ? '0 2px 4px rgba(168,85,247,0.2)' : '0 2px 4px rgba(0,0,0,0.15)' }}
+                    >
+                      {promptOfDayActive ? (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                          Active
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                          </svg>
+                          Try It
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Need a Background? CTA */}
+              <div className="max-w-3xl mx-auto mb-6">
+                <Link href="/canvas" className="block p-3 bg-purple-600 rounded-lg border-2 border-purple-700 hover:border-purple-800 hover:scale-[1.01] transition-all duration-200 group shadow-md hover:shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl leading-none">🎨</span>
+                      <div>
+                        <h3 className="text-base font-black text-white leading-tight tracking-tight">Need a Background?</h3>
+                        <p className="text-xs text-purple-100 font-medium leading-tight mt-0.5">Generate custom AI backgrounds with Canvas</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-white font-bold group-hover:gap-2.5 transition-all text-sm">
+                      <span>Try Canvas</span>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
+                {/* Left Sidebar - Templates & Batch Generator (Hidden on Mobile) */}
+                <div className="hidden lg:flex lg:w-[320px] flex-col space-y-3 animate-slide-in-left">
+                  <div className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-lg sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+                    <h2 className="text-lg font-bold mb-4 bg-teal-600 bg-clip-text text-transparent">
+                      🎨 Creative Studio
+                    </h2>
+
+                    {/* Template Selector */}
+                    <TemplateSelector
+                      onSelectTemplate={handleTemplateSelect}
+                      currentImage={currentImage}
+                    />
+
+                    {/* Batch Style Generator */}
+                    <div className="mt-4">
+                      <BatchStyleGenerator
+                        currentImage={currentImage}
+                        onBatchGenerated={handleBatchGenerated}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Center - Main Image and Form */}
+                <div className="flex-1 flex flex-col space-y-2 sm:space-y-3">
+                  {/* Main Image Display with Before/After Toggle */}
+                  <div className="space-y-2">
+                    {/* View Toggle Buttons */}
+                    {currentImage && originalImage && currentImage !== originalImage && (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setShowBeforeAfter(false)}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg ${!showBeforeAfter
+                            ? 'bg-teal-600 text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                        >
+                          Current View
+                        </button>
+                        <button
+                          onClick={() => setShowBeforeAfter(true)}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg flex items-center gap-2 ${showBeforeAfter
+                            ? 'bg-teal-600 text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h8m-4-3v3m0 0v3m0-3h3m-3 0H5" />
+                          </svg>
+                          Before/After
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Image Display Area */}
+                    {showBeforeAfter && originalImage && currentImage && currentImage !== originalImage ? (
+                      <BeforeAfterSlider
+                        beforeImage={originalImage}
+                        afterImage={currentImage}
+                        beforeLabel="Original"
+                        afterLabel="Edited"
+                        className="w-full"
+                      />
+                    ) : (
+                      <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] border-2 border-gray-200 rounded-xl overflow-hidden bg-gray-50 shadow-inner transition-all duration-300 card-smooth hover-lift">
+                        {currentImage && (
+                          <>
+                            <NextImage
+                              src={currentImage}
+                              alt="Current image"
+                              fill
+                              className="object-contain cursor-zoom-in"
+                              onClick={() => openZoom(currentImage)}
+                            />
+                            <button
+                              onClick={() => openZoom(currentImage)}
+                              className="absolute top-2 left-2 glass-dark text-white p-2.5 rounded-lg hover:scale-110 transition-all duration-200 shadow-lg border border-white/10 active:scale-95 hover-grow button-press"
+                              title="Click to zoom"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                              </svg>
+                            </button>
+                          </>
+                        )}
+                        {history.length > 0 && (
+                          <div className="absolute top-2 right-2 glass-dark text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg border border-white/10">
+                            Edit #{history.length}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Watermark Preview Notice (Free Tier Only) */}
+                  {/* Watermark notice disabled */}
+
+                  {/* Input Form */}
+                  <form onSubmit={handleSubmit} className="w-full space-y-2 sm:space-y-3">
+                    {/* Mobile Advanced Options Dropdown (Only visible on mobile) */}
+                    <div className="lg:hidden">
+                      <button
+                        type="button"
+                        onClick={() => setShowMobileOptions(!showMobileOptions)}
+                        className="w-full flex items-center justify-between p-3 bg-teal-50 border-2 border-teal-200 rounded-xl hover:bg-teal-100 transition-all"
+                      >
+                        <span className="flex items-center gap-2 text-sm font-semibold text-teal-900">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                          </svg>
+                          Magic Templates & Advanced Options
+                        </span>
+                        <svg
+                          className={`w-5 h-5 text-teal-600 transition-transform duration-200 ${showMobileOptions ? 'rotate-180' : ''}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+
+                      {/* Collapsible Content */}
+                      {showMobileOptions && (
+                        <div className="mt-3 p-4 bg-white rounded-xl border-2 border-gray-200 shadow-lg space-y-4 animate-slide-down">
+                          <h3 className="text-base font-bold text-teal-600 mb-3">
+                            🎨 Creative Studio
+                          </h3>
+
+                          {/* Template Selector */}
+                          <TemplateSelector
+                            onSelectTemplate={(prompt, name) => {
+                              handleTemplateSelect(prompt, name)
+                              setShowMobileOptions(false) // Auto-close after selection
+                            }}
+                            currentImage={currentImage}
+                          />
+
+                          {/* Batch Style Generator */}
+                          <div className="mt-4 pt-4 border-t border-gray-200">
+                            <BatchStyleGenerator
+                              currentImage={currentImage}
+                              onBatchGenerated={(images) => {
+                                handleBatchGenerated(images)
+                                setShowMobileOptions(false) // Auto-close after generation
+                              }}
+                            />
+                          </div>
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
 
-                {/* Watermark Preview Notice (Free Tier Only) */}
-                {/* Watermark notice disabled */}
-
-                {/* Input Form */}
-                <form onSubmit={handleSubmit} className="w-full space-y-2 sm:space-y-3">
-                {/* Mobile Advanced Options Dropdown (Only visible on mobile) */}
-                <div className="lg:hidden">
-                  <button
-                    type="button"
-                    onClick={() => setShowMobileOptions(!showMobileOptions)}
-                    className="w-full flex items-center justify-between p-3 bg-teal-50 border-2 border-teal-200 rounded-xl hover:bg-teal-100 transition-all"
-                  >
-                    <span className="flex items-center gap-2 text-sm font-semibold text-teal-900">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                      </svg>
-                      Magic Templates & Advanced Options
-                    </span>
-                    <svg
-                      className={`w-5 h-5 text-teal-600 transition-transform duration-200 ${showMobileOptions ? 'rotate-180' : ''}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {/* Collapsible Content */}
-                  {showMobileOptions && (
-                    <div className="mt-3 p-4 bg-white rounded-xl border-2 border-gray-200 shadow-lg space-y-4 animate-slide-down">
-                      <h3 className="text-base font-bold text-teal-600 mb-3">
-                        🎨 Creative Studio
-                      </h3>
-
-                      {/* Template Selector */}
-                      <TemplateSelector
-                        onSelectTemplate={(prompt, name) => {
-                          handleTemplateSelect(prompt, name)
-                          setShowMobileOptions(false) // Auto-close after selection
-                        }}
-                        currentImage={currentImage}
+                    <div className="relative">
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-sm font-medium text-gray-700">
+                          Editing Instructions {instructions && <span className="text-teal-500">✏️ (Edit & customize below)</span>}
+                        </label>
+                        {user && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-50 border border-teal-200 rounded-full text-xs font-medium text-teal-700">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {getRemainingImages()} remaining today
+                          </span>
+                        )}
+                      </div>
+                      <textarea
+                        value={instructions}
+                        onChange={(e) => setInstructions(e.target.value)}
+                        placeholder="Enter editing instructions or select a template above..."
+                        rows={3}
+                        className="w-full px-4 sm:px-5 py-3 border-2 border-gray-200 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm transition-all duration-200 hover:shadow-lg placeholder-gray-400 font-medium focus-smooth resize-none"
+                        disabled={isSubmitting}
                       />
 
-                      {/* Batch Style Generator */}
-                      <div className="mt-4 pt-4 border-t border-gray-200">
-                        <BatchStyleGenerator
-                          currentImage={currentImage}
-                          onBatchGenerated={(images) => {
-                            handleBatchGenerated(images)
-                            setShowMobileOptions(false) // Auto-close after generation
-                          }}
+                      {/* Lock Composition Checkbox */}
+                      <div className="mt-2 flex items-center gap-2 px-2">
+                        <input
+                          type="checkbox"
+                          id="lock-composition"
+                          checked={lockComposition}
+                          onChange={(e) => setLockComposition(e.target.checked)}
+                          className="w-4 h-4 text-teal-500 border-gray-300 rounded focus:ring-teal-500 focus:ring-2 cursor-pointer"
+                          disabled={isSubmitting}
                         />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium text-gray-700">
-                      Editing Instructions {instructions && <span className="text-teal-500">✏️ (Edit & customize below)</span>}
-                    </label>
-                    {user && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-50 border border-teal-200 rounded-full text-xs font-medium text-teal-700">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        {getRemainingImages()} remaining today
-                      </span>
-                    )}
-                  </div>
-                  <textarea
-                    value={instructions}
-                    onChange={(e) => setInstructions(e.target.value)}
-                    placeholder="Enter editing instructions or select a template above..."
-                    rows={3}
-                    className="w-full px-4 sm:px-5 py-3 border-2 border-gray-200 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm transition-all duration-200 hover:shadow-lg placeholder-gray-400 font-medium focus-smooth resize-none"
-                    disabled={isSubmitting}
-                  />
-
-                  {/* Lock Composition Checkbox */}
-                  <div className="mt-2 flex items-center gap-2 px-2">
-                    <input
-                      type="checkbox"
-                      id="lock-composition"
-                      checked={lockComposition}
-                      onChange={(e) => setLockComposition(e.target.checked)}
-                      className="w-4 h-4 text-teal-500 border-gray-300 rounded focus:ring-teal-500 focus:ring-2 cursor-pointer"
-                      disabled={isSubmitting}
-                    />
-                    <label
-                      htmlFor="lock-composition"
-                      className="text-sm text-gray-700 cursor-pointer select-none flex items-center gap-1.5"
-                    >
-                      <span className="font-medium">🔒 Lock Composition</span>
-                      <span className="text-xs text-gray-500">- Keep everything else the same, only apply my edit</span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Fusion Dock - Additional Image Upload Section */}
-                <div className="relative">
-                  <span className="absolute -top-2 left-4 bg-white px-2 text-xs font-bold text-teal-600 z-10">🔥 FUSION DOCK</span>
-                  <div
-                    className={`border-2 border-dashed rounded-xl p-2 sm:p-3 transition-all duration-300 ${
-                    isDraggingAdditional
-                      ? 'border-teal-500 bg-teal-50'
-                      : 'border-gray-300 hover:border-gray-400'
-                  }`}
-                  onDragOver={handleAdditionalDragOver}
-                  onDragLeave={handleAdditionalDragLeave}
-                  onDrop={handleAdditionalDrop}
-                >
-                  {!additionalImagePreview ? (
-                    <div className="text-center">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleAdditionalImageUpload}
-                        style={{ display: 'none' }}
-                        id="additional-image-upload"
-                      />
-                      <div className="py-1.5">
-                        <svg className="w-5 h-5 mx-auto text-gray-400 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                        <p className="text-[9px] font-medium text-gray-700 mb-0.5">
-                          {isDraggingAdditional ? 'Drop image here' : 'Click, Drop or Paste'}
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => document.getElementById('additional-image-upload')?.click()}
-                          className="px-2 py-0.5 text-[9px] bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                        <label
+                          htmlFor="lock-composition"
+                          className="text-sm text-gray-700 cursor-pointer select-none flex items-center gap-1.5"
                         >
-                          Browse Files
-                        </button>
-                        <p className="text-[8px] text-gray-500 mt-0.5">Blend, combine, or fuse images</p>
+                          <span className="font-medium">🔒 Lock Composition</span>
+                          <span className="text-xs text-gray-500">- Keep everything else the same, only apply my edit</span>
+                        </label>
                       </div>
-                      </div>
-                    ) : (
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="relative w-20 h-20 rounded overflow-hidden bg-gray-50">
-                          <NextImage
-                            src={additionalImagePreview}
-                            alt="Additional image"
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">Additional Image Added</p>
-                          <p className="text-xs text-gray-500">Will be incorporated into the edit</p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={removeAdditionalImage}
-                        className="p-2 text-coral-600 hover:bg-amber-50 rounded-lg transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
                     </div>
-                  )}
-                  </div>
+
+                    {/* Fusion Dock - Additional Image Upload Section */}
+                    <div className="relative">
+                      <span className="absolute -top-2 left-4 bg-white px-2 text-xs font-bold text-teal-600 z-10">🔥 FUSION DOCK</span>
+                      <div
+                        className={`border-2 border-dashed rounded-xl p-2 sm:p-3 transition-all duration-300 ${isDraggingAdditional
+                          ? 'border-teal-500 bg-teal-50'
+                          : 'border-gray-300 hover:border-gray-400'
+                          }`}
+                        onDragOver={handleAdditionalDragOver}
+                        onDragLeave={handleAdditionalDragLeave}
+                        onDrop={handleAdditionalDrop}
+                      >
+                        {!additionalImagePreview ? (
+                          <div className="text-center">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleAdditionalImageUpload}
+                              style={{ display: 'none' }}
+                              id="additional-image-upload"
+                            />
+                            <div className="py-1.5">
+                              <svg className="w-5 h-5 mx-auto text-gray-400 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                              </svg>
+                              <p className="text-[9px] font-medium text-gray-700 mb-0.5">
+                                {isDraggingAdditional ? 'Drop image here' : 'Click, Drop or Paste'}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => document.getElementById('additional-image-upload')?.click()}
+                                className="px-2 py-0.5 text-[9px] bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                              >
+                                Browse Files
+                              </button>
+                              <p className="text-[8px] text-gray-500 mt-0.5">Blend, combine, or fuse images</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="relative w-20 h-20 rounded overflow-hidden bg-gray-50">
+                                <NextImage
+                                  src={additionalImagePreview}
+                                  alt="Additional image"
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium">Additional Image Added</p>
+                                <p className="text-xs text-gray-500">Will be incorporated into the edit</p>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={removeAdditionalImage}
+                              className="p-2 text-coral-600 hover:bg-amber-50 rounded-lg transition-colors"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2 items-center">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting || !instructions.trim()}
+                        className="px-8 py-4 bg-brutal-pink hover:bg-brutal-cyan text-white border-4 border-black transition-all disabled:bg-gray-400 disabled:border-gray-500 text-sm font-black uppercase shadow-brutal hover:shadow-brutal-hover hover:translate-x-1 hover:translate-y-1 min-w-[200px]"
+                      >
+                        {isSubmitting ? 'Processing...' : 'Generate'}
+                      </button>
+                      {instructions && !isSubmitting && (
+                        <p className="text-xs text-black text-center font-bold">
+                          Click to generate
+                        </p>
+                      )}
+                    </div>
+
+                    {submitMessage && (
+                      <div className={`text-center p-3 rounded-lg text-sm font-medium shadow-md transition-all duration-300 animate-fadeIn ${submitMessage.includes('Error') || submitMessage.includes('Failed')
+                        ? 'bg-purple-50 text-purple-700'
+                        : submitMessage.includes('not available')
+                          ? 'bg-purple-50 text-purple-700'
+                          : 'bg-teal-50 text-teal-700'
+                        }`}>
+                        {submitMessage}
+                      </div>
+                    )}
+                  </form>
                 </div>
 
-                <div className="flex flex-col gap-2 items-center">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || !instructions.trim()}
-                    className="px-8 py-4 bg-brutal-pink hover:bg-brutal-cyan text-white border-4 border-black transition-all disabled:bg-gray-400 disabled:border-gray-500 text-sm font-black uppercase shadow-brutal hover:shadow-brutal-hover hover:translate-x-1 hover:translate-y-1 min-w-[200px]"
-                  >
-                    {isSubmitting ? 'Processing...' : 'Generate'}
-                  </button>
-                  {instructions && !isSubmitting && (
-                    <p className="text-xs text-black text-center font-bold">
-                      Click to generate
-                    </p>
-                  )}
-                </div>
+                {/* Right side - Enhanced Image Gallery */}
+                {history.length > 0 && (
+                  <div className="lg:w-[400px] animate-slide-in-right delay-200">
+                    <div className="flex justify-between items-center mb-3">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setShowShareModal(true)}
+                          className="px-3 py-1.5 text-xs bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                          title="Share Image"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a9.001 9.001 0 01-7.432 0m9.032-4.026A9.001 9.001 0 0112 3c-4.474 0-8.268 3.12-9.032 7.326M8.684 13.342C7.932 14.726 6.482 15.75 4.75 15.75c-2.485 0-4.5-2.015-4.5-4.5s2.015-4.5 4.5-4.5c1.732 0 3.182 1.024 3.934 2.408" />
+                          </svg>
+                          Share
+                        </button>
+                        <button
+                          onClick={downloadAllImages}
+                          className="px-3 py-1.5 text-xs bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                          title="Download All Images"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                          </svg>
+                          All ({history.length})
+                        </button>
+                      </div>
+                    </div>
 
-                {submitMessage && (
-                  <div className={`text-center p-3 rounded-lg text-sm font-medium shadow-md transition-all duration-300 animate-fadeIn ${
-                    submitMessage.includes('Error') || submitMessage.includes('Failed')
-                      ? 'bg-purple-50 text-purple-700'
-                      : submitMessage.includes('not available')
-                      ? 'bg-purple-50 text-purple-700'
-                      : 'bg-teal-50 text-teal-700'
-                  }`}>
-                    {submitMessage}
+                    <ImageGallery
+                      items={history}
+                      currentImage={currentImage}
+                      onRestore={restoreFromHistory}
+                      onDownload={downloadSingleImage}
+                      onDelete={deleteHistoryItem}
+                      onZoom={openZoom}
+                      onFavorite={handleFavoriteImage}
+                    />
                   </div>
                 )}
-              </form>
               </div>
-
-              {/* Right side - Enhanced Image Gallery */}
-              {history.length > 0 && (
-                <div className="lg:w-[400px] animate-slide-in-right delay-200">
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setShowShareModal(true)}
-                        className="px-3 py-1.5 text-xs bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
-                        title="Share Image"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a9.001 9.001 0 01-7.432 0m9.032-4.026A9.001 9.001 0 0112 3c-4.474 0-8.268 3.12-9.032 7.326M8.684 13.342C7.932 14.726 6.482 15.75 4.75 15.75c-2.485 0-4.5-2.015-4.5-4.5s2.015-4.5 4.5-4.5c1.732 0 3.182 1.024 3.934 2.408" />
-                        </svg>
-                        Share
-                      </button>
-                      <button
-                        onClick={downloadAllImages}
-                        className="px-3 py-1.5 text-xs bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
-                        title="Download All Images"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                        </svg>
-                        All ({history.length})
-                      </button>
-                    </div>
-                  </div>
-
-                  <ImageGallery
-                    items={history}
-                    currentImage={currentImage}
-                    onRestore={restoreFromHistory}
-                    onDownload={downloadSingleImage}
-                    onDelete={deleteHistoryItem}
-                    onZoom={openZoom}
-                    onFavorite={handleFavoriteImage}
-                  />
-                </div>
-              )}
-            </div>
-          </>
-        )}
-      </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Share Modal */}

@@ -5,7 +5,10 @@
  * Used by hooks, components, and API routes to enforce limits.
  */
 
-export type TierType = 'free' | 'starter' | 'creator' | 'pro' | 'unlimited';
+export type TierType = 'free' | 'starter' | 'creator' | 'pro' | 'unlimited' | 'elite';
+
+// AI model types for tier-based model selection
+export type AIModelType = 'gemini-2.0-flash-exp' | 'gemini-2.5-flash-preview-05-20';
 
 export interface TierConfig {
   name: string;
@@ -26,6 +29,9 @@ export interface TierConfig {
     hasWatermark: boolean;
     hasPriorityQueue: boolean;
     hasApiAccess: boolean;
+
+    // AI Model selection (Elite gets premium model)
+    aiModel: AIModelType;
   };
   features: string[];
 }
@@ -42,6 +48,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: true,
       hasPriorityQueue: false,
       hasApiAccess: false,
+      aiModel: 'gemini-2.0-flash-exp',
     },
     features: [
       '10 images/day',
@@ -61,6 +68,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: false,
       hasApiAccess: false,
+      aiModel: 'gemini-2.0-flash-exp',
     },
     features: [
       '100 images/month',
@@ -81,6 +89,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: false,
+      aiModel: 'gemini-2.0-flash-exp',
     },
     features: [
       '500 images/month',
@@ -102,6 +111,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: false,
+      aiModel: 'gemini-2.0-flash-exp',
     },
     features: [
       '2,000 images/month',
@@ -123,6 +133,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: true,
+      aiModel: 'gemini-2.0-flash-exp',
     },
     features: [
       'Unlimited images',
@@ -134,6 +145,30 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       'Dedicated support',
     ],
   },
+  elite: {
+    name: 'elite',
+    displayName: 'Elite',
+    price: { monthly: 79, yearly: 659 },
+    limits: {
+      imagesPerDay: null,
+      imagesPerMonth: null, // Truly unlimited
+      batchSize: 500,
+      hasWatermark: false,
+      hasPriorityQueue: true,
+      hasApiAccess: true,
+      aiModel: 'gemini-2.5-flash-preview-05-20', // Premium Gemini 2.5 model
+    },
+    features: [
+      'Unlimited images',
+      '🔥 Gemini 2.5 Flash (Premium AI)',
+      'Batch up to 500 images',
+      'No watermark',
+      'Priority queue',
+      'API access',
+      'Dedicated support',
+      'Early access to new features',
+    ],
+  },
 };
 
 /**
@@ -141,6 +176,21 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
  */
 export function getTierConfig(tier: TierType | undefined): TierConfig {
   return TIER_CONFIG[tier || 'free'];
+}
+
+/**
+ * Get the AI model to use for a given tier
+ * Elite tier gets premium Gemini 2.5, others get standard model
+ */
+export function getAIModel(tier: TierType | undefined): AIModelType {
+  return getTierConfig(tier).limits.aiModel;
+}
+
+/**
+ * Check if tier is an elite/premium tier
+ */
+export function isEliteTier(tier: TierType | undefined): boolean {
+  return tier === 'elite';
 }
 
 /**
@@ -158,8 +208,8 @@ export function hasReachedLimit(
     return config.limits.imagesPerDay !== null && dailyCount >= config.limits.imagesPerDay;
   }
 
-  // Unlimited tier never reaches limit
-  if (tier === 'unlimited') {
+  // Unlimited and Elite tiers never reach limit
+  if (tier === 'unlimited' || tier === 'elite') {
     return false;
   }
 
@@ -177,8 +227,8 @@ export function getRemainingImages(
 ): number | 'Unlimited' {
   const config = getTierConfig(tier);
 
-  // Unlimited tier
-  if (tier === 'unlimited') {
+  // Unlimited and Elite tiers
+  if (tier === 'unlimited' || tier === 'elite') {
     return 'Unlimited';
   }
 
@@ -250,7 +300,7 @@ export function needsMonthlyReset(lastMonthlyReset: number | undefined): boolean
 
   // Reset if we're in a different month
   return lastReset.getMonth() !== currentMonth.getMonth() ||
-         lastReset.getFullYear() !== currentMonth.getFullYear();
+    lastReset.getFullYear() !== currentMonth.getFullYear();
 }
 
 /**

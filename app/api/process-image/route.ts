@@ -4,6 +4,7 @@ import { checkRateLimitKv, getClientIdentifier } from '@/lib/rateLimitKv'
 import { requireEnvVar } from '@/lib/validateEnv'
 import { Errors, handleApiError, createRateLimitResponse } from '@/lib/apiErrors'
 import { logger } from '@/lib/logger'
+import { getAIModel, TierType } from '@/lib/tierConfig'
 
 // Increase timeout for image processing (can take 10-20 seconds)
 export const maxDuration = 60
@@ -36,11 +37,13 @@ export async function POST(request: NextRequest) {
     let additionalImageFile: File | null = null
     let prompt: string = ''
     let base64ImageData: string | null = null
+    let userTier: TierType = 'free' // Default to free tier
 
     if (contentType.includes('application/json')) {
       // Handle JSON request (from batch processor)
       const jsonData = await request.json()
       prompt = jsonData.prompt
+      userTier = (jsonData.userTier as TierType) || 'free'
 
       // Extract base64 image data
       if (jsonData.image) {
@@ -63,6 +66,7 @@ export async function POST(request: NextRequest) {
       imageFile = formData.get('image') as File
       additionalImageFile = formData.get('additionalImage') as File | null
       prompt = formData.get('prompt') as string
+      userTier = (formData.get('userTier') as TierType) || 'free'
     } else {
       // Unsupported content type
       throw Errors.invalidInput(`Unsupported content type: ${contentType}. Use application/json or multipart/form-data.`)
@@ -144,14 +148,15 @@ export async function POST(request: NextRequest) {
       additionalImageType = additionalImageFile.type
     }
 
-    // Use Gemini 3 Pro Image for image transformation
-    logger.info('Using Gemini 3 Pro Image for transformation...')
+    // Get the appropriate AI model based on user tier
+    const aiModelName = getAIModel(userTier)
+    logger.info(`Using AI model: ${aiModelName} for tier: ${userTier}`)
 
     try {
       // Initialize Gemini with quality-focused configuration
       const genAI = new GoogleGenerativeAI(geminiApiKey)
       const model = genAI.getGenerativeModel({
-        model: 'gemini-3-pro-image',
+        model: aiModelName,
         generationConfig: {
           temperature: 0.4,  // Lower temperature for more consistent, detailed results
           topP: 0.95,
@@ -248,22 +253,23 @@ Generate a high-fidelity, professional quality result with maximum sharpness and
 
       return NextResponse.json({
         success: true,
-        message: '🎉 Image transformed successfully with Gemini 3 Pro Image!',
+        message: `🎉 Image transformed successfully with ${aiModelName}!`,
         imageSize: imageSize,
         prompt: prompt,
         generatedImage: generatedImageData,
         generationStatus: 'success',
-        modelUsed: 'gemini-3-pro-image'
+        modelUsed: aiModelName,
+        userTier: userTier
       })
 
     } catch (modelError: unknown) {
-      logger.error('Gemini 3 Pro Image transformation error:', modelError)
+      logger.error(`${aiModelName} transformation error:`, modelError)
       const error = modelError as Error
 
       // Log the full error details for debugging
       logger.error('Full error object:', JSON.stringify(modelError, null, 2))
 
-      throw Errors.imageProcessingFailed(error.message || 'Gemini 3 Pro Image transformation failed')
+      throw Errors.imageProcessingFailed(error.message || `${aiModelName} transformation failed`)
     }
 
   } catch (error) {
