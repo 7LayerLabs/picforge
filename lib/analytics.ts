@@ -4,6 +4,7 @@
  */
 
 import { logger } from './logger';
+import { TierType } from './tierConfig';
 
 // Extend Window interface for gtag
 declare global {
@@ -109,7 +110,7 @@ export const initGA = (measurementId: string) => {
   window.dataLayer = window.dataLayer || [];
 
   // Define gtag function
-  window.gtag = function() {
+  window.gtag = function () {
     window.dataLayer.push(arguments);
   };
 
@@ -398,7 +399,7 @@ export const trackError = (params: ErrorEvent) => {
  * Set user properties (useful for segmentation)
  */
 export const setUserProperties = (properties: {
-  user_tier?: 'free' | 'pro' | 'unlimited';
+  user_tier?: TierType;
   has_generated_images?: boolean;
   total_transformations?: number;
   favorite_category?: string;
@@ -534,8 +535,8 @@ export const trackExport = (
  * Track user tier changes
  */
 export const trackTierChange = (
-  fromTier: 'free' | 'pro' | 'unlimited',
-  toTier: 'free' | 'pro' | 'unlimited',
+  fromTier: TierType,
+  toTier: TierType,
   method: 'promo_code' | 'payment' | 'referral'
 ) => {
   trackEvent('tier_change', {
@@ -543,7 +544,7 @@ export const trackTierChange = (
     from_tier: fromTier,
     to_tier: toTier,
     method,
-    value: toTier === 'unlimited' ? 1 : 0,
+    value: toTier === 'unlimited' || toTier === 'elite' ? 1 : 0,
   });
 };
 
