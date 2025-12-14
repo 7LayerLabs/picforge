@@ -20,6 +20,7 @@ export default function PricingPage() {
     creator: { monthly: 19, yearly: 159, images: 500 },
     pro: { monthly: 39, yearly: 329, images: 2000 },
     unlimited: { monthly: 79, yearly: 669, images: 'Unlimited' },
+    elite: { monthly: 79, yearly: 659, images: 'Unlimited' },
   }
 
   // Calculate yearly savings
@@ -31,7 +32,7 @@ export default function PricingPage() {
     return Math.round((1 - yearlyCost / monthlyCost) * 100)
   }
 
-  const handleUpgrade = async (tier: 'starter' | 'creator' | 'pro' | 'unlimited') => {
+  const handleUpgrade = async (tier: 'starter' | 'creator' | 'pro' | 'unlimited' | 'elite') => {
     if (!user) {
       alert('Please sign in to upgrade')
       window.location.href = '/'
@@ -58,6 +59,10 @@ export default function PricingPage() {
         unlimited: {
           monthly: 'price_unlimited_monthly',
           yearly: 'price_unlimited_yearly',
+        },
+        elite: {
+          monthly: 'price_elite_monthly', // Replace with actual Stripe price ID
+          yearly: 'price_elite_yearly',
         },
       }
 
@@ -112,21 +117,19 @@ export default function PricingPage() {
           <div className="flex items-center justify-center gap-4 mb-12">
             <button
               onClick={() => setBillingPeriod('monthly')}
-              className={`px-6 py-3 font-black uppercase border-4 border-black transition-all ${
-                billingPeriod === 'monthly'
-                  ? 'bg-brutal-cyan text-black shadow-brutal'
-                  : 'bg-white text-black hover:bg-gray-100 shadow-brutal-hover'
-              }`}
+              className={`px-6 py-3 font-black uppercase border-4 border-black transition-all ${billingPeriod === 'monthly'
+                ? 'bg-brutal-cyan text-black shadow-brutal'
+                : 'bg-white text-black hover:bg-gray-100 shadow-brutal-hover'
+                }`}
             >
               Monthly
             </button>
             <button
               onClick={() => setBillingPeriod('yearly')}
-              className={`px-6 py-3 font-black uppercase border-4 border-black transition-all relative ${
-                billingPeriod === 'yearly'
-                  ? 'bg-brutal-cyan text-black shadow-brutal'
-                  : 'bg-white text-black hover:bg-gray-100 shadow-brutal-hover'
-              }`}
+              className={`px-6 py-3 font-black uppercase border-4 border-black transition-all relative ${billingPeriod === 'yearly'
+                ? 'bg-brutal-cyan text-black shadow-brutal'
+                : 'bg-white text-black hover:bg-gray-100 shadow-brutal-hover'
+                }`}
             >
               Yearly
               <span className="absolute -top-2 -right-2 bg-brutal-yellow text-black text-xs px-2 py-0.5 border-2 border-black font-black">
@@ -431,6 +434,68 @@ export default function PricingPage() {
                   className="px-8 py-4 bg-brutal-cyan text-black border-4 border-brutal-cyan font-black uppercase hover:bg-brutal-yellow transition-all shadow-brutal hover:shadow-brutal-hover disabled:opacity-50"
                 >
                   {isProcessing ? 'Processing...' : 'Go Unlimited'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Elite Tier - Premium AI - Full Width */}
+        <div className="max-w-4xl mx-auto mt-8">
+          <div className="bg-gradient-to-r from-purple-900 via-purple-800 to-pink-800 p-8 border-4 border-brutal-yellow shadow-brutal-lg relative">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <div className="bg-brutal-yellow text-black px-4 py-1 border-2 border-black text-sm font-black flex items-center gap-2 shadow-brutal uppercase animate-pulse">
+                <Sparkles className="w-4 h-4" />
+                🔥 PREMIUM AI
+              </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-4">
+              <div className="text-center md:text-left">
+                <h3 className="text-2xl font-black uppercase text-white mb-2">Elite</h3>
+                <p className="text-gray-200 font-bold mb-4">Next-gen AI. Powered by Gemini 2.5 Flash for superior quality.</p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-white">
+                    <Check className="w-4 h-4 text-brutal-yellow" />
+                    <span><strong>Unlimited</strong> image generations</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-white">
+                    <Check className="w-4 h-4 text-brutal-yellow" />
+                    <span>🔥 <strong>Gemini 2.5 Flash</strong> (Premium AI)</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-white">
+                    <Check className="w-4 h-4 text-brutal-yellow" />
+                    <span>Batch up to <strong>500 images</strong></span>
+                  </li>
+                  <li className="flex items-center gap-2 text-white">
+                    <Check className="w-4 h-4 text-brutal-yellow" />
+                    <span><strong>Priority queue</strong> + API access</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-white">
+                    <Check className="w-4 h-4 text-brutal-yellow" />
+                    <span><strong>Early access</strong> to new features</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="text-center">
+                <div className="flex items-baseline gap-2 mb-2 justify-center">
+                  <span className="text-5xl font-black text-brutal-yellow">
+                    ${billingPeriod === 'monthly' ? pricing.elite.monthly : Math.round(pricing.elite.yearly / 12)}
+                  </span>
+                  <span className="text-gray-200 text-sm">/mo</span>
+                </div>
+                {billingPeriod === 'yearly' && (
+                  <p className="text-xs text-brutal-yellow font-bold mb-4">
+                    Billed ${pricing.elite.yearly}/yr - Save {getSavings('elite')}%
+                  </p>
+                )}
+                <button
+                  onClick={() => handleUpgrade('elite')}
+                  disabled={isProcessing}
+                  className="px-8 py-4 bg-brutal-yellow text-black border-4 border-black font-black uppercase hover:bg-white transition-all shadow-brutal hover:shadow-brutal-hover disabled:opacity-50"
+                >
+                  {isProcessing ? 'Processing...' : 'Go Elite 🚀'}
                 </button>
               </div>
             </div>
