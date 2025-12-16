@@ -8,7 +8,8 @@
 export type TierType = 'free' | 'starter' | 'creator' | 'pro' | 'unlimited' | 'elite';
 
 // AI model types for tier-based model selection
-export type AIModelType = 'gemini-2.0-flash-exp' | 'gemini-2.5-flash-preview-05-20';
+// Note: gemini-3-pro-image is the standard image generation model
+export type AIModelType = 'gemini-3-pro-image' | 'gemini-2.5-flash-preview-05-20';
 
 export interface TierConfig {
   name: string;
@@ -48,7 +49,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: true,
       hasPriorityQueue: false,
       hasApiAccess: false,
-      aiModel: 'gemini-2.0-flash-exp',
+      aiModel: 'gemini-3-pro-image',
     },
     features: [
       '10 images/day',
@@ -68,7 +69,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: false,
       hasApiAccess: false,
-      aiModel: 'gemini-2.0-flash-exp',
+      aiModel: 'gemini-3-pro-image',
     },
     features: [
       '100 images/month',
@@ -89,7 +90,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: false,
-      aiModel: 'gemini-2.0-flash-exp',
+      aiModel: 'gemini-3-pro-image',
     },
     features: [
       '500 images/month',
@@ -111,7 +112,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: false,
-      aiModel: 'gemini-2.0-flash-exp',
+      aiModel: 'gemini-3-pro-image',
     },
     features: [
       '2,000 images/month',
@@ -133,7 +134,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: true,
-      aiModel: 'gemini-2.0-flash-exp',
+      aiModel: 'gemini-3-pro-image',
     },
     features: [
       'Unlimited images',
