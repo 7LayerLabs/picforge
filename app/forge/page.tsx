@@ -17,6 +17,7 @@ import { logger } from '@/lib/logger'
 import { useImageTracking } from '@/hooks/useImageTracking'
 import { prompts } from '@/lib/prompts'
 import { addWatermarkIfFree, blobToDataUrl, dataUrlToBlob } from '@/lib/watermark'
+import { AIModelType } from '@/lib/tierConfig'
 
 interface HistoryItem {
   prompt: string
@@ -82,6 +83,10 @@ export default function EditorPage() {
 
   // Mobile options dropdown state
   const [showMobileOptions, setShowMobileOptions] = useState(false)
+
+  // Elite model selector state - allows Elite users to choose between Gemini 2.5 and 3.0
+  const isElite = tier === 'elite'
+  const [selectedModel, setSelectedModel] = useState<AIModelType>('gemini-3-pro-image-preview')
 
   // Convert image to supported format (JPEG/PNG) if needed
   const convertImageToSupported = async (file: File): Promise<string> => {
@@ -413,6 +418,10 @@ export default function EditorPage() {
 
       formData.append('prompt', finalPrompt)
       formData.append('userTier', tier) // Pass user tier for model selection
+      // Elite users can override the model selection
+      if (isElite && selectedModel) {
+        formData.append('selectedModel', selectedModel)
+      }
 
       const response = await fetch('/api/process-image', {
         method: 'POST',
@@ -1179,6 +1188,29 @@ export default function EditorPage() {
                         </div>
                       )}
                     </div>
+
+                    {/* Elite Model Selector - Only visible for Elite tier users */}
+                    {isElite && (
+                      <div className="p-3 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-xl mb-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">🔥</span>
+                            <div>
+                              <label className="text-sm font-bold text-purple-900">AI Model</label>
+                              <p className="text-xs text-purple-600">Elite exclusive</p>
+                            </div>
+                          </div>
+                          <select
+                            value={selectedModel}
+                            onChange={(e) => setSelectedModel(e.target.value as AIModelType)}
+                            className="px-3 py-2 bg-white border-2 border-purple-300 rounded-lg text-sm font-medium text-purple-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all cursor-pointer"
+                          >
+                            <option value="gemini-3-pro-image-preview">Gemini 3 Pro (Nano Banana Pro) ⭐</option>
+                            <option value="gemini-2.5-flash-image">Gemini 2.5 Flash (Nano Banana)</option>
+                          </select>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="relative">
                       <div className="flex items-center justify-between mb-2">

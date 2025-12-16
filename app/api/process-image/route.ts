@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
     let prompt: string = ''
     let base64ImageData: string | null = null
     let userTier: TierType = 'free' // Default to free tier
+    let selectedModel: string | null = null // Elite users can override model
 
     if (contentType.includes('application/json')) {
       // Handle JSON request (from batch processor)
@@ -67,6 +68,7 @@ export async function POST(request: NextRequest) {
       additionalImageFile = formData.get('additionalImage') as File | null
       prompt = formData.get('prompt') as string
       userTier = (formData.get('userTier') as TierType) || 'free'
+      selectedModel = formData.get('selectedModel') as string | null
     } else {
       // Unsupported content type
       throw Errors.invalidInput(`Unsupported content type: ${contentType}. Use application/json or multipart/form-data.`)
@@ -149,7 +151,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Get the appropriate AI model based on user tier
-    const aiModelName = getAIModel(userTier)
+    // Elite users can override with their selected model
+    let aiModelName = getAIModel(userTier)
+    if (userTier === 'elite' && selectedModel) {
+      // Validate the selected model is one of the allowed options
+      if (selectedModel === 'gemini-3-pro-image-preview' || selectedModel === 'gemini-2.5-flash-image') {
+        aiModelName = selectedModel as any
+        logger.info(`Elite user selected model override: ${aiModelName}`)
+      }
+    }
     logger.info(`Using AI model: ${aiModelName} for tier: ${userTier}`)
 
     try {
