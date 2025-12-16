@@ -8,8 +8,8 @@
 export type TierType = 'free' | 'starter' | 'creator' | 'pro' | 'unlimited' | 'elite';
 
 // AI model types for tier-based model selection
-// Note: gemini-3-pro-image is the standard image generation model
-export type AIModelType = 'gemini-3-pro-image' | 'gemini-2.5-flash-preview-05-20';
+// gemini-2.5-flash-image is the stable production model for image generation
+export type AIModelType = 'gemini-2.5-flash-image' | 'gemini-2.5-flash-image';
 
 export interface TierConfig {
   name: string;
@@ -49,7 +49,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: true,
       hasPriorityQueue: false,
       hasApiAccess: false,
-      aiModel: 'gemini-3-pro-image',
+      aiModel: 'gemini-2.5-flash-image',
     },
     features: [
       '10 images/day',
@@ -69,7 +69,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: false,
       hasApiAccess: false,
-      aiModel: 'gemini-3-pro-image',
+      aiModel: 'gemini-2.5-flash-image',
     },
     features: [
       '100 images/month',
@@ -90,7 +90,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: false,
-      aiModel: 'gemini-3-pro-image',
+      aiModel: 'gemini-2.5-flash-image',
     },
     features: [
       '500 images/month',
@@ -112,7 +112,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: false,
-      aiModel: 'gemini-3-pro-image',
+      aiModel: 'gemini-2.5-flash-image',
     },
     features: [
       '2,000 images/month',
@@ -134,7 +134,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: true,
-      aiModel: 'gemini-3-pro-image',
+      aiModel: 'gemini-2.5-flash-image',
     },
     features: [
       'Unlimited images',
@@ -157,7 +157,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: true,
-      aiModel: 'gemini-2.5-flash-preview-05-20', // Premium Gemini 2.5 model
+      aiModel: 'gemini-2.5-flash-image', // Premium Gemini 2.5 model
     },
     features: [
       'Unlimited images',
