@@ -143,6 +143,6 @@ export function usePromoCode() {
     error,
     success,
     clearMessages,
-    hasUnlimitedAccess: usage?.tier === 'unlimited' || usage?.tier === 'pro',
+    hasUnlimitedAccess: usage?.tier === 'unlimited' || usage?.tier === 'pro' || usage?.tier === 'elite',
   };
 }

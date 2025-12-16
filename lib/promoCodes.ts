@@ -19,7 +19,7 @@ export function generatePromoCode(prefix: string = 'PICFORGE'): string {
  */
 export async function createPromoCode(
   code: string,
-  tier: 'unlimited' | 'pro' = 'unlimited',
+  tier: 'unlimited' | 'pro' | 'elite' = 'unlimited',
   createdBy?: string
 ): Promise<string> {
   const codeId = id();
@@ -149,6 +149,7 @@ export async function redeemPromoCode(
  */
 export const INITIAL_CODES = [
   { code: 'DEREK-FOUNDER-2025', tier: 'unlimited' as const },
+  { code: 'DEREK-ELITE-2025', tier: 'elite' as const },  // Elite tier with Gemini 3 Pro
   { code: 'BOBOLA-FAM-01', tier: 'unlimited' as const },
   { code: 'BOBOLA-FAM-02', tier: 'unlimited' as const },
   { code: 'BOBOLA-FAM-03', tier: 'unlimited' as const },
