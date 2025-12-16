@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Image as ImageIcon, Images, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2, Crown, User, Star, Scale, Shield, FileText } from 'lucide-react';
+import { Image as ImageIcon, Images, Layers, Sparkles, Menu, X, Lightbulb, Trophy, Flame, Shuffle, Wand2, ChevronDown, Gamepad2, Crown, User, Star } from 'lucide-react';
 import { useState } from 'react';
 import AuthButton from './AuthButton';
 import MegaMenu from './MegaMenu';
@@ -15,7 +15,6 @@ export default function Navigation() {
   const [gamesDropdownOpen, setGamesDropdownOpen] = useState(false);
   const [resourcesDropdownOpen, setResourcesDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const [legalDropdownOpen, setLegalDropdownOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
   const isGameActive = () => isActive('/roast') || isActive('/roulette');
@@ -27,9 +26,6 @@ export default function Navigation() {
   const isProfileActive = () =>
     isActive('/profile') ||
     isActive('/favorites');
-  const isLegalActive = () =>
-    isActive('/legal/privacy') ||
-    isActive('/legal/terms');
 
   return (
     <nav className="bg-brutal-yellow border-b-4 border-black sticky top-0 z-50">
@@ -52,33 +48,30 @@ export default function Navigation() {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-1">
               <Link
                 href="/forge"
-                className={`inline-flex items-center px-3 py-2 text-sm md:text-base font-black uppercase ${
-                  isActive('/forge')
-                    ? 'text-black underline decoration-4 underline-offset-4'
-                    : 'text-black hover:underline decoration-2 underline-offset-4'
-                }`}
+                className={`inline-flex items-center px-3 py-2 text-sm md:text-base font-black uppercase ${isActive('/forge')
+                  ? 'text-black underline decoration-4 underline-offset-4'
+                  : 'text-black hover:underline decoration-2 underline-offset-4'
+                  }`}
               >
                 FORGE
               </Link>
 
               <Link
                 href="/batch"
-                className={`inline-flex items-center px-3 py-2 text-sm md:text-base font-black uppercase ${
-                  isActive('/batch')
-                    ? 'text-black underline decoration-4 underline-offset-4'
-                    : 'text-black hover:underline decoration-2 underline-offset-4'
-                }`}
+                className={`inline-flex items-center px-3 py-2 text-sm md:text-base font-black uppercase ${isActive('/batch')
+                  ? 'text-black underline decoration-4 underline-offset-4'
+                  : 'text-black hover:underline decoration-2 underline-offset-4'
+                  }`}
               >
                 FOUNDRY
               </Link>
 
               <Link
                 href="/canvas"
-                className={`inline-flex items-center px-3 py-2 text-sm md:text-base font-black uppercase ${
-                  isActive('/canvas')
-                    ? 'text-black underline decoration-4 underline-offset-4'
-                    : 'text-black hover:underline decoration-2 underline-offset-4'
-                }`}
+                className={`inline-flex items-center px-3 py-2 text-sm md:text-base font-black uppercase ${isActive('/canvas')
+                  ? 'text-black underline decoration-4 underline-offset-4'
+                  : 'text-black hover:underline decoration-2 underline-offset-4'
+                  }`}
               >
                 CANVAS
               </Link>
@@ -90,11 +83,10 @@ export default function Navigation() {
                 onMouseLeave={() => setResourcesDropdownOpen(false)}
               >
                 <button
-                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${
-                    isResourceActive()
-                      ? 'border-teal-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${isResourceActive()
+                    ? 'border-teal-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
                 >
                   <Layers className="w-3 h-3 mr-1.5" />
                   Explore
@@ -129,11 +121,10 @@ export default function Navigation() {
                 onMouseLeave={() => setGamesDropdownOpen(false)}
               >
                 <button
-                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${
-                    isGameActive()
-                      ? 'border-pink-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${isGameActive()
+                    ? 'border-pink-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
                 >
                   <Gamepad2 className="w-3 h-3 mr-1.5" />
                   Play
@@ -156,61 +147,14 @@ export default function Navigation() {
 
               <Link
                 href="/pricing"
-                className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold ${
-                  isActive('/pricing')
-                    ? 'border-purple-500 text-gray-900'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold ${isActive('/pricing')
+                  ? 'border-purple-500 text-gray-900'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
               >
                 <Crown className="w-3 h-3 mr-1.5 text-coral-500" />
                 Pricing
               </Link>
-
-              {/* Legal Dropdown */}
-              <div
-                className="relative z-[100]"
-                onMouseEnter={() => setLegalDropdownOpen(true)}
-                onMouseLeave={() => setLegalDropdownOpen(false)}
-              >
-                <button
-                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${
-                    isLegalActive()
-                      ? 'border-teal-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <Scale className="w-3 h-3 mr-1.5" />
-                  Legal
-                  <ChevronDown className="w-2.5 h-2.5 ml-1" />
-                </button>
-
-                {legalDropdownOpen && (
-                  <div className="absolute top-full right-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-[100]">
-                    <Link
-                      href="/legal/privacy"
-                      className={`flex items-center px-4 py-2 text-sm font-semibold ${
-                        isActive('/legal/privacy')
-                          ? 'bg-teal-50 text-teal-700'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Shield className="w-3 h-3 mr-1.5" />
-                      Privacy Policy
-                    </Link>
-                    <Link
-                      href="/legal/terms"
-                      className={`flex items-center px-4 py-2 text-sm font-semibold ${
-                        isActive('/legal/terms')
-                          ? 'bg-teal-50 text-teal-700'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <FileText className="w-3 h-3 mr-1.5" />
-                      Terms of Service
-                    </Link>
-                  </div>
-                )}
-              </div>
 
               {/* Profile Dropdown */}
               <div
@@ -219,11 +163,10 @@ export default function Navigation() {
                 onMouseLeave={() => setProfileDropdownOpen(false)}
               >
                 <button
-                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${
-                    isProfileActive()
-                      ? 'border-teal-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`inline-flex items-center px-2 pt-1 border-b-2 text-sm md:text-base font-semibold h-full ${isProfileActive()
+                    ? 'border-teal-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
                 >
                   <User className="w-3 h-3 mr-1.5" />
                   Profile
@@ -234,22 +177,20 @@ export default function Navigation() {
                   <div className="absolute top-full right-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-[100]">
                     <Link
                       href="/profile"
-                      className={`flex items-center px-4 py-2 text-sm font-semibold ${
-                        isActive('/profile')
-                          ? 'bg-teal-50 text-teal-700'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                      className={`flex items-center px-4 py-2 text-sm font-semibold ${isActive('/profile')
+                        ? 'bg-teal-50 text-teal-700'
+                        : 'text-gray-700 hover:bg-gray-50'
+                        }`}
                     >
                       <User className="w-3 h-3 mr-1.5" />
                       My Account
                     </Link>
                     <Link
                       href="/favorites"
-                      className={`flex items-center px-4 py-2 text-sm font-semibold ${
-                        isActive('/favorites')
-                          ? 'bg-teal-50 text-teal-700'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                      className={`flex items-center px-4 py-2 text-sm font-semibold ${isActive('/favorites')
+                        ? 'bg-teal-50 text-teal-700'
+                        : 'text-gray-700 hover:bg-gray-50'
+                        }`}
                     >
                       <Star className="w-3 h-3 mr-1.5" />
                       Favorites
@@ -294,11 +235,10 @@ export default function Navigation() {
           <div className="pt-2 pb-3 space-y-1">
             <Link
               href="/forge"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/forge')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/forge')
+                ? 'bg-teal-50 border-teal-500 text-teal-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -309,11 +249,10 @@ export default function Navigation() {
 
             <Link
               href="/batch"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/batch')
-                  ? 'bg-purple-50 border-purple-500 text-purple-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/batch')
+                ? 'bg-purple-50 border-purple-500 text-purple-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -324,11 +263,10 @@ export default function Navigation() {
 
             <Link
               href="/canvas"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/canvas')
-                  ? 'bg-purple-50 border-purple-500 text-purple-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/canvas')
+                ? 'bg-purple-50 border-purple-500 text-purple-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -347,11 +285,10 @@ export default function Navigation() {
 
             <Link
               href="/prompt-wizard"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/prompt-wizard')
-                  ? 'bg-purple-50 border-purple-500 text-purple-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/prompt-wizard')
+                ? 'bg-purple-50 border-purple-500 text-purple-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -370,11 +307,10 @@ export default function Navigation() {
 
             <Link
               href="/roast"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/roast')
-                  ? 'bg-purple-50 border-purple-500 text-purple-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/roast')
+                ? 'bg-purple-50 border-purple-500 text-purple-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -385,11 +321,10 @@ export default function Navigation() {
 
             <Link
               href="/roulette"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/roulette')
-                  ? 'bg-purple-50 border-purple-500 text-purple-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/roulette')
+                ? 'bg-purple-50 border-purple-500 text-purple-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -404,11 +339,10 @@ export default function Navigation() {
 
             <Link
               href="/prompts"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/prompts')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/prompts')
+                ? 'bg-teal-50 border-teal-500 text-teal-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -419,11 +353,10 @@ export default function Navigation() {
 
             <Link
               href="/examples"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/examples')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/examples')
+                ? 'bg-teal-50 border-teal-500 text-teal-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -434,11 +367,10 @@ export default function Navigation() {
 
             <Link
               href="/tips"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/tips')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/tips')
+                ? 'bg-teal-50 border-teal-500 text-teal-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -450,54 +382,15 @@ export default function Navigation() {
 
             <Link
               href="/pricing"
-              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/pricing')
-                  ? 'bg-purple-50 border-purple-500 text-purple-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/pricing')
+                ? 'bg-purple-50 border-purple-500 text-purple-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
                 <Crown className="w-3 h-3 mr-1.5 text-coral-500" />
                 Pricing
-              </div>
-            </Link>
-
-            {/* Legal Section */}
-            <div className="px-3 py-2">
-              <div className="flex items-center text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
-                <Scale className="w-3 h-3 mr-1" />
-                Legal
-              </div>
-            </div>
-
-            <Link
-              href="/legal/privacy"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/legal/privacy')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <div className="flex items-center">
-                <Shield className="w-3 h-3 mr-1.5" />
-                Privacy Policy
-              </div>
-            </Link>
-
-            <Link
-              href="/legal/terms"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/legal/terms')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <div className="flex items-center">
-                <FileText className="w-3 h-3 mr-1.5" />
-                Terms of Service
               </div>
             </Link>
 
@@ -511,11 +404,10 @@ export default function Navigation() {
 
             <Link
               href="/profile"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/profile')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/profile')
+                ? 'bg-teal-50 border-teal-500 text-teal-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
@@ -526,11 +418,10 @@ export default function Navigation() {
 
             <Link
               href="/favorites"
-              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${
-                isActive('/favorites')
-                  ? 'bg-teal-50 border-teal-500 text-teal-700'
-                  : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-              }`}
+              className={`block pl-6 pr-4 py-2 border-l-4 text-base md:text-lg font-semibold ${isActive('/favorites')
+                ? 'bg-teal-50 border-teal-500 text-teal-700'
+                : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <div className="flex items-center">
