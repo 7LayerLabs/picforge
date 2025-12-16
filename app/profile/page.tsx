@@ -5,7 +5,7 @@ import { useImageTracking } from '@/hooks/useImageTracking';
 import { usePromoCode } from '@/hooks/usePromoCode';
 import { useReferral } from '@/hooks/useReferral';
 import { getAIModel, TierType } from '@/lib/tierConfig';
-import { Check, X, Crown, Zap, Sparkles, AlertCircle, Gift, Key, Users, Copy, ExternalLink, Cpu, Image, Star } from 'lucide-react';
+import { Check, X, Crown, Zap, Sparkles, AlertCircle, Gift, Key, Users, Copy, ExternalLink, Cpu, Image as ImageIcon, Star } from 'lucide-react';
 import Link from 'next/link';
 import ReferralShareButton from '@/components/ReferralShareButton';
 
@@ -121,7 +121,7 @@ export default function ProfilePage() {
           <div className="bg-white rounded-xl p-4 shadow-md border border-gray-100">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                <Image className="w-5 h-5 text-teal-600" />
+                <ImageIcon className="w-5 h-5 text-teal-600" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">{imagesGenerated}</p>
