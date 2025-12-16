@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { init } from '@instantdb/admin';
+import { init, id } from '@instantdb/admin';
 import { logger } from '@/lib/logger';
-
-// Initialize InstantDB Admin SDK
-const db = init({
-    appId: process.env.NEXT_PUBLIC_INSTANT_APP_ID!,
-    adminToken: process.env.INSTANT_ADMIN_TOKEN!,
-});
 
 // Admin email - only this user can be upgraded via this endpoint
 const ADMIN_EMAIL = 'derek.bobola@gmail.com';
@@ -14,7 +8,7 @@ const ADMIN_EMAIL = 'derek.bobola@gmail.com';
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { email, tier } = body;
+        const { email, tier, userId, usageId } = body;
 
         // Security check - only allow upgrading the admin
         if (email !== ADMIN_EMAIL) {
@@ -39,32 +33,36 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Query for the user by email
-        const { users } = await db.query({ users: {} });
-        const user = users?.find((u: any) => u.email === email);
-
-        if (!user) {
-            return NextResponse.json(
-                { error: `User with email ${email} not found` },
-                { status: 404 }
-            );
-        }
-
-        // Query for the user's usage record
-        const { usage } = await db.query({
-            usage: {}
+        // Initialize InstantDB Admin SDK
+        const db = init({
+            appId: process.env.NEXT_PUBLIC_INSTANT_APP_ID!,
+            adminToken: process.env.INSTANT_ADMIN_TOKEN!,
         });
 
-        const userUsage = usage?.find((u: any) => u.userId === user.id);
-
-        if (!userUsage) {
-            // Create new usage record with the tier
-            const { id } = await import('@instantdb/admin');
-            const usageId = id();
-
+        // If usageId is provided, update directly (fastest path)
+        if (usageId) {
             await db.transact([
                 db.tx.usage[usageId].update({
-                    userId: user.id,
+                    tier: tier,
+                })
+            ]);
+
+            logger.info(`Updated usage ${usageId} to tier: ${tier}`);
+
+            return NextResponse.json({
+                success: true,
+                message: `Successfully upgraded to ${tier} tier!`,
+                tier: tier,
+            });
+        }
+
+        // If userId is provided, create/update usage for that user
+        if (userId) {
+            const newUsageId = id();
+
+            await db.transact([
+                db.tx.usage[newUsageId].update({
+                    userId: userId,
                     tier: tier,
                     count: 0,
                     monthlyCount: 0,
@@ -73,24 +71,21 @@ export async function POST(request: NextRequest) {
                 })
             ]);
 
-            logger.info(`Created usage record for ${email} with tier: ${tier}`);
-        } else {
-            // Update existing usage record
-            await db.transact([
-                db.tx.usage[userUsage.id].update({
-                    tier: tier,
-                })
-            ]);
+            logger.info(`Created/updated usage for user ${userId} with tier: ${tier}`);
 
-            logger.info(`Updated ${email} to tier: ${tier}`);
+            return NextResponse.json({
+                success: true,
+                message: `Successfully upgraded to ${tier} tier!`,
+                userId: userId,
+                tier: tier,
+                usageId: newUsageId,
+            });
         }
 
-        return NextResponse.json({
-            success: true,
-            message: `Successfully upgraded ${email} to ${tier} tier!`,
-            userId: user.id,
-            tier: tier,
-        });
+        return NextResponse.json(
+            { error: 'Please provide userId or usageId. Check browser console on profile page for your user ID.' },
+            { status: 400 }
+        );
 
     } catch (error) {
         logger.error('Error upgrading user:', error);
