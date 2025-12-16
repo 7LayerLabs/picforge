@@ -8,8 +8,9 @@
 export type TierType = 'free' | 'starter' | 'creator' | 'pro' | 'unlimited' | 'elite';
 
 // AI model types for tier-based model selection
-// gemini-2.5-flash-image is the stable production model for image generation
-export type AIModelType = 'gemini-2.5-flash-image' | 'gemini-2.5-flash-image';
+// gemini-2.5-flash-image = "Nano Banana" (standard image generation)
+// gemini-3-pro-image-preview = "Nano Banana Pro" (premium, Elite tier only)
+export type AIModelType = 'gemini-2.5-flash-image' | 'gemini-3-pro-image-preview';
 
 export interface TierConfig {
   name: string;
@@ -157,7 +158,7 @@ export const TIER_CONFIG: Record<TierType, TierConfig> = {
       hasWatermark: false,
       hasPriorityQueue: true,
       hasApiAccess: true,
-      aiModel: 'gemini-2.5-flash-image', // Premium Gemini 2.5 model
+      aiModel: 'gemini-3-pro-image-preview', // Nano Banana Pro - premium model
     },
     features: [
       'Unlimited images',
