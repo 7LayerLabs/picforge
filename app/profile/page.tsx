@@ -265,14 +265,14 @@ export default function ProfilePage() {
             Redeem Promo Code
           </h2>
 
-          {hasUnlimitedAccess ? (
-            <div className="p-6 bg-gray-900 border-4 border-brutal-cyan shadow-brutal">
+          {isElite ? (
+            <div className="p-6 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-4 border-purple-500 shadow-brutal">
               <div className="flex items-center gap-3 mb-3">
-                <Check className="w-8 h-8 text-brutal-cyan" />
-                <h3 className="font-heading font-black text-brutal-cyan text-lg uppercase tracking-tight">Unlimited Access Active!</h3>
+                <Check className="w-8 h-8 text-purple-400" />
+                <h3 className="font-heading font-black text-purple-400 text-lg uppercase tracking-tight">Elite Access Active!</h3>
               </div>
               <p className="font-body text-white font-bold">
-                You have unlimited image generation. Enjoy creating without limits!
+                You have Elite access with Gemini 3 Pro (Nano Banana Pro) - our most advanced AI model!
               </p>
             </div>
           ) : (
