@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useImageTracking } from '@/hooks/useImageTracking';
 import { usePromoCode } from '@/hooks/usePromoCode';
 import { useReferral } from '@/hooks/useReferral';
-import { Check, X, Crown, Zap, Sparkles, AlertCircle, Gift, Key, Users, TrendingUp } from 'lucide-react';
+import { getAIModel, TierType } from '@/lib/tierConfig';
+import { Check, X, Crown, Zap, Sparkles, AlertCircle, Gift, Key, Users, TrendingUp, Cpu } from 'lucide-react';
 import Link from 'next/link';
 import ReferralShareButton from '@/components/ReferralShareButton';
 
@@ -41,9 +42,12 @@ export default function ProfilePage() {
     );
   }
 
-  const tier = usage?.tier || 'free';
+  const tier = (usage?.tier || 'free') as TierType;
   const imagesGenerated = imageHistory?.length || 0;
   const remainingImages = getRemainingImages();
+  const aiModel = getAIModel(tier);
+  const isElite = tier === 'elite';
+  const isPremium = tier === 'unlimited' || tier === 'pro' || tier === 'elite';
 
   const handleRedeem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +71,12 @@ export default function ProfilePage() {
               <h1 className="font-heading text-4xl font-black uppercase text-brutal-cyan mb-2 tracking-tight">Your Profile</h1>
               <p className="font-body text-white font-bold">{user.email}</p>
             </div>
-            {tier === 'unlimited' || tier === 'pro' ? (
+            {isElite ? (
+              <div className="flex flex-col items-center">
+                <Crown className="w-16 h-16 text-purple-400" />
+                <span className="text-xs font-bold text-purple-400 uppercase">Elite</span>
+              </div>
+            ) : isPremium ? (
               <Crown className="w-16 h-16 text-brutal-yellow" />
             ) : (
               <Sparkles className="w-16 h-16 text-gray-400" />
@@ -176,13 +185,24 @@ export default function ProfilePage() {
 
             <div className="space-y-4">
               {/* Tier */}
-              <div className="flex items-center justify-between p-4 bg-gray-900 border-4 border-black">
+              <div className={`flex items-center justify-between p-4 border-4 ${isElite ? 'bg-purple-900/30 border-purple-500' : 'bg-gray-900 border-black'}`}>
                 <span className="font-body text-white font-black uppercase">Current Plan</span>
                 <div className="flex items-center gap-2">
-                  {tier === 'unlimited' || tier === 'pro' ? (
-                    <Crown className="w-5 h-5 text-brutal-yellow" />
-                  ) : null}
-                  <span className="font-body font-black text-brutal-cyan uppercase">{tier}</span>
+                  {isPremium && (
+                    <Crown className={`w-5 h-5 ${isElite ? 'text-purple-400' : 'text-brutal-yellow'}`} />
+                  )}
+                  <span className={`font-body font-black uppercase ${isElite ? 'text-purple-400' : 'text-brutal-cyan'}`}>{tier}</span>
+                </div>
+              </div>
+
+              {/* AI Model */}
+              <div className={`flex items-center justify-between p-4 border-4 ${isElite ? 'bg-purple-900/30 border-purple-500' : 'bg-gray-900 border-black'}`}>
+                <span className="font-body text-white font-black uppercase">AI Model</span>
+                <div className="flex items-center gap-2">
+                  <Cpu className={`w-5 h-5 ${isElite ? 'text-purple-400' : 'text-gray-400'}`} />
+                  <span className={`font-body font-bold ${isElite ? 'text-purple-400' : 'text-white'}`}>
+                    {isElite ? 'Gemini 3 Pro (Nano Banana Pro)' : 'Gemini 2.5 Flash (Nano Banana)'}
+                  </span>
                 </div>
               </div>
 
@@ -204,13 +224,13 @@ export default function ProfilePage() {
                 <span className="font-body font-black text-white">{imagesGenerated.toLocaleString()}</span>
               </div>
 
-              {/* Upgrade CTA (only for free tier) */}
-              {tier === 'free' && (
+              {/* Upgrade CTA (for non-premium tiers) */}
+              {!isPremium && (
                 <div className="mt-6 p-6 bg-gray-900 border-4 border-brutal-cyan shadow-brutal">
                   <Crown className="w-8 h-8 text-brutal-yellow mb-3" />
-                  <h3 className="font-heading font-black text-lg text-brutal-cyan mb-2 uppercase tracking-tight">Upgrade to Pro</h3>
+                  <h3 className="font-heading font-black text-lg text-brutal-cyan mb-2 uppercase tracking-tight">Upgrade Your Plan</h3>
                   <p className="font-body text-white text-sm mb-4 font-bold">
-                    Get unlimited images, priority processing, and no watermarks!
+                    Get more images, priority processing, and access to premium AI models!
                   </p>
                   <Link
                     href="/pricing"
@@ -218,6 +238,19 @@ export default function ProfilePage() {
                   >
                     View Pricing →
                   </Link>
+                </div>
+              )}
+
+              {/* Elite Badge */}
+              {isElite && (
+                <div className="mt-6 p-6 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-4 border-purple-500 shadow-brutal">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Crown className="w-8 h-8 text-purple-400" />
+                    <h3 className="font-heading font-black text-lg text-purple-400 uppercase tracking-tight">Elite Member</h3>
+                  </div>
+                  <p className="font-body text-white text-sm font-bold">
+                    You have access to Gemini 3 Pro (Nano Banana Pro) - our most advanced AI model with improved text rendering and higher fidelity images.
+                  </p>
                 </div>
               )}
             </div>
