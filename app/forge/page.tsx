@@ -982,9 +982,12 @@ export default function EditorPage() {
                     </button>
                     <button
                       onClick={() => {
-                        setPromptOfDayActive(!promptOfDayActive);
-                        if (!promptOfDayActive) {
+                        const newActive = !promptOfDayActive;
+                        setPromptOfDayActive(newActive);
+                        if (newActive) {
                           setInstructions(PROMPT_OF_THE_DAY);
+                          // Scroll to upload section to prompt user to upload
+                          uploadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         } else {
                           setInstructions('');
                         }
