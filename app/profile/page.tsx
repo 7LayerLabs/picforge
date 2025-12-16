@@ -5,7 +5,7 @@ import { useImageTracking } from '@/hooks/useImageTracking';
 import { usePromoCode } from '@/hooks/usePromoCode';
 import { useReferral } from '@/hooks/useReferral';
 import { getAIModel, TierType } from '@/lib/tierConfig';
-import { Check, X, Crown, Zap, Sparkles, AlertCircle, Gift, Key, Users, TrendingUp, Cpu } from 'lucide-react';
+import { Check, X, Crown, Zap, Sparkles, AlertCircle, Gift, Key, Users, Copy, ExternalLink, Cpu, Image, Star } from 'lucide-react';
 import Link from 'next/link';
 import ReferralShareButton from '@/components/ReferralShareButton';
 
@@ -21,19 +21,20 @@ export default function ProfilePage() {
   } = useReferral();
 
   const [promoCode, setPromoCode] = useState('');
+  const [copied, setCopied] = useState(false);
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="bg-black p-12 max-w-md text-center border-4 border-brutal-cyan shadow-brutal-lg">
-          <AlertCircle className="w-16 h-16 text-brutal-cyan mx-auto mb-6" />
-          <h1 className="font-heading text-3xl font-black uppercase text-brutal-cyan mb-4 tracking-tight">Sign In Required</h1>
-          <p className="font-body text-white mb-8 font-bold">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="bg-white p-12 max-w-md text-center rounded-2xl shadow-xl border border-gray-200">
+          <AlertCircle className="w-16 h-16 text-teal-500 mx-auto mb-6" />
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Sign In Required</h1>
+          <p className="text-gray-600 mb-8">
             Please sign in to view your profile and manage your account.
           </p>
           <Link
             href="/"
-            className="inline-block px-8 py-3 bg-brutal-cyan text-black border-4 border-black font-black uppercase hover:bg-brutal-pink hover:text-white transition-all shadow-brutal hover:shadow-brutal-hover hover:translate-x-1 hover:translate-y-1"
+            className="inline-block px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-all shadow-lg hover:shadow-xl"
           >
             Go to Homepage
           </Link>
@@ -56,314 +57,337 @@ export default function ProfilePage() {
     const result = await redeemCode(promoCode);
     if (result) {
       setPromoCode('');
-      // Clear success message after 5 seconds
       setTimeout(clearMessages, 5000);
     }
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const tierColors = {
+    free: 'from-gray-500 to-gray-600',
+    starter: 'from-blue-500 to-blue-600',
+    creator: 'from-green-500 to-green-600',
+    pro: 'from-amber-500 to-orange-500',
+    unlimited: 'from-teal-500 to-emerald-500',
+    elite: 'from-purple-500 to-pink-500',
+  };
+
+  const tierBadgeColors = {
+    free: 'bg-gray-100 text-gray-700',
+    starter: 'bg-blue-100 text-blue-700',
+    creator: 'bg-green-100 text-green-700',
+    pro: 'bg-amber-100 text-amber-700',
+    unlimited: 'bg-teal-100 text-teal-700',
+    elite: 'bg-purple-100 text-purple-700',
+  };
+
   return (
-    <div className="min-h-screen bg-white py-12 px-4">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="bg-black p-8 mb-8 border-4 border-brutal-cyan shadow-brutal-lg">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+      <div className="max-w-4xl mx-auto space-y-6">
+
+        {/* Profile Header Card */}
+        <div className={`bg-gradient-to-r ${tierColors[tier]} rounded-2xl p-6 text-white shadow-xl`}>
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-heading text-4xl font-black uppercase text-brutal-cyan mb-2 tracking-tight">Your Profile</h1>
-              <p className="font-body text-white font-bold">{user.email}</p>
-            </div>
-            {isElite ? (
-              <div className="flex flex-col items-center">
-                <Crown className="w-16 h-16 text-purple-400" />
-                <span className="text-xs font-bold text-purple-400 uppercase">Elite</span>
-              </div>
-            ) : isPremium ? (
-              <Crown className="w-16 h-16 text-brutal-yellow" />
-            ) : (
-              <Sparkles className="w-16 h-16 text-gray-400" />
-            )}
-          </div>
-        </div>
-
-        {/* Referral Section - Full Width Banner */}
-        <div className="bg-brutal-pink p-8 mb-8 border-4 border-black shadow-brutal-lg">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-center md:text-left">
-              <h2 className="font-heading text-3xl font-black uppercase text-black mb-2 flex items-center gap-2 justify-center md:justify-start tracking-tight">
-                <Users className="w-8 h-8 text-black" />
-                Invite Friends, Earn Free Images
-              </h2>
-              <p className="font-body text-black text-lg font-bold">
-                Give your friends <span className="font-black">10 bonus images</span>, get <span className="font-black">10 for yourself</span>!
-              </p>
-            </div>
-            <div className="bg-black p-6 text-center border-4 border-brutal-yellow">
-              <div className="flex items-center gap-6">
-                <div>
-                  <p className="font-body text-brutal-pink text-sm mb-1 font-bold">Friends Joined</p>
-                  <p className="font-heading text-4xl font-black text-brutal-yellow">{completedReferralsCount}</p>
-                </div>
-                <div className="w-px h-12 bg-brutal-yellow"></div>
-                <div>
-                  <p className="font-body text-brutal-pink text-sm mb-1 font-bold">Bonus Images</p>
-                  <p className="font-heading text-4xl font-black text-brutal-yellow">{totalBonusImages}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Referral Sharing */}
-          <div className="bg-black p-8 border-4 border-brutal-cyan shadow-brutal">
-            <h2 className="font-heading text-2xl font-black uppercase text-brutal-cyan mb-6 flex items-center gap-2 tracking-tight">
-              <TrendingUp className="w-6 h-6 text-brutal-cyan" />
-              Your Referral Link
-            </h2>
-
-            {isGenerating ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="w-8 h-8 border-4 border-brutal-cyan border-t-transparent animate-spin"></div>
-              </div>
-            ) : activeReferralCode && referralLink ? (
-              <>
-                {/* Referral Code Display */}
-                <div className="mb-6">
-                  <label className="block text-sm font-body font-black uppercase text-white mb-2">
-                    Your Referral Code
-                  </label>
-                  <div className="bg-gray-900 border-4 border-brutal-cyan p-4 text-center shadow-brutal">
-                    <code className="font-mono text-brutal-cyan text-2xl font-black">{activeReferralCode}</code>
-                  </div>
-                </div>
-
-                {/* Referral Link Display */}
-                <div className="mb-6">
-                  <label className="block text-sm font-body font-black uppercase text-white mb-2">
-                    Your Referral Link
-                  </label>
-                  <div className="bg-gray-900 p-3 break-all border-4 border-brutal-cyan">
-                    <p className="font-body text-brutal-cyan text-sm font-bold">{referralLink}</p>
-                  </div>
-                </div>
-
-                {/* Share Buttons */}
-                <ReferralShareButton
-                  referralLink={referralLink}
-                  referralCode={activeReferralCode}
-                />
-
-                {/* Stats */}
-                {completedReferralsCount > 0 && (
-                  <div className="mt-6 p-4 bg-gray-900 border-4 border-brutal-cyan shadow-brutal">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-body text-white text-sm font-bold">Total Referrals</p>
-                        <p className="font-heading text-3xl font-black text-brutal-cyan">{completedReferralsCount}</p>
-                      </div>
-                      <Sparkles className="w-12 h-12 text-brutal-cyan animate-pulse" />
-                    </div>
-                    <p className="font-body text-gray-400 text-xs mt-2 font-bold">
-                      You&apos;ve earned {totalBonusImages} bonus images so far!
-                    </p>
-                  </div>
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                {isElite ? (
+                  <Crown className="w-8 h-8 text-yellow-300" />
+                ) : isPremium ? (
+                  <Crown className="w-8 h-8 text-white" />
+                ) : (
+                  <Sparkles className="w-8 h-8 text-white" />
                 )}
-              </>
-            ) : (
-              <div className="text-center py-8">
-                <AlertCircle className="w-12 h-12 text-brutal-pink mx-auto mb-4" />
-                <p className="font-body text-white font-bold">Unable to generate referral code. Please refresh.</p>
               </div>
-            )}
+              <div>
+                <h1 className="text-2xl font-bold">{user.email?.split('@')[0] || 'User'}</h1>
+                <p className="text-white/80 text-sm">{user.email}</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-bold backdrop-blur-sm">
+                {isElite && <Crown className="w-4 h-4" />}
+                {tier.toUpperCase()} TIER
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-xl p-4 shadow-md border border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                <Image className="w-5 h-5 text-teal-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">{imagesGenerated}</p>
+                <p className="text-xs text-gray-500 uppercase font-medium">Images Created</p>
+              </div>
+            </div>
           </div>
 
-          {/* Account Info */}
-          <div className="bg-black p-8 border-4 border-brutal-cyan shadow-brutal">
-            <h2 className="font-heading text-2xl font-black uppercase text-brutal-cyan mb-6 flex items-center gap-2 tracking-tight">
-              <Zap className="w-6 h-6 text-brutal-cyan" />
-              Account Status
-            </h2>
-
-            <div className="space-y-4">
-              {/* Tier */}
-              <div className={`flex items-center justify-between p-4 border-4 ${isElite ? 'bg-purple-900/30 border-purple-500' : 'bg-gray-900 border-black'}`}>
-                <span className="font-body text-white font-black uppercase">Current Plan</span>
-                <div className="flex items-center gap-2">
-                  {isPremium && (
-                    <Crown className={`w-5 h-5 ${isElite ? 'text-purple-400' : 'text-brutal-yellow'}`} />
-                  )}
-                  <span className={`font-body font-black uppercase ${isElite ? 'text-purple-400' : 'text-brutal-cyan'}`}>{tier}</span>
-                </div>
+          <div className="bg-white rounded-xl p-4 shadow-md border border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <Zap className="w-5 h-5 text-blue-600" />
               </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">
+                  {hasUnlimitedAccess ? '∞' : remainingImages}
+                </p>
+                <p className="text-xs text-gray-500 uppercase font-medium">Remaining Today</p>
+              </div>
+            </div>
+          </div>
 
-              {/* AI Model */}
-              <div className={`flex items-center justify-between p-4 border-4 ${isElite ? 'bg-purple-900/30 border-purple-500' : 'bg-gray-900 border-black'}`}>
-                <span className="font-body text-white font-black uppercase">AI Model</span>
-                <div className="flex items-center gap-2">
-                  <Cpu className={`w-5 h-5 ${isElite ? 'text-purple-400' : 'text-gray-400'}`} />
-                  <span className={`font-body font-bold ${isElite ? 'text-purple-400' : 'text-white'}`}>
-                    {isElite ? 'Gemini 3 Pro (Nano Banana Pro)' : 'Gemini 2.5 Flash (Nano Banana)'}
+          <div className="bg-white rounded-xl p-4 shadow-md border border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">{completedReferralsCount}</p>
+                <p className="text-xs text-gray-500 uppercase font-medium">Referrals</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-4 shadow-md border border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                <Gift className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">{totalBonusImages}</p>
+                <p className="text-xs text-gray-500 uppercase font-medium">Bonus Images</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Two Column Layout */}
+        <div className="grid md:grid-cols-2 gap-6">
+
+          {/* Left Column */}
+          <div className="space-y-6">
+
+            {/* Plan Details Card */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-100">
+                <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-teal-500" />
+                  Your Plan
+                </h2>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Current Tier</span>
+                  <span className={`px-3 py-1 rounded-full text-sm font-bold ${tierBadgeColors[tier]}`}>
+                    {tier.charAt(0).toUpperCase() + tier.slice(1)}
                   </span>
                 </div>
-              </div>
 
-              {/* Images Remaining */}
-              <div className="flex items-center justify-between p-4 bg-gray-900 border-4 border-black">
-                <span className="font-body text-white font-black uppercase">Daily Limit</span>
-                <span className="font-body font-black text-white">
-                  {hasUnlimitedAccess ? (
-                    <span className="text-brutal-cyan uppercase">Unlimited ✨</span>
-                  ) : (
-                    `${remainingImages} / 20 remaining`
-                  )}
-                </span>
-              </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">AI Model</span>
+                  <span className="flex items-center gap-2 text-sm font-medium text-gray-900">
+                    <Cpu className="w-4 h-4 text-gray-400" />
+                    {isElite ? 'Gemini 3 Pro' : 'Gemini 2.5 Flash'}
+                  </span>
+                </div>
 
-              {/* Total Images */}
-              <div className="flex items-center justify-between p-4 bg-gray-900 border-4 border-black">
-                <span className="font-body text-white font-black uppercase">Total Images Generated</span>
-                <span className="font-body font-black text-white">{imagesGenerated.toLocaleString()}</span>
-              </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Daily Limit</span>
+                  <span className="text-sm font-bold text-gray-900">
+                    {hasUnlimitedAccess ? 'Unlimited ✨' : `${remainingImages} / 20`}
+                  </span>
+                </div>
 
-              {/* Upgrade CTA (for non-premium tiers) */}
-              {!isPremium && (
-                <div className="mt-6 p-6 bg-gray-900 border-4 border-brutal-cyan shadow-brutal">
-                  <Crown className="w-8 h-8 text-brutal-yellow mb-3" />
-                  <h3 className="font-heading font-black text-lg text-brutal-cyan mb-2 uppercase tracking-tight">Upgrade Your Plan</h3>
-                  <p className="font-body text-white text-sm mb-4 font-bold">
-                    Get more images, priority processing, and access to premium AI models!
-                  </p>
+                {!isPremium && (
                   <Link
                     href="/pricing"
-                    className="inline-block w-full text-center px-6 py-3 bg-brutal-cyan text-black border-4 border-black font-black uppercase hover:bg-brutal-pink hover:text-white transition-all shadow-brutal hover:shadow-brutal-hover hover:translate-x-1 hover:translate-y-1"
+                    className="block w-full text-center mt-4 px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-bold rounded-xl hover:from-teal-600 hover:to-emerald-600 transition-all shadow-md hover:shadow-lg"
                   >
-                    View Pricing →
+                    Upgrade Plan →
                   </Link>
-                </div>
-              )}
-
-              {/* Elite Badge */}
-              {isElite && (
-                <div className="mt-6 p-6 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-4 border-purple-500 shadow-brutal">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Crown className="w-8 h-8 text-purple-400" />
-                    <h3 className="font-heading font-black text-lg text-purple-400 uppercase tracking-tight">Elite Member</h3>
-                  </div>
-                  <p className="font-body text-white text-sm font-bold">
-                    You have access to Gemini 3 Pro (Nano Banana Pro) - our most advanced AI model with improved text rendering and higher fidelity images.
-                  </p>
-                </div>
-              )}
+                )}
+              </div>
             </div>
+
+            {/* Promo Code Card */}
+            {!isElite && (
+              <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100">
+                  <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <Gift className="w-5 h-5 text-amber-500" />
+                    Redeem Code
+                  </h2>
+                </div>
+                <div className="p-6">
+                  <form onSubmit={handleRedeem} className="space-y-4">
+                    <div className="relative">
+                      <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                        placeholder="Enter promo code"
+                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 font-mono uppercase focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all"
+                        disabled={isRedeeming}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isRedeeming || !promoCode.trim()}
+                      className="w-full px-4 py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {isRedeeming ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent animate-spin rounded-full" />
+                          Redeeming...
+                        </>
+                      ) : (
+                        <>
+                          <Gift className="w-5 h-5" />
+                          Redeem
+                        </>
+                      )}
+                    </button>
+                  </form>
+
+                  {error && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-sm">
+                      <X className="w-4 h-4 flex-shrink-0" />
+                      {error}
+                    </div>
+                  )}
+
+                  {success && (
+                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-700 text-sm">
+                      <Check className="w-4 h-4 flex-shrink-0" />
+                      {success}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Elite Badge */}
+            {isElite && (
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-6 text-white shadow-lg">
+                <div className="flex items-center gap-3 mb-3">
+                  <Crown className="w-8 h-8 text-yellow-300" />
+                  <h3 className="text-xl font-bold">Elite Member</h3>
+                </div>
+                <p className="text-white/90 text-sm">
+                  You have access to Gemini 3 Pro (Nano Banana Pro) — our most advanced AI with improved text rendering and photorealism.
+                </p>
+              </div>
+            )}
           </div>
 
-        </div>
+          {/* Right Column - Referrals */}
+          <div className="space-y-6">
 
-        {/* Promo Code Redemption - Full Width */}
-        <div className="bg-black p-8 mt-8 border-4 border-brutal-cyan shadow-brutal-lg">
-          <h2 className="font-heading text-2xl font-black uppercase text-brutal-cyan mb-6 flex items-center gap-2 tracking-tight">
-            <Gift className="w-6 h-6 text-brutal-cyan" />
-            Redeem Promo Code
-          </h2>
-
-          {isElite ? (
-            <div className="p-6 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-4 border-purple-500 shadow-brutal">
-              <div className="flex items-center gap-3 mb-3">
-                <Check className="w-8 h-8 text-purple-400" />
-                <h3 className="font-heading font-black text-purple-400 text-lg uppercase tracking-tight">Elite Access Active!</h3>
+            {/* Referral Card */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50">
+                <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <Users className="w-5 h-5 text-purple-500" />
+                  Invite Friends
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">Give 10 images, get 10 images!</p>
               </div>
-              <p className="font-body text-white font-bold">
-                You have Elite access with Gemini 3 Pro (Nano Banana Pro) - our most advanced AI model!
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleRedeem} className="max-w-2xl">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="promoCode" className="block text-sm font-body font-black uppercase text-white mb-2">
-                    Enter your promo code
-                  </label>
-                  <div className="relative">
-                    <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      id="promoCode"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                      placeholder="DEREK-FOUNDER-2025"
-                      className="w-full pl-12 pr-4 py-3 bg-gray-900 border-4 border-brutal-cyan text-white focus:border-brutal-pink focus:outline-none font-mono text-lg uppercase placeholder-gray-500"
-                      disabled={isRedeeming}
-                    />
+              <div className="p-6 space-y-4">
+
+                {isGenerating ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="w-8 h-8 border-4 border-teal-500 border-t-transparent animate-spin rounded-full" />
                   </div>
-                  <button
-                    type="submit"
-                    disabled={isRedeeming || !promoCode.trim()}
-                    className="w-full mt-4 px-6 py-3 bg-brutal-cyan text-black border-4 border-black font-black uppercase hover:bg-brutal-pink hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-brutal hover:shadow-brutal-hover hover:translate-x-1 hover:translate-y-1"
-                  >
-                    {isRedeeming ? (
-                      <>
-                        <div className="w-5 h-5 border-4 border-black border-t-transparent animate-spin" />
-                        Redeeming...
-                      </>
-                    ) : (
-                      <>
-                        <Gift className="w-5 h-5" />
-                        Redeem Code
-                      </>
-                    )}
-                  </button>
-                </div>
+                ) : activeReferralCode && referralLink ? (
+                  <>
+                    {/* Referral Code */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-2">Your Code</label>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 px-4 py-3 bg-gray-100 rounded-xl font-mono font-bold text-gray-900 text-center">
+                          {activeReferralCode}
+                        </div>
+                        <button
+                          onClick={() => copyToClipboard(activeReferralCode)}
+                          className="p-3 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all"
+                          title="Copy code"
+                        >
+                          <Copy className="w-5 h-5 text-gray-600" />
+                        </button>
+                      </div>
+                    </div>
 
-                <div className="p-4 bg-gray-900 border-4 border-brutal-cyan">
-                  <h4 className="font-heading font-black text-brutal-cyan mb-2 flex items-center gap-2 uppercase tracking-tight">
-                    <Sparkles className="w-4 h-4 text-brutal-cyan" />
-                    How it works
-                  </h4>
-                  <ul className="font-body text-sm text-white space-y-1 font-bold">
-                    <li>• Enter your unique promo code above</li>
-                    <li>• Get instant unlimited access</li>
-                    <li>• Each code works for one account only</li>
-                    <li>• No expiration date</li>
-                  </ul>
-                </div>
+                    {/* Referral Link */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-2">Share Link</label>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 px-4 py-3 bg-gray-100 rounded-xl text-sm text-gray-700 truncate">
+                          {referralLink}
+                        </div>
+                        <button
+                          onClick={() => copyToClipboard(referralLink)}
+                          className="p-3 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all"
+                          title="Copy link"
+                        >
+                          <Copy className="w-5 h-5 text-gray-600" />
+                        </button>
+                      </div>
+                      {copied && (
+                        <p className="text-sm text-green-600 mt-2 flex items-center gap-1">
+                          <Check className="w-4 h-4" /> Copied!
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Share Buttons */}
+                    <div className="pt-2">
+                      <ReferralShareButton
+                        referralLink={referralLink}
+                        referralCode={activeReferralCode}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-8">
+                    <AlertCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500">Unable to generate referral code. Please refresh.</p>
+                  </div>
+                )}
               </div>
-
-              {error && (
-                <div className="mt-4 p-4 bg-black border-4 border-brutal-pink shadow-brutal flex items-start gap-3">
-                  <X className="w-5 h-5 text-brutal-pink flex-shrink-0 mt-0.5" />
-                  <p className="font-body text-brutal-pink text-sm font-bold">{error}</p>
-                </div>
-              )}
-
-              {success && (
-                <div className="mt-4 p-4 bg-gray-900 border-4 border-brutal-cyan shadow-brutal flex items-start gap-3 animate-bounce">
-                  <Check className="w-5 h-5 text-brutal-cyan flex-shrink-0 mt-0.5" />
-                  <p className="font-body text-brutal-cyan text-sm font-black">{success}</p>
-                </div>
-              )}
-            </form>
-          )}
+            </div>
+          </div>
         </div>
 
         {/* Quick Links */}
-        <div className="mt-8 grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-4">
           <Link
             href="/favorites"
-            className="bg-black p-6 border-4 border-brutal-cyan shadow-brutal hover:shadow-brutal-hover hover:translate-x-1 hover:translate-y-1 transition-all group"
+            className="bg-white rounded-xl p-5 shadow-md border border-gray-100 hover:shadow-lg hover:border-teal-200 transition-all group"
           >
-            <Crown className="w-8 h-8 text-brutal-yellow mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="font-heading font-black text-brutal-cyan mb-2 uppercase tracking-tight">Favorites</h3>
-            <p className="font-body text-white text-sm font-bold">Your saved prompts and styles</p>
+            <Star className="w-8 h-8 text-amber-500 mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold text-gray-900 mb-1">Favorites</h3>
+            <p className="text-sm text-gray-500">Saved prompts & styles</p>
           </Link>
 
           <Link
-            href="/pricing"
-            className="bg-black border-4 border-brutal-pink p-6 shadow-brutal hover:shadow-brutal-hover hover:translate-x-1 hover:translate-y-1 transition-all group"
+            href="/forge"
+            className="bg-white rounded-xl p-5 shadow-md border border-gray-100 hover:shadow-lg hover:border-teal-200 transition-all group"
           >
-            <Zap className="w-8 h-8 text-brutal-pink mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="font-heading font-black text-brutal-pink mb-2 uppercase tracking-tight">Upgrade</h3>
-            <p className="font-body text-white text-sm font-bold">Get unlimited access today</p>
+            <Sparkles className="w-8 h-8 text-teal-500 mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold text-gray-900 mb-1">Create Images</h3>
+            <p className="text-sm text-gray-500">Start transforming</p>
           </Link>
         </div>
+
       </div>
     </div>
   );
