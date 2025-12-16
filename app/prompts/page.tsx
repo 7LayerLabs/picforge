@@ -15,6 +15,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [potdCopied, setPotdCopied] = useState(false);
   const [migrationStatus, setMigrationStatus] = useState<{
     show: boolean;
     migrating: boolean;
@@ -161,6 +162,18 @@ export default function Home() {
     searchInputRef.current?.blur(); // Remove focus from search
   };
 
+  const handleCopyPromptOfDay = async () => {
+    try {
+      if (navigator?.clipboard) {
+        await navigator.clipboard.writeText(promptOfTheDay.description);
+      }
+      setPotdCopied(true);
+      setTimeout(() => setPotdCopied(false), 2000);
+    } catch (err) {
+      logger.error('Failed to copy prompt:', err);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-white">
       {/* Page Header */}
@@ -222,8 +235,11 @@ export default function Home() {
           <p className="text-black text-sm font-black uppercase mb-2">✨ Prompt of the Day</p>
           <h3 className="text-black text-xl font-black uppercase mb-1 tracking-tight">{promptOfTheDay.title}</h3>
           <p className="text-black mb-3 font-bold">{promptOfTheDay.description}</p>
-          <button className="px-4 py-2 bg-black hover:bg-brutal-cyan text-brutal-pink hover:text-black border-4 border-brutal-cyan font-black uppercase transition shadow-brutal">
-            Try This Prompt
+          <button
+            onClick={handleCopyPromptOfDay}
+            className="px-4 py-2 bg-black hover:bg-brutal-cyan text-brutal-pink hover:text-black border-4 border-brutal-cyan font-black uppercase transition shadow-brutal"
+          >
+            {potdCopied ? '✓ Copied!' : 'Try This Prompt'}
           </button>
         </div>
 
