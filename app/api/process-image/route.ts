@@ -160,6 +160,14 @@ export async function POST(request: NextRequest) {
         logger.info(`Elite user selected model override: ${aiModelName}`)
       }
     }
+
+    // Force use of stable model for fusion operations (two images)
+    // gemini-3-pro-image-preview may timeout with multi-image fusion
+    if (additionalImageFile && aiModelName === 'gemini-3-pro-image-preview') {
+      aiModelName = 'gemini-2.5-flash-image' as any
+      logger.info('Using gemini-2.5-flash-image for fusion operation (more stable for multi-image)')
+    }
+
     logger.info(`Using AI model: ${aiModelName} for tier: ${userTier}`)
 
     try {
